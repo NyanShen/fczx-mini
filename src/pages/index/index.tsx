@@ -15,11 +15,15 @@ export default class Index extends Component {
 
   componentDidHide () { }
 
+  tabCallback(name) {
+    console.log(name)
+  }
+
   render () {
     return (
       <View className='index'>
-        <Text className="iconfont">&#xe682;test Hello world!</Text>
-        <Tabbar></Tabbar>
+        <Text>test Hello world!</Text>
+        <Tabbar callback={this.tabCallback.bind(this)}></Tabbar>
       </View>
     )
   }

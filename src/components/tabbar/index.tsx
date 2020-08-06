@@ -9,7 +9,7 @@ interface IProps {
     background: any
     activedColor: string
     tabList: any
-    onClick: () => void
+    callback: (name: string) => void
 }
 
 interface IState {
@@ -22,19 +22,22 @@ export default class Tabbar extends Component<IProps, IState> {
         color: '#333',
         background: '#fff',
         activedColor: '#11a43c',
-        onClick: () => { },
+        callback: () => { },
         tabList: [
             {
                 icon: '\ue600',
-                name: '首页'
+                name: '首页',
+                pathname: 'home'
             },
             {
                 icon: '\ue682',
-                name: '微聊'
+                name: '微聊',
+                pathname: 'chat'
             },
             {
                 icon: '\ue603',
-                name: '我的'
+                name: '我的',
+                pathname: 'user'
             }
         ]
     }
@@ -56,22 +59,22 @@ export default class Tabbar extends Component<IProps, IState> {
 
     componentDidHide() { }
 
-    updateCurrent(index) {
+    updateCurrent(index, pathname) {
         this.setState({
             currentIndex: index
-        })
+        });
+        this.props.callback(pathname)
     }
 
     render() {
         let { background, tabList } = this.props
         let { currentIndex } = this.state
-        console.log(tabList)
         return (
             <View className="fc-tabbar fc-tabbar-fixed">
                 <View className="fc-tabbar-list" style={{ backgroundColor: background }}>
                     {
                         tabList.map((item, index) => (
-                            <View className={classnames('fc-tabbar-item', currentIndex == index && 'actived')} key={index} onClick={this.updateCurrent.bind(this, index)}>
+                            <View className={classnames('fc-tabbar-item', currentIndex == index && 'actived')} key={index} onClick={this.updateCurrent.bind(this, index, item.pathname)}>
                                 <View className="fc-tabbar-icon">
                                     <Text className="iconfont">{item.icon}</Text>
                                 </View>
