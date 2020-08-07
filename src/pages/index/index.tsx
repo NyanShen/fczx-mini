@@ -1,29 +1,19 @@
 import React, { Component } from 'react'
 import { View, Text } from '@tarojs/components'
-import Tabbar from '../../components/tabbar'
 import './index.scss'
 
 export default class Index extends Component {
 
-  componentWillMount () { }
+  componentDidShow() {
+   }
 
-  componentDidMount () { }
+  componentDidHide() { }
 
-  componentWillUnmount () { }
 
-  componentDidShow () { }
-
-  componentDidHide () { }
-
-  tabCallback(name) {
-    console.log(name)
-  }
-
-  render () {
+  render() {
     return (
       <View className='index'>
-        <Text>test Hello world!</Text>
-        <Tabbar callback={this.tabCallback.bind(this)}></Tabbar>
+        <Text>hczx Home test</Text>
       </View>
     )
   }
