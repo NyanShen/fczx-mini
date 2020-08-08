@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import { View, Text } from '@tarojs/components'
+import { View, Text, Input } from '@tarojs/components'
 import './index.scss'
 
 export default class Index extends Component {
 
   componentDidShow() {
-   }
+  }
 
   componentDidHide() { }
 
@@ -13,7 +13,13 @@ export default class Index extends Component {
   render() {
     return (
       <View className='index'>
-        <Text>hczx Home test</Text>
+        <View className="index-search">
+          <View className="index-search-content clearfix">
+            <Text className="iconfont">&#xe616;</Text>
+            <Input className="index-search-content-input" type="text" placeholder="输入区县、小区名"></Input>
+            <Text className="index-search-content-text">区域</Text>
+          </View>
+        </View>
       </View>
     )
   }

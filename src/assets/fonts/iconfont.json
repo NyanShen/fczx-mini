@@ -6,25 +6,11 @@
   "description": "",
   "glyphs": [
     {
-      "icon_id": "739897",
-      "name": "message",
-      "font_class": "message",
-      "unicode": "e682",
-      "unicode_decimal": 59010
-    },
-    {
-      "icon_id": "8063170",
-      "name": "User, person, avtar,",
-      "font_class": "iconfont-user",
-      "unicode": "e603",
-      "unicode_decimal": 58883
-    },
-    {
-      "icon_id": "16280130",
-      "name": "home",
-      "font_class": "shouye",
-      "unicode": "e600",
-      "unicode_decimal": 58880
+      "icon_id": "970725",
+      "name": "search",
+      "font_class": "search",
+      "unicode": "e616",
+      "unicode_decimal": 58902
     }
   ]
 }

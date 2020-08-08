@@ -14,3 +14,10 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+.clearfix::after {
+  content: "";
+  display: block;
+  clear: both;
+  overflow: auto;
+}
