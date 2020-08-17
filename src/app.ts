@@ -1,18 +1,24 @@
 import { Component } from 'react'
+import Taro from '@tarojs/taro'
 import './app.scss'
+
+Taro.getSystemInfo({})
+  .then(res => {
+    Taro['$navBarMarginTop'] = res.statusBarHeight;
+  })
 
 class App extends Component {
 
-  componentDidMount () {}
+  componentDidMount() { }
 
-  componentDidShow () {}
+  componentDidShow() { }
 
-  componentDidHide () {}
+  componentDidHide() { }
 
-  componentDidCatchError () {}
+  componentDidCatchError() { }
 
   // this.props.children 是将要会渲染的页面
-  render () {
+  render() {
     return this.props.children
   }
 }

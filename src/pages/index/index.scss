@@ -14,13 +14,14 @@
         .iconfont {
             float: left;
         }
-        &-input {
+        &-desc {
             float: left;
             width: 80%;
             height: 80px;
             line-height: 80px;
             text-align: left;
             padding-left: 20px;
+            color: #999;
         }
     }
 }
