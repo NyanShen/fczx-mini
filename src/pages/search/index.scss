@@ -17,6 +17,7 @@ page {
         background-color: #eee;
         border-radius: 10px;
         .search-label {
+            position: relative;
             float: left;
             padding: 0 20px;
             font-size: 28px;
@@ -47,5 +48,20 @@ page {
         display: inline-block;
         font-size: 28px;
         margin-left: 20px;
+    }
+}
+
+.search-history {
+    padding: 20px 28px;
+    background-color: #fff;
+
+    .search-header {
+        .title {
+            float: left;
+            font-weight: bold;
+        }
+        .iconfont {
+            float: right;
+        }
     }
 }

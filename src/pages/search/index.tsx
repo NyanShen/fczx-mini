@@ -34,6 +34,15 @@ const Search = () => {
         </View>
         <Text className="search-cancel">取消</Text>
       </View>
+      <View className="search-history">
+        <View className="search-header clearfix">
+          <Text className="title">历史搜索</Text>
+          <Text className="iconfont">x</Text>
+        </View>
+        <View className="history-list">
+          <Text>吾悦广场</Text>
+        </View>
+      </View>
     </View>
   )
 }
