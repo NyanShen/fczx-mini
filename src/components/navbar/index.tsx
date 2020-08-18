@@ -47,12 +47,6 @@ const NavBar = (props: IProps) => {
     }
 
     const handleBackClick = () => {
-        if (Taro.getCurrentPages().length <= 1) {
-            Taro.reLaunch({
-                url: '/pages/index/index'
-            })
-            return
-        }
         Taro.navigateBack()
     }
 

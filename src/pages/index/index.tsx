@@ -12,7 +12,7 @@ export default class Index extends Component {
   componentDidHide() { }
 
   clickHandler() {
-    Taro.redirectTo({
+    Taro.navigateTo({
       url: '/pages/search/index'
     })
   }
