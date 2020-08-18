@@ -1,0 +1,23 @@
+.navbar {
+    display: flex;
+    align-items: center;
+
+    &-title {
+        font-size: 28px;
+        margin-left: 20px;
+    }
+
+    .iconfont {
+        margin-left: 20px;
+    }
+
+    .back {
+        font-size: 32px;
+    }
+
+    .iconhome {
+        padding: 10px 12px;
+        border-radius: 50%;
+        background-color: rgba($color: #000, $alpha: 0.2);
+    }
+}

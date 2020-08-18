@@ -1,11 +1,5 @@
 import { Component } from 'react'
-import Taro from '@tarojs/taro'
 import './app.scss'
-
-Taro.getSystemInfo({})
-  .then(res => {
-    Taro['$navBarMarginTop'] = res.statusBarHeight;
-  })
 
 class App extends Component {
 

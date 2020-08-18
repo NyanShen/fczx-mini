@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text } from '@tarojs/components'
+import NavBar from '../../components/navbar/index'
 import './index.scss'
 
 export default class Chat extends Component {
@@ -10,7 +11,8 @@ export default class Chat extends Component {
 
   render () {
     return (
-      <View className='chat'>
+      <View className="chat">
+        <NavBar title="微聊" home={true}/>
         <Text>test chat!</Text>
       </View>
     )

@@ -5,7 +5,7 @@ export default {
     'pages/index/index',
     'pages/user/index',
     'pages/chat/index',
-    'pages/search/index',
+    'pages/search/index'
   ],
   tabBar: {
     color: 'rgba(68, 68, 68, 1)',
@@ -34,8 +34,9 @@ export default {
   },
   window: {
     backgroundTextStyle: 'light',
-    navigationBarBackgroundColor: '#fff',
-    navigationBarTitleText: 'WeChat',
-    navigationBarTextStyle: 'black'
+    navigationBarBackgroundColor: '#11a43c',
+    navigationBarTitleText: '房产在线',
+    navigationBarTextStyle: 'white',
+    navigationStyle: 'custom'
   }
 } as Config
