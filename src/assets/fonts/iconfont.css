@@ -15,6 +15,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.iconclear1:before {
+  content: "\e633";
+}
+
 .iconclear:before {
   content: "\e601";
 }
