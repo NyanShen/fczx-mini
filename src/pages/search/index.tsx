@@ -1,116 +1,80 @@
 import React, { useState, useEffect } from 'react'
 import Taro from '@tarojs/taro'
-import { View, Text, Input, RichText, ScrollView } from '@tarojs/components'
 import classnames from 'classnames'
+import * as _ from 'lodash'
+import { View, Text, Input, RichText, ScrollView } from '@tarojs/components'
+
+import api from '../../services/api'
+import app from '../../services/request'
+import { keywordcolorful } from '../../utils'
+import storage from '../../utils/storage'
+import useNavData from '../../hooks/useNavData'
 import NavBar from '../../components/navbar/index'
 import './index.scss'
 
-const INIT_NODES: any = [
-  {
-    name: 'ul',
-    attrs: {
-      class: 'nodes_ul'
-    },
-    children: [
-      {
-        name: 'li',
-        attrs: {
-          class: 'nodes_li'
-        },
-        children: [
-          {
-            name: 'p',
-            attrs: {
-              class: 'name'
-            },
-            children: [{
-              type: 'text',
-              text: '1襄阳吾悦广场',
-            }]
-          },
-          {
-            name: 'p',
-            attrs: {
-              class: 'address'
-            },
-            children: [
-              {
-                type: 'text',
-                text: '1地址襄阳吾悦广场',
-              }
-            ]
-          }
-        ]
-      },
-      {
-        name: 'li',
-        attrs: {
-          class: 'nodes_li'
-        },
-        children: [
-          {
-            name: 'p',
-            attrs: {
-              class: 'name'
-            },
-            children: [{
-              type: 'text',
-              text: '2襄阳吾悦广场',
-            }]
-          },
-          {
-            name: 'p',
-            attrs: {
-              class: 'address'
-            },
-            children: [
-              {
-                type: 'text',
-                text: '2地址襄阳吾悦广场',
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  }
-]
-
-const INIT_HOT_LIST = ["樊城", "沃尔玛", "襄阳吾悦广场", "襄阳万达广场", "火车站"]
-const INIT_SEARCH_HISTORIES = ["初始化", "襄阳吾悦广场"]
+const INIT_HISTORIES = storage.getItem('histories', 'search') || []
 
 const Search = () => {
+  const { contentHeight } = useNavData()
   const [clear, setClear] = useState(false)
+  const [hotList, setHotList] = useState([])
+  const [matcheList, setMatcheList] = useState([])
   const [searchValue, setSearchValue] = useState("")
-  const [matcheList, setMatcheList] = useState(INIT_NODES)
-  const [hotList, setHotList] = useState(INIT_HOT_LIST)
-  const [searchHistories, setSearchHistories] = useState(INIT_SEARCH_HISTORIES)
+  const [searchHistories, setSearchHistories] = useState(INIT_HISTORIES)
 
   useEffect(() => {
-    // Taro.request({
-    //   url: 'http://xiangyang.fczx.com/house/list',
-    //   data: {},
-    //   header: {
-    //     'content-type': 'application/json' // 默认值
-    //   },
-    //   success: function (res) {
-    //     console.log(res.data)
-    //   }
-    // })
+    app.request({ url: api.getSearchHotList }, { isMock: true, loading: false })
+      .then((result: any) => {
+        setHotList(result || [])
+      })
   }, [])
 
+  const handleKeyClick = (item) => {
+    let ids = _.map(searchHistories, 'id');
+    if (ids.length === 0) {
+      searchHistories.push(item)
+    } else if (!_.includes(ids, item.id)) {
+      searchHistories.push(item)
+    }
+    storage.setItem('histories', searchHistories, 'search');
+    Taro.navigateTo({
+      url: `/pages/house/index?id=${item.id}`
+    })
+  }
+
   const handleInput = (event) => {
-    if (event.currentTarget.value) {
+    let keyValue = event.currentTarget.value
+    if (keyValue) {
       setClear(true)
     } else {
       setClear(false)
     }
-    setSearchValue(event.currentTarget.value)
+    setSearchValue(keyValue)
+    updateKeyList(keyValue)
+  }
+
+  const updateKeyList = (keyValue) => {
+    app.request({
+      url: api.getSearchKeyList,
+      data: { kw: keyValue }
+    }, { isMock: true, loading: false })
+      .then((result: any) => {
+        setMatcheList(result || [])
+      })
   }
 
   const clearSearchValue = () => {
     setClear(false)
     setSearchValue("")
+  }
+
+  const handleCancel = () => {
+    Taro.navigateBack()
+  }
+
+  const handleClearClick = () => {
+    storage.clear('search')
+    setSearchHistories([])
   }
 
   const renderSearchKeys = (title, className, keyList, allowClear = false) => {
@@ -119,11 +83,11 @@ const Search = () => {
         <View className={classnames("search-record", className)}>
           <View className="search-header clearfix">
             <Text className="title">{title}</Text>
-            {allowClear && <Text className="iconfont iconclear1"></Text>}
+            {allowClear && <Text className="iconfont iconclear1" onClick={handleClearClick}></Text>}
           </View>
           <View className="search-list clearfix">
             {keyList.map((item, index) => {
-              return <Text className="item" key={index}>{item}</Text>
+              return <Text className="item" key={index} onClick={() => handleKeyClick(item)}>{item.name}</Text>
             })}
           </View>
         </View>
@@ -134,25 +98,35 @@ const Search = () => {
   return (
     <View className="search">
       <NavBar title="搜索" back={true} />
-      <ScrollView>
-        <View className="search-container clearfix">
-          <View className="search-content">
-            <View className="search-label">
-              <Text className="search-label-text">新房</Text>
-              <Text className="iconfont iconarrow-down-filling"></Text>
-            </View>
-            <Input className="search-input" placeholder="请输入楼盘名称或地址" onInput={handleInput} value={searchValue} autoFocus></Input>
-            {clear && <Text className="iconfont iconclear" onClick={clearSearchValue}></Text>}
+      <View className="search-container clearfix">
+        <View className="search-content">
+          <View className="search-label">
+            <Text className="search-label-text">新房</Text>
+            <Text className="iconfont iconarrow-down-filling"></Text>
           </View>
-          <Text className="search-cancel">取消</Text>
+          <Input className="search-input" placeholder="请输入楼盘名称或地址" onInput={handleInput} value={searchValue} autoFocus></Input>
+          {clear && <Text className="iconfont iconclear" onClick={clearSearchValue}></Text>}
         </View>
-        {
-          searchValue ?
-            <RichText className="search-matches" nodes={matcheList} /> :
-            <View>
-              {renderSearchKeys('搜索历史', 'search-history', searchHistories, true)}
-              {renderSearchKeys('热门搜索', 'search-hot', hotList)}
-            </View>
+        <Text className="search-cancel" onClick={handleCancel}>取消</Text>
+      </View>
+      <ScrollView style={{ height: `${contentHeight - 50}px` }} scrollY>
+        {searchValue ?
+          <View className="search-matches">
+            {
+              matcheList.map((item: any, index: number) => {
+                return (
+                  <View className="match-item" key={index} onClick={() => handleKeyClick(item)}>
+                    <RichText nodes={keywordcolorful(item.name, searchValue)} />
+                    <View className="address">{item.address}</View>
+                  </View>
+                )
+              })
+            }
+          </View> :
+          <View>
+            {renderSearchKeys('搜索历史', 'search-history', searchHistories, true)}
+            {renderSearchKeys('热门搜索', 'search-hot', hotList)}
+          </View>
         }
       </ScrollView>
     </View>

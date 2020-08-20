@@ -31,8 +31,8 @@ const NavBar = (props: IProps) => {
         iconClass: '',
         iconStyle: null
     }
-    props = _.assign({}, defaultProps, props);
-    const { statusBarHeight, titleBarHeight } = useNavData();
+    props = _.assign({}, defaultProps, props)
+    const { statusBarHeight, titleBarHeight, appHeaderHeight } = useNavData()
     const style = {
         paddingTop: `${statusBarHeight}px`,
         height: `${titleBarHeight}px`,
@@ -53,11 +53,13 @@ const NavBar = (props: IProps) => {
     const { home, back, iconOther, iconClass, iconStyle, icon } = props;
 
     return (
-        <View className="navbar" style={style}>
-            {home && <Text className="iconfont iconhome" onClick={() => handleHomeClick()}></Text>}
-            {back && <Text className="iconfont iconarrow-left-bold back" onClick={() => handleBackClick()}></Text>}
-            {iconOther && <Text className={classnames('iconfont', iconClass)} style={iconStyle} onClick={props.callback}>{icon}</Text>}
-            <Text className="navbar-title">{props.title}</Text>
+        <View style={{ height: `${appHeaderHeight}px` }}>
+            <View className="navbar" style={style}>
+                {home && <Text className="iconfont iconhome" onClick={() => handleHomeClick()}></Text>}
+                {back && <Text className="iconfont iconarrow-left-bold back" onClick={() => handleBackClick()}></Text>}
+                {iconOther && <Text className={classnames('iconfont', iconClass)} style={iconStyle} onClick={props.callback}>{icon}</Text>}
+                <Text className="navbar-title">{props.title}</Text>
+            </View>
         </View>
     )
 }
