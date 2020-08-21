@@ -1,7 +1,7 @@
 import Taro from '@tarojs/taro'
 
 const app: any = {};
-app.mockApi = 'http://xiangyang.fczx.com';
+app.mockApi = 'http://192.168.2.248:12306';
 app.baseApi = 'http://api.fczx.com';
 
 app.request = (params: any, { loading = true, toast = true, isMock = false }: any = {}) => {

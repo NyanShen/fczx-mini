@@ -38,7 +38,7 @@ const Search = () => {
     }
     storage.setItem('histories', searchHistories, 'search');
     Taro.navigateTo({
-      url: `/pages/house/index?id=${item.id}`
+      url: `/pages/house/index?id=${item.id}&name=${item.name}`
     })
   }
 
@@ -86,8 +86,8 @@ const Search = () => {
             {allowClear && <Text className="iconfont iconclear1" onClick={handleClearClick}></Text>}
           </View>
           <View className="search-list clearfix">
-            {keyList.map((item, index) => {
-              return <Text className="item" key={index} onClick={() => handleKeyClick(item)}>{item.name}</Text>
+            {keyList.map((item: any) => {
+              return <Text className="item" key={item.id} onClick={() => handleKeyClick(item)}>{item.name}</Text>
             })}
           </View>
         </View>
