@@ -2,7 +2,7 @@ import React from 'react'
 import Taro from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
 import useNavData from '../../hooks/useNavData'
-import * as _ from 'lodash'
+import { assign } from 'lodash'
 import classnames from 'classnames'
 import './index.scss'
 
@@ -31,7 +31,7 @@ const NavBar = (props: IProps) => {
         iconClass: '',
         iconStyle: null
     }
-    props = _.assign({}, defaultProps, props)
+    props = assign({}, defaultProps, props)
     const { statusBarHeight, titleBarHeight, appHeaderHeight } = useNavData()
     const style = {
         paddingTop: `${statusBarHeight}px`,

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Taro from '@tarojs/taro'
 import classnames from 'classnames'
-import * as _ from 'lodash'
+import {map, includes} from 'lodash'
 import { View, Text, Input, RichText, ScrollView } from '@tarojs/components'
 
 import api from '../../services/api'
@@ -30,10 +30,10 @@ const Search = () => {
   }, [])
 
   const handleKeyClick = (item) => {
-    let ids = _.map(searchHistories, 'id');
+    let ids = map(searchHistories, 'id');
     if (ids.length === 0) {
       searchHistories.push(item)
-    } else if (!_.includes(ids, item.id)) {
+    } else if (!includes(ids, item.id)) {
       searchHistories.push(item)
     }
     storage.setItem('histories', searchHistories, 'search');
