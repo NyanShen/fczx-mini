@@ -15,6 +15,18 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.iconarrow-right-bold:before {
+  content: "\e687";
+}
+
+.iconaddress:before {
+  content: "\e6a7";
+}
+
+.iconarrow-right:before {
+  content: "\e665";
+}
+
 .iconclear1:before {
   content: "\e633";
 }
@@ -38,4 +50,3 @@
 .iconarrow-left-bold:before {
   content: "\e685";
 }
-

@@ -2,7 +2,7 @@
   "miniprogramRoot": "./dist",
   "projectname": "mini",
   "description": "fczx mini",
-  "appid": "touristappid",
+  "appid": "wx2c038eb5a1ff2941",
   "setting": {
     "urlCheck": true,
     "es6": false,

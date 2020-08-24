@@ -115,7 +115,17 @@ const House = () => {
                         }
                     </View>
                 </View>
-                <View className="view-content">123</View>
+                <View className="house-header">
+                    <View className="name">{houseData.house_name}</View>
+                    <View className="tags">
+                        <Text className="tags-item sale-status">在售</Text>
+                        <Text className="tags-item">毛坯</Text>
+                        <Text className="tags-item">中高层</Text>
+                    </View>
+                </View>
+                <View className="view-content">
+
+                </View>
             </ScrollView>
         </View>
     )
