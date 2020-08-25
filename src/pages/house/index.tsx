@@ -90,7 +90,7 @@ const House = () => {
     return (
         <View className="house">
             <NavBar title={houseData.house_name || '楼盘'} back={true} />
-            <ScrollView style={{ height: `${contentHeight}px` }} scrollY>
+            <ScrollView style={{ height: `${contentHeight - 55}px`, backgroundColor: '#f7f7f7' }} scrollY>
                 <View className="house-album">
                     <Swiper style={{ height: '225px' }} current={albumSwiper.swiperIndex} onChange={onSwiperChange}>
                         {
@@ -120,7 +120,7 @@ const House = () => {
                     </View>
                 </View>
                 <View className="house-header">
-                    <View className="name">{houseData.house_name}</View>
+                    <View className="name">{houseData.house_name || '楼盘名称'}</View>
                     <View className="tags">
                         <Text className="tags-item sale-status">在售</Text>
                         <Text className="tags-item">毛坯</Text>
@@ -140,13 +140,48 @@ const House = () => {
                     <View className="info-item">
                         <Text className="label">地址</Text>
                         <Text className="text address">东津新区东西轴线与南山路交汇处东津新区东西轴线与南山路交汇处</Text>
-                        <Text className="iconfont iconaddress"></Text>
+                        <Text className="iconfont iconaddress">地图</Text>
                     </View>
-                    <View className="btn" onClick={() => navigateTo('/pages/house/detail')}>
+                    <View className="btn btn-blue mt20" onClick={() => navigateTo('/pages/house/detail')}>
                         <Text className="btn-name">查看更多楼盘详情</Text>
+                    </View>
+                    <View className="subscrib">
+                        <View className="subscrib-item">
+                            <Text className="iconfont icondata-view"></Text>
+                            <Text>变价通知</Text>
+                        </View>
+                        <View className="subscrib-item">
+                            <Text className="iconfont iconnotice"></Text>
+                            <Text>开盘通知</Text>
+                        </View>
+                    </View>
+                </View>
+                <View className="contact mt20">
+                    <View className="iconfont icontelephone-out"></View>
+                    <View>
+                        <View className="phone-call">400-018-0632转6199</View>
+                        <View className="phone-desc">致电售楼处了解项目更多信息</View>
                     </View>
                 </View>
             </ScrollView>
+            <View className="bottom-bar">
+                <View className="bar-item">
+                    <Text className="iconfont iconhome"></Text>
+                    <Text>首页</Text>
+                </View>
+                <View className="line-split"></View>
+                <View className="bar-item">
+                    <Text className="iconfont icongroup"></Text>
+                    <Text>团购</Text>
+                </View>
+                <View className="bar-item-btn">
+                    <Text className="btn btn-yellow btn-bar">置业顾问</Text>
+                </View>
+                <View className="bar-item-btn">
+                    <Text className="btn btn-green btn-bar">电话咨询</Text>
+                </View>
+            </View>
+            
         </View>
     )
 }

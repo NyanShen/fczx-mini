@@ -43,7 +43,7 @@
 }
 .house-header {
     padding: 30px;
-    background-color: #f5fdf6;
+    background-image: linear-gradient(to right, #d9e7fc, #dff5db);
 
     .name {
         max-width: 400px;
@@ -75,17 +75,16 @@
 }
 
 .info {
+    font-size: 28px;
     &-item {
         display: flex;
-        margin: 30px 0;
-        font-size: 30px;
+        padding-top: 30px;
         line-height: 40px;
 
         .label {
             display: block;
-            min-width: 80px;
+            min-width: 60px;
             text-align: justify;
-            text-align-last: justify;
             margin-right: 20px;
             color: #999;
         }
@@ -97,16 +96,106 @@
         }
         .iconaddress {
             display: block;
-            width: 60px;
+            width: 200px;
             color: #f60;
+        }
+    }
+
+    .subscrib {
+        display: flex;
+        justify-content: space-between;
+        color: #666;
+
+        &-item {
+            flex: 1;
+            text-align: center;
+            line-height: 80px;
+
+            .iconfont {
+                margin-right: 10px;
+                color: #f34;
+            }
         }
     }
 }
 
+.contact {
+    display: flex;
+    padding: 30px 30px;
+    background-color: #fff;
+
+    .icontelephone-out {
+        font-size: 86px;
+        margin-right: 20px;
+        color: #11a43c;
+    }
+
+    .phone-call {
+        font-size: 36px;
+        margin-bottom: 10px;
+        color: #11a43c;
+    }
+    .phone-desc {
+        font-size: 24px;
+        color: #999;
+    }
+}
+
 .btn {
+    display: block;
     line-height: 80px;
     text-align: center;
-    font-size: 24px;
-    background-color: #f8f8f8;
-    color: #8099af;
+    font-size: 26px;
+    border-radius: 10px;
+    &-blue {
+        color: #8099af;
+        background-color: #f8f8f8;
+    }
+
+    &-yellow {
+        color: #fff;
+        background-color: #f90;
+    }
+
+    &-green {
+        color: #fff;
+        background-color: #11a43c;
+    }
+}
+.bottom-bar {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 110px;
+    font-size: 28px;
+    background-color: #fff;
+    z-index: 99;
+    box-shadow: 0 -1px 6px 0 rgba(0, 0, 0, 0.08);
+
+    .line-split {
+        width: 1px;
+        height: 80px;
+        margin: 15px 0;
+        background-color: #f7f7f7;
+    }
+
+    .bar-item {
+        padding: 15px 30px;
+        line-height: 80px;
+        color: #666;
+
+        .iconfont {
+            margin-right: 10px;
+        }
+    }
+
+    .bar-item-btn {
+        flex: 1;
+        text-align: center;
+
+        .btn-bar {
+            margin: 15px 30px 15px 0;
+        }
+    }
 }

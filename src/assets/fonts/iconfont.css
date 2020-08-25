@@ -15,6 +15,22 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icongroup:before {
+  content: "\e645";
+}
+
+.icondata-view:before {
+  content: "\e66c";
+}
+
+.icontelephone-out:before {
+  content: "\e680";
+}
+
+.iconnotice:before {
+  content: "\e61e";
+}
+
 .iconarrow-right-bold:before {
   content: "\e687";
 }
