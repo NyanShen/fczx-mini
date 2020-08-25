@@ -1,0 +1,38 @@
+.house-detail-wrap {
+    background-color: #f7f7f7;
+    .info {
+        background-color: #fff;
+        padding: 0 30px 30px 30px;
+        &-title {
+            line-height: 80px;
+            font-weight: bold;
+            border-bottom: 1px solid #f7f7f7;
+        }
+        &-item {
+            display: flex;
+            font-size: 28px;
+            margin: 20px 0;
+
+            .label {
+                display: block;
+                max-width: 160px;
+                white-space: nowrap;
+                overflow: hidden;
+                margin-right: 20px;
+                color: #666;
+            }
+            .text {
+                flex: 1;
+
+                &.contact {
+                    color: #11a43c;
+                }
+
+                .more {
+                    margin-left: 16px;
+                    color: #11a43c;
+                }
+            }
+        }
+    }
+}

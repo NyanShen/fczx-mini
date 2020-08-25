@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { getCurrentInstance, useReady } from '@tarojs/taro'
+import Taro, { getCurrentInstance, useReady } from '@tarojs/taro'
 import { View, ScrollView, Swiper, SwiperItem, Image, Text } from '@tarojs/components'
 import classnames from 'classnames'
 import { parseInt } from 'lodash'
@@ -83,6 +83,10 @@ const House = () => {
         }
     }
 
+    const navigateTo = (url: string, params: any = {}) => {
+        Taro.navigateTo({ url })
+    }
+
     return (
         <View className="house">
             <NavBar title={houseData.house_name || '楼盘'} back={true} />
@@ -123,8 +127,24 @@ const House = () => {
                         <Text className="tags-item">中高层</Text>
                     </View>
                 </View>
-                <View className="view-content">
-
+                <View className="view-content info">
+                    <View className="info-item">
+                        <Text className="label">售价</Text>
+                        <Text className="price">20012</Text>
+                        <Text className="text">元/m²</Text>
+                    </View>
+                    <View className="info-item">
+                        <Text className="label">开盘</Text>
+                        <Text className="text">已于2019年6月23号开盘</Text>
+                    </View>
+                    <View className="info-item">
+                        <Text className="label">地址</Text>
+                        <Text className="text address">东津新区东西轴线与南山路交汇处东津新区东西轴线与南山路交汇处</Text>
+                        <Text className="iconfont iconaddress"></Text>
+                    </View>
+                    <View className="btn" onClick={() => navigateTo('/pages/house/detail')}>
+                        <Text className="btn-name">查看更多楼盘详情</Text>
+                    </View>
                 </View>
             </ScrollView>
         </View>

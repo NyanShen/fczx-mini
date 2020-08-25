@@ -8,7 +8,7 @@
 }
 
 .view-content {
-  padding: 0 20px;
+  padding: 0 30px;
 }
 
 .auto-center {
@@ -24,4 +24,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.price {
+  font-size: 36px;
+  font-weight: bold;
+  color: #f34;
+}
+
+.mt20 {
+  margin-top: 20px;
 }

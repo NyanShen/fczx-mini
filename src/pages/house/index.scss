@@ -65,27 +65,48 @@
             padding: 5px 10px;
             border-radius: 10px;
             background-color: #eee;
+            color: #999;
         }
         &-item.sale-status {
+            color: #fff;
             background-color: #f90;
         }
     }
-    .address {
-        line-height: 48px;
-        &-name {
-            position: relative;
-            top: 12px;
-            display: inline-block;
-            font-size: 24px;
-            max-width: 480px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+}
+
+.info {
+    &-item {
+        display: flex;
+        margin: 30px 0;
+        font-size: 30px;
+        line-height: 40px;
+
+        .label {
+            display: block;
+            min-width: 80px;
+            text-align: justify;
+            text-align-last: justify;
             margin-right: 20px;
             color: #999;
         }
-        .iconfont {
-            color: #f90;
+        .text {
+            color: #333;
+        }
+        .address {
+            color: #8099af;
+        }
+        .iconaddress {
+            display: block;
+            width: 60px;
+            color: #f60;
         }
     }
+}
+
+.btn {
+    line-height: 80px;
+    text-align: center;
+    font-size: 24px;
+    background-color: #f8f8f8;
+    color: #8099af;
 }
