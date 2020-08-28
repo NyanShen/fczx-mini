@@ -24,8 +24,11 @@
       "global.d.ts"
     ],
     "paths": {
+        "@components/*": ["src/components/*"],
+        "@services/*": ["src/services/*"],
+        "@hooks/*": ["src/hooks/*"],
+        "@utils/*": ["src/utils/*"],
         "@assets/*": ["src/assets/*"], // css, html中需要 `~@assets/*`
-        "@components/*": ["src/components/*"]
     }
   },
   "exclude": [

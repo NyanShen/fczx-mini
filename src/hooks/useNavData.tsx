@@ -15,7 +15,7 @@ interface INavData {
     windowHeight: number
 }
 
-function useNavData(): INavData {
+const useNavData = (): INavData => {
     const [navData, setNavData] = useState({
         statusBarHeight: 0,
         titleBarHeight: 0,

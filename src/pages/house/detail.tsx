@@ -1,8 +1,8 @@
 import React from 'react'
 import { ScrollView, View, Text } from '@tarojs/components'
 
-import NavBar from '../../components/navbar/index'
-import useNavData from '../../hooks/useNavData'
+import NavBar from '@components/navbar/index'
+import useNavData from '@hooks/useNavData'
 import './detail.scss'
 
 const HouseDetail = () => {

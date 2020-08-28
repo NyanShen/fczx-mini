@@ -51,6 +51,10 @@
   content: "\e601";
 }
 
+.iconclose:before {
+  content: "\e66d";
+}
+
 .iconarrow-down-filling:before {
   content: "\e68a";
 }

@@ -4,10 +4,11 @@ import { View, ScrollView, Swiper, SwiperItem, Image, Text } from '@tarojs/compo
 import classnames from 'classnames'
 import { parseInt } from 'lodash'
 
-import api from '../../services/api'
-import app from '../../services/request'
-import NavBar from '../../components/navbar/index'
-import useNavData from '../../hooks/useNavData'
+import api from '@services/api'
+import app from '@services/request'
+import useNavData from '@hooks/useNavData'
+import NavBar from '@components/navbar/index'
+import Popup from '@components/popup/index'
 import './index.scss'
 
 interface IAlbumSwiper {
@@ -181,7 +182,7 @@ const House = () => {
                     <Text className="btn btn-green btn-bar">电话咨询</Text>
                 </View>
             </View>
-            
+            <Popup title="楼盘" subTitle="订阅消息"></Popup>
         </View>
     )
 }

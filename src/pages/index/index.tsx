@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import Taro from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
-import NavBar from '../../components/navbar/index'
+import NavBar from '@components/navbar/index'
 import './index.scss'
 
 export default class Index extends Component {

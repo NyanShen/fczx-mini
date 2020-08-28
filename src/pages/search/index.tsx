@@ -4,12 +4,12 @@ import classnames from 'classnames'
 import {map, includes} from 'lodash'
 import { View, Text, Input, RichText, ScrollView } from '@tarojs/components'
 
-import api from '../../services/api'
-import app from '../../services/request'
-import { keywordcolorful } from '../../utils'
-import storage from '../../utils/storage'
-import useNavData from '../../hooks/useNavData'
-import NavBar from '../../components/navbar/index'
+import api from '@services/api'
+import app from '@services/request'
+import { keywordcolorful } from '@utils/index'
+import storage from '@utils/storage'
+import useNavData from '@hooks/useNavData'
+import NavBar from '@components/navbar/index'
 import './index.scss'
 
 const INIT_HISTORIES = storage.getItem('histories', 'search') || []

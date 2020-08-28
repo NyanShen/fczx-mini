@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text } from '@tarojs/components'
-import NavBar from '../../components/navbar/index'
+import NavBar from '@components/navbar/index'
 import './index.scss'
 
 export default class User extends Component {
