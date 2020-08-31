@@ -129,7 +129,7 @@ const House = () => {
                 <View className="house-header">
                     <View className="name">{houseData.house_name || '楼盘名称'}</View>
                     <View className="tags">
-                        <Text className="tags-item sale-status">在售</Text>
+                        <Text className="tags-item sale-status-1">在售</Text>
                         <Text className="tags-item">毛坯</Text>
                         <Text className="tags-item">中高层</Text>
                     </View>

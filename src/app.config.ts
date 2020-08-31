@@ -2,12 +2,12 @@ import { Config } from "@tarojs/taro";
 
 export default {
   pages: [
-    'pages/house/index',
-    'pages/search/index',
-    'pages/house/detail',
     'pages/index/index',
     'pages/user/index',
     'pages/chat/index',
+    'pages/house/index',
+    'pages/search/index',
+    'pages/house/detail',
   ],
   tabBar: {
     color: 'rgba(68, 68, 68, 1)',

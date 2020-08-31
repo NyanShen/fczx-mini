@@ -34,6 +34,36 @@
   color: #f34;
 }
 
+.price-unit {
+  font-size: 30px;
+  color: #f34;
+}
+
+.small-desc {
+  color: $desc-color;
+  font-size: $font-26;
+}
+
 .mt20 {
   margin-top: 20px;
+}
+
+.tags {
+  height: 40px;
+  line-height: 40px;
+  font-size: 24px;
+  max-width: 460px;
+  white-space: nowrap;
+  overflow: hidden;
+  &-item {
+      margin-right: 20px;
+      padding: 5px 10px;
+      border-radius: 5px;
+      background-color: #eee;
+      color: #999;
+  }
+  &-item.sale-status-1 {
+      color: #fff;
+      background-color: $sale-1;
+  }
 }
