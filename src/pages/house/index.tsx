@@ -24,6 +24,7 @@ const House = () => {
     const { contentHeight } = useNavData()
     const [albumSwiper, setAlbumSwiper] = useState<IAlbumSwiper>(INIT_ALBUM_SWIPER)
     const [houseData, setHouseData] = useState<any>({})
+    const [popup, setPopup] = useState<boolean>(false)
 
     useReady(() => {
         let currentRouter: any = getCurrentInstance().router
@@ -88,6 +89,11 @@ const House = () => {
         Taro.navigateTo({ url })
     }
 
+    const handlePopupConfirm = (popupData) => {
+        console.log(popupData)
+        setPopup(false)
+    }
+
     return (
         <View className="house">
             <NavBar title={houseData.house_name || '楼盘'} back={true} />
@@ -149,11 +155,11 @@ const House = () => {
                     <View className="subscrib">
                         <View className="subscrib-item">
                             <Text className="iconfont icondata-view"></Text>
-                            <Text>变价通知</Text>
+                            <Text onClick={() => setPopup(true)}>变价通知</Text>
                         </View>
                         <View className="subscrib-item">
                             <Text className="iconfont iconnotice"></Text>
-                            <Text>开盘通知</Text>
+                            <Text onClick={() => setPopup(true)}>开盘通知</Text>
                         </View>
                     </View>
                 </View>
@@ -182,7 +188,16 @@ const House = () => {
                     <Text className="btn btn-green btn-bar">电话咨询</Text>
                 </View>
             </View>
-            <Popup title="楼盘" subTitle="订阅消息"></Popup>
+            {
+                popup &&
+                <Popup
+                    title="楼盘"
+                    subTitle="订阅消息"
+                    onConfirm={handlePopupConfirm}
+                    onCancel={() => setPopup(false)}
+                ></Popup>
+            }
+
         </View>
     )
 }
