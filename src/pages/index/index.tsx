@@ -1,6 +1,7 @@
 import React from 'react'
 import Taro from '@tarojs/taro'
 import { View, Text, Image } from '@tarojs/components'
+
 import NavBar from '@components/navbar/index'
 import new_house from '@assets/icons/new_house.png'
 import second_house from '@assets/icons/house.png'
@@ -15,17 +16,17 @@ const Index = () => {
       {
         name: '新盘',
         icon: new_house,
-        path: '/pages/new-house/index'
+        path: '/pages/newhouse/index'
       },
       {
         name: '二手房',
         icon: second_house,
-        path: '/pages/second-house/index'
+        path: '/pages/secondhouse/index'
       },
       {
         name: '租房',
         icon: rent_house,
-        path: '/pages/rent-house/index'
+        path: '/pages/renthouse/index'
       },
       {
         name: '资讯',
@@ -42,7 +43,9 @@ const Index = () => {
   }
 
   const handleMenuClick = (path) => {
-
+    Taro.navigateTo({
+      url: path
+    })
   }
 
   return (
@@ -50,7 +53,7 @@ const Index = () => {
       <NavBar title="房产在线" />
       <View className="index-search">
         <View className="index-search-content clearfix">
-          <Text className="iconfont">&#xe600;</Text>
+          <Text className="iconfont iconsearch"></Text>
           <Text className="index-search-content-desc" onClick={clickHandler}>输入区县、小区名</Text>
           <Text className="index-search-content-text">区域</Text>
         </View>
@@ -81,6 +84,28 @@ const Index = () => {
       </View>
       <View className="house-list view-content">
         <View className="house-list-ul">
+          <View className="house-list-li">
+            <View className="li-image">
+              <Image src="//static.fczx.com/www/assets/images/1400x933_1.jpg"></Image>
+            </View>
+            <View className="li-text">
+              <View className="title mb10">
+                <Text>襄阳吾悦广场</Text>
+              </View>
+              <View className="small-desc mb10">
+                <Text>樊城区-樊城区</Text>
+                <Text className="line-split"></Text>
+                <Text>建面85-0139平米</Text>
+              </View>
+              <View className="mb10">
+                <Text className="price">1200</Text>
+                <Text className="price-unit">元/m²</Text>
+              </View>
+              <View className="tags">
+                <Text className="tags-item sale-status-1">在售</Text>
+              </View>
+            </View>
+          </View>
           <View className="house-list-li">
             <View className="li-image">
               <Image src="//static.fczx.com/www/assets/images/1400x933_1.jpg"></Image>

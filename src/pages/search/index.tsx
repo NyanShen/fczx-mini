@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Taro from '@tarojs/taro'
 import classnames from 'classnames'
-import {map, includes} from 'lodash'
+import { map, includes, multiply } from 'lodash'
 import { View, Text, Input, RichText, ScrollView } from '@tarojs/components'
 
 import api from '@services/api'
@@ -17,6 +17,7 @@ const INIT_HISTORIES = storage.getItem('histories', 'search') || []
 const Search = () => {
   const { contentHeight } = useNavData()
   const [clear, setClear] = useState(false)
+  const [multiply, setMultiply] = useState(true)
   const [hotList, setHotList] = useState([])
   const [matcheList, setMatcheList] = useState([])
   const [searchValue, setSearchValue] = useState("")
@@ -99,11 +100,13 @@ const Search = () => {
     <View className="search">
       <NavBar title="搜索" back={true} />
       <View className="search-container clearfix">
+        <View className="search-label">
+          <Text className="search-label-text">新房</Text>
+          {
+            multiply && <Text className="iconfont iconarrow-down-filling"></Text>
+          }
+        </View>
         <View className="search-content">
-          <View className="search-label">
-            <Text className="search-label-text">新房</Text>
-            <Text className="iconfont iconarrow-down-filling"></Text>
-          </View>
           <Input className="search-input" placeholder="请输入楼盘名称或地址" onInput={handleInput} value={searchValue} autoFocus></Input>
           {clear && <Text className="iconfont iconclear" onClick={clearSearchValue}></Text>}
         </View>
