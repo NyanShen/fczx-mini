@@ -22,6 +22,7 @@
     max-height: 50vh;
     z-index: 98;
     background-color: $white;
+    font-size: $font-basic;
     &-item {
         .search-region {
             display: flex;
