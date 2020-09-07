@@ -6,25 +6,37 @@
     line-height: 80px;
     font-size: $font-basic;
     border-bottom: $border;
+    background-color: $white;
+    z-index: 99;
     &-item {
         flex: 1;
         text-align: center;
 
         .iconfont {
             color: $desc-color;
+            margin-left: 10px;
         }
     }
 }
 
-.search-content {
+.search-container {
     position: absolute;
     width: 100%;
     max-height: 50vh;
-    z-index: 98;
+    z-index: -10;
     background-color: $white;
     font-size: $font-basic;
-    &-item {
-        .search-region {
+    transform: translateY(-100%);
+    transition: 0.2s;
+    &.actived {
+        transform: translateY(0);
+    }
+    .search-content-scroll {
+        margin-bottom: 120px;
+    }
+    .search-content {
+
+        .search-split {
             display: flex;
 
             .flex-item {
@@ -34,7 +46,7 @@
             .flex-item:last-child {
                 border-right: 0;
             }
-            .region-item {
+            .split-item {
                 height: 80px;
                 line-height: 80px;
                 padding-left: 30px;
@@ -44,10 +56,76 @@
                     background-color: $bg-color;
                 }
             }
-            .region-item:last-child {
+            .split-item:last-child {
                 border-bottom: 0;
             }
-            
+        }
+
+        .search-multi-item {
+            padding: 16px 24px;
+            .title {
+                font-size: 30px;
+                color: $title-color;
+                padding: 10px;
+            }
+
+            .options {
+                display: flex;
+                flex-wrap: wrap;
+
+                &-item {
+                    width: 25%;
+                    margin: 18px;
+                    text-align: center;
+                    font-size: 24px;
+                    padding: 14px 10px;
+                    border: 0.5px solid $bg2-color;
+                    background-color: $bg2-color;
+                    color: $text-color;
+                }
+            }
         }
     }
+
+    .search-footer {
+        position: absolute;
+        bottom: 0;
+        display: flex;
+        width: 100%;
+        justify-content: space-around;
+        align-items: center;
+        padding: 20px 0;
+        background-color: #fff;
+        .btn {
+            width: 40%;
+            line-height: 80px;
+            text-align: center;
+            border-radius: 6px;
+
+            &.reset-btn {
+                color: $text-color;
+                background-color: $bg-color;
+            }
+
+            &.confirm-btn {
+                color: $white;
+                background-color: $primary-color;
+            }
+
+            &.single-btn {
+                width: 25%;
+            }
+        }
+        .search-input {
+            width: 25%;
+            height: 80px;
+            line-height: 80px;
+            text-align: center;
+            background-color: $bg-color;
+        }
+    }
+}
+
+.search-multi-container {
+    max-height: 60vh;
 }

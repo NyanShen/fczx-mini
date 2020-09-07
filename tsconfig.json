@@ -29,6 +29,7 @@
         "@hooks/*": ["src/hooks/*"],
         "@utils/*": ["src/utils/*"],
         "@assets/*": ["src/assets/*"], // css, html中需要 `~@assets/*`
+        "@styles/*": ["src/styles/*"],
     }
   },
   "exclude": [
