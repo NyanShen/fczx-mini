@@ -12,9 +12,27 @@
         flex: 1;
         text-align: center;
 
+        &.actived {
+            color: $primary-color;
+
+            .iconfont {
+                color: $primary-color;
+            }
+        }
+
+        .text {
+            display: inline-block;
+            max-width: 70%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            vertical-align: middle;
+        }
+
         .iconfont {
             color: $desc-color;
             margin-left: 10px;
+            vertical-align: middle;
         }
     }
 }
@@ -35,7 +53,6 @@
         margin-bottom: 120px;
     }
     .search-content {
-
         .search-split {
             display: flex;
 
@@ -56,9 +73,6 @@
                     background-color: $bg-color;
                 }
             }
-            .split-item:last-child {
-                border-bottom: 0;
-            }
         }
 
         .search-multi-item {
@@ -74,14 +88,21 @@
                 flex-wrap: wrap;
 
                 &-item {
-                    width: 25%;
-                    margin: 18px;
+                    width: 19.5%;
+                    margin: 8px;
                     text-align: center;
                     font-size: 24px;
                     padding: 14px 10px;
                     border: 0.5px solid $bg2-color;
+                    border-radius: 6px;
                     background-color: $bg2-color;
                     color: $text-color;
+
+                    &.actived {
+                        color: $primary-color;
+                        border-color: $primary-color;
+                        background-color: $white;
+                    }
                 }
             }
         }
