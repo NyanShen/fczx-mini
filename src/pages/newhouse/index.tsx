@@ -89,8 +89,11 @@ const NewHouse = () => {
 
     useEffect(() => {
         fetchCondition()
-        fetchHouseList()
     }, [])
+
+    useEffect(() => {
+        fetchHouseList()
+    }, [selected.region, selected.unit_price, selected.total_price, selected.house_type])
 
     const fetchCondition = () => {
         app.request({
@@ -107,10 +110,18 @@ const NewHouse = () => {
     const fetchHouseList = () => {
         app.request({
             url: api.getHouseNew,
-            data: {}
+            data: {
+                region: selected.region?.id,
+                unit_price: selected.unit_price?.value,
+                total_price: selected.total_price?.value,
+                house_type: selected.house_type?.value,
+                house_property: selected.house_property?.value,
+                sale_status: selected.sale_status?.value,
+                feature: selected.feature?.value,
+                renovation: selected.renovation?.value
+            }
         }, {
-            isMock: true,
-            loading: false
+            isMock: true
         }).then((result: any) => {
             setHouseList(result || [])
         })
@@ -190,6 +201,7 @@ const NewHouse = () => {
 
     const handleConfirm = () => {
         setTab('')
+        fetchHouseList()
     }
 
     const renderSplitItem = (key: string) => {
