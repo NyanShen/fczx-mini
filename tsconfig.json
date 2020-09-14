@@ -25,6 +25,7 @@
     ],
     "paths": {
         "@components/*": ["src/components/*"],
+        "@constants/*": ["src/constants/*"],
         "@services/*": ["src/services/*"],
         "@hooks/*": ["src/hooks/*"],
         "@utils/*": ["src/utils/*"],

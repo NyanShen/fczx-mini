@@ -1,10 +1,13 @@
-import React, { useState } from 'react'
-import { View, Text, ScrollView, Input, Image } from '@tarojs/components'
+import React, { useEffect, useState } from 'react'
+import { View, Text, ScrollView, Image } from '@tarojs/components'
 import classnames from 'classnames'
 import { find, remove } from 'lodash'
 
+import api from '@services/api'
+import app from '@services/request'
 import NavBar from '@components/navbar/index'
 import useNavData from '@hooks/useNavData'
+import { PRICE_TYPE, SALE_STATUS } from '@constants/house'
 import '@styles/common/house-list.scss'
 import '@styles/common/search-tab.scss'
 import './index.scss'
@@ -42,11 +45,14 @@ const INIT_CONDITION = {
 
 const NewHouse = () => {
     const { appHeaderHeight, contentHeight } = useNavData()
-    const scrollHeight = contentHeight * 0.5 - 60
-    const scrollMoreHeight = contentHeight * 0.6 - 60
+    const footerBtnHeight = 60
+    const scrollHeight = contentHeight * 0.5 - footerBtnHeight
+    const scrollMoreHeight = contentHeight * 0.6 - footerBtnHeight
     const [tab, setTab] = useState<string>('')
     const [priceType, setPriceType] = useState<string>('unit_price')
     const [selected, setSelected] = useState<IConditionState>(INIT_CONDITION)
+    const [condition, setCondition] = useState<any>()
+    const [houseList, setHouseList] = useState<any>([])
     const tabs = [
         {
             type: 'region',
@@ -80,238 +86,34 @@ const NewHouse = () => {
             value: "total_price"
         }
     ]
-    const conditions = {
-        region: [
-            {
-                id: 'all000',
-                name: '不限',
-                value: ''
-            },
-            {
-                id: '1001',
-                name: '樊城区',
-                value: '1001'
-            },
-            {
-                id: '1002',
-                name: '襄城区',
-                value: '1002'
-            },
-            {
-                id: '1003',
-                name: '襄州区',
-                value: '1003'
-            },
-            {
-                id: '1004',
-                name: '谷城县',
-                value: '1004'
-            },
-            {
-                id: '1005',
-                name: '老河口',
-                value: '1005'
-            },
-            {
-                id: '1006',
-                name: '宜城',
-                value: '1006'
-            },
-            {
-                id: '1007',
-                name: '万达广场测试',
-                value: '1007'
-            }
-        ],
-        unit_price: [
-            {
-                id: 'all000',
-                name: '不限',
-                value: ''
-            },
-            {
-                id: '001',
-                name: '4000元/m²以下',
-                value: '4000'
-            },
-            {
-                id: '002',
-                name: '4000-5000元/m²',
-                value: '4000-5000'
-            },
-            {
-                id: '003',
-                name: '5000-6000元/m²',
-                value: '5000-6000'
-            },
-            {
-                id: '004',
-                name: '6000-7000元/m²',
-                value: '6000-7000'
-            },
-            {
-                id: '005',
-                name: '7000-8000元/m²',
-                value: '7000-8000'
-            },
-            {
-                id: '006',
-                name: '8000-9000元/m²',
-                value: '8000-9000'
-            },
-            {
-                id: '007',
-                name: '9000-10000元/m²',
-                value: '9000-10000'
-            },
-            {
-                id: '008',
-                name: '10000元/m²',
-                value: '10000'
-            },
-        ],
-        total_price: [
-            {
-                id: 'all000',
-                name: '不限',
-                value: ''
-            },
-            {
-                id: '001',
-                name: '20万以下',
-                value: '20'
-            },
-            {
-                id: '002',
-                name: '20-50万',
-                value: '20-50'
-            },
-            {
-                id: '003',
-                name: '50-100万',
-                value: '50-100'
-            },
-            {
-                id: '004',
-                name: '100万以上',
-                value: '100'
-            }
-        ],
-        house_type: [
-            {
-                id: 'all000',
-                name: '不限',
-                value: ''
-            },
-            {
-                id: '001',
-                name: '一居',
-                value: '1'
-            },
-            {
-                id: '002',
-                name: '二居',
-                value: '2'
-            },
-            {
-                id: '003',
-                name: '三居',
-                value: '3'
-            },
-            {
-                id: '004',
-                name: '四居',
-                value: '4'
-            },
-            {
-                id: '005',
-                name: '五居',
-                value: '5'
-            },
-            {
-                id: '006',
-                name: '五居以上',
-                value: '6'
-            }
-        ],
-        house_property: [
-            {
-                id: '001',
-                name: '住宅',
-                value: '住宅'
-            },
-            {
-                id: '002',
-                name: '别墅',
-                value: '别墅'
-            },
-            {
-                id: '003',
-                name: '写字楼',
-                value: '写字楼'
-            },
-            {
-                id: '004',
-                name: '商住',
-                value: '商住'
-            },
-            {
-                id: '005',
-                name: '商铺',
-                value: '商铺'
-            },
-        ],
-        sale_status: [
-            {
-                id: '001',
-                name: '待售',
-                value: '待售'
-            },
-            {
-                id: '002',
-                name: '在售',
-                value: '在售'
-            },
-            {
-                id: '003',
-                name: '售完',
-                value: '售完'
-            },
-        ],
-        renovation: [
-            {
-                id: '001',
-                name: '毛坯',
-                value: '毛坯'
-            },
-            {
-                id: '002',
-                name: '普通装修',
-                value: '普通装修'
-            },
-            {
-                id: '003',
-                name: '精装修',
-                value: '精装修'
-            },
-            {
-                id: '004',
-                name: '豪华装修',
-                value: '豪华装修'
-            }
-        ],
-        feature: [
-            {
-                id: '001',
-                name: '小戶型',
-                value: '小戶型'
-            },
-            {
-                id: '002',
-                name: '低总价',
-                value: '低总价'
-            }
-        ]
+
+    useEffect(() => {
+        fetchCondition()
+        fetchHouseList()
+    }, [])
+
+    const fetchCondition = () => {
+        app.request({
+            url: api.getHouseCondition,
+            data: { type: 'newHouse' }
+        }, {
+            isMock: true,
+            loading: false
+        }).then((result: any) => {
+            setCondition(result || {})
+        })
+    }
+
+    const fetchHouseList = () => {
+        app.request({
+            url: api.getHouseNew,
+            data: {}
+        }, {
+            isMock: true,
+            loading: false
+        }).then((result: any) => {
+            setHouseList(result || [])
+        })
     }
 
     const switchCondition = (item) => {
@@ -394,7 +196,7 @@ const NewHouse = () => {
         return (
             <ScrollView className="split-list flex-item" scrollY style={{ height: scrollHeight }}>
                 {
-                    conditions[key].map((item: any, index: number) => (
+                    condition && condition[key].map((item: any, index: number) => (
                         <View
                             key={index}
                             className={classnames("split-item", selected[key].id === item.id && 'actived')}
@@ -413,7 +215,7 @@ const NewHouse = () => {
                 {title && <View className="title">{title}</View>}
                 <View className="options">
                     {
-                        conditions[key].map((item: any, index: number) => (
+                        condition && condition[key].map((item: any, index: number) => (
                             <View
                                 key={index}
                                 className={classnames("options-item", selected[key].id === item.id && 'actived')}
@@ -535,56 +337,38 @@ const NewHouse = () => {
             <View className={classnames('mask', tab && 'show')} onClick={() => setTab('')}></View>
 
             <View className="newhouse-content">
-                <View className="house-list view-content">
-                    <ScrollView className="house-list-ul">
-                        <View className="house-list-li">
-                            <View className="li-image">
-                                <Image src="//static.fczx.com/www/assets/images/1400x933_1.jpg"></Image>
-                            </View>
-                            <View className="li-text">
-                                <View className="title mb10">
-                                    <Text>襄阳吾悦广场</Text>
+                <ScrollView className="house-list view-content" scrollY style={{ height: contentHeight - 85 }}>
+                    <View className="house-list-ul">
+                        {
+                            houseList.length > 0 && houseList.map((item: any) => (
+                                <View className="house-list-li" key={item.id}>
+                                    <View className="li-image">
+                                        <Image src={item.image_path}></Image>
+                                    </View>
+                                    <View className="li-text">
+                                        <View className="title mb10">
+                                            <Text>{item.house_name}</Text>
+                                        </View>
+                                        <View className="small-desc mb10">
+                                            <Text>{item.area && item.area.name}</Text>
+                                            <Text className="line-split"></Text>
+                                            <Text>建面{item.building_area}平米</Text>
+                                        </View>
+                                        <View className="mb10">
+                                            <Text className="price">{item.price}</Text>
+                                            <Text className="price-unit">{PRICE_TYPE[item.price_type]}</Text>
+                                        </View>
+                                        <View className="tags">
+                                            <Text className={classnames('tags-item', `sale-status-${item.sale_status}`)}>{SALE_STATUS[item.sale_status]}</Text>
+                                        </View>
+                                    </View>
                                 </View>
-                                <View className="small-desc mb10">
-                                    <Text>樊城区-樊城区</Text>
-                                    <Text className="line-split"></Text>
-                                    <Text>建面85-0139平米</Text>
-                                </View>
-                                <View className="mb10">
-                                    <Text className="price">1200</Text>
-                                    <Text className="price-unit">元/m²</Text>
-                                </View>
-                                <View className="tags">
-                                    <Text className="tags-item sale-status-1">在售</Text>
-                                </View>
-                            </View>
-                        </View>
-                        <View className="house-list-li">
-                            <View className="li-image">
-                                <Image src="//static.fczx.com/www/assets/images/1400x933_1.jpg"></Image>
-                            </View>
-                            <View className="li-text">
-                                <View className="title mb10">
-                                    <Text>襄阳吾悦广场</Text>
-                                </View>
-                                <View className="small-desc mb10">
-                                    <Text>樊城区-樊城区</Text>
-                                    <Text className="line-split"></Text>
-                                    <Text>建面85-0139平米</Text>
-                                </View>
-                                <View className="mb10">
-                                    <Text className="price">1200</Text>
-                                    <Text className="price-unit">元/m²</Text>
-                                </View>
-                                <View className="tags">
-                                    <Text className="tags-item sale-status-1">在售</Text>
-                                </View>
-                            </View>
-                        </View>
-                    </ScrollView>
-                </View>
+                            ))
+                        }
+                    </View>
+                </ScrollView>
             </View>
         </View>
     )
 }
-export default NewHousek
+export default NewHouse
