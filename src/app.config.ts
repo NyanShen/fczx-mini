@@ -2,12 +2,12 @@ import { Config } from "@tarojs/taro";
 
 export default {
   pages: [
+    'pages/search/index',
     'pages/newhouse/index',
     'pages/index/index',
     'pages/user/index',
     'pages/chat/index',
     'pages/house/index',
-    'pages/search/index',
     'pages/house/detail',
   ],
   tabBar: {

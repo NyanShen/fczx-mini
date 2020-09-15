@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import Taro from '@tarojs/taro'
 import { View, Text, ScrollView, Image } from '@tarojs/components'
 import classnames from 'classnames'
 import { find, remove } from 'lodash'
@@ -204,6 +205,12 @@ const NewHouse = () => {
         fetchHouseList()
     }
 
+    const handleHouseItemClick = (item: any) => {
+        Taro.navigateTo({
+            url: `/pages/house/index?id=${item.id}&name=${item.house_name}`
+          })
+    }
+
     const renderSplitItem = (key: string) => {
         return (
             <ScrollView className="split-list flex-item" scrollY style={{ height: scrollHeight }}>
@@ -353,7 +360,7 @@ const NewHouse = () => {
                     <View className="house-list-ul">
                         {
                             houseList.length > 0 && houseList.map((item: any) => (
-                                <View className="house-list-li" key={item.id}>
+                                <View className="house-list-li" key={item.id} onClick={() => handleHouseItemClick(item)}>
                                     <View className="li-image">
                                         <Image src={item.image_path}></Image>
                                     </View>
