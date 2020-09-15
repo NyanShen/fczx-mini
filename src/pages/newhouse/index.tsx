@@ -33,10 +33,10 @@ interface IConditionState {
 const initial_value = { id: '', name: '', value: '' }
 
 const INIT_CONDITION = {
-    region: { id: 'all000', name: '不限', value: '' },
-    unit_price: { id: 'all000', name: '不限', value: '' },
+    region: { id: 'all', name: '不限', value: '' },
+    unit_price: { id: 'all', name: '不限', value: '' },
     total_price: initial_value,
-    house_type: { id: 'all000', name: '不限', value: '' },
+    house_type: { id: 'all', name: '不限', value: '' },
     house_property: initial_value,
     sale_status: initial_value,
     renovation: initial_value,
@@ -349,7 +349,7 @@ const NewHouse = () => {
             <View className={classnames('mask', tab && 'show')} onClick={() => setTab('')}></View>
 
             <View className="newhouse-content">
-                <ScrollView className="house-list view-content" scrollY style={{ height: contentHeight - 85 }}>
+                <ScrollView className="house-list" scrollY style={{ maxHeight: contentHeight - 90 }}>
                     <View className="house-list-ul">
                         {
                             houseList.length > 0 && houseList.map((item: any) => (
@@ -377,6 +377,9 @@ const NewHouse = () => {
                                 </View>
                             ))
                         }
+                    </View>
+                    <View className="empty-container">
+                        <Text>没有更多数据了</Text>
                     </View>
                 </ScrollView>
             </View>

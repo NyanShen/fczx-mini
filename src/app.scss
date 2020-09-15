@@ -90,3 +90,10 @@
       z-index: 90;
   }
 }
+
+.empty-container {
+  text-align: center;
+  color: $desc-color;
+  font-size: $font-basic;
+  padding: 30px 0;
+}
