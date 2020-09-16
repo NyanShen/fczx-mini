@@ -12,24 +12,31 @@ import useNavData from '@hooks/useNavData'
 import NavBar from '@components/navbar/index'
 import './index.scss'
 
+export interface ISearchOption {
+  type: string
+  name: string
+}
+
 interface ISearchProps {
   searchTitle: string
-  isMultiply?: boolean
   searchOption: any[]
   searchRemark?: string
   searchUrl: string
-  onItemClick: (any) => void
+  onItemClick: (any, ISearchOption) => void
 }
 
 const Search = (props: ISearchProps) => {
-
-  const INIT_HISTORIES = storage.getItem('histories', `search_`) || []
+  const isMultiply = props.searchOption.length > 1
+  const INIT_OPTION = props.searchOption[0]
+  const INIT_HISTORIES = storage.getItem('histories', `search_${INIT_OPTION.name}`) || []
   const { contentHeight } = useNavData()
   const [clear, setClear] = useState(false)
   const [hotList, setHotList] = useState([])
   const [matcheList, setMatcheList] = useState([])
   const [searchValue, setSearchValue] = useState("")
   const [searchHistories, setSearchHistories] = useState(INIT_HISTORIES)
+  const [option, setOption] = useState<ISearchOption>(INIT_OPTION)
+  const [showOption, setShowOption] = useState<boolean>(false)
 
   useEffect(() => {
     app.request({ url: api.getSearchHotList }, { isMock: true, loading: false })
@@ -38,13 +45,13 @@ const Search = (props: ISearchProps) => {
       })
   }, [])
 
-  const handleItemClick = (item) => {
+  const handleItemClick = (item: any) => {
     let ids = map(searchHistories, 'id')
     if (!includes(ids, item.id)) {
       searchHistories.push(item)
     }
-    storage.setItem('histories', searchHistories, `search_`)
-    props.onItemClick(item)
+    storage.setItem('histories', searchHistories, `search_${option.name}`)
+    props.onItemClick(item, option)
   }
 
   const handleInput = (event) => {
@@ -78,8 +85,17 @@ const Search = (props: ISearchProps) => {
   }
 
   const handleClearClick = () => {
-    storage.clear(`search_`)
+    storage.clear(`search_${option.name}`)
     setSearchHistories([])
+  }
+
+  const handleSwitchOption = (item: ISearchOption) => {
+    if (item.type === option.type) {
+      return
+    }
+    setOption(item)
+    setShowOption(false)
+    setSearchHistories(storage.getItem('histories', `search_${item.name}`) || [])
   }
 
   const renderSearchKeys = (title, className, keyList, allowClear = false) => {
@@ -92,7 +108,12 @@ const Search = (props: ISearchProps) => {
           </View>
           <View className="search-list clearfix">
             {keyList.map((item: any) => {
-              return <Text className="item" key={item.id} onClick={() => handleItemClick(item)}>{item.name}</Text>
+              return <Text
+                key={item.id}
+                className="item"
+                onClick={() => handleItemClick(item)}
+              >{item.name}
+              </Text>
             })}
           </View>
         </View>
@@ -100,27 +121,39 @@ const Search = (props: ISearchProps) => {
     }
   }
 
+  const renderSearOption = () => {
+    return props.searchOption.map((item: ISearchOption, index: number) => (
+      <View
+        key={index}
+        className={classnames('options-item', option.type === item.type && 'actived')}
+        onClick={() => handleSwitchOption(item)}
+      >{item.name}
+      </View>
+    ))
+  }
+
   return (
     <View className="search">
       <NavBar title={props.searchTitle} back={true} />
-      <View className="search-container clearfix">
-
+      <View className="search-wrapper clearfix">
         <View className="search-content">
-          <View className="search-label">
-            <Text className="search-label-text">新房</Text>
-            {
-              props.isMultiply && <Text className="iconfont iconarrow-down-bold"></Text>
-            }
+
+          <View className="search-label" onClick={() => setShowOption(!showOption)}>
+            <Text className="search-label-text">{option.name}</Text>
+            <Text className={classnames('iconfont', isMultiply ? 'iconarrow-down-bold' : 'iconsearch')}></Text>
+          </View>
+          <Input className="search-input" placeholder={props.searchRemark} onInput={handleInput} value={searchValue} autoFocus></Input>
+
+          {clear && <Text className="iconfont iconclear" onClick={clearSearchValue}></Text>}
+
+          {showOption &&
             <View className="search-options">
               <View className="triangle-up">
                 <Text className="cover"></Text>
               </View>
-              <View className="options-item actived">新房</View>
-              <View className="options-item">二手房</View>
+              {renderSearOption()}
             </View>
-          </View>
-          <Input className="search-input" placeholder={props.searchRemark} onInput={handleInput} value={searchValue} autoFocus></Input>
-          {clear && <Text className="iconfont iconclear" onClick={clearSearchValue}></Text>}
+          }
         </View>
         <Text className="search-cancel" onClick={handleCancel}>取消</Text>
       </View>

@@ -1,396 +1,205 @@
-import React, { useEffect, useState } from 'react'
-import Taro from '@tarojs/taro'
-import { View, Text, ScrollView, Image } from '@tarojs/components'
+import React, { useState } from 'react'
+import Taro, { getCurrentInstance, useReady } from '@tarojs/taro'
+import { View, ScrollView, Swiper, SwiperItem, Image, Text } from '@tarojs/components'
 import classnames from 'classnames'
-import { find, remove } from 'lodash'
+import { parseInt } from 'lodash'
 
 import api from '@services/api'
 import app from '@services/request'
-import NavBar from '@components/navbar/index'
 import useNavData from '@hooks/useNavData'
-import { PRICE_TYPE, SALE_STATUS } from '@constants/house'
-import '@styles/common/house-list.scss'
-import '@styles/common/search-tab.scss'
+import NavBar from '@components/navbar/index'
+import Popup from '@components/popup/index'
 import './index.scss'
 
-interface IFilter {
-    id: string
-    name: string
-    value?: string
+interface IAlbumSwiper {
+    albumId: string
+    imageIndex: number
+    swiperIndex: number,
+    itemLength: number
 }
 
-interface IConditionState {
-    region?: IFilter
-    unit_price?: IFilter
-    total_price?: IFilter
-    house_type?: IFilter
-    house_property?: IFilter
-    sale_status?: IFilter
-    renovation?: IFilter
-    feature?: IFilter
+const INIT_ALBUM_SWIPER = { albumId: '', imageIndex: 0, swiperIndex: 0, itemLength: 0 }
 
-}
+const House = () => {
+    const { contentHeight } = useNavData()
+    const [albumSwiper, setAlbumSwiper] = useState<IAlbumSwiper>(INIT_ALBUM_SWIPER)
+    const [houseData, setHouseData] = useState<any>({})
+    const [popup, setPopup] = useState<boolean>(false)
 
-const initial_value = { id: '', name: '', value: '' }
-
-const INIT_CONDITION = {
-    region: { id: 'all', name: '不限', value: '' },
-    unit_price: { id: 'all', name: '不限', value: '' },
-    total_price: initial_value,
-    house_type: { id: 'all', name: '不限', value: '' },
-    house_property: initial_value,
-    sale_status: initial_value,
-    renovation: initial_value,
-    feature: initial_value
-}
-
-const NewHouse = () => {
-    const { appHeaderHeight, contentHeight } = useNavData()
-    const footerBtnHeight = 60
-    const scrollHeight = contentHeight * 0.5 - footerBtnHeight
-    const scrollMoreHeight = contentHeight * 0.6 - footerBtnHeight
-    const [tab, setTab] = useState<string>('')
-    const [priceType, setPriceType] = useState<string>('unit_price')
-    const [selected, setSelected] = useState<IConditionState>(INIT_CONDITION)
-    const [condition, setCondition] = useState<any>()
-    const [houseList, setHouseList] = useState<any>([])
-    const tabs = [
-        {
-            type: 'region',
-            name: '区域',
-            keys: ['region']
-        },
-        {
-            type: 'price',
-            name: '价格',
-            keys: ['unit_price', 'total_price']
-        },
-        {
-            type: 'house_type',
-            name: '户型',
-            keys: ['house_type']
-        },
-        {
-            type: 'more',
-            name: '更多',
-            keys: ['house_property', 'sale_status', 'renovation', 'feature']
-        }]
-    const priceTabs = [
-        {
-            id: 'id_01',
-            name: '按单价',
-            value: "unit_price"
-        },
-        {
-            id: 'id_02',
-            name: '按总价',
-            value: "total_price"
+    useReady(() => {
+        let currentRouter: any = getCurrentInstance().router
+        let params: any = currentRouter.params
+        if (params.id) {
+            app.request({ url: api.getHouseById, data: { id: params.id } }, { isMock: true })
+                .then((result: any) => {
+                    setHouseData(result)
+                    setAlbumSwiper({
+                        ...albumSwiper,
+                        itemLength: result.house_album[0].images.length,
+                        albumId: result.house_album[0].id,
+                    })
+                })
         }
-    ]
+    })
 
-    useEffect(() => {
-        fetchCondition()
-    }, [])
-
-    useEffect(() => {
-        fetchHouseList()
-    }, [selected.region, selected.unit_price, selected.total_price, selected.house_type])
-
-    const fetchCondition = () => {
-        app.request({
-            url: api.getHouseCondition,
-            data: { type: 'newHouse' }
-        }, {
-            isMock: true,
-            loading: false
-        }).then((result: any) => {
-            setCondition(result || {})
+    const onSwiperChange = (event) => {
+        let swiperIndex = event.detail.current;
+        let currentItem = event.detail.currentItemId.split(',');
+        let albumId = currentItem[0];
+        let imageIndex = parseInt(currentItem[1]);
+        let itemLength = findAlbumById(albumId).length
+        setAlbumSwiper({
+            albumId,
+            imageIndex,
+            swiperIndex,
+            itemLength
         })
     }
 
-    const fetchHouseList = () => {
-        app.request({
-            url: api.getHouseNew,
-            data: {
-                region: selected.region?.id,
-                unit_price: selected.unit_price?.value,
-                total_price: selected.total_price?.value,
-                house_type: selected.house_type?.value,
-                house_property: selected.house_property?.value,
-                sale_status: selected.sale_status?.value,
-                feature: selected.feature?.value,
-                renovation: selected.renovation?.value
-            }
-        }, {
-            isMock: true
-        }).then((result: any) => {
-            setHouseList(result || [])
+    const switchAlbum = (albumId: string) => {
+        const currenAlbum = findAlbumById(albumId)
+        setAlbumSwiper({
+            albumId,
+            imageIndex: 0,
+            swiperIndex: currenAlbum.indexBefore,
+            itemLength: currenAlbum.length
         })
     }
 
-    const switchCondition = (item) => {
-        if (tab === item.type) {
-            setTab('')
-            return
-        }
-        setTab(item.type)
-    }
-
-    const handleSingleClick = (key: string, item: any) => {
-        setTab('')
-        if (key === 'unit_price') {
-            setSelected({
-                ...selected,
-                total_price: initial_value,
-                [key]: item
-            })
-        } else if (key === 'total_price') {
-            setSelected({
-                ...selected,
-                unit_price: initial_value,
-                [key]: item
-            })
-        } else {
-            setSelected({
-                ...selected,
-                [key]: item
-            })
-        }
-    }
-    const handleMultiClick = (key: string, item: any) => {
-        let selectedValue = selected[key]
-        if (selectedValue instanceof Object) {
-            if (selectedValue.id === item.id) {
-                setSelected({
-                    ...selected,
-                    [key]: initial_value
-                })
-            } else {
-                setSelected({
-                    ...selected,
-                    [key]: item
-                })
+    const findAlbumById = (albumId: string) => {
+        let indexBefore = 0;
+        let album: any = null;
+        for (const item of houseData.house_album) {
+            if (item.id === albumId) {
+                album = item
+                break;
             }
+            indexBefore = indexBefore + item.images.length
         }
 
-        if (selectedValue instanceof Array) {
-            let target = find(selectedValue, { id: item.id })
-            if (target) {
-                remove(selectedValue, { id: item.id })
-                setSelected({
-                    ...selected,
-                    [key]: selectedValue
-                })
-            } else {
-                setSelected({
-                    ...selected,
-                    [key]: [...selectedValue, item]
-                })
-            }
+        return {
+            id: albumId,
+            length: album.images.length,
+            images: album.images,
+            indexBefore
         }
     }
 
-    const handleReset = () => {
-        setSelected({
-            ...selected,
-            house_property: initial_value,
-            renovation: initial_value,
-            sale_status: initial_value,
-            feature: initial_value
-        })
+    const navigateTo = (url: string, params: any = {}) => {
+        console.log(params)
+        Taro.navigateTo({ url })
     }
 
-    const handleConfirm = () => {
-        setTab('')
-        fetchHouseList()
+    const handlePopupConfirm = (popupData) => {
+        console.log(popupData)
+        setPopup(false)
     }
 
-    const handleHouseItemClick = (item: any) => {
-        Taro.navigateTo({
-            url: `/pages/house/index?id=${item.id}&name=${item.house_name}`
-          })
-    }
-
-    const renderSplitItem = (key: string) => {
-        return (
-            <ScrollView className="split-list flex-item" scrollY style={{ height: scrollHeight }}>
-                {
-                    condition && condition[key].map((item: any, index: number) => (
-                        <View
-                            key={index}
-                            className={classnames("split-item", selected[key].id === item.id && 'actived')}
-                            onClick={() => handleSingleClick(key, item)}
-                        >{item.name}
-                        </View>
-                    ))
-                }
-            </ScrollView>
-        )
-    }
-
-    const renderMultiItem = (key: string, title: string = '') => {
-        return (
-            <View className="search-multi-item">
-                {title && <View className="title">{title}</View>}
-                <View className="options">
-                    {
-                        condition && condition[key].map((item: any, index: number) => (
-                            <View
-                                key={index}
-                                className={classnames("options-item", selected[key].id === item.id && 'actived')}
-                                onClick={() => handleMultiClick(key, item)}
-                            >
-                                {item.name}
-                            </View>
-                        ))
-                    }
-                </View>
-            </View>
-        )
-    }
-
-    const renderShowName = (item: any) => {
-        let showList: string[] = []
-        for (const key of item.keys) {
-            if (selected[key] instanceof Object) {
-                let showName: string = selected[key].name
-                if (!showName || ['不限', '全部'].includes(showName)) {
-                    continue
-                }
-                showList.push(showName)
-            }
-        }
-
-        if (showList.length > 1) {
-            showList = ['多选']
-        }
-
-        return showList.join(',')
-    }
     return (
-        <View className="newhouse">
-            <NavBar title="新房" back={true} />
-            <View className="fixed-top" style={{ top: appHeaderHeight }}>
-                <View className="newhouse-header view-content">
-                    <View className="newhouse-search">
-                        <Text className="iconfont iconsearch"></Text>
-                        <Text className="newhouse-search-text placeholder">请输入楼盘名称或地址</Text>
-                    </View>
-                    <View className="newhouse-nav-right">
-                        <Text className="iconfont iconmap"></Text>
-                        <Text className="text">地图找房</Text>
-                    </View>
-                </View>
-                <View className="search-tab">
-                    {
-
-                        tabs.map((item: any, index: number) => {
-                            let showName = renderShowName(item)
-                            return (
-                                <View
-                                    key={index}
-                                    className={classnames('search-tab-item', showName && 'actived')}
-                                    onClick={() => switchCondition(item)}
-                                >
-                                    <Text className="text">{showName ? showName : item.name}</Text>
-                                    <Text className="iconfont iconarrow-down-bold"></Text>
-                                </View>
-                            )
-                        })
-                    }
-                </View>
-                <View className={classnames('search-container', tab === 'region' && 'actived')}>
-                    <View className="search-content">
-                        <View className="search-split">
-                            <View className="split-type flex-item">
-                                <View className="split-item actived">区域</View>
-                            </View>
-                            {renderSplitItem('region')}
-                        </View>
-                    </View>
-                </View>
-                <View className={classnames('search-container', tab === 'price' && 'actived')}>
-                    <View className="search-content">
-                        <View className="search-split">
-                            <View className="split-type flex-item">
-                                {
-                                    priceTabs.map((item: any) => (
-                                        <View
-                                            key={item.id}
-                                            className={classnames("split-item", item.value === priceType && 'actived')}
-                                            onClick={() => setPriceType(item.value)}>
-                                            {item.name}
-                                        </View>
-                                    ))
-                                }
-                            </View>
-                            {renderSplitItem(priceType)}
-                        </View>
-                    </View>
-                    {/* <View className="search-footer">
-                        <Input className="search-input" placeholder="最低价" />-
-                        <Input className="search-input" placeholder="最高价" />
-                        <View className="btn confirm-btn single-btn">确定</View>
-                    </View> */}
-                </View>
-                <View className={classnames('search-container', tab === 'house_type' && 'actived')}>
-                    <View className="search-content">
-                        <View className="search-split">
-                            {renderSplitItem('house_type')}
-                        </View>
-                    </View>
-                </View>
-                <View className={classnames('search-container', 'search-multi-container', tab === 'more' && 'actived')}>
-                    <ScrollView className="search-content search-content-scroll" scrollY style={{ maxHeight: scrollMoreHeight }}>
-                        {renderMultiItem('house_property', '类型')}
-                        {renderMultiItem('renovation', '装修')}
-                        {renderMultiItem('sale_status', '状态')}
-                        {renderMultiItem('feature', '特色')}
-                    </ScrollView>
-                    <View className="search-footer">
-                        <View className="btn reset-btn" onClick={handleReset}>重置</View>
-                        <View className="btn confirm-btn" onClick={handleConfirm}>确定</View>
-                    </View>
-                </View>
-            </View>
-            <View className={classnames('mask', tab && 'show')} onClick={() => setTab('')}></View>
-
-            <View className="newhouse-content">
-                <ScrollView className="house-list" scrollY style={{ maxHeight: contentHeight - 90 }}>
-                    <View className="house-list-ul">
+        <View className="house">
+            <NavBar title={houseData.house_name || '楼盘'} back={true} />
+            <ScrollView style={{ height: `${contentHeight - 55}px`, backgroundColor: '#f7f7f7' }} scrollY>
+                <View className="house-album">
+                    <Swiper style={{ height: '225px' }} current={albumSwiper.swiperIndex} onChange={onSwiperChange}>
                         {
-                            houseList.length > 0 && houseList.map((item: any) => (
-                                <View className="house-list-li" key={item.id} onClick={() => handleHouseItemClick(item)}>
-                                    <View className="li-image">
-                                        <Image src={item.image_path}></Image>
-                                    </View>
-                                    <View className="li-text">
-                                        <View className="title mb10">
-                                            <Text>{item.house_name}</Text>
-                                        </View>
-                                        <View className="small-desc mb10">
-                                            <Text>{item.area && item.area.name}</Text>
-                                            <Text className="line-split"></Text>
-                                            <Text>建面{item.building_area}平米</Text>
-                                        </View>
-                                        <View className="mb10">
-                                            <Text className="price">{item.price}</Text>
-                                            <Text className="price-unit">{PRICE_TYPE[item.price_type]}</Text>
-                                        </View>
-                                        <View className="tags">
-                                            <Text className={classnames('tags-item', `sale-status-${item.sale_status}`)}>{SALE_STATUS[item.sale_status]}</Text>
-                                        </View>
-                                    </View>
-                                </View>
-                            ))
+                            houseData.house_album && houseData.house_album.map((albumItem: any) => {
+                                return albumItem.images.map((imageItem: any, imageIndex: number) => {
+                                    return (
+                                        <SwiperItem key={imageIndex} itemId={`${albumItem.id},${imageIndex}`}>
+                                            <Image style="width: 100%; height: 240px" src={imageItem.image_path} mode='widthFix'></Image>
+                                            {albumItem.type == 'video' && <Text className="auto-center icon-vedio"></Text>}
+                                        </SwiperItem>
+                                    )
+                                })
+                            })
+                        }
+                    </Swiper>
+                    <View className="album-count">{albumSwiper.imageIndex + 1}/{albumSwiper.itemLength}</View>
+                    <View className="album-text">
+                        {
+                            houseData.house_album && houseData.house_album.map((albumItem: any, albumIndex: number) => {
+                                return <Text
+                                    className={classnames('album-text-item', albumItem.id == albumSwiper.albumId && 'album-text-actived')}
+                                    key={albumIndex}
+                                    onClick={() => switchAlbum(albumItem.id)}
+                                >{albumItem.name}</Text>
+                            })
                         }
                     </View>
-                    <View className="empty-container">
-                        <Text>没有更多数据了</Text>
+                </View>
+                <View className="house-header">
+                    <View className="name">{houseData.house_name || '楼盘名称'}</View>
+                    <View className="tags">
+                        <Text className="tags-item sale-status-1">在售</Text>
+                        <Text className="tags-item">毛坯</Text>
+                        <Text className="tags-item">中高层</Text>
                     </View>
-                </ScrollView>
+                </View>
+                <View className="view-content info">
+                    <View className="info-item">
+                        <Text className="label">售价</Text>
+                        <Text className="price">20012</Text>
+                        <Text className="text">元/m²</Text>
+                    </View>
+                    <View className="info-item">
+                        <Text className="label">开盘</Text>
+                        <Text className="text">已于2019年6月23号开盘</Text>
+                    </View>
+                    <View className="info-item">
+                        <Text className="label">地址</Text>
+                        <Text className="text address">东津新区东西轴线与南山路交汇处东津新区东西轴线与南山路交汇处</Text>
+                        <Text className="iconfont iconaddress">地图</Text>
+                    </View>
+                    <View className="btn btn-blue mt20" onClick={() => navigateTo('/pages/newhouse/detail')}>
+                        <Text className="btn-name">查看更多楼盘详情</Text>
+                    </View>
+                    <View className="subscrib">
+                        <View className="subscrib-item">
+                            <Text className="iconfont icondata-view"></Text>
+                            <Text onClick={() => setPopup(true)}>变价通知</Text>
+                        </View>
+                        <View className="subscrib-item">
+                            <Text className="iconfont iconnotice"></Text>
+                            <Text onClick={() => setPopup(true)}>开盘通知</Text>
+                        </View>
+                    </View>
+                </View>
+                <View className="contact mt20">
+                    <View className="iconfont icontelephone-out"></View>
+                    <View>
+                        <View className="phone-call">400-018-0632转6199</View>
+                        <View className="phone-desc">致电售楼处了解项目更多信息</View>
+                    </View>
+                </View>
+            </ScrollView>
+            <View className="bottom-bar">
+                <View className="bar-item">
+                    <Text className="iconfont iconhome"></Text>
+                    <Text>首页</Text>
+                </View>
+                <View className="line-split"></View>
+                <View className="bar-item">
+                    <Text className="iconfont icongroup"></Text>
+                    <Text>团购</Text>
+                </View>
+                <View className="bar-item-btn">
+                    <Text className="btn btn-yellow btn-bar">置业顾问</Text>
+                </View>
+                <View className="bar-item-btn">
+                    <Text className="btn btn-green btn-bar">电话咨询</Text>
+                </View>
             </View>
+            {
+                popup &&
+                <Popup
+                    title="楼盘"
+                    subTitle="订阅消息"
+                    onConfirm={handlePopupConfirm}
+                    onCancel={() => setPopup(false)}
+                ></Popup>
+            }
+
         </View>
     )
 }
-export default NewHouse
+export default House

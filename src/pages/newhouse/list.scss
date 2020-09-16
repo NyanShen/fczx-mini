@@ -1,0 +1,41 @@
+.fixed-top {
+    position: fixed;
+    width: 100%;
+    background-color: $white;
+    z-index: 98;
+}
+
+.newhouse-header {
+    display: flex;
+    height: 70px;
+    line-height: 70px;
+    padding-top: 20px;
+    font-size: $font-basic;
+    background-color: $white;
+    z-index: 100;
+
+    .newhouse-search {
+        flex: 1;
+        border-radius: 5px;
+        padding: 0 20px;
+        background-color: $bg-color;
+
+        .newhouse-search-text {
+            padding-left: 20px;
+            &.placeholder {
+                color: $desc-color;
+            }
+        }
+    }
+    .newhouse-nav-right {
+        margin-left: 30px;
+        color: $text-color;
+        .iconmap {
+            color: $search-actived;
+        }
+    }
+}
+
+.newhouse-content {
+    padding-top: 181px;
+}
