@@ -186,7 +186,7 @@ const House = () => {
                     <Text className="btn btn-yellow btn-bar">置业顾问</Text>
                 </View>
                 <View className="bar-item-btn">
-                    <Text className="btn btn-green btn-bar">电话咨询</Text>
+                    <Text className="btn btn-primary btn-bar">电话咨询</Text>
                 </View>
             </View>
             {

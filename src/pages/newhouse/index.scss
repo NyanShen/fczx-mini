@@ -128,27 +128,6 @@
     }
 }
 
-.btn {
-    display: block;
-    line-height: 80px;
-    text-align: center;
-    font-size: 26px;
-    border-radius: 10px;
-    &-blue {
-        color: #8099af;
-        background-color: #f8f8f8;
-    }
-
-    &-yellow {
-        color: #fff;
-        background-color: #f90;
-    }
-
-    &-green {
-        color: #fff;
-        background-color: #11a43c;
-    }
-}
 .bottom-bar {
     display: flex;
     position: fixed;

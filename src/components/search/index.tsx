@@ -45,6 +45,18 @@ const Search = (props: ISearchProps) => {
       })
   }, [])
 
+  const navData = {
+    title: props.searchTitle,
+    back: true,
+    color: '#000000',
+    backgroundColor: '#ffffff'
+  }
+
+  Taro.setNavigationBarColor({
+    frontColor: navData.color,
+    backgroundColor: navData.backgroundColor
+  })
+
   const handleItemClick = (item: any) => {
     let ids = map(searchHistories, 'id')
     if (!includes(ids, item.id)) {
@@ -134,7 +146,7 @@ const Search = (props: ISearchProps) => {
 
   return (
     <View className="search">
-      <NavBar title={props.searchTitle} back={true} />
+      <NavBar {...navData} />
       <View className="search-wrapper clearfix">
         <View className="search-content">
 

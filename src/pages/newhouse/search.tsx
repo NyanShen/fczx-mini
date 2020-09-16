@@ -3,13 +3,13 @@ import Taro from '@tarojs/taro'
 import { View } from '@tarojs/components'
 
 import api from '@services/api'
-import Search from '@components/search'
+import Search, { ISearchOption } from '@components/search'
 
 const NewHouseSearch = () => {
 
-  const searchOption = [{ type: "newhouse", name: "新房" }]
+  const searchOption: ISearchOption[] = [{ type: "newhouse", name: "新房" }]
 
-  const handleItemClick = (item) => {
+  const handleItemClick = (item: any) => {
     Taro.navigateTo({
       url: `/pages/newhouse/index?id=${item.id}&name=${item.name}`
     })

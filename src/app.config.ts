@@ -2,12 +2,13 @@ import { Config } from "@tarojs/taro";
 
 export default {
   pages: [
+    'pages/user/index',
+    'pages/user/login',
+    'pages/newhouse/index',
     'pages/newhouse/list',
     'pages/newhouse/search',
-    'pages/newhouse/index',
     'pages/newhouse/detail',
     'pages/index/index',
-    'pages/user/index',
     'pages/chat/index',
     'pages/search/index',
   ],

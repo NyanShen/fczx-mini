@@ -10,7 +10,7 @@
 
 .view-content {
   padding: 0 30px;
-  background-color: #fff;
+  background-color: $white;
 }
 
 .auto-center {
@@ -56,26 +56,25 @@
   white-space: nowrap;
   overflow: hidden;
   &-item {
-      margin-right: 20px;
-      padding: 5px 10px;
-      border-radius: 5px;
-      background-color: #eee;
-      color: #999;
+    margin-right: 20px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    background-color: $border-color;
+    color: $desc-color;
   }
   &-item.sale-status-1 {
-      color: #fff;
-      background-color: $sale-1;
+    color: $white;
+    background-color: $sale-1;
   }
   &-item.sale-status-2 {
-      color: #fff;
-      background-color: $sale-2;
+    color: $white;
+    background-color: $sale-2;
   }
   &-item.sale-status-3 {
-      color: #fff;
-      background-color: $sale-3;
+    color: $white;
+    background-color: $sale-3;
   }
 }
-
 
 .mask {
   position: fixed;
@@ -86,8 +85,8 @@
   transition: 0.3s;
   z-index: -1;
   &.show {
-      background-color: rgba(0, 0, 0, 0.3);
-      z-index: 90;
+    background-color: rgba(0, 0, 0, 0.3);
+    z-index: 90;
   }
 }
 
@@ -96,4 +95,38 @@
   color: $desc-color;
   font-size: $font-basic;
   padding: 30px 0;
+}
+
+.btn {
+  display: block;
+  line-height: 80px;
+  text-align: center;
+  font-size: $font-basic;
+  border-radius: $border-radius-10;
+  border: $border;
+  &-blue {
+    color: #8099af;
+    background-color: $bg-color;
+  }
+
+  &-yellow {
+    color: $white;
+    background-color: $sale-2;
+  }
+
+  &-primary {
+    color: $white;
+    background-color: $primary-color;
+  }
+  
+  &-plain {
+    color: $primary-color;
+    border-color: $primary-color;
+    background-color: $white;
+  }
+}
+
+.cut-line {
+  border-bottom: 1px solid $line-color;
+  clear: both;
 }
