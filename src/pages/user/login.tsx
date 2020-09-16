@@ -1,6 +1,6 @@
 import React from 'react'
 import Taro from '@tarojs/taro'
-import { View, Text } from '@tarojs/components'
+import { View, Text, Button } from '@tarojs/components'
 
 import NavBar from '@components/navbar/index'
 import './login.scss'
@@ -12,10 +12,23 @@ const Login = () => {
         color: '#000000',
         backgroundColor: '#ffffff'
     }
+
     Taro.setNavigationBarColor({
         frontColor: navData.color,
         backgroundColor: navData.backgroundColor
     })
+
+    const onLoginByWeapp = () => {
+        Taro.login({
+            success: function (res: any) {
+                console.log(res)
+            }
+        })
+    }
+
+    const getPhoneNumber = (e) => {
+
+    }
 
     return (
         <View className="login">
@@ -29,9 +42,9 @@ const Login = () => {
                     <View className="cut-line"></View>
                     <Text className="desc">推荐使用登录方式</Text>
                 </View>
-                <View className="btn btn-primary">
+                <Button openType="getPhoneNumber" className="btn btn-primary">
                     <Text>微信登录</Text>
-                </View>
+                </Button>
                 <View className="btn btn-plain">
                     <Text>手机快捷登录</Text>
                 </View>
