@@ -10,7 +10,7 @@ const User = () => {
 
   const gotoLogin = () => {
     Taro.navigateTo({
-      url: '/pages/user/login'
+      url: '/pages/user/login/index'
     })
   }
 

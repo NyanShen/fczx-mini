@@ -2,11 +2,12 @@ import { Config } from '@tarojs/taro';
 
 export default {
   pages: [
-    'pages/user/login/phone/index',
     'pages/index/index',
     'pages/chat/index',
     'pages/search/index',
-    'pages/user/index'
+    'pages/user/index',
+    'pages/user/login/index',
+    'pages/user/login/phone/index',
   ],
   subPackages: [
     {

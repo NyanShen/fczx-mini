@@ -7,7 +7,7 @@ import './index.scss'
 
 const Login = () => {
     const navData = {
-        title: '登录',
+        title: '',
         back: true,
         color: '#000000',
         backgroundColor: '#ffffff'

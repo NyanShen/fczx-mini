@@ -102,11 +102,11 @@ const Search = (props: ISearchProps) => {
   }
 
   const handleSwitchOption = (item: ISearchOption) => {
+    setShowOption(false)
     if (item.type === option.type) {
       return
     }
     setOption(item)
-    setShowOption(false)
     setSearchHistories(storage.getItem('histories', `search_${item.name}`) || [])
   }
 

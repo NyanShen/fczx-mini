@@ -1,7 +1,9 @@
 .user {
-    margin: 20px;
+    height: 100vh;
+    background-color: $bg-color;
     &-header {
         display: flex;
+        margin: 20px;
         padding: 40px 30px;
         background-color: $white;
 
