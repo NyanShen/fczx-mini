@@ -1,0 +1,1 @@
+export const PHONE_PATTERN = '^1[34589]\\d{9}$'

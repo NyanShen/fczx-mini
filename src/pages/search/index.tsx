@@ -15,7 +15,7 @@ const HouseSearch = () => {
 
   const handleItemClick = (item: any, option: ISearchOption) => {
     Taro.navigateTo({
-      url: `/pages/${option.type}/index?id=${item.id}&name=${item.name}`
+      url: `/pages/${option.type}/index/index?id=${item.id}&name=${item.name}`
     })
   }
 

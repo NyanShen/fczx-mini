@@ -1,0 +1,43 @@
+.login-phone {
+    &-header {
+        margin: 20% 0 80px 0;
+        text-align: center;
+        font-size: 42px;
+        color: $primary-color;
+    }
+
+    &-form {
+        width: 90%;
+        margin: 0 auto;
+
+        .form-item {
+            display: flex;
+            height: 100px;
+            line-height: 100px;
+            border-bottom: $border;
+
+            .label-control {
+                margin-right: 30px;
+                color: $title-color;
+            }
+
+            .input-control {
+                flex: 1;
+                height: 100px;
+                line-height: 100px;
+            }
+
+            .btn-code {
+                color: $desc-color;
+
+                &.actived {
+                    color: $primary-color;
+                }
+            }
+        }
+
+        .btn {
+            margin-top: 80px;
+        }
+    }
+}

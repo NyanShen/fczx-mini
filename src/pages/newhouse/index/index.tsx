@@ -150,7 +150,7 @@ const House = () => {
                         <Text className="text address">东津新区东西轴线与南山路交汇处东津新区东西轴线与南山路交汇处</Text>
                         <Text className="iconfont iconaddress">地图</Text>
                     </View>
-                    <View className="btn btn-blue mt20" onClick={() => navigateTo('/pages/newhouse/detail')}>
+                    <View className="btn btn-blue mt20" onClick={() => navigateTo('/pages/newhouse/detail/index')}>
                         <Text className="btn-name">查看更多楼盘详情</Text>
                     </View>
                     <View className="subscrib">

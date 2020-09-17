@@ -3,7 +3,7 @@ import Taro from '@tarojs/taro'
 import { View, Text, Button } from '@tarojs/components'
 
 import NavBar from '@components/navbar/index'
-import './login.scss'
+import './index.scss'
 
 const Login = () => {
     const navData = {
@@ -18,16 +18,14 @@ const Login = () => {
         backgroundColor: navData.backgroundColor
     })
 
-    const onLoginByWeapp = () => {
-        Taro.login({
-            success: function (res: any) {
-                console.log(res)
-            }
-        })
+    const getPhoneNumber = (e) => {
+        console.log(e)
     }
 
-    const getPhoneNumber = (e) => {
-
+    const handleLoginByPhone = () => {
+        Taro.navigateTo({
+            url: '/pages/user/login/phone/index'
+        })
     }
 
     return (
@@ -42,10 +40,10 @@ const Login = () => {
                     <View className="cut-line"></View>
                     <Text className="desc">推荐使用登录方式</Text>
                 </View>
-                <Button openType="getPhoneNumber" className="btn btn-primary">
+                <Button openType="getPhoneNumber" onGetPhoneNumber={getPhoneNumber} className="btn btn-primary">
                     <Text>微信登录</Text>
                 </Button>
-                <View className="btn btn-plain">
+                <View className="btn btn-plain" onClick={handleLoginByPhone}>
                     <Text>手机快捷登录</Text>
                 </View>
             </View>

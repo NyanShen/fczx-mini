@@ -118,11 +118,16 @@
     color: $white;
     background-color: $primary-color;
   }
-  
+
   &-plain {
     color: $primary-color;
     border-color: $primary-color;
     background-color: $white;
+  }
+
+  &-disabled {
+    color: $desc-color;
+    background-color: $bg2-color;
   }
 }
 

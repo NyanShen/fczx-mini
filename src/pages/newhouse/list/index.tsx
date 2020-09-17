@@ -11,7 +11,7 @@ import useNavData from '@hooks/useNavData'
 import { PRICE_TYPE, SALE_STATUS } from '@constants/house'
 import '@styles/common/house-list.scss'
 import '@styles/common/search-tab.scss'
-import './list.scss'
+import './index.scss'
 
 interface IFilter {
     id: string
@@ -207,13 +207,13 @@ const NewHouse = () => {
 
     const handleHouseItemClick = (item: any) => {
         Taro.navigateTo({
-            url: `/pages/newhouse/index?id=${item.id}&name=${item.house_name}`
+            url: `/pages/newhouse/index/index?id=${item.id}&name=${item.house_name}`
         })
     }
 
     const handleSearchClick = () => {
         Taro.navigateTo({
-            url: `/pages/newhouse/search`
+            url: `/pages/newhouse/search/index`
         })
     }
 

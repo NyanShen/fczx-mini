@@ -1,16 +1,23 @@
-import { Config } from "@tarojs/taro";
+import { Config } from '@tarojs/taro';
 
 export default {
   pages: [
-    'pages/user/login',
-    'pages/user/index',
-    'pages/newhouse/index',
-    'pages/newhouse/list',
-    'pages/newhouse/search',
-    'pages/newhouse/detail',
+    'pages/user/login/phone/index',
     'pages/index/index',
     'pages/chat/index',
     'pages/search/index',
+    'pages/user/index'
+  ],
+  subPackages: [
+    {
+      root: 'pages/newhouse/',
+      pages: [
+        'index/index',
+        'list/index',
+        'search/index',
+        'detail/index'
+      ]
+    }
   ],
   tabBar: {
     color: 'rgba(68, 68, 68, 1)',

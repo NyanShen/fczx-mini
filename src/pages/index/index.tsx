@@ -16,7 +16,7 @@ const Index = () => {
       {
         name: '新盘',
         icon: new_house,
-        path: '/pages/newhouse/index'
+        path: '/pages/newhouse/list/index'
       },
       {
         name: '二手房',

@@ -3,7 +3,7 @@ import { ScrollView, View, Text } from '@tarojs/components'
 
 import NavBar from '@components/navbar/index'
 import useNavData from '@hooks/useNavData'
-import './detail.scss'
+import './index.scss'
 
 const HouseDetail = () => {
     const { contentHeight } = useNavData()
