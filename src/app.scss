@@ -1,6 +1,10 @@
 @import "./styles/common/popup.scss";
 @import "./assets/fonts/iconfont.css";
 
+page {
+  font-size: $font-32;
+}
+
 .clearfix::after {
   content: "";
   display: block;
@@ -128,6 +132,25 @@
   &-disabled {
     color: $desc-color;
     background-color: $bg2-color;
+  }
+}
+
+.ovalbtn {
+  border-radius: 30px;
+  height: 50px;
+  line-height: 50px;
+  font-size: $font-basic;
+
+  &::after {
+    border: 0;
+  }
+
+  &-pink {
+    color: $pink;
+    background-color: $white;
+  }
+  &-brown {
+    color: rgb(131, 80, 55);
   }
 }
 

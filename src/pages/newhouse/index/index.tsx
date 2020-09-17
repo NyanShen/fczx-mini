@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Taro, { getCurrentInstance, useReady } from '@tarojs/taro'
-import { View, ScrollView, Swiper, SwiperItem, Image, Text } from '@tarojs/components'
+import { View, ScrollView, Swiper, SwiperItem, Image, Text, Button } from '@tarojs/components'
 import classnames from 'classnames'
 import { parseInt } from 'lodash'
 
@@ -9,6 +9,7 @@ import app from '@services/request'
 import useNavData from '@hooks/useNavData'
 import NavBar from '@components/navbar/index'
 import Popup from '@components/popup/index'
+import '@styles/common/bottom-bar.scss'
 import './index.scss'
 
 interface IAlbumSwiper {
@@ -135,7 +136,7 @@ const House = () => {
                         <Text className="tags-item">中高层</Text>
                     </View>
                 </View>
-                <View className="view-content info">
+                <View className="info view-content">
                     <View className="info-item">
                         <Text className="label">售价</Text>
                         <Text className="price">20012</Text>
@@ -164,11 +165,133 @@ const House = () => {
                         </View>
                     </View>
                 </View>
-                <View className="contact mt20">
+                <View className="house-contact view-content mt20">
                     <View className="iconfont icontelephone-out"></View>
                     <View>
-                        <View className="phone-call">400-018-0632转6199</View>
+                        <View className="phone-call">400-018-0632 转 6199</View>
                         <View className="phone-desc">致电售楼处了解项目更多信息</View>
+                    </View>
+                </View>
+                <View className="house-item house-activity mt20">
+                    <View className="house-item-header view-content">
+                        <View className="title">优惠</View>
+                        <View className="more">
+                            <Text>更多</Text>
+                            <Text className="iconfont iconarrow-right-bold"></Text>
+                        </View>
+                    </View>
+                    <View className="house-item-content activity-item">
+                        <View className="item-text">
+                            <View>获取优惠</View>
+                            <View className="desc">优惠活动描述</View>
+                        </View>
+                        <View className="item-action">
+                            <Button className="ovalbtn ovalbtn-pink">预约优惠</Button>
+                        </View>
+                    </View>
+                </View>
+                <View className="house-item house-type mt20">
+                    <View className="house-item-header view-content">
+                        <View className="title">主力户型(5)</View>
+                        <View className="more">
+                            <Text>更多</Text>
+                            <Text className="iconfont iconarrow-right-bold"></Text>
+                        </View>
+                    </View>
+                    <View className="house-type-content">
+                        <Swiper displayMultipleItems={2.5}>
+                            <SwiperItem>
+                                <View className="swiper-item">
+                                    <View className="item-image">
+                                        <Image src="http://192.168.2.248/assets/images/1400x933_4.png"></Image>
+                                    </View>
+                                    <View className="item-title">
+                                        <Text>4室2厅2卫</Text>
+                                        <Text>169.32m²</Text>
+                                    </View>
+                                    <View className="item-price">120万</View>
+                                </View>
+                            </SwiperItem>
+                            <SwiperItem>
+                                <View className="swiper-item">
+                                    <View className="item-image">
+                                        <Image src=""></Image>
+                                    </View>
+                                    <View className="item-title">
+                                        <Text>3室2厅2卫</Text>
+                                        <Text>124.22m²</Text>
+                                    </View>
+                                    <View className="item-price">87万</View>
+                                </View>
+                            </SwiperItem>
+                            <SwiperItem>
+                                <View className="swiper-item">
+                                    <View className="item-image">
+                                        <Image src=""></Image>
+                                    </View>
+                                    <View className="item-title">
+                                        <Text>2室2厅2卫</Text>
+                                        <Text>89.54m²</Text>
+                                    </View>
+                                    <View className="item-price">70万</View>
+                                </View>
+                            </SwiperItem>
+                            <SwiperItem>
+                                <View className="swiper-item">
+                                    <View className="item-image">
+                                        <Image src=""></Image>
+                                    </View>
+                                    <View className="item-title">
+                                        <Text>2室1厅1卫</Text>
+                                        <Text>67.37m²</Text>
+                                    </View>
+                                    <View className="item-price">56万</View>
+                                </View>
+                            </SwiperItem>
+                        </Swiper>
+                    </View>
+                </View>
+                <View className="house-consultant mt20">
+                    <View className="house-item-header view-content">
+                        <View className="title">置业顾问(2)</View>
+                    </View>
+                    <View className="house-consultant-content clearfix">
+                        <View className="consultant-item">
+                            <View className="item-image">
+                                <Image src="http://192.168.2.248/assets/images/105x105.jpg"></Image>
+                            </View>
+                            <View className="item-name">胡锦文</View>
+                            <View className="item-btn">
+                                <Button className="ovalbtn ovalbtn-brown">
+                                    <Text className="iconfont"></Text>
+                                    <Text>咨询</Text>
+                                </Button>
+                            </View>
+                        </View>
+                        <View className="consultant-item">
+                            <View className="item-image">
+                                <Image src="http://192.168.2.248/assets/images/105x105.jpg"></Image>
+                            </View>
+                            <View className="item-name">胡文</View>
+                            <View className="item-btn">
+                                <Button className="ovalbtn ovalbtn-brown">
+                                    <Text className="iconfont"></Text>
+                                    <Text>咨询</Text>
+                                </Button>
+                            </View>
+                        </View>
+                        <View className="consultant-item">
+                            <View className="item-image">
+                                <Image src="http://192.168.2.248/assets/images/105x105.jpg"></Image>
+                            </View>
+                            <View className="item-name">胡锦文</View>
+                            <View className="item-btn">
+                                <Button className="ovalbtn ovalbtn-brown">
+                                    <Text className="iconfont"></Text>
+                                    <Text>咨询</Text>
+                                </Button>
+                            </View>
+                        </View>
                     </View>
                 </View>
             </ScrollView>
