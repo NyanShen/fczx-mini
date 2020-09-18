@@ -5,4 +5,5 @@ export default {
     getHouseById: '/api/house',
     getHouseCondition: '/api/house/condition',
     getHouseNew: '/api/house/new',
+    getHouseAlbum: '/api/house/all-image',
 }
