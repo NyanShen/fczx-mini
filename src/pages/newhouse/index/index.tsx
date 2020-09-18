@@ -253,7 +253,7 @@ const House = () => {
                 </View>
                 <View className="house-consultant mt20">
                     <View className="house-item-header view-content">
-                        <View className="title">置业顾问(2)</View>
+                        <View className="title">置业顾问(3)</View>
                     </View>
                     <View className="house-consultant-content clearfix">
                         <View className="consultant-item">

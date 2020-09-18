@@ -276,7 +276,7 @@ const NewHouse = () => {
     return (
         <View className="newhouse">
             <NavBar title="新房" back={true} />
-            <View className="fixed-top" style={{ top: appHeaderHeight }}>
+            <View className="fixed" style={{ top: appHeaderHeight }}>
                 <View className="newhouse-header view-content">
                     <View className="newhouse-search" onClick={handleSearchClick}>
                         <Text className="iconfont iconsearch"></Text>
