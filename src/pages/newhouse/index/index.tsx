@@ -15,7 +15,7 @@ import './index.scss'
 interface IAlbumSwiper {
     albumId: string
     imageIndex: number
-    swiperIndex: number,
+    swiperIndex: number
     itemLength: number
 }
 
@@ -101,7 +101,11 @@ const House = () => {
             <NavBar title={houseData.house_name || '楼盘'} back={true} />
             <ScrollView style={{ height: `${contentHeight - 55}px`, backgroundColor: '#f7f7f7' }} scrollY>
                 <View className="house-album">
-                    <Swiper style={{ height: '225px' }} current={albumSwiper.swiperIndex} onChange={onSwiperChange}>
+                    <Swiper
+                        style={{ height: '225px' }}
+                        current={albumSwiper.swiperIndex}
+                        onChange={onSwiperChange}
+                    >
                         {
                             houseData.house_album && houseData.house_album.map((albumItem: any) => {
                                 return albumItem.images.map((imageItem: any, imageIndex: number) => {
