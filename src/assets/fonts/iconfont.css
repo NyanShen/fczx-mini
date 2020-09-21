@@ -15,6 +15,30 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icontraffic:before {
+  content: "\e64b";
+}
+
+.iconeducation:before {
+  content: "\e662";
+}
+
+.iconyiyuan:before {
+  content: "\e65a";
+}
+
+.iconbank:before {
+  content: "\e8ce";
+}
+
+.iconShopping:before {
+  content: "\e623";
+}
+
+.iconweizhi:before {
+  content: "\e661";
+}
+
 .iconda:before {
   content: "\e889";
 }

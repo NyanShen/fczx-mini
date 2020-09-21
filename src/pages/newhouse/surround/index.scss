@@ -1,0 +1,31 @@
+.surround {
+    &-wrapper {
+        position: relative;
+        .surround-map {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+            height: auto;
+        }
+
+        .surround-tabs {
+            display: flex;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 100px;
+            line-height: 100px;
+            background-color: $white;
+            text-align: center;
+            font-size: $font-basic;
+
+            .tabs-item {
+                flex: 1;
+                .iconfont {
+                    font-size: $font-32;
+                }
+            }
+        }
+    }
+}

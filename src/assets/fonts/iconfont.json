@@ -6,6 +6,48 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "4923927",
+      "name": "交通",
+      "font_class": "traffic",
+      "unicode": "e64b",
+      "unicode_decimal": 58955
+    },
+    {
+      "icon_id": "7765184",
+      "name": "学校_学生",
+      "font_class": "xuexiao_xuesheng",
+      "unicode": "e662",
+      "unicode_decimal": 58978
+    },
+    {
+      "icon_id": "1313803",
+      "name": "医院",
+      "font_class": "yiyuan",
+      "unicode": "e65a",
+      "unicode_decimal": 58970
+    },
+    {
+      "icon_id": "3958510",
+      "name": "bank",
+      "font_class": "bank",
+      "unicode": "e8ce",
+      "unicode_decimal": 59598
+    },
+    {
+      "icon_id": "10554762",
+      "name": "Shopping cart, finance, business",
+      "font_class": "Shoppingcartfinancebusiness",
+      "unicode": "e623",
+      "unicode_decimal": 58915
+    },
+    {
+      "icon_id": "15766525",
+      "name": "位置",
+      "font_class": "weizhi",
+      "unicode": "e661",
+      "unicode_decimal": 58977
+    },
+    {
       "icon_id": "2076246",
       "name": " 问答2",
       "font_class": "wenda",
