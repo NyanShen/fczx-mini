@@ -2,7 +2,7 @@ import { Config } from '@tarojs/taro';
 
 export default {
   pages: [
-    'pages/newhouse/album/index',
+    'pages/newhouse/index/index',
     'pages/index/index',
     'pages/chat/index',
     'pages/search/index',
@@ -10,18 +10,18 @@ export default {
     'pages/user/login/index',
     'pages/user/login/phone/index',
   ],
-  subPackages: [
-    // {
-    //   root: 'pages/newhouse/',
-    //   pages: [
-    //     'index/index',
-    //     'album/index',
-    //     'list/index',
-    //     'search/index',
-    //     'detail/index'
-    //   ]
-    // }
-  ],
+  // subPackages: [
+  //   {
+  //     root: 'pages/newhouse/',
+  //     pages: [
+  //       'index/index',
+  //       'album/index',
+  //       'list/index',
+  //       'search/index',
+  //       'detail/index'
+  //     ]
+  //   }
+  // ],
   tabBar: {
     color: 'rgba(68, 68, 68, 1)',
     selectedColor: 'rgba(68, 68, 68, 1)',

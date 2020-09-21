@@ -87,6 +87,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            margin: 30px 30px 0 30px;
             padding: 40px;
             color: $pink;
             background-color: $bg-pink;
@@ -122,7 +123,7 @@
         }
 
         &-content {
-            margin: 30px 30px 0 30px;
+            padding: 30px 30px 0 30px;
         }
     }
 
@@ -160,6 +161,66 @@
         }
     }
 
+    &-comment {
+        .comment-item {
+            display: flex;
+            font-size: $font-basic;
+            margin-bottom: 20px;
+            .user-photo {
+                width: 48px;
+                height: 48px;
+                border-radius: 50%;
+                overflow: hidden;
+
+                Image {
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+            .comment-text {
+                flex: 1;
+                margin-left: 20px;
+                color: $text-color;
+
+                .name {
+                    color: $desc-color;
+                    height: 48px;
+                    line-height: 48px;
+                }
+            }
+        }
+    }
+
+    &-question {
+        .question-item {
+            .question {
+                display: flex;
+                font-size: $font-basic;
+                margin-bottom: 20px;
+                color: $text-color;
+
+                .iconfont {
+                    font-size: $font-36;
+                    margin-right: 20px;
+                }
+
+                .iconwen {
+                    color: $search-actived;
+                }
+                .iconda {
+                    color: $primary-color;
+                }
+
+                .text {
+                    flex: 1;
+                    &.da {
+                        color: $desc-color;
+                    }
+                }
+            }
+        }
+    }
+
     &-consultant {
         &-content {
             padding: 30px 0 30px 30px;
@@ -191,7 +252,6 @@
                     font-size: $font-basic;
                     margin-bottom: 20px;
                 }
-                
             }
         }
     }

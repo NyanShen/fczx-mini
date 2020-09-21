@@ -30,6 +30,7 @@ const House = () => {
     useReady(() => {
         let currentRouter: any = getCurrentInstance().router
         let params: any = currentRouter.params
+        params.id = '1001'
         if (params.id) {
             app.request({ url: api.getHouseById, data: { id: params.id } }, { isMock: true })
                 .then((result: any) => {
@@ -96,6 +97,12 @@ const House = () => {
         setPopup(false)
     }
 
+    const toAlbum = () => {
+        Taro.navigateTo({
+            url: '/pages/newhouse/album/index'
+        })
+    }
+
     return (
         <View className="house">
             <NavBar title={houseData.house_name || '楼盘'} back={true} />
@@ -110,7 +117,11 @@ const House = () => {
                             houseData.house_album && houseData.house_album.map((albumItem: any) => {
                                 return albumItem.images.map((imageItem: any, imageIndex: number) => {
                                     return (
-                                        <SwiperItem key={imageIndex} itemId={`${albumItem.id},${imageIndex}`}>
+                                        <SwiperItem
+                                            key={imageIndex}
+                                            itemId={`${albumItem.id},${imageIndex}`}
+                                            onClick={toAlbum}
+                                        >
                                             <Image style="width: 100%; height: 240px" src={imageItem.image_path} mode='widthFix'></Image>
                                             {albumItem.type == 'video' && <Text className="auto-center icon-vedio"></Text>}
                                         </SwiperItem>
@@ -184,7 +195,7 @@ const House = () => {
                             <Text className="iconfont iconarrow-right-bold"></Text>
                         </View>
                     </View>
-                    <View className="house-item-content activity-item">
+                    <View className="activity-item">
                         <View className="item-text">
                             <View>获取优惠</View>
                             <View className="desc">优惠活动描述</View>
@@ -253,6 +264,76 @@ const House = () => {
                                 </View>
                             </SwiperItem>
                         </Swiper>
+                    </View>
+                </View>
+                <View className="house-comment mt20">
+                    <View className="house-item-header view-content">
+                        <View className="title">用户评论(11)</View>
+                        <View className="more">
+                            <Text>查看更多</Text>
+                            <Text className="iconfont iconarrow-right-bold"></Text>
+                        </View>
+                    </View>
+                    <View className="house-item">
+                        <View className="house-item-content">
+                            <View className="comment-item">
+                                <View className="user-photo">
+                                    <Image src="http://192.168.2.248/assets/images/user_photo.jpg"></Image>
+                                </View>
+                                <View className="comment-text">
+                                    <View className="name">Nyan Shen</View>
+                                    <View className="text">未来周边配套怎么样啊，附近小学是哪个，什么时候投入使用，有没有超市，医院</View>
+                                </View>
+                            </View>
+                            <View className="comment-item">
+                                <View className="user-photo">
+                                    <Image src="http://192.168.2.248/assets/images/user_photo.jpg"></Image>
+                                </View>
+                                <View className="comment-text">
+                                    <View className="name">Nyan Shen</View>
+                                    <View className="text">未来周边配套怎么样啊，附近小学是哪个，什么时候投入使用，有没有超市，医院</View>
+                                </View>
+                            </View>
+                            <View className="btn btn-blue">
+                                <Text className="btn-name">我要评论</Text>
+                            </View>
+                        </View>
+                    </View>
+                </View>
+                <View className="house-question">
+                    <View className="house-item-header view-content">
+                        <View className="title">大家都在问(3)</View>
+                        <View className="more">
+                            <Text>查看更多</Text>
+                            <Text className="iconfont iconarrow-right-bold"></Text>
+                        </View>
+                    </View>
+                    <View className="house-item">
+                        <View className="house-item-content">
+                            <View className="question-item">
+                                <View className="question">
+                                    <Text className="iconfont iconwen"></Text>
+                                    <Text className="text">五中学校主体现在建好了吗？</Text>
+                                </View>
+                                <View className="question">
+                                    <Text className="iconfont iconda"></Text>
+                                    <Text className="text da">您好，襄阳五中华侨城实验学校已经封顶了，明年9月1日就正式开学了。</Text>
+                                </View>
+                            </View>
+                            <View className="question-item">
+                                <View className="question">
+                                    <Text className="iconfont iconwen"></Text>
+                                    <Text className="text">五中学校主体现在建好了吗？</Text>
+                                </View>
+                                <View className="question">
+                                    <Text className="iconfont iconda"></Text>
+                                    <Text className="text da">建好了。</Text>
+                                </View>
+                            </View>
+                            <View className="btn btn-blue">
+                                <Text className="btn-name">我要提问</Text>
+                            </View>
+                        </View>
                     </View>
                 </View>
                 <View className="house-consultant mt20">

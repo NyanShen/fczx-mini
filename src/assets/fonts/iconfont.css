@@ -15,6 +15,22 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.iconda:before {
+  content: "\e889";
+}
+
+.iconwen:before {
+  content: "\e8cd";
+}
+
+.iconweibiaoti1:before {
+  content: "\e602";
+}
+
+.iconweibiaoti1-copy:before {
+  content: "\e6a8";
+}
+
 .iconarrow-down-bold:before {
   content: "\e686";
 }
