@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Taro, { useReady, getCurrentInstance } from '@tarojs/taro'
+import { getCurrentInstance } from '@tarojs/taro'
 import { View, Text, Map } from "@tarojs/components"
 import classnames from 'classnames'
 
@@ -7,13 +7,8 @@ import api from '@services/api'
 import app from '@services/request'
 import NavBar from '@components/navbar/index'
 import useNavData from '@hooks/useNavData'
+import { SURROUND_TABS, ISurroundTab } from '@constants/house'
 import './index.scss'
-
-interface IMapTab {
-    name: string
-    type: string
-    icon: string
-}
 
 const INIT_TAB = {
     name: '交通',
@@ -26,7 +21,6 @@ const INIT_TAB = {
 const houseSurround = () => {
     let currentRouter: any = getCurrentInstance().router
     let params: any = currentRouter.params
-    let surroundMap: any = null
     const houseMarker = {
         latitude: params.lat,
         longitude: params.lng,
@@ -47,41 +41,8 @@ const houseSurround = () => {
         }
     }
     const { contentHeight } = useNavData()
-    const [tab, setTab] = useState<IMapTab>(INIT_TAB)
+    const [tab, setTab] = useState<ISurroundTab>(INIT_TAB)
     const [markers, setMarkers] = useState<any[]>([houseMarker]);
-
-    const surroundTabs: IMapTab[] = [
-        {
-            name: '交通',
-            type: 'traffic',
-            icon: 'icontraffic'
-        },
-        {
-            name: '学校',
-            type: 'education',
-            icon: 'iconeducation'
-        },
-        {
-            name: '银行',
-            type: 'bank',
-            icon: 'iconbank'
-        },
-        {
-            name: '医院',
-            type: 'hospital',
-            icon: 'iconyiyuan'
-        },
-        {
-            name: '购物',
-            type: 'shopping',
-            icon: 'iconShopping'
-        }
-    ]
-
-    useReady(() => {
-        surroundMap = Taro.createMapContext('surroundMap')
-        console.log(surroundMap)
-    })
 
     useEffect(() => {
         app.request({
@@ -128,7 +89,7 @@ const houseSurround = () => {
                 </Map>
                 <View className="surround-tabs">
                     {
-                        surroundTabs.map((item: any, index: number) => (
+                        SURROUND_TABS.map((item: any, index: number) => (
                             <View
                                 key={index}
                                 onClick={() => setTab(item)}

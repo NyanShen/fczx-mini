@@ -161,6 +161,15 @@
         }
     }
 
+    &-surround {
+        .surround {
+            padding-top: 30px;
+            .surround-wrapper {
+                border: 1px solid $bg-color;
+            }
+        }
+    }
+
     &-comment {
         .comment-item {
             display: flex;

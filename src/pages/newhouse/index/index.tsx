@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Taro, { getCurrentInstance, useReady } from '@tarojs/taro'
-import { View, ScrollView, Swiper, SwiperItem, Image, Text, Button } from '@tarojs/components'
+import { View, ScrollView, Swiper, SwiperItem, Image, Text, Button, Map } from '@tarojs/components'
 import classnames from 'classnames'
 import { parseInt } from 'lodash'
 
@@ -10,8 +10,10 @@ import { toUrlParam } from '@utils/urlHandler'
 import useNavData from '@hooks/useNavData'
 import NavBar from '@components/navbar/index'
 import Popup from '@components/popup/index'
+import { SURROUND_TABS, ISurroundTab } from '@constants/house'
 import '@styles/common/bottom-bar.scss'
 import './index.scss'
+import '../surround/index.scss'
 
 interface IAlbumSwiper {
     albumId: string
@@ -20,8 +22,18 @@ interface IAlbumSwiper {
     itemLength: number
 }
 
-const INIT_ALBUM_SWIPER = { albumId: '', imageIndex: 0, swiperIndex: 0, itemLength: 0 }
+const INIT_ALBUM_SWIPER = {
+    albumId: '',
+    imageIndex: 0,
+    swiperIndex: 0,
+    itemLength: 0
+}
 
+const INIT_SURROUND_TAB = {
+    name: '交通',
+    type: 'traffic',
+    icon: 'icontraffic'
+}
 const House = () => {
     const { contentHeight } = useNavData()
     const [albumSwiper, setAlbumSwiper] = useState<IAlbumSwiper>(INIT_ALBUM_SWIPER)
@@ -35,7 +47,7 @@ const House = () => {
         if (params.id) {
             app.request({ url: api.getHouseById, data: { id: params.id } }, { isMock: true })
                 .then((result: any) => {
-                    setHouseData(result)
+                    setHouseData({ ...result, houseMarker: initHouseMarker(result) })
                     setAlbumSwiper({
                         ...albumSwiper,
                         itemLength: result.house_album[0].images.length,
@@ -44,6 +56,28 @@ const House = () => {
                 })
         }
     })
+
+    const initHouseMarker = (houseData) => {
+        return {
+            latitude: houseData.lat,
+            longitude: houseData.lng,
+            width: 30,
+            height: 30,
+            iconPath: 'http://192.168.2.248/assets/mini/location.png',
+            callout: {
+                content: houseData.house_name,
+                color: '#fff',
+                fontSize: 14,
+                borderWidth: 2,
+                borderRadius: 5,
+                borderColor: '#11a43c',
+                bgColor: '#11a43c',
+                padding: 5,
+                display: 'ALWAYS',
+                textAlign: 'center'
+            }
+        }
+    }
 
     const onSwiperChange = (event) => {
         let swiperIndex = event.detail.current;
@@ -98,7 +132,7 @@ const House = () => {
         setPopup(false)
     }
 
-    const toSurroundMap = () => {
+    const toHouseSurround = (currentTab: ISurroundTab = INIT_SURROUND_TAB) => {
         const { id, lat, lng, house_name } = houseData
         const paramString = toUrlParam({ id, lat, lng, name: house_name })
         Taro.navigateTo({
@@ -173,7 +207,7 @@ const House = () => {
                     <View className="info-item">
                         <Text className="label">地址</Text>
                         <Text className="text address">东津新区东西轴线与南山路交汇处东津新区东西轴线与南山路交汇处</Text>
-                        <Text className="iconfont iconaddress" onClick={toSurroundMap}>地图</Text>
+                        <Text className="iconfont iconaddress" onClick={() => toHouseSurround()}>地图</Text>
                     </View>
                     <View className="btn btn-blue mt20" onClick={() => navigateTo('/pages/newhouse/detail/index')}>
                         <Text className="btn-name">查看更多楼盘详情</Text>
@@ -273,6 +307,42 @@ const House = () => {
                                 </View>
                             </SwiperItem>
                         </Swiper>
+                    </View>
+                </View>
+                <View className="house-surround mt20">
+                    <View className="house-item-header view-content">
+                        <View className="title">周边配套</View>
+                        <View className="more">
+                            <Text>地图</Text>
+                            <Text className="iconfont iconarrow-right-bold"></Text>
+                        </View>
+                    </View>
+                    <View className="house-item surround view-content">
+                        <View className="surround-wrapper" style={{ height: 225 }}>
+                            <Map
+                                id="surroundMap"
+                                className="surround-map"
+                                latitude={houseData.lat}
+                                longitude={houseData.lng}
+                                markers={[houseData.houseMarker]}
+                                enableZoom={false}
+                            >
+                            </Map>
+                            <View className="surround-tabs">
+                                {
+                                    SURROUND_TABS.map((item: any, index: number) => (
+                                        <View
+                                            key={index}
+                                            className={classnames('tabs-item')}
+                                            onClick={() => toHouseSurround(item)}
+                                        >
+                                            <Text className={classnames('iconfont', item.icon)}></Text>
+                                            <Text className="text">{item.name}</Text>
+                                        </View>
+                                    ))
+                                }
+                            </View>
+                        </View>
                     </View>
                 </View>
                 <View className="house-comment mt20">
