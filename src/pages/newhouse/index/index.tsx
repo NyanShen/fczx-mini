@@ -6,6 +6,7 @@ import { parseInt } from 'lodash'
 
 import api from '@services/api'
 import app from '@services/request'
+import { toUrlParam } from '@utils/urlHandler'
 import useNavData from '@hooks/useNavData'
 import NavBar from '@components/navbar/index'
 import Popup from '@components/popup/index'
@@ -97,6 +98,14 @@ const House = () => {
         setPopup(false)
     }
 
+    const toSurroundMap = () => {
+        const { id, lat, lng, house_name } = houseData
+        const paramString = toUrlParam({ id, lat, lng, name: house_name })
+        Taro.navigateTo({
+            url: `/pages/newhouse/surround/index${paramString}`
+        })
+    }
+
     const toAlbum = () => {
         Taro.navigateTo({
             url: '/pages/newhouse/album/index'
@@ -164,7 +173,7 @@ const House = () => {
                     <View className="info-item">
                         <Text className="label">地址</Text>
                         <Text className="text address">东津新区东西轴线与南山路交汇处东津新区东西轴线与南山路交汇处</Text>
-                        <Text className="iconfont iconaddress">地图</Text>
+                        <Text className="iconfont iconaddress" onClick={toSurroundMap}>地图</Text>
                     </View>
                     <View className="btn btn-blue mt20" onClick={() => navigateTo('/pages/newhouse/detail/index')}>
                         <Text className="btn-name">查看更多楼盘详情</Text>
