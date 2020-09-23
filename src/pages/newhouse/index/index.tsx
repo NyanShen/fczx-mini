@@ -316,7 +316,7 @@ const House = () => {
                 <View className="house-surround mt20">
                     <View className="house-item-header view-content">
                         <View className="title">周边配套</View>
-                        <View className="more">
+                        <View className="more" onClick={() => toHouseSurround()}>
                             <Text>地图</Text>
                             <Text className="iconfont iconarrow-right-bold"></Text>
                         </View>
@@ -459,6 +459,16 @@ const House = () => {
                                     <Text>咨询</Text>
                                 </Button>
                             </View>
+                        </View>
+                    </View>
+                </View>
+                <View className="house-statement mt20">
+                    <View className="house-item-header view-content">
+                        <View className="title">免责声明</View>
+                    </View>
+                    <View className="house-item">
+                        <View className="house-item-content">
+                            楼盘信息来源政府网站、开发商、第三方公众平台,最终以政府部门登记备案为主,请谨慎核查。如楼盘信息有误或者其他疑议，请拨打客服电话0632-00000000
                         </View>
                     </View>
                 </View>

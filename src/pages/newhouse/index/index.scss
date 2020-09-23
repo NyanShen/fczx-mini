@@ -264,6 +264,16 @@
             }
         }
     }
+
+    &-statement {
+        .title {
+            color: $text-color;
+        }
+        .house-item-content {
+            font-size: $font-26;
+            color: $desc-color;
+        }
+    }
 }
 
 .info {
