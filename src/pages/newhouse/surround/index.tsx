@@ -10,38 +10,13 @@ import useNavData from '@hooks/useNavData'
 import { SURROUND_TABS, ISurroundTab } from '@constants/house'
 import './index.scss'
 
-const INIT_TAB = {
-    name: '交通',
-    type: 'traffic',
-    icon: 'icontraffic'
-}
-/**
- * /pages/newhouse/surround/index?id=196&lat=32.093051&lng=112.133937
- */
 const houseSurround = () => {
     let currentRouter: any = getCurrentInstance().router
     let params: any = currentRouter.params
-    const houseMarker = {
-        latitude: params.lat,
-        longitude: params.lng,
-        width: 30,
-        height: 30,
-        iconPath: 'http://192.168.2.248/assets/mini/location.png',
-        callout: {
-            content: params.name,
-            color: '#fff',
-            fontSize: 14,
-            borderWidth: 2,
-            borderRadius: 5,
-            borderColor: '#11a43c',
-            bgColor: '#11a43c',
-            padding: 5,
-            display: 'ALWAYS',
-            textAlign: 'center'
-        }
-    }
+    const currentTab = JSON.parse(params.tab)
+    const houseMarker = JSON.parse(params.houseMarker)
     const { contentHeight } = useNavData()
-    const [tab, setTab] = useState<ISurroundTab>(INIT_TAB)
+    const [tab, setTab] = useState<ISurroundTab>(currentTab)
     const [markers, setMarkers] = useState<any[]>([houseMarker]);
 
     useEffect(() => {
@@ -81,8 +56,8 @@ const houseSurround = () => {
                 <Map
                     id="surroundMap"
                     className="surround-map"
-                    latitude={params.lat}
-                    longitude={params.lng}
+                    latitude={houseMarker.latitude}
+                    longitude={houseMarker.longitude}
                     markers={markers}
                     enableZoom={false}
                 >
@@ -94,7 +69,6 @@ const houseSurround = () => {
                                 key={index}
                                 onClick={() => setTab(item)}
                                 className={classnames('tabs-item', tab.type === item.type && 'actived')}
-
                             >
                                 <Text className={classnames('iconfont', item.icon)}></Text>
                                 <Text className="text">{item.name}</Text>

@@ -122,8 +122,7 @@ const House = () => {
         }
     }
 
-    const navigateTo = (url: string, params: any = {}) => {
-        console.log(params)
+    const navigateTo = (url: string) => {
         Taro.navigateTo({ url })
     }
 
@@ -133,8 +132,13 @@ const House = () => {
     }
 
     const toHouseSurround = (currentTab: ISurroundTab = INIT_SURROUND_TAB) => {
-        const { id, lat, lng, house_name } = houseData
-        const paramString = toUrlParam({ id, lat, lng, name: house_name })
+        const { id, house_name, houseMarker } = houseData
+        const paramString = toUrlParam({
+            id,
+            name: house_name,
+            tab: JSON.stringify(currentTab),
+            houseMarker: JSON.stringify(houseMarker),
+        })
         Taro.navigateTo({
             url: `/pages/newhouse/surround/index${paramString}`
         })
