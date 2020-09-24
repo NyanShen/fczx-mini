@@ -39,10 +39,11 @@ const Search = (props: ISearchProps) => {
   const [showOption, setShowOption] = useState<boolean>(false)
 
   useEffect(() => {
-    app.request({ url: api.getSearchHotList }, { isMock: true, loading: false })
-      .then((result: any) => {
-        setHotList(result || [])
-      })
+    app.request({
+      url: app.testApiUrl(api.getSearchHotList)
+    }, { loading: false }).then((result: any) => {
+      setHotList(result || [])
+    })
   }, [])
 
   const navData = {
@@ -79,12 +80,13 @@ const Search = (props: ISearchProps) => {
 
   const updateKeyList = (keyValue) => {
     app.request({
-      url: props.searchUrl,
-      data: { kw: keyValue }
-    }, { isMock: true, loading: false })
-      .then((result: any) => {
-        setMatcheList(result || [])
-      })
+      url: app.testApiUrl(props.searchUrl),
+      data: {
+        kw: keyValue
+      }
+    }, { loading: false }).then((result: any) => {
+      setMatcheList(result || [])
+    })
   }
 
   const clearSearchValue = () => {
@@ -149,15 +151,12 @@ const Search = (props: ISearchProps) => {
       <NavBar {...navData} />
       <View className="search-wrapper clearfix">
         <View className="search-content">
-
           <View className="search-label" onClick={() => setShowOption(!showOption)}>
             <Text className="search-label-text">{option.name}</Text>
             <Text className={classnames('iconfont', isMultiply ? 'iconarrow-down-bold' : 'iconsearch')}></Text>
           </View>
           <Input className="search-input" placeholder={props.searchRemark} onInput={handleInput} value={searchValue} autoFocus></Input>
-
           {clear && <Text className="iconfont iconclear" onClick={clearSearchValue}></Text>}
-
           {showOption &&
             <View className="search-options">
               <View className="triangle-up">

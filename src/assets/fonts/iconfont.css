@@ -15,6 +15,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.iconmapcity:before {
+  content: "\e62e";
+}
+
 .icontraffic:before {
   content: "\e64b";
 }
@@ -47,11 +51,11 @@
   content: "\e8cd";
 }
 
-.iconweibiaoti1:before {
+.iconuserdark:before {
   content: "\e602";
 }
 
-.iconweibiaoti1-copy:before {
+.iconuserlight:before {
   content: "\e6a8";
 }
 

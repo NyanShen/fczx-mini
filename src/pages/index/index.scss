@@ -1,22 +1,28 @@
 .index-search {
     &-content {
-        height: 80px;
-        line-height: 80px;
+        display: flex;
+        height: 70px;
+        line-height: 70px;
         margin: 30px 40px;
         padding: 0 20px;
         border-radius: 5px;
-        background-color: #dde6f7;
-        .iconfont {
-            float: left;
-        }
+        background-color: $bg2-color;
+
         &-desc {
-            float: left;
-            width: 80%;
-            height: 80px;
-            line-height: 80px;
+            flex: auto;
             text-align: left;
             padding-left: 20px;
             color: #999;
+        }
+        &-text {
+            .iconfont {
+                color: $search-actived;
+            }
+            .city-name {
+                padding-left: 8px;
+                font-size: $font-32;
+                font-weight: bold;
+            }
         }
     }
 }

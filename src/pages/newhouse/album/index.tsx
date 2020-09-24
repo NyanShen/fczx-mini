@@ -34,13 +34,12 @@ const AlbumList = () => {
 
     useEffect(() => {
         app.request({
-            url: api.getHouseAlbum,
+            url: app.testApiUrl(api.getHouseAlbum),
             data: { fang_house_id: '1000006' }
-        }, { isMock: true })
-            .then((result: any) => {
-                setCurrentView(`view_${result[0].id}`)
-                setAlbumData(result)
-            })
+        }).then((result: any) => {
+            setCurrentView(`view_${result[0].id}`)
+            setAlbumData(result)
+        })
     }, [])
 
     const handleTabClick = (item: any, isSwiper: boolean = false) => {

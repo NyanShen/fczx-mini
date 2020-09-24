@@ -1,10 +1,35 @@
 import Taro from '@tarojs/taro'
+import storage from '@utils/storage'
+
+const getCityAlias = (): string => {
+    const city = storage.getItem('city')
+    if (city) {
+        return city.alias
+    }
+    return ''
+}
+
+const agreement: string = 'http://'
+const topDomain: string = '.fczx.com'
+const apiDomain: string = `${agreement}api${topDomain}`
+const testApiDomain: string = `${agreement}192.168.2.248:12306`
 
 const app: any = {};
 app.mockApi = 'http://192.168.2.248:12306';
 app.baseApi = 'http://api.fczx.com';
+app.apiUrl = (uri: string) => {
+    return apiDomain + uri
+}
 
-app.request = (params: any, { loading = true, toast = true, isMock = false }: any = {}) => {
+app.areaApiUrl = (uri: string) => {
+    return `${agreement}${getCityAlias()}.api${topDomain}${uri}`
+}
+
+app.testApiUrl = (uri: string) => {
+    return testApiDomain + uri
+}
+
+app.request = (params: any, { loading = true, toast = true }: any = {}) => {
 
     return new Promise((resolve, reject) => {
         if (loading) {
@@ -13,9 +38,8 @@ app.request = (params: any, { loading = true, toast = true, isMock = false }: an
                 mask: true
             })
         }
-        let baseUrl = isMock ? app.mockApi : app.baseApi;
         Taro.request({
-            url: baseUrl + params.url,
+            url: params.url,
             data: params.data || {},
             method: params.method,
             header: params.header,

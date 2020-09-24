@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "1134298",
+      "name": "map",
+      "font_class": "map1",
+      "unicode": "e62e",
+      "unicode_decimal": 58926
+    },
+    {
       "icon_id": "4923927",
       "name": "交通",
       "font_class": "traffic",

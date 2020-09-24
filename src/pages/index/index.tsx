@@ -1,7 +1,10 @@
-import React from 'react'
-import Taro from '@tarojs/taro'
+import React, { useEffect, useState } from 'react'
+import Taro, { useDidShow } from '@tarojs/taro'
 import { View, Text, Image } from '@tarojs/components'
 
+import api from '@services/api'
+import app from '@services/request'
+import storage from '@utils/storage'
 import NavBar from '@components/navbar/index'
 import new_house from '@assets/icons/new_house.png'
 import second_house from '@assets/icons/house.png'
@@ -11,6 +14,43 @@ import './index.scss'
 import '../../styles/common/house-list.scss'
 
 const Index = () => {
+
+  const [city, setCity] = useState<any>({})
+
+  useEffect(() => {
+  }, [])
+
+  useDidShow(() => {
+    const currentCity = storage.getItem('city')
+    if (!currentCity) {
+      Taro.showModal({
+        title: '提示',
+        content: '请先选择一个的城市',
+        showCancel: false,
+        success: function (res) {
+          if (res.confirm) {
+            Taro.navigateTo({
+              url: '/pages/city/index'
+            })
+          }
+        }
+      })
+      return
+    } 
+    if (currentCity.id !== city.id) {
+      setCity(currentCity)
+      fetchHouseList()
+    }
+  })
+
+  const fetchHouseList = () => {
+    app.request({
+      url: app.testApiUrl(api.getHouseList)
+    }).then((result: any) => {
+      console.log(result)
+    })
+  }
+
   const menuContent = [{
     children: [
       {
@@ -48,14 +88,23 @@ const Index = () => {
     })
   }
 
+  const toCityList = () => {
+    Taro.navigateTo({
+      url: '/pages/city/index'
+    })
+  }
+
   return (
     <View className="index">
       <NavBar title="房产在线" />
       <View className="index-search">
         <View className="index-search-content clearfix">
-          <Text className="iconfont iconsearch"></Text>
-          <Text className="index-search-content-desc" onClick={clickHandler}>输入区县、小区名</Text>
-          <Text className="index-search-content-text">区域</Text>
+          <View className="iconfont iconsearch"></View>
+          <View className="index-search-content-desc" onClick={clickHandler}>输入区县、小区名</View>
+          <View className="index-search-content-text" onClick={toCityList}>
+            <Text className="iconfont iconmapcity"></Text>
+            <Text className="city-name">{city.short_name}</Text>
+          </View>
         </View>
       </View>
       <View className="index-menu">

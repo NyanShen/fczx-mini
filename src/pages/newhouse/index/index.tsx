@@ -45,15 +45,19 @@ const House = () => {
         let params: any = currentRouter.params
         params.id = '1001'
         if (params.id) {
-            app.request({ url: api.getHouseById, data: { id: params.id } }, { isMock: true })
-                .then((result: any) => {
-                    setHouseData({ ...result, houseMarker: initHouseMarker(result) })
-                    setAlbumSwiper({
-                        ...albumSwiper,
-                        itemLength: result.house_album[0].images.length,
-                        albumId: result.house_album[0].id,
-                    })
+            app.request({
+                url: app.testApiUrl(api.getHouseById),
+                data: {
+                    id: params.id
+                }
+            }).then((result: any) => {
+                setHouseData({ ...result, houseMarker: initHouseMarker(result) })
+                setAlbumSwiper({
+                    ...albumSwiper,
+                    itemLength: result.house_album[0].images.length,
+                    albumId: result.house_album[0].id,
                 })
+            })
         }
     })
 

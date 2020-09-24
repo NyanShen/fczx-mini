@@ -98,19 +98,18 @@ const NewHouse = () => {
 
     const fetchCondition = () => {
         app.request({
-            url: api.getHouseCondition,
-            data: { type: 'newHouse' }
-        }, {
-            isMock: true,
-            loading: false
-        }).then((result: any) => {
+            url: app.testApiUrl(api.getHouseCondition),
+            data: {
+                type: 'newHouse'
+            }
+        }, { loading: false }).then((result: any) => {
             setCondition(result || {})
         })
     }
 
     const fetchHouseList = () => {
         app.request({
-            url: api.getHouseNew,
+            url: app.testApiUrl(api.getHouseNew),
             data: {
                 region: selected.region?.id,
                 unit_price: selected.unit_price?.value,
@@ -121,8 +120,6 @@ const NewHouse = () => {
                 feature: selected.feature?.value,
                 renovation: selected.renovation?.value
             }
-        }, {
-            isMock: true
         }).then((result: any) => {
             setHouseList(result || [])
         })

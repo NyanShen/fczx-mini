@@ -21,32 +21,33 @@ const houseSurround = () => {
 
     useEffect(() => {
         app.request({
-            url: api.getHouseSurround,
-            data: { type: tab.name }
-        }, { isMock: true })
-            .then((result: any) => {
-                const surroundMarkers: any[] = []
-                for (const item of result) {
-                    surroundMarkers.push({
-                        latitude: item.lat,
-                        longitude: item.lng,
-                        width: 24,
-                        height: 36,
-                        iconPath: `http://192.168.2.248/assets/mini/${tab.type}.png`,
-                        callout: {
-                            content: `${item.title}\n${item.address}`,
-                            color: '#333',
-                            fontSize: 12,
-                            borderWidth: 2,
-                            borderRadius: 5,
-                            borderColor: '#fff',
-                            padding: 5,
-                            display: 'BYCLICK'
-                        }
-                    })
-                }
-                setMarkers([houseMarker, ...surroundMarkers])
-            })
+            url: app.testApiUrl(api.getHouseSurround),
+            data: {
+                type: tab.name
+            }
+        }).then((result: any) => {
+            const surroundMarkers: any[] = []
+            for (const item of result) {
+                surroundMarkers.push({
+                    latitude: item.lat,
+                    longitude: item.lng,
+                    width: 24,
+                    height: 36,
+                    iconPath: `http://192.168.2.248/assets/mini/${tab.type}.png`,
+                    callout: {
+                        content: `${item.title}\n${item.address}`,
+                        color: '#333',
+                        fontSize: 12,
+                        borderWidth: 2,
+                        borderRadius: 5,
+                        borderColor: '#fff',
+                        padding: 5,
+                        display: 'BYCLICK'
+                    }
+                })
+            }
+            setMarkers([houseMarker, ...surroundMarkers])
+        })
     }, [tab])
 
     return (

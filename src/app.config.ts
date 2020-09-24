@@ -3,6 +3,7 @@ import { Config } from '@tarojs/taro';
 export default {
   pages: [
     // 'pages/newhouse/sand/index',
+    'pages/city/index',
     'pages/index/index',
     'pages/chat/index',
     'pages/user/index',
