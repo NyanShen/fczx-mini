@@ -86,7 +86,7 @@ const Index = () => {
         <View className="house-list-ul">
           <View className="house-list-li">
             <View className="li-image">
-              <Image src="//static.fczx.com/www/assets/images/1400x933_1.jpg"></Image>
+              <Image src="http://192.168.2.248/assets/images/1400x933_1.jpg"></Image>
             </View>
             <View className="li-text">
               <View className="title mb10">
@@ -108,7 +108,7 @@ const Index = () => {
           </View>
           <View className="house-list-li">
             <View className="li-image">
-              <Image src="//static.fczx.com/www/assets/images/1400x933_1.jpg"></Image>
+              <Image src="http://192.168.2.248/assets/images/1400x933_1.jpg"></Image>
             </View>
             <View className="li-text">
               <View className="title mb10">

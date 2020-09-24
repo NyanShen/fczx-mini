@@ -2,15 +2,18 @@ import { Config } from '@tarojs/taro';
 
 export default {
   pages: [
-    // 'pages/newhouse/index/index',
+    // 'pages/newhouse/sand/index',
     'pages/index/index',
     'pages/chat/index',
-    'pages/search/index',
     'pages/user/index',
-    'pages/user/login/index',
-    'pages/user/login/phone/index',
   ],
   subPackages: [
+    {
+      root: 'pages/search/',
+      pages: [
+        'index'
+      ]
+    },
     {
       root: 'pages/newhouse/',
       pages: [
@@ -19,7 +22,15 @@ export default {
         'list/index',
         'search/index',
         'surround/index',
+        'sand/index',
         'detail/index'
+      ]
+    },
+    {
+      root: 'pages/user/login/',
+      pages: [
+        'index',
+        'phone/index'
       ]
     }
   ],

@@ -1,13 +1,41 @@
 {
-  "miniprogramRoot": "./dist",
+  "miniprogramRoot": "dist/",
   "projectname": "mini",
   "description": "fczx mini",
-  "appid": "wx2c038eb5a1ff2941",
+  "appid": "wxb1a8fb08acb02def",
   "setting": {
     "urlCheck": true,
     "es6": false,
+    "enhance": false,
     "postcss": false,
-    "minified": false
+    "preloadBackgroundData": false,
+    "minified": false,
+    "newFeature": false,
+    "coverView": true,
+    "nodeModules": false,
+    "autoAudits": false,
+    "showShadowRootInWxmlPanel": true,
+    "scopeDataCheck": false,
+    "uglifyFileName": false,
+    "checkInvalidKey": true,
+    "checkSiteMap": true,
+    "uploadWithSourceMap": true,
+    "compileHotReLoad": false,
+    "useMultiFrameRuntime": false,
+    "useApiHook": true,
+    "babelSetting": {
+      "ignore": [],
+      "disablePlugins": [],
+      "outputPath": ""
+    },
+    "useIsolateContext": true,
+    "useCompilerModule": true,
+    "userConfirmedUseCompilerModuleSwitch": false,
+    "packNpmManually": false,
+    "packNpmRelationList": []
   },
-  "compileType": "miniprogram"
+  "compileType": "miniprogram",
+  "simulatorType": "wechat",
+  "simulatorPluginLibVersion": {},
+  "condition": {}
 }

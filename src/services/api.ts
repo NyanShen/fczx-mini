@@ -1,4 +1,5 @@
 export default {
+    getTestData: '/test/test',
     getHouseList: '/api/house/list',
     getSearchKeyList: '/api/search/key/list',
     getSearchHotList: '/api/search/hot/list',
