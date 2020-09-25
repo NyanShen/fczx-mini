@@ -30,7 +30,19 @@ app.testApiUrl = (uri: string) => {
 }
 
 app.request = (params: any, { loading = true, toast = true }: any = {}) => {
-
+    if (!params.data) {
+        params.data = {}
+    }
+    const { page, limit } = params.data
+    if (typeof page != "undefined" && typeof limit != "undefined") {
+        const pageParam = {
+            'X-Page': page,
+            'X-Page-Size': limit
+        }
+        params.header = { ...params.header, ...pageParam }
+        delete params.data.Page
+        delete params.data.limit
+    }
     return new Promise((resolve, reject) => {
         if (loading) {
             Taro.showLoading({
@@ -40,7 +52,7 @@ app.request = (params: any, { loading = true, toast = true }: any = {}) => {
         }
         Taro.request({
             url: params.url,
-            data: params.data || {},
+            data: params.data,
             method: params.method,
             header: params.header,
             success: function ({ data }: any) {

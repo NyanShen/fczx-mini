@@ -8,7 +8,7 @@ import api from '@services/api'
 import app from '@services/request'
 import NavBar from '@components/navbar/index'
 import useNavData from '@hooks/useNavData'
-import { PRICE_TYPE, SALE_STATUS } from '@constants/house'
+import { PRICE_TYPE, SALE_STATUS, SALE_STATUS_ATTR } from '@constants/house'
 import '@styles/common/house-list.scss'
 import '@styles/common/search-tab.scss'
 import './index.scss'
@@ -20,28 +20,33 @@ interface IFilter {
 }
 
 interface IConditionState {
-    region?: IFilter
-    unit_price?: IFilter
-    total_price?: IFilter
-    house_type?: IFilter
-    house_property?: IFilter
-    sale_status?: IFilter
-    renovation?: IFilter
-    feature?: IFilter
+    areaList?: IFilter
+    unitPrice?: IFilter
+    totalPrice?: IFilter
+    priceType?: string
+    room?: IFilter
+    propertyType?: IFilter
+    fangBuildingType?: IFilter
+    saleStatus?: IFilter
+    renovationStatus?: IFilter
+    projectFeature?: IFilter
 
 }
 
-const initial_value = { id: '', name: '', value: '' }
+const initial_value = { id: '', name: '' }
+const default_value = { id: 'all', name: '不限' }
 
 const INIT_CONDITION = {
-    region: { id: 'all', name: '不限', value: '' },
-    unit_price: { id: 'all', name: '不限', value: '' },
-    total_price: initial_value,
-    house_type: { id: 'all', name: '不限', value: '' },
-    house_property: initial_value,
-    sale_status: initial_value,
-    renovation: initial_value,
-    feature: initial_value
+    priceType: '',
+    areaList: default_value,
+    unitPrice: default_value,
+    totalPrice: initial_value,
+    room: default_value,
+    propertyType: initial_value,
+    fangBuildingType: initial_value,
+    saleStatus: initial_value,
+    renovationStatus: initial_value,
+    projectFeature: initial_value
 }
 
 const NewHouse = () => {
@@ -50,41 +55,41 @@ const NewHouse = () => {
     const scrollHeight = contentHeight * 0.5 - footerBtnHeight
     const scrollMoreHeight = contentHeight * 0.6 - footerBtnHeight
     const [tab, setTab] = useState<string>('')
-    const [priceType, setPriceType] = useState<string>('unit_price')
+    const [priceType, setPriceType] = useState<string>('unitPrice')
     const [selected, setSelected] = useState<IConditionState>(INIT_CONDITION)
     const [condition, setCondition] = useState<any>()
     const [houseList, setHouseList] = useState<any>([])
     const tabs = [
         {
-            type: 'region',
+            type: 'areaList',
             name: '区域',
-            keys: ['region']
+            keys: ['areaList']
         },
         {
             type: 'price',
             name: '价格',
-            keys: ['unit_price', 'total_price']
+            keys: ['totalPrice', 'unitPrice']
         },
         {
-            type: 'house_type',
+            type: 'room',
             name: '户型',
-            keys: ['house_type']
+            keys: ['room']
         },
         {
             type: 'more',
             name: '更多',
-            keys: ['house_property', 'sale_status', 'renovation', 'feature']
+            keys: ['propertyType', 'fangBuildingType', 'renovationStatus', 'projectFeature']
         }]
     const priceTabs = [
         {
-            id: 'id_01',
+            id: '1',
             name: '按单价',
-            value: "unit_price"
+            value: "unitPrice"
         },
         {
-            id: 'id_02',
+            id: '2',
             name: '按总价',
-            value: "total_price"
+            value: "totalPrice"
         }
     ]
 
@@ -94,35 +99,39 @@ const NewHouse = () => {
 
     useEffect(() => {
         fetchHouseList()
-    }, [selected.region, selected.unit_price, selected.total_price, selected.house_type])
+    }, [selected.areaList, selected.unitPrice, selected.totalPrice, selected.room])
 
     const fetchCondition = () => {
         app.request({
-            url: app.testApiUrl(api.getHouseCondition),
-            data: {
-                type: 'newHouse'
-            }
-        }, { loading: false }).then((result: any) => {
-            setCondition(result || {})
+            url: app.testApiUrl(api.getHouseAttr)
+        }).then((result: any) => {
+            setCondition({ ...result, saleStatus: SALE_STATUS_ATTR })
         })
     }
 
     const fetchHouseList = () => {
         app.request({
-            url: app.testApiUrl(api.getHouseNew),
+            url: app.areaApiUrl(api.getHouseList),
             data: {
-                region: selected.region?.id,
-                unit_price: selected.unit_price?.value,
-                total_price: selected.total_price?.value,
-                house_type: selected.house_type?.value,
-                house_property: selected.house_property?.value,
-                sale_status: selected.sale_status?.value,
-                feature: selected.feature?.value,
-                renovation: selected.renovation?.value
+                page: 0,
+                limit: 20,
+                fang_area_id: filterParam(selected.areaList?.id),
+                price: filterParam(selected.unitPrice?.id || selected.totalPrice?.id),
+                price_type: filterParam(selected.priceType),
+                sale_status: selected.saleStatus?.id,
+                fang_room_type: filterParam(selected.room?.id),
+                fang_project_feature: selected.projectFeature?.id,
+                fang_renovation_status: selected.renovationStatus?.id,
+                fang_property_type: selected.propertyType?.id,
+                fang_building_type: selected.fangBuildingType?.id
             }
         }).then((result: any) => {
-            setHouseList(result || [])
+            setHouseList(result.data || [])
         })
+    }
+
+    const filterParam = (id: any) => {
+        return id === 'all' ? '' : id
     }
 
     const switchCondition = (item) => {
@@ -135,16 +144,19 @@ const NewHouse = () => {
 
     const handleSingleClick = (key: string, item: any) => {
         setTab('')
-        if (key === 'unit_price') {
+
+        if (key === 'unitPrice') {
             setSelected({
                 ...selected,
-                total_price: initial_value,
+                totalPrice: initial_value,
+                priceType: '1',
                 [key]: item
             })
-        } else if (key === 'total_price') {
+        } else if (key === 'totalPrice') {
             setSelected({
                 ...selected,
-                unit_price: initial_value,
+                unitPrice: initial_value,
+                priceType: '2',
                 [key]: item
             })
         } else {
@@ -190,10 +202,10 @@ const NewHouse = () => {
     const handleReset = () => {
         setSelected({
             ...selected,
-            house_property: initial_value,
-            renovation: initial_value,
-            sale_status: initial_value,
-            feature: initial_value
+            propertyType: initial_value,
+            renovationStatus: initial_value,
+            saleStatus: initial_value,
+            projectFeature: initial_value
         })
     }
 
@@ -204,7 +216,7 @@ const NewHouse = () => {
 
     const handleHouseItemClick = (item: any) => {
         Taro.navigateTo({
-            url: `/pages/newhouse/index/index?id=${item.id}&name=${item.house_name}`
+            url: `/pages/newhouse/index/index?id=${item.id}&name=${item.title}`
         })
     }
 
@@ -217,6 +229,11 @@ const NewHouse = () => {
     const renderSplitItem = (key: string) => {
         return (
             <ScrollView className="split-list flex-item" scrollY style={{ height: scrollHeight }}>
+                <View
+                    className={classnames("split-item", selected[key].id === default_value.id && 'actived')}
+                    onClick={() => handleSingleClick(key, default_value)}
+                >{default_value.name}
+                </View>
                 {
                     condition && condition[key].map((item: any, index: number) => (
                         <View
@@ -302,13 +319,13 @@ const NewHouse = () => {
                         })
                     }
                 </View>
-                <View className={classnames('search-container', tab === 'region' && 'actived')}>
+                <View className={classnames('search-container', tab === 'areaList' && 'actived')}>
                     <View className="search-content">
                         <View className="search-split">
                             <View className="split-type flex-item">
                                 <View className="split-item actived">区域</View>
                             </View>
-                            {renderSplitItem('region')}
+                            {renderSplitItem('areaList')}
                         </View>
                     </View>
                 </View>
@@ -336,19 +353,19 @@ const NewHouse = () => {
                         <View className="btn confirm-btn single-btn">确定</View>
                     </View> */}
                 </View>
-                <View className={classnames('search-container', tab === 'house_type' && 'actived')}>
+                <View className={classnames('search-container', tab === 'room' && 'actived')}>
                     <View className="search-content">
                         <View className="search-split">
-                            {renderSplitItem('house_type')}
+                            {renderSplitItem('room')}
                         </View>
                     </View>
                 </View>
                 <View className={classnames('search-container', 'search-multi-container', tab === 'more' && 'actived')}>
                     <ScrollView className="search-content search-content-scroll" scrollY style={{ maxHeight: scrollMoreHeight }}>
-                        {renderMultiItem('house_property', '类型')}
-                        {renderMultiItem('renovation', '装修')}
-                        {renderMultiItem('sale_status', '状态')}
-                        {renderMultiItem('feature', '特色')}
+                        {renderMultiItem('propertyType', '建筑类型')}
+                        {renderMultiItem('renovationStatus', '装修状况')}
+                        {renderMultiItem('saleStatus', '销售状态')}
+                        {renderMultiItem('projectFeature', '项目特色')}
                     </ScrollView>
                     <View className="search-footer">
                         <View className="btn reset-btn" onClick={handleReset}>重置</View>
@@ -368,19 +385,19 @@ const NewHouse = () => {
                                         <Image src={item.image_path}></Image>
                                     </View>
                                     <View className="li-text">
-                                        <View className="title mb10">
-                                            <Text>{item.house_name}</Text>
+                                        <View className="text-item title mb10">
+                                            <Text>{item.title}</Text>
                                         </View>
-                                        <View className="small-desc mb10">
+                                        <View className="text-item small-desc mb10">
                                             <Text>{item.area && item.area.name}</Text>
                                             <Text className="line-split"></Text>
-                                            <Text>建面{item.building_area}平米</Text>
+                                            <Text>{item.address}</Text>
                                         </View>
                                         <View className="mb10">
                                             <Text className="price">{item.price}</Text>
                                             <Text className="price-unit">{PRICE_TYPE[item.price_type]}</Text>
                                         </View>
-                                        <View className="tags">
+                                        <View className="text-item tags">
                                             <Text className={classnames('tags-item', `sale-status-${item.sale_status}`)}>{SALE_STATUS[item.sale_status]}</Text>
                                         </View>
                                     </View>

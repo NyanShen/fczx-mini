@@ -4,7 +4,6 @@ import classnames from 'classnames'
 import { map, includes } from 'lodash'
 import { View, Text, Input, RichText, ScrollView } from '@tarojs/components'
 
-import api from '@services/api'
 import app from '@services/request'
 import { keywordcolorful } from '@utils/index'
 import storage from '@utils/storage'
@@ -22,6 +21,7 @@ interface ISearchProps {
   searchOption: any[]
   searchRemark?: string
   searchUrl: string
+  hotListUrl?: string
   onItemClick: (any, ISearchOption) => void
 }
 
@@ -40,7 +40,7 @@ const Search = (props: ISearchProps) => {
 
   useEffect(() => {
     app.request({
-      url: app.testApiUrl(api.getSearchHotList)
+      url: app.areaApiUrl(props.hotListUrl)
     }, { loading: false }).then((result: any) => {
       setHotList(result || [])
     })
@@ -80,12 +80,14 @@ const Search = (props: ISearchProps) => {
 
   const updateKeyList = (keyValue) => {
     app.request({
-      url: app.testApiUrl(props.searchUrl),
+      url: app.areaApiUrl(props.searchUrl),
       data: {
-        kw: keyValue
+        title: keyValue,
+        page: 0,
+        limit: 50
       }
     }, { loading: false }).then((result: any) => {
-      setMatcheList(result || [])
+      setMatcheList(result.data || [])
     })
   }
 
@@ -126,7 +128,7 @@ const Search = (props: ISearchProps) => {
                 key={item.id}
                 className="item"
                 onClick={() => handleItemClick(item)}
-              >{item.name}
+              >{item.title}
               </Text>
             })}
           </View>
@@ -175,7 +177,7 @@ const Search = (props: ISearchProps) => {
               matcheList.map((item: any, index: number) => {
                 return (
                   <View className="match-item" key={index} onClick={() => handleItemClick(item)}>
-                    <RichText nodes={keywordcolorful(item.name, searchValue)} />
+                    <RichText nodes={keywordcolorful(item.title, searchValue)} />
                     <View className="address">{item.address}</View>
                   </View>
                 )

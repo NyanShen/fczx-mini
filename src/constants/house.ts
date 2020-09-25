@@ -7,8 +7,23 @@ export const PRICE_TYPE = {
 export const SALE_STATUS = {
     "1": "在售",
     "2": "待售",
-    "3": "售完"
+    "3": "售罄"
 }
+
+export const SALE_STATUS_ATTR = [
+    {
+        id: '1',
+        name: '在售'
+    },
+    {
+        id: '2',
+        name: '待售'
+    },
+    {
+        id: '3',
+        name: '售罄'
+    }
+]
 
 export interface ISurroundTab {
     name: string

@@ -2,7 +2,7 @@ import { Config } from '@tarojs/taro';
 
 export default {
   pages: [
-    'pages/newhouse/sand/index',
+    // 'pages/newhouse/search/index',
     'pages/index/index',
     'pages/chat/index',
     'pages/user/index',
@@ -20,18 +20,18 @@ export default {
         'index'
       ]
     },
-    // {
-    //   root: 'pages/newhouse/',
-    //   pages: [
-    //     'index/index',
-    //     'album/index',
-    //     'list/index',
-    //     'search/index',
-    //     'surround/index',
-    //     'sand/index',
-    //     'detail/index'
-    //   ]
-    // },
+    {
+      root: 'pages/newhouse/',
+      pages: [
+        'index/index',
+        'album/index',
+        'list/index',
+        'search/index',
+        'surround/index',
+        'sand/index',
+        'detail/index'
+      ]
+    },
     {
       root: 'pages/user/login/',
       pages: [

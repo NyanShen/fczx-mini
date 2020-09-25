@@ -26,7 +26,8 @@ const HouseSearch = () => {
         searchOption={searchOption}
         onItemClick={handleItemClick}
         searchRemark="请输入楼盘名称或地址"
-        searchUrl={api.getSearchKeyList}
+        hotListUrl={api.getHouseSearchHot}
+        searchUrl={api.getHouseList}
       ></Search>
     </View>
   )
