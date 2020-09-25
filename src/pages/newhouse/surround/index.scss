@@ -4,7 +4,7 @@
         .surround-map {
             position: absolute;
             top: 0;
-            bottom: 0;
+            bottom: 90px;
             width: 100%;
             height: auto;
         }
@@ -19,6 +19,7 @@
             background-color: $white;
             text-align: center;
             font-size: $font-basic;
+            z-index: 999;
 
             .tabs-item {
                 flex: 1;
