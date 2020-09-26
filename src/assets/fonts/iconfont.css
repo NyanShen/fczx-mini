@@ -3,7 +3,7 @@
   src: url("./iconfont.eot");
   src: url("./iconfont.eot?#iefix") format("embedded-opentype"),
     url("./iconfont.woff2") format("woff2"), url("./iconfont.woff") format("woff"),
-    url("./iconfont.ttf") format("truetype"), url("./iconfont.svg#iconfont") format("svg");
+    url("./iconfont.ttf") format("truetype");
 }
 
 .iconfont {
@@ -39,24 +39,12 @@
   content: "\e623";
 }
 
-.iconweizhi:before {
-  content: "\e661";
-}
-
 .iconda:before {
   content: "\e889";
 }
 
 .iconwen:before {
   content: "\e8cd";
-}
-
-.iconuserdark:before {
-  content: "\e602";
-}
-
-.iconuserlight:before {
-  content: "\e6a8";
 }
 
 .iconarrow-down-bold:before {
@@ -101,10 +89,6 @@
 
 .iconclose:before {
   content: "\e66d";
-}
-
-.iconarrow-down-filling:before {
-  content: "\e68a";
 }
 
 .iconhome:before {

@@ -16,6 +16,7 @@ import { includes } from 'lodash'
 import api from '@services/api'
 import app from '@services/request'
 import NavBar from '@components/navbar'
+import '@styles/common/house.scss'
 import './index.scss'
 
 interface ISandState {

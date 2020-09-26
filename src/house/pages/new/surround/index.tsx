@@ -7,7 +7,7 @@ import api from '@services/api'
 import app from '@services/request'
 import NavBar from '@components/navbar/index'
 import useNavData from '@hooks/useNavData'
-import { SURROUND_TABS, ISurroundTab } from '@constants/house'
+import { SURROUND_TABS, ISurroundTab } from '@house/constants/house'
 import './index.scss'
 
 const houseSurround = () => {

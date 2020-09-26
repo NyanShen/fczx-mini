@@ -1,4 +1,3 @@
-@import "./styles/common/popup.scss";
 @import "./assets/fonts/iconfont.css";
 
 page {
@@ -39,17 +38,6 @@ page {
   z-index: 98;
 }
 
-.price {
-  font-size: 36px;
-  font-weight: bold;
-  color: #f34;
-}
-
-.price-unit {
-  font-size: 30px;
-  color: #f34;
-}
-
 .small-desc {
   color: $desc-color;
   font-size: $font-26;
@@ -57,34 +45,6 @@ page {
 
 .mt20 {
   margin-top: 20px;
-}
-
-.tags {
-  height: 40px;
-  line-height: 40px;
-  font-size: 24px;
-  max-width: 460px;
-  white-space: nowrap;
-  overflow: hidden;
-  &-item {
-    margin-right: 20px;
-    padding: 5px 10px;
-    border-radius: 5px;
-    background-color: $border-color;
-    color: $desc-color;
-  }
-  &-item.sale-status-1 {
-    color: $white;
-    background-color: $sale-1;
-  }
-  &-item.sale-status-2 {
-    color: $white;
-    background-color: $sale-2;
-  }
-  &-item.sale-status-3 {
-    color: $white;
-    background-color: $sale-3;
-  }
 }
 
 .mask {
@@ -164,28 +124,4 @@ page {
 .cut-line {
   border-bottom: 1px solid $line-color;
   clear: both;
-}
-
-.sale-status-1 {
-  background-color: $sale-1;
-
-  .triangle-down {
-      border-color: $sale-1 transparent transparent;
-  }
-}
-
-.sale-status-2 {
-  background-color: $sale-2;
-
-  .triangle-down {
-      border-color: $sale-2 transparent transparent;
-  }
-}
-
-.sale-status-3 {
-  background-color: $sale-3;
-
-  .triangle-down {
-      border-color: $sale-3 transparent transparent;
-  }
 }

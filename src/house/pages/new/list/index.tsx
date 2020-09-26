@@ -8,9 +8,9 @@ import api from '@services/api'
 import app from '@services/request'
 import NavBar from '@components/navbar/index'
 import useNavData from '@hooks/useNavData'
-import { PRICE_TYPE, SALE_STATUS, SALE_STATUS_ATTR } from '@constants/house'
-import '@styles/common/house-list.scss'
-import '@styles/common/search-tab.scss'
+import { PRICE_TYPE, SALE_STATUS, SALE_STATUS_ATTR } from '@house/constants/house'
+import '@styles/common/house.scss'
+import '@house/styles/search-tab.scss'
 import './index.scss'
 
 interface IFilter {
@@ -216,13 +216,13 @@ const NewHouse = () => {
 
     const handleHouseItemClick = (item: any) => {
         Taro.navigateTo({
-            url: `/pages/newhouse/index/index?id=${item.id}&name=${item.title}`
+            url: `/house/pages/new/index/index?id=${item.id}&name=${item.title}`
         })
     }
 
     const handleSearchClick = () => {
         Taro.navigateTo({
-            url: `/pages/newhouse/search/index`
+            url: `/house/pages/new/search/index`
         })
     }
 

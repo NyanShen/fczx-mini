@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import Taro from '@tarojs/taro'
 import { View, Text, Input } from '@tarojs/components'
 
+import './index.scss'
+
 interface IPopupProps {
     title: string
     subTitle?: string

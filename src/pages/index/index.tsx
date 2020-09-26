@@ -10,8 +10,8 @@ import new_house from '@assets/icons/new_house.png'
 import second_house from '@assets/icons/house.png'
 import rent_house from '@assets/icons/rent_house.png'
 import news from '@assets/icons/news.png'
+import '@styles/common/house.scss'
 import './index.scss'
-import '../../styles/common/house-list.scss'
 
 const Index = () => {
 
@@ -56,17 +56,17 @@ const Index = () => {
       {
         name: '新盘',
         icon: new_house,
-        path: '/pages/newhouse/list/index'
+        path: '/house/pages/new/list/index'
       },
       {
         name: '二手房',
         icon: second_house,
-        path: '/pages/secondhouse/index'
+        path: '/house/pages/esf/index'
       },
       {
         name: '租房',
         icon: rent_house,
-        path: '/pages/renthouse/index'
+        path: '/house/pages/rent/index'
       },
       {
         name: '资讯',
@@ -78,7 +78,7 @@ const Index = () => {
 
   const clickHandler = () => {
     Taro.navigateTo({
-      url: '/pages/search/index'
+      url: '/house/pages/search/index'
     })
   }
 

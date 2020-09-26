@@ -24,7 +24,7 @@ const Login = () => {
 
     const handleLoginByPhone = () => {
         Taro.navigateTo({
-            url: '/pages/user/login/phone/index'
+            url: '/login/pages/phone/index'
         })
     }
 

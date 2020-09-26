@@ -9,9 +9,10 @@ import app from '@services/request'
 import { toUrlParam } from '@utils/urlHandler'
 import useNavData from '@hooks/useNavData'
 import NavBar from '@components/navbar/index'
-import Popup from '@components/popup/index'
-import { SURROUND_TABS, ISurroundTab } from '@constants/house'
-import '@styles/common/bottom-bar.scss'
+import Popup from '@house/components/popup/index'
+import { SURROUND_TABS, ISurroundTab } from '@house/constants/house'
+import '@styles/common/house.scss'
+import '@house/styles/bottom-bar.scss'
 import './index.scss'
 import '../surround/index.scss'
 
@@ -144,13 +145,13 @@ const House = () => {
             houseMarker: JSON.stringify(houseMarker),
         })
         Taro.navigateTo({
-            url: `/pages/newhouse/surround/index${paramString}`
+            url: `/house/pages/new/surround/index${paramString}`
         })
     }
 
     const toAlbum = () => {
         Taro.navigateTo({
-            url: '/pages/newhouse/album/index'
+            url: '/house/pages/new/album/index'
         })
     }
 
@@ -217,7 +218,7 @@ const House = () => {
                         <Text className="text address">东津新区东西轴线与南山路交汇处东津新区东西轴线与南山路交汇处</Text>
                         <Text className="iconfont iconaddress" onClick={() => toHouseSurround()}>地图</Text>
                     </View>
-                    <View className="btn btn-blue mt20" onClick={() => navigateTo('/pages/newhouse/detail/index')}>
+                    <View className="btn btn-blue mt20" onClick={() => navigateTo('/house/pages/new/detail/index')}>
                         <Text className="btn-name">查看更多楼盘详情</Text>
                     </View>
                     <View className="subscrib">
@@ -365,7 +366,7 @@ const House = () => {
                         <View className="house-item-content">
                             <View className="comment-item">
                                 <View className="user-photo">
-                                    <Image src="http://192.168.2.248/assets/images/user_photo.jpg"></Image>
+                                    <Image src="http://192.168.2.248/assets/mini/105x105.jpg"></Image>
                                 </View>
                                 <View className="comment-text">
                                     <View className="name">Nyan Shen</View>
@@ -374,7 +375,7 @@ const House = () => {
                             </View>
                             <View className="comment-item">
                                 <View className="user-photo">
-                                    <Image src="http://192.168.2.248/assets/images/user_photo.jpg"></Image>
+                                    <Image src="http://192.168.2.248/assets/mini/105x105.jpg"></Image>
                                 </View>
                                 <View className="comment-text">
                                     <View className="name">Nyan Shen</View>
@@ -430,7 +431,7 @@ const House = () => {
                     <View className="house-consultant-content clearfix">
                         <View className="consultant-item">
                             <View className="item-image">
-                                <Image src="http://192.168.2.248/assets/images/105x105.jpg"></Image>
+                                <Image src="http://192.168.2.248/assets/mini/105x105.jpg"></Image>
                             </View>
                             <View className="item-name">胡锦文</View>
                             <View className="item-btn">
@@ -442,7 +443,7 @@ const House = () => {
                         </View>
                         <View className="consultant-item">
                             <View className="item-image">
-                                <Image src="http://192.168.2.248/assets/images/105x105.jpg"></Image>
+                                <Image src="http://192.168.2.248/assets/mini/105x105.jpg"></Image>
                             </View>
                             <View className="item-name">胡文</View>
                             <View className="item-btn">
@@ -454,7 +455,7 @@ const House = () => {
                         </View>
                         <View className="consultant-item">
                             <View className="item-image">
-                                <Image src="http://192.168.2.248/assets/images/105x105.jpg"></Image>
+                                <Image src="http://192.168.2.248/assets/mini/105x105.jpg"></Image>
                             </View>
                             <View className="item-name">胡锦文</View>
                             <View className="item-btn">

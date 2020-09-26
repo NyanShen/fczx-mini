@@ -70,6 +70,7 @@ const config = {
     '@utils': path.resolve(__dirname, '..', 'src/utils'),
     '@assets': path.resolve(__dirname, '..', 'src/assets'),
     '@styles': path.resolve(__dirname, '..', 'src/styles'),
+    '@house': path.resolve(__dirname, '..', 'src/house'),
   },
   sass: {
     resource: path.resolve(__dirname, '..', 'src/styles/variable.scss')
