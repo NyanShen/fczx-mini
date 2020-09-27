@@ -9,5 +9,6 @@ export default {
     getHouseNew: '/api/house/new',
     getHouseAlbum: '/api/house/all-image',
     getHouseSurround: '/api/house/surround',
-    getHouseSand: '/house/get-sand'
+    getHouseSand: '/house/get-sand',
+    getHouseSandRoom: '/house/find-sand-room',
 }

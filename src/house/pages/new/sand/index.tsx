@@ -17,6 +17,7 @@ import api from '@services/api'
 import app from '@services/request'
 import NavBar from '@components/navbar'
 import '@styles/common/house.scss'
+import '@house/styles/common.scss'
 import './index.scss'
 
 interface ISandState {
@@ -48,17 +49,28 @@ interface IShowState {
     text: string
 }
 
+const INIT_SAND_DATA = {
+    sandBuilding: []
+}
+
 const INIT_SHOW_STATE = { show: true, text: '收起' }
 
 const HouseSand = () => {
+    const INTI_CURRENT = { id: '167' }
     const [movableView, setMovableView] = useState<any>({})
     const [showState, setShowState] = useState<IShowState>(INIT_SHOW_STATE)
-    const [sandState, setSadState] = useState<ISandState[]>(INIT_SAND_STATE)
-    const [sandData, setSandData] = useState<any>({})
+    const [sandState, setSandState] = useState<ISandState[]>(INIT_SAND_STATE)
+    const [sandData, setSandData] = useState<any>(INIT_SAND_DATA)
+    const [roomData, setRoomData] = useState<any[]>([])
+    const [current, setCurrent] = useState<any>(INTI_CURRENT)
 
     useEffect(() => {
-        fetchSandData()
+        fetchSand()
     }, [])
+
+    useEffect(() => {
+        fetchRoom()
+    }, [current.id])
 
     const winData = Taro.getSystemInfoSync()
 
@@ -69,14 +81,25 @@ const HouseSand = () => {
         })
     }
 
-    const fetchSandData = () => {
+    const fetchSand = () => {
         app.request({
-            url: app.areaApiUrl(api.getHouseSand),
+            url: app.testApiUrl(api.getHouseSand),
             data: {
                 id: '194'
             }
         }).then((result: any) => {
             setSandData(result)
+        })
+    }
+
+    const fetchRoom = () => {
+        app.request({
+            url: app.testApiUrl(api.getHouseSandRoom),
+            data: {
+                id: current.id
+            }
+        }).then((result: any) => {
+            setRoomData(result)
         })
     }
 
@@ -90,14 +113,21 @@ const HouseSand = () => {
     const handleCheckboxChange = (e: any) => {
         const values = e.detail.value
         for (const item of sandState) {
-            console.log(values, item.value, includes(values, item.value))
             if (includes(values, item.value)) {
                 item.checked = true
             } else {
                 item.checked = false
             }
         }
-        setSadState(sandState)
+        setSandState(sandState)
+    }
+
+    const switchCurrent = (item: any) => {
+        setCurrent(item)
+    }
+    
+    const handleRoomCheck = (item: any) => {
+        console.log(item)
     }
     return (
         <View className="sand">
@@ -115,13 +145,12 @@ const HouseSand = () => {
                         >
                             <Image className="sand-image" src={sandData.fang_sand_pic} onLoad={handleSandImageLoad}></Image>
                             {
-                                sandData.sandBuilding &&
-                                sandData.sandBuilding.length > 0 &&
                                 sandData.sandBuilding.map((item: any, index: number) => (
                                     <View
                                         key={index}
-                                        className={classnames('sand-item', `sale-status-${item.sale_status}`)}
                                         style={item.style}
+                                        className={classnames('sand-item', `sale-status-${item.sale_status}`)}
+                                        onClick={() => switchCurrent(item)}
                                     >
                                         <Text>{item.name}</Text>
                                         <Text className="triangle-down"></Text>
@@ -163,12 +192,16 @@ const HouseSand = () => {
                             scrollX
                         >
                             <View className="sand-list">
-                                <View className="sand-item">11#</View>
-                                <View className="sand-item actived">11#</View>
-                                <View className="sand-item">11#</View>
-                                <View className="sand-item">11#</View>
-                                <View className="sand-item">11#</View>
-                                <View className="sand-item">11#</View>
+                                {
+                                    sandData.sandBuilding.map((item: any, index: number) => (
+                                        <View
+                                            key={index}
+                                            className={classnames('sand-item', current.id === item.id && 'actived')}
+                                            onClick={() => switchCurrent(item)}
+                                        >{item.name}
+                                        </View>
+                                    ))
+                                }
                             </View>
                         </ScrollView>
                         <View className="sand-info-detail">
@@ -191,12 +224,19 @@ const HouseSand = () => {
                                     <Text className="title">户型</Text>
                                 </View>
                                 <View className="room-list">
-                                    <View className="room-item">
-                                        <Text className="item-text">D户型高层</Text>
-                                        <Text className="item-text">2房2室2厅1卫</Text>
-                                        <Text className="item-text">100㎡</Text>
-                                        <Text className="item-btn">查看</Text>
-                                    </View>
+                                    {
+                                        roomData.map((item: any, index: number) => {
+                                            const itemData = item.fangHouseBuildingRoom
+                                            return (
+                                                <View key={index} className="room-item">
+                                                    <Text className="item-text">{itemData.name}</Text>
+                                                    <Text className="item-text">{itemData.room}室{itemData.office}厅{itemData.toilet}卫</Text>
+                                                    <Text className="item-text">{itemData.building_area}㎡</Text>
+                                                    <Text className="item-btn" onClick={() => handleRoomCheck(itemData)}>查看</Text>
+                                                </View>
+                                            )
+                                        })
+                                    }
                                 </View>
                             </View>
                         </View>
