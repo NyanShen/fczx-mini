@@ -2,7 +2,7 @@ import { Config } from '@tarojs/taro';
 
 export default {
   pages: [
-    'house/pages/new/index/index',
+    'house/pages/new/detail/index',
     'pages/index/index',
     'pages/chat/index',
     'pages/user/index'

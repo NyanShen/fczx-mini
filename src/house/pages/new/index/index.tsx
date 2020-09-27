@@ -36,11 +36,11 @@ const INIT_HOUSE_DATA = {
     id: '',
     title: '',
     tags: [],
+    ask: [],
     _renovationStatus: [],
     fangHouseRoom: [],
     imagesData: {},
     fangHouseComment: [],
-    ask: [],
     enableFangHouseConsultant: []
 }
 

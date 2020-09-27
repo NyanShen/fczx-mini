@@ -5,12 +5,13 @@
         padding: 0 30px 30px 30px;
         &-title {
             line-height: 80px;
+            font-size: $font-32;
             font-weight: bold;
             border-bottom: 1px solid #f7f7f7;
         }
         &-item {
             display: flex;
-            font-size: 28px;
+            font-size: $font-basic;
             margin: 20px 0;
 
             .label {
@@ -20,6 +21,9 @@
                 overflow: hidden;
                 margin-right: 20px;
                 color: #666;
+            }
+            .hx {
+                margin-right: 10px;
             }
             .text {
                 flex: 1;
@@ -32,6 +36,31 @@
                     margin-left: 16px;
                     color: #11a43c;
                 }
+            }
+        }
+        &-table {
+            font-size: $font-26;
+            color: $text-color;
+            &-content {
+                display: flex;
+                border-bottom: $border;
+                .item {
+                    padding: 10px;
+                    box-sizing: border-box;
+                }
+                .no {
+                    flex: 40%;
+                }
+                .time {
+                    width: 25%;
+                }
+                .bind {
+                    width: 35%;
+                }
+            }
+            .table-header {
+                background-color: $bg2-color;
+                color: $title-color;
             }
         }
     }
