@@ -2,6 +2,11 @@
     &-album {
         position: relative;
 
+        Image {
+            width: 100%;
+            height: 480px;
+        }
+
         .icon-vedio {
             width: 120px;
             height: 120px;
@@ -134,7 +139,7 @@
         }
         .swiper-item {
             width: 88%;
-            height: 70%;
+            height: 65%;
             margin-right: 12%;
 
             .item-image {
@@ -147,16 +152,23 @@
                 }
             }
 
-            .item-title {
+            .item-text {
                 display: flex;
                 justify-content: space-between;
+                align-items: center;
                 font-size: $font-26;
                 margin-top: 10px;
-            }
+                .price {
+                    font-size: $font-basic;
+                    margin-top: 5px;
+                }
+                .price-unit {
+                    font-size: $font-26;
+                }
 
-            .item-price {
-                margin-top: 5px;
-                color: $tip-color;
+                .tags-item {
+                    margin: 0;
+                }
             }
         }
     }
@@ -176,10 +188,11 @@
             font-size: $font-basic;
             margin-bottom: 20px;
             .user-photo {
-                width: 48px;
-                height: 48px;
+                width: 50px;
+                height: 50px;
                 border-radius: 50%;
                 overflow: hidden;
+                background-color: $bg-color;
 
                 Image {
                     width: 100%;
@@ -193,8 +206,12 @@
 
                 .name {
                     color: $desc-color;
-                    height: 48px;
-                    line-height: 48px;
+                    height: 50px;
+                    line-height: 50px;
+                }
+
+                .text {
+                    margin-bottom: 8px;
                 }
             }
         }
@@ -252,6 +269,7 @@
                     margin-bottom: 20px;
                     border-radius: 50%;
                     overflow: hidden;
+                    background-color: $bg-color;
                     Image {
                         max-width: 100%;
                         max-height: 100%;

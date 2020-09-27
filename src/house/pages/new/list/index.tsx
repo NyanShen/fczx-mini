@@ -297,7 +297,7 @@ const NewHouse = () => {
                         <Text className="newhouse-search-text placeholder">请输入楼盘名称或地址</Text>
                     </View>
                     <View className="newhouse-nav-right">
-                        <Text className="iconfont iconmap"></Text>
+                        <Text className="iconfont iconaddress"></Text>
                         <Text className="text">地图找房</Text>
                     </View>
                 </View>

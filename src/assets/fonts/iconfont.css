@@ -15,7 +15,11 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.iconmapcity:before {
+.iconempty:before {
+  content: "\e6a6";
+}
+
+.iconmap:before {
   content: "\e62e";
 }
 
@@ -49,10 +53,6 @@
 
 .iconarrow-down-bold:before {
   content: "\e686";
-}
-
-.iconmap:before {
-  content: "\e618";
 }
 
 .icongroup:before {

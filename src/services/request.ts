@@ -11,14 +11,9 @@ const getCityAlias = (): string => {
 
 const agreement: string = 'http://'
 const topDomain: string = '.fczx.com'
-const apiDomain: string = `${agreement}api${topDomain}`
-const testApiDomain: string = `${agreement}192.168.2.248:12306`
-
 const app: any = {};
-app.mockApi = 'http://192.168.2.248:12306';
-app.baseApi = 'http://api.fczx.com';
 app.apiUrl = (uri: string) => {
-    return apiDomain + uri
+    return `${agreement}api${topDomain}${uri}`
 }
 
 app.areaApiUrl = (uri: string) => {
@@ -26,7 +21,7 @@ app.areaApiUrl = (uri: string) => {
 }
 
 app.testApiUrl = (uri: string) => {
-    return testApiDomain + uri
+    return `${agreement}192.168.2.248:12306${uri}`
 }
 
 app.request = (params: any, { loading = true, toast = true }: any = {}) => {

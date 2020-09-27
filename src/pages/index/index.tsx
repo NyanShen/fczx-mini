@@ -102,7 +102,7 @@ const Index = () => {
           <View className="iconfont iconsearch"></View>
           <View className="index-search-content-desc" onClick={clickHandler}>输入区县、小区名</View>
           <View className="index-search-content-text" onClick={toCityList}>
-            <Text className="iconfont iconmapcity"></Text>
+            <Text className="iconfont iconmap"></Text>
             <Text className="city-name">{city.short_name}</Text>
           </View>
         </View>

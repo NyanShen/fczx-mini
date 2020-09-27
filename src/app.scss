@@ -66,6 +66,11 @@ page {
   color: $desc-color;
   font-size: $font-basic;
   padding: 30px 0;
+
+  .iconempty {
+    font-size: 80px;
+    margin-bottom: 10px;
+  }
 }
 
 .btn {

@@ -4,7 +4,7 @@ export default {
     getHouseList: '/house/list',
     getSearchKeyList: '/api/search/key/list',
     getHouseSearchHot: '/house/hot-search',
-    getHouseById: '/api/house',
+    getHouseById: '/house/get',
     getHouseAttr: '/house/attr',
     getHouseNew: '/api/house/new',
     getHouseAlbum: '/api/house/all-image',
