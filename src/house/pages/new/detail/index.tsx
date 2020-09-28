@@ -132,7 +132,14 @@ const HouseDetail = () => {
                                 <View key={index} className="info-table-content">
                                     <Text className="item no">{item.name}</Text>
                                     <Text className="item time">{formatTimestamp(item.modified, 'yy-MM-dd')}</Text>
-                                    <Text className="item bind">{item.bind_building}</Text>
+                                    <Text className="item bind">
+                                        {
+                                            item.fangHouseLicenseBuilding &&
+                                            item.fangHouseLicenseBuilding.map((item:any) => {
+                                                return item.fang_house_building_name
+                                            }).join(',')
+                                        }
+                                    </Text>
                                 </View>
                             ))
                         }

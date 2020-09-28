@@ -10,9 +10,11 @@ import { formatTimestamp } from '@utils/index'
 import useNavData from '@hooks/useNavData'
 import NavBar from '@components/navbar/index'
 import Popup from '@house/components/popup/index'
+import SandCommon from '@house/pages/new/sand/common'
 import { SURROUND_TABS, ISurroundTab, SALE_STATUS, PRICE_TYPE } from '@house/constants/house'
 import '@styles/common/house.scss'
 import '@house/styles/bottom-bar.scss'
+import '@house/styles/common.scss'
 import '@house/pages/new/surround/index.scss'
 import './index.scss'
 
@@ -382,6 +384,17 @@ const House = () => {
                             }
                         </Swiper>
                     </View>
+                </View>
+                <View className="house-sand mt20">
+                    <View className="house-item-header view-content">
+                        <View className="title">沙盘图</View>
+                    </View>
+                    <SandCommon
+                        outerWidth={375}
+                        outerHeight={300}
+                        setCurrentBuilding={() => { }}
+                        updateSandBuilding={() => { }}
+                    />
                 </View>
                 <View className="house-surround mt20">
                     <View className="house-item-header view-content">

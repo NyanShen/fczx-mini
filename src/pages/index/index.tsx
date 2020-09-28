@@ -30,7 +30,7 @@ const Index = () => {
         success: function (res) {
           if (res.confirm) {
             Taro.navigateTo({
-              url: '/pages/city/index'
+              url: '/house/pages/city/index'
             })
           }
         }
@@ -90,7 +90,7 @@ const Index = () => {
 
   const toCityList = () => {
     Taro.navigateTo({
-      url: '/pages/city/index'
+      url: '/house/pages/city/index'
     })
   }
 
