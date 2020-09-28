@@ -11,4 +11,5 @@ export default {
     getHouseSurround: '/api/house/surround',
     getHouseSand: '/house/get-sand',
     getHouseSandRoom: '/house/find-sand-room',
+    getHouseComment: '/house/comment-list',
 }
