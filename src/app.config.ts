@@ -2,26 +2,26 @@ import { Config } from '@tarojs/taro';
 
 export default {
   pages: [
-    'house/pages/new/sand/index',
+    // 'house/pages/new/index/index',
     'pages/index/index',
     'pages/chat/index',
     'pages/user/index'
   ],
   subPackages: [
-    // {
-    //   root: 'house',
-    //   pages: [
-    //     'pages/new/index/index',
-    //     'pages/new/album/index',
-    //     'pages/new/list/index',
-    //     'pages/new/search/index',
-    //     'pages/new/surround/index',
-    //     'pages/new/sand/index',
-    //     'pages/new/detail/index',
-    //     'pages/city/index',
-    //     'pages/search/index',
-    //   ]
-    // },
+    {
+      root: 'house',
+      pages: [
+        'pages/new/index/index',
+        'pages/new/album/index',
+        'pages/new/list/index',
+        'pages/new/search/index',
+        'pages/new/surround/index',
+        'pages/new/sand/index',
+        'pages/new/detail/index',
+        'pages/city/index',
+        'pages/search/index',
+      ]
+    },
     {
       root: 'login',
       pages: [

@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import Taro from '@tarojs/taro'
+import { getCurrentInstance } from '@tarojs/taro'
 import {
     View,
     Text,
@@ -18,16 +18,17 @@ import './index.scss'
 const INIT_SAND_BUILDING = []
 
 const HouseSand = () => {
-    const INTI_CURRENT = { id: '167' }
+    let currentRouter: any = getCurrentInstance().router
+    let params: any = currentRouter.params
+    const currentBuilding = JSON.parse(params.currentBuilding)
     const [sandBuilding, setSandBuilding] = useState<any>(INIT_SAND_BUILDING)
+    const [current, setCurrent] = useState<any>(currentBuilding)
     const [roomData, setRoomData] = useState<any[]>([])
-    const [current, setCurrent] = useState<any>(INTI_CURRENT)
 
     useEffect(() => {
         fetchRoom()
     }, [current.id])
 
-    const safeArea = Taro.getSystemInfoSync().safeArea
 
     const fetchRoom = () => {
         app.request({
@@ -47,18 +48,18 @@ const HouseSand = () => {
     const getSandCommonComponent = useMemo(() => {
         return (
             <SandCommon
-                outerWidth={safeArea.width}
+                houseId={params.id}
                 outerHeight={300}
                 currentBuilding={current}
                 setCurrentBuilding={(currentBuilding) => setCurrent(currentBuilding)}
                 updateSandBuilding={(sandBuilding) => setSandBuilding(sandBuilding)}
-            ></SandCommon>
+            />
         )
     }, [current])
 
     return (
         <View className="sand">
-            <NavBar title="楼盘沙盘图"></NavBar>
+            <NavBar title={`${params.name}沙盘图`} back={true}></NavBar>
             <View className="sand-wrapper">
                 {getSandCommonComponent}
                 <View className="sand-content">

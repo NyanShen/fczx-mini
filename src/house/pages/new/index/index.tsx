@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import Taro, { getCurrentInstance, useReady } from '@tarojs/taro'
 import { View, ScrollView, Swiper, SwiperItem, Image, Text, Button, Map } from '@tarojs/components'
 import classnames from 'classnames'
@@ -143,6 +143,17 @@ const House = () => {
         })
     }
 
+    const toHouseSand = (currentBuilding: any) => {
+        const paramString = toUrlParam({
+            id: houseData.id,
+            name: houseData.title,
+            currentBuilding: JSON.stringify(currentBuilding)
+        })
+        Taro.navigateTo({
+            url: `/house/pages/new/sand/index${paramString}`
+        })
+    }
+
     const renderPrice = (price: string, price_type: string) => {
         if (price === '0') {
             return <Text className="price">待定</Text>
@@ -180,8 +191,8 @@ const House = () => {
 
     const renderComment = (comment: any[]) => {
         return (
-            <View className="house-comment mt20">
-                <View className="house-item-header view-content">
+            <View className="house-item house-comment mt20">
+                <View className="house-item-header">
                     <View className="title">用户评论({houseData.comment_num})</View>
                     {
                         comment.length > 0 &&
@@ -191,30 +202,28 @@ const House = () => {
                         </View>
                     }
                 </View>
-                <View className="house-item">
-                    <View className="house-item-content">
-                        {
-                            comment.length > 0 ?
-                                comment.map((item: any, index: number) => (
-                                    <View key={index} className="comment-item">
-                                        <View className="user-photo">
-                                            <Image src={item.user.avatar}></Image>
-                                        </View>
-                                        <View className="comment-text">
-                                            <View className="name">{item.user.nickname}</View>
-                                            <View className="text">{item.content}</View>
-                                            <View className="small-desc">{formatTimestamp(item.modified)}</View>
-                                        </View>
+                <View className="house-item-content">
+                    {
+                        comment.length > 0 ?
+                            comment.map((item: any, index: number) => (
+                                <View key={index} className="comment-item">
+                                    <View className="user-photo">
+                                        <Image src={item.user.avatar}></Image>
                                     </View>
-                                )) :
-                                <View className="empty-container">
-                                    <View className="iconfont iconempty"></View>
-                                    <View>暂无评论</View>
+                                    <View className="comment-text">
+                                        <View className="name">{item.user.nickname}</View>
+                                        <View className="text">{item.content}</View>
+                                        <View className="small-desc">{formatTimestamp(item.modified)}</View>
+                                    </View>
                                 </View>
-                        }
-                        <View className="btn btn-blue">
-                            <Text className="btn-name">我要评论</Text>
-                        </View>
+                            )) :
+                            <View className="empty-container">
+                                <View className="iconfont iconempty"></View>
+                                <View>暂无评论</View>
+                            </View>
+                    }
+                    <View className="btn btn-blue">
+                        <Text className="btn-name">我要评论</Text>
                     </View>
                 </View>
             </View>
@@ -223,8 +232,8 @@ const House = () => {
 
     const renderAsk = (ask: any[]) => {
         return (
-            <View className="house-question">
-                <View className="house-item-header view-content">
+            <View className="house-item house-question">
+                <View className="house-item-header">
                     <View className="title">大家都在问</View>
                     {
                         ask.length > 0 &&
@@ -234,35 +243,45 @@ const House = () => {
                         </View>
                     }
                 </View>
-                <View className="house-item">
-                    <View className="house-item-content">
-                        {
-                            ask.length > 0 ?
-                                ask.map((item: any, index: number) => (
-                                    <View key={index} className="question-item">
-                                        <View className="question">
-                                            <Text className="iconfont iconwen"></Text>
-                                            <Text className="text">{item.title}</Text>
-                                        </View>
-                                        <View className="question">
-                                            <Text className="iconfont iconda"></Text>
-                                            <Text className="text da">{item.reply_content ? item.reply_content : '暂无回答'}</Text>
-                                        </View>
+                <View className="house-item-content">
+                    {
+                        ask.length > 0 ?
+                            ask.map((item: any, index: number) => (
+                                <View key={index} className="question-item">
+                                    <View className="question">
+                                        <Text className="iconfont iconwen"></Text>
+                                        <Text className="text">{item.title}</Text>
                                     </View>
-                                )) :
-                                <View className="empty-container">
-                                    <View className="iconfont iconempty"></View>
-                                    <View>对此楼盘有疑问？赶快去提问吧</View>
+                                    <View className="question">
+                                        <Text className="iconfont iconda"></Text>
+                                        <Text className="text da">{item.reply_content ? item.reply_content : '暂无回答'}</Text>
+                                    </View>
                                 </View>
-                        }
-                        <View className="btn btn-blue">
-                            <Text className="btn-name">我要提问</Text>
-                        </View>
+                            )) :
+                            <View className="empty-container">
+                                <View className="iconfont iconempty"></View>
+                                <View>对此楼盘有疑问？赶快去提问吧</View>
+                            </View>
+                    }
+                    <View className="btn btn-blue">
+                        <Text className="btn-name">我要提问</Text>
                     </View>
                 </View>
             </View>
         )
     }
+
+    const getSandCommonComponent = useMemo(() => {
+        return (
+            <SandCommon
+                houseId={houseData.id}
+                outerHeight={200}
+                currentBuilding={{}}
+                setCurrentBuilding={toHouseSand}
+                updateSandBuilding={() => { }}
+            />
+        )
+    }, [houseData.id])
 
     return (
         <View className="house">
@@ -334,7 +353,7 @@ const House = () => {
                 {
                     houseData.enableFangHouseDiscount &&
                     <View className="house-item house-activity mt20">
-                        <View className="house-item-header view-content">
+                        <View className="house-item-header">
                             <View className="title">优惠</View>
                             <View className="more">
                                 <Text>更多</Text>
@@ -354,7 +373,7 @@ const House = () => {
                 }
 
                 <View className="house-item house-type mt20">
-                    <View className="house-item-header view-content">
+                    <View className="house-item-header">
                         <View className="title">主力户型({houseData.fangHouseRoom.length + 1})</View>
                         <View className="more">
                             <Text>更多</Text>
@@ -385,26 +404,21 @@ const House = () => {
                         </Swiper>
                     </View>
                 </View>
-                <View className="house-sand mt20">
-                    <View className="house-item-header view-content">
+                <View className="house-item house-sand mt20">
+                    <View className="house-item-header">
                         <View className="title">沙盘图</View>
                     </View>
-                    <SandCommon
-                        outerWidth={375}
-                        outerHeight={300}
-                        setCurrentBuilding={() => { }}
-                        updateSandBuilding={() => { }}
-                    />
+                    {houseData.id && getSandCommonComponent}
                 </View>
-                <View className="house-surround mt20">
-                    <View className="house-item-header view-content">
+                <View className="house-item house-surround mt20">
+                    <View className="house-item-header">
                         <View className="title">周边配套</View>
                         <View className="more" onClick={() => toHouseSurround()}>
                             <Text>地图</Text>
                             <Text className="iconfont iconarrow-right-bold"></Text>
                         </View>
                     </View>
-                    <View className="house-item surround view-content">
+                    <View className="house-item-content surround">
                         <View className="surround-wrapper" style={{ height: 225 }}>
                             <Map
                                 id="surroundMap"
@@ -434,8 +448,8 @@ const House = () => {
                 </View>
                 {renderComment(houseData.fangHouseComment)}
                 {renderAsk(houseData.ask)}
-                <View className="house-consultant mt20">
-                    <View className="house-item-header view-content">
+                <View className="house-item house-consultant mt20">
+                    <View className="house-item-header">
                         <View className="title">置业顾问</View>
                     </View>
                     <View className="house-consultant-content clearfix">
@@ -461,8 +475,8 @@ const House = () => {
                         }
                     </View>
                 </View>
-                <View className="house-statement mt20">
-                    <View className="house-item-header view-content">
+                <View className="house-item house-statement mt20">
+                    <View className="house-item-header">
                         <View className="title">免责声明</View>
                     </View>
                     <View className="house-item">

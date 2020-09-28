@@ -116,6 +116,7 @@
             line-height: 80px;
             border-bottom: $border;
             font-size: $font-34;
+            padding: 0 30px;
 
             .more {
                 font-size: $font-24;
@@ -129,6 +130,7 @@
 
         &-content {
             padding: 30px 30px 0 30px;
+            background-color: $white;
         }
     }
 

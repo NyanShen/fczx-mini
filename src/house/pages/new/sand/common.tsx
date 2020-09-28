@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import Taro from '@tarojs/taro'
 import {
     View,
     MovableArea,
@@ -52,7 +53,8 @@ const INIT_SAND_DATA = {
 const INIT_SHOW_STATE = { show: true, text: '收起' }
 
 interface IProps {
-    outerWidth: number,
+    houseId: string,
+    outerWidth?: number,
     outerHeight: number,
     currentBuilding?: any,
     setCurrentBuilding: (any) => void,
@@ -60,17 +62,19 @@ interface IProps {
 }
 
 const SandCommon = (props: IProps) => {
-    const { currentBuilding = {}, setCurrentBuilding, updateSandBuilding } = props
+    const { houseId, outerHeight, currentBuilding = {} } = props
     const [movableView, setMovableView] = useState<any>({})
     const [showState, setShowState] = useState<IShowState>(INIT_SHOW_STATE)
     const [sandState, setSandState] = useState<ISandState[]>(INIT_SAND_STATE)
     const [sandData, setSandData] = useState<any>(INIT_SAND_DATA)
     const [sandBuilding, setSandBuilding] = useState<any>(INIT_SAND_DATA.sandBuilding)
     const [current, setCurrent] = useState<any>({})
+    const safeArea = Taro.getSystemInfoSync().safeArea
+    const outerWidth = props.outerWidth ? props.outerWidth : safeArea.width
 
     useEffect(() => {
         fetchSand()
-    }, [])
+    }, [houseId])
 
     useEffect(() => {
         setCurrent(currentBuilding)
@@ -87,12 +91,12 @@ const SandCommon = (props: IProps) => {
         app.request({
             url: app.areaApiUrl(api.getHouseSand),
             data: {
-                id: '194'
+                id: houseId
             }
         }).then((result: any) => {
             setSandData(result)
             showSandBuilding(INIT_SAND_STATE, result.sandBuilding)
-            updateSandBuilding(result.sandBuilding)
+            props.updateSandBuilding(result.sandBuilding)
         })
     }
 
@@ -128,15 +132,15 @@ const SandCommon = (props: IProps) => {
     }
 
     const switchCurrent = (item: any) => {
-        setCurrentBuilding(item)
+        props.setCurrentBuilding(item)
     }
 
     return (
-        <View className="sand-card" style={{ width: '100%', height: props.outerHeight }}>
+        <View className="sand-card" style={{ width: '100%', height: outerHeight }}>
             <MovableArea className="sand-area">
                 <MovableView
-                    x={(props.outerWidth - movableView.width) / 2}
-                    y={(props.outerHeight - movableView.height) / 2}
+                    x={(outerWidth - movableView.width) / 2}
+                    y={(outerHeight - movableView.height) / 2}
                     style={movableView}
                     className="sand-view"
                     direction="all"
@@ -175,6 +179,7 @@ const SandCommon = (props: IProps) => {
                                 className={classnames('check-label', `sale-status-${item.value}`)}
                             >
                                 <Checkbox
+                                    id={index}
                                     className="check-box"
                                     value={item.value}
                                     checked={item.checked}
