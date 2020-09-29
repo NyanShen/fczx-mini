@@ -1,56 +1,105 @@
 import React, { useState } from 'react'
-import Taro from '@tarojs/taro'
+import Taro, { getCurrentInstance } from '@tarojs/taro'
 import { Textarea, View, Text, Image } from '@tarojs/components'
 
+import api from '@services/api'
+import app from '@services/request'
 import NavBar from '@components/navbar'
 import './index.scss'
 
+interface ITextData {
+    count?: number,
+    value: string
+}
+
+const INIT_TEXT_DATA = {
+    value: '',
+    count: 0
+}
+
 const HouseCommentForm = () => {
+    const textCount = 150
+    const router = getCurrentInstance().router
+    const [textData, setTextData] = useState<ITextData>(INIT_TEXT_DATA)
     const [imagePath, setImagePath] = useState<string>('')
 
-    const uploadImage = () => {
+    const handleInputChange = (e: any) => {
+        const { cursor, value } = e.detail
+        setTextData({
+            value,
+            count: cursor
+        })
+    }
+
+    const handleUploadImage = () => {
         Taro.chooseImage({
             count: 1,
             success: ((res: any) => {
-                setImagePath(res.tempFilePaths[0]) //todo:上传图片接口
+                Taro.uploadFile({
+                    url: app.areaApiUrl(api.uploadFile),
+                    filePath: res.tempFilePaths[0],
+                    name: 'file',
+                    formData: {
+                        file: res.tempFiles[0]
+                    },
+                    header: {
+                        'X-Token': 'zrggSr9n1XFzDeaD'
+                    },
+                    success: ((result: any) => {
+                        setImagePath(JSON.parse(result.data).data)
+                    })
+                })
             })
         })
     }
 
-    const deleteImage = () => {
-        setImagePath('')
+    const submitComment = () => {
+        app.request({
+            url: app.areaApiUrl(api.postHouseComment),
+            method: 'POST',
+            data: {
+                fang_house_id: router?.params.id,
+                content: textData.value,
+                image_path: imagePath
+            }
+        })
     }
+
     return (
         <View className="comment-form">
-            <NavBar title="写评论" back={true}></NavBar>
+            <NavBar title="点评" back={true}></NavBar>
             <View className="comment-wrapper">
                 <View className="comment-title">
                     写下对楼盘【】的点评
                 </View>
                 <View className="comment-input">
                     <Textarea
+                        autoFocus
                         autoHeight
+                        maxlength={textCount}
                         placeholderClass="small-desc"
                         className="comment-input-text"
                         placeholder="楼盘的环境、位置、配套设置满意吗？说说你的看法"
+                        onInput={handleInputChange}
                     />
                     <View className="comment-input-image">
-                        <View className="image-show">
+                        <View className="image-wrapper">
                             {
                                 imagePath &&
-                                <View>
-                                    <Text className="iconfont iconclear" onClick={deleteImage}></Text>
+                                <View className="image-show">
+                                    <Text className="iconfont iconclear" onClick={() => setImagePath('')}></Text>
                                     <Image src={imagePath} />
                                 </View>
                             }
                         </View>
-                        <View className="upload-btn" onClick={uploadImage}>
+                        <View className="upload-btn" onClick={handleUploadImage}>
                             <Text className="text">上传图片</Text>
                         </View>
                     </View>
+                    <View className="comment-input-count">{textData.count}/{textCount}</View>
                 </View>
                 <View className="comment-action">
-                    <View className="btn btn-primary">提交评论</View>
+                    <View className="btn btn-primary" onClick={submitComment}>提交评论</View>
                 </View>
             </View>
         </View>
