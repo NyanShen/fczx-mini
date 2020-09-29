@@ -70,7 +70,7 @@ const HouseCommentForm = () => {
             <NavBar title="点评" back={true}></NavBar>
             <View className="comment-wrapper">
                 <View className="comment-title">
-                    写下对楼盘【】的点评
+                    写下对楼盘【{router?.params.title}】的点评
                 </View>
                 <View className="comment-input">
                     <Textarea

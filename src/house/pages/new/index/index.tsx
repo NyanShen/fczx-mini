@@ -222,7 +222,7 @@ const House = () => {
                                 <View>暂无评论</View>
                             </View>
                     }
-                    <View className="btn btn-blue">
+                    <View className="btn btn-blue" onClick={() => toHouseModule('commentForm')}>
                         <Text className="btn-name">我要评论</Text>
                     </View>
                 </View>

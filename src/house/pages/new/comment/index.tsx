@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { getCurrentInstance } from '@tarojs/taro'
+import Taro, { getCurrentInstance } from '@tarojs/taro'
 import { View, Image, Text, ScrollView } from '@tarojs/components'
 
 import api from '@services/api'
@@ -7,6 +7,7 @@ import app from '@services/request'
 import NavBar from '@components/navbar'
 import useNavData from '@hooks/useNavData'
 import { formatTimestamp } from '@utils/index'
+import { toUrlParam } from '@utils/urlHandler'
 import { IPage, INIT_PAGE, getTotalPage } from '@utils/page'
 
 import './index.scss'
@@ -24,6 +25,7 @@ const HouseComment = () => {
     useEffect(() => {
         fetchHouseComment()
     }, [page.currentPage])
+
 
     const fetchHouseComment = () => {
         app.request({
@@ -52,6 +54,15 @@ const HouseComment = () => {
         } else {
             setShowEmpty(true)
         }
+    }
+    const toHouseModule = (module: string) => {
+        const paramString = toUrlParam({
+            id: houseId,
+            title: houseTitle
+        })
+        Taro.navigateTo({
+            url: `/house/pages/new/${module}/index${paramString}`
+        })
     }
     return (
         <View className="comment">
@@ -97,7 +108,7 @@ const HouseComment = () => {
                     }
                 </ScrollView>
             </View>
-            <View className="fixed comment-footer">
+            <View className="fixed comment-footer" onClick={() => toHouseModule('commentForm')}>
                 <View className="footer-btn">我也要点评</View>
             </View>
         </View>
