@@ -11,6 +11,7 @@ export default {
     getHouseSurround: '/api/house/surround',
     getHouseSand: '/house/get-sand',
     getHouseSandRoom: '/house/find-sand-room',
+    getHouseAsk: '/house/ask-list',
     getHouseComment: '/house/comment-list',
     postHouseComment: '/house/comment',
     uploadFile: '/file/upload'

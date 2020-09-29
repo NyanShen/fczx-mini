@@ -1,0 +1,52 @@
+.ask {
+    &-header {
+        height: 80px;
+        line-height: 79px;
+        border-bottom: $border;
+        box-sizing: border-box;
+        color: $title-color;
+        .count {
+            color: $sale-2;
+            margin: 0 6px;
+        }
+    }
+    &-content {
+        .ask-list {
+            .question-item {
+                border-bottom: $border;
+                padding: 30px;
+                .question {
+                    display: flex;
+                    font-size: $font-basic;
+                    margin-bottom: 20px;
+                    color: $text-color;
+
+                    .iconfont {
+                        font-size: $font-36;
+                        margin-right: 20px;
+                    }
+
+                    .iconwen {
+                        color: $search-actived;
+                    }
+                    .iconda {
+                        color: $primary-color;
+                    }
+
+                    .text {
+                        flex: 1;
+                        &.da {
+                            color: $desc-color;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    &-footer {
+        bottom: 0;
+        .btn {
+            border-radius: 0;
+        }
+    }
+}

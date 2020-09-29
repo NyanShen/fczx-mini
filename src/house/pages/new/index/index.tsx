@@ -169,7 +169,7 @@ const House = () => {
                 onClick={() => toHouseModule('album')}
             >
                 <Image src={video.image_path} mode='widthFix'></Image>
-                <Text className="auto-center icon-vedio"></Text>
+                <Text className="icon-vedio"></Text>
             </SwiperItem>
         )
     }

@@ -66,6 +66,8 @@
 
     &-footer {
         bottom: 0;
-        
+        .btn {
+            border-radius: 0;
+        }
     }
 }

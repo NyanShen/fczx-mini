@@ -16,21 +16,6 @@ page {
   background-color: $white;
 }
 
-.auto-center {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  margin: auto;
-}
-
-.flex-center {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .fixed {
   position: fixed;
   width: 100%;
@@ -82,16 +67,19 @@ page {
   border: $border;
   &-blue {
     color: #8099af;
+    border-color: $bg-color;
     background-color: $bg-color;
   }
 
   &-yellow {
     color: $white;
+    border-color: $sale-2;
     background-color: $sale-2;
   }
 
   &-primary {
     color: $white;
+    border-color: $primary-color;
     background-color: $primary-color;
   }
 
@@ -103,6 +91,7 @@ page {
 
   &-disabled {
     color: $desc-color;
+    border-color: $bg2-color;
     background-color: $bg2-color;
   }
 }
@@ -124,15 +113,6 @@ page {
   &-brown {
     color: rgb(131, 80, 55);
   }
-}
-
-.footer-btn {
-  height: 80px;
-  line-height: 80px;
-  font-size: $font-basic;
-  text-align: center;
-  color: $white;
-  background-color: $primary-color;
 }
 
 .cut-line {
