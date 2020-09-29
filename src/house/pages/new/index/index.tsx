@@ -115,20 +115,26 @@ const House = () => {
         })
     }
 
-    const navigateTo = (url: string) => {
-        Taro.navigateTo({ url })
-    }
-
     const handlePopupConfirm = (popupData) => {
         console.log(popupData)
         setPopup(false)
+    }
+
+    const toHouseModule = (module: string) => {
+        const paramString = toUrlParam({
+            id: houseData.id,
+            title: houseData.title
+        })
+        Taro.navigateTo({
+            url: `/house/pages/new/${module}/index${paramString}`
+        })
     }
 
     const toHouseSurround = (currentTab: ISurroundTab = INIT_SURROUND_TAB) => {
         const { id, title, houseMarker } = houseData
         const paramString = toUrlParam({
             id,
-            name: title,
+            title: title,
             tab: JSON.stringify(currentTab),
             houseMarker: JSON.stringify(houseMarker),
         })
@@ -137,16 +143,10 @@ const House = () => {
         })
     }
 
-    const toAlbum = () => {
-        Taro.navigateTo({
-            url: '/house/pages/new/album/index'
-        })
-    }
-
     const toHouseSand = (currentBuilding: any) => {
         const paramString = toUrlParam({
             id: houseData.id,
-            name: houseData.title,
+            title: houseData.title,
             currentBuilding: JSON.stringify(currentBuilding)
         })
         Taro.navigateTo({
@@ -166,7 +166,7 @@ const House = () => {
         return (
             <SwiperItem
                 itemId={video.id}
-                onClick={toAlbum}
+                onClick={() => toHouseModule('album')}
             >
                 <Image src={video.image_path} mode='widthFix'></Image>
                 <Text className="auto-center icon-vedio"></Text>
@@ -196,7 +196,7 @@ const House = () => {
                     <View className="title">用户评论({houseData.comment_num})</View>
                     {
                         comment.length > 0 &&
-                        <View className="more">
+                        <View className="more" onClick={() => toHouseModule('comment')}>
                             <Text>查看更多</Text>
                             <Text className="iconfont iconarrow-right-bold"></Text>
                         </View>
@@ -294,7 +294,7 @@ const House = () => {
                         onChange={onSwiperChange}
                     >
                         {houseData.imagesData.video && renderVideo(houseData.imagesData.video)}
-                        <SwiperItem itemId={imageId} onClick={toAlbum}>
+                        <SwiperItem itemId={imageId} onClick={() => toHouseModule('album')}>
                             <Image src={houseData.image_path} mode='widthFix'></Image>
                         </SwiperItem>
                     </Swiper>
@@ -329,7 +329,7 @@ const House = () => {
                         <Text className="text address">{houseData.address}</Text>
                         <Text className="iconfont iconaddress" onClick={() => toHouseSurround()}>地图</Text>
                     </View>
-                    <View className="btn btn-blue mt20" onClick={() => navigateTo('/house/pages/new/detail/index')}>
+                    <View className="btn btn-blue mt20" onClick={() => toHouseModule('detail')}>
                         <Text className="btn-name">查看更多楼盘详情</Text>
                     </View>
                     <View className="subscrib">
@@ -355,10 +355,6 @@ const House = () => {
                     <View className="house-item house-activity mt20">
                         <View className="house-item-header">
                             <View className="title">优惠</View>
-                            <View className="more">
-                                <Text>更多</Text>
-                                <Text className="iconfont iconarrow-right-bold"></Text>
-                            </View>
                         </View>
                         <View className="activity-item">
                             <View className="item-text">

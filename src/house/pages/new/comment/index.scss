@@ -1,12 +1,14 @@
 .comment {
     &-header {
         height: 80px;
-        line-height: 80px;
+        line-height: 79px;
         border-bottom: $border;
+        box-sizing: border-box;
         font-weight: bold;
         color: $title-color;
     }
     &-content {
+        padding-bottom: 80px;
         .comment-list {
             .comment-item {
                 display: flex;
@@ -60,5 +62,10 @@
                 }
             }
         }
+    }
+
+    &-footer {
+        bottom: 0;
+        
     }
 }

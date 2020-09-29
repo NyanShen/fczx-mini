@@ -59,7 +59,7 @@ const HouseSand = () => {
 
     return (
         <View className="sand">
-            <NavBar title={`${params.name}沙盘图`} back={true}></NavBar>
+            <NavBar title={`${params.title}沙盘图`} back={true}></NavBar>
             <View className="sand-wrapper">
                 {getSandCommonComponent}
                 <View className="sand-content">

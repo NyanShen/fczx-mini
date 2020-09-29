@@ -126,6 +126,15 @@ page {
   }
 }
 
+.footer-btn {
+  height: 80px;
+  line-height: 80px;
+  font-size: $font-basic;
+  text-align: center;
+  color: $white;
+  background-color: $primary-color;
+}
+
 .cut-line {
   border-bottom: 1px solid $line-color;
   clear: both;

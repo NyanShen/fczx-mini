@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { getCurrentInstance } from '@tarojs/taro'
 import { View, Image, Text, ScrollView } from '@tarojs/components'
 
 import api from '@services/api'
@@ -6,45 +7,64 @@ import app from '@services/request'
 import NavBar from '@components/navbar'
 import useNavData from '@hooks/useNavData'
 import { formatTimestamp } from '@utils/index'
+import { IPage, INIT_PAGE, getTotalPage } from '@utils/page'
 
 import './index.scss'
+
 const HouseComment = () => {
+    const PAGE_LIMIT = 10
+    const router = getCurrentInstance().router
+    const houseId = router?.params.id
+    const houseTitle = router?.params.title
     const { contentHeight } = useNavData()
-    const [totalCount, setTotalCount] = useState<number>(0)
+    const [showEmpty, setShowEmpty] = useState<boolean>(false)
+    const [page, setPage] = useState<IPage>(INIT_PAGE)
     const [commentList, setCommentList] = useState<any[]>([])
 
     useEffect(() => {
         fetchHouseComment()
-    }, [])
+    }, [page.currentPage])
 
     const fetchHouseComment = () => {
         app.request({
             url: app.areaApiUrl(api.getHouseComment),
             data: {
-                page: 0,
-                limit: 10,
-                fang_house_id: '1000006',
+                page: page.currentPage,
+                limit: PAGE_LIMIT,
+                fang_house_id: houseId,
             }
         }).then((result: any) => {
-            setCommentList(result.data)
-            setTotalCount(result.pagination.totalCount)
+            setCommentList([...commentList, ...result.data])
+            setPage({
+                ...page,
+                totalCount: result.pagination.totalCount,
+                totalPage: getTotalPage(PAGE_LIMIT, result.pagination.totalCount)
+            })
         })
     }
 
-    const handleScrollToLower = (e: any) => {
-        console.log("handleScrollToLower", e)
+    const handleScrollToLower = () => {
+        if (page.totalPage > page.currentPage) {
+            setPage({
+                ...page,
+                currentPage: page.currentPage + 1
+            })
+        } else {
+            setShowEmpty(true)
+        }
     }
     return (
         <View className="comment">
-            <NavBar title="评论" back={true}></NavBar>
+            <NavBar title={`${houseTitle}-全部评论`} back={true}></NavBar>
             <View className="comment-header">
-                <View className="title view-content">全部评论({totalCount})</View>
+                <View className="title view-content">全部评论({page.totalCount})</View>
             </View>
             <View className="comment-content">
                 <ScrollView
                     className="comment-list"
                     scrollY
-                    style={{ height: contentHeight }}
+                    style={{ height: contentHeight - 80 }}
+                    lowerThreshold={40}
                     onScrollToLower={handleScrollToLower}
                 >
                     {
@@ -64,15 +84,21 @@ const HouseComment = () => {
                                     }
                                     <View className="context-footer">
                                         <View className="date">{formatTimestamp(item.modified, 'yy-MM-dd')}</View>
-                                        <View className="action">
-                                            <Text className="zan">{item.like_num}</Text>
-                                        </View>
                                     </View>
                                 </View>
                             </View>
                         ))
                     }
+                    {
+                        showEmpty &&
+                        <View className="empty-container">
+                            <Text>没有更多数据了</Text>
+                        </View>
+                    }
                 </ScrollView>
+            </View>
+            <View className="fixed comment-footer">
+                <View className="footer-btn">我也要点评</View>
             </View>
         </View>
     )
