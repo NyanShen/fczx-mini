@@ -2,7 +2,7 @@ import React from 'react'
 import Taro from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
 import useNavData from '@hooks/useNavData'
-import { assign } from 'lodash'
+import assign from 'lodash/assign'
 import classnames from 'classnames'
 import './index.scss'
 

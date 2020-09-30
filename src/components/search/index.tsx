@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import Taro from '@tarojs/taro'
 import classnames from 'classnames'
-import { map, includes } from 'lodash'
+import map from 'lodash/map'
+import includes from 'lodash/includes'
 import { View, Text, Input, RichText, ScrollView } from '@tarojs/components'
 
 import app from '@services/request'

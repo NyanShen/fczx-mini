@@ -11,7 +11,8 @@ import {
     Checkbox
 } from '@tarojs/components'
 import classnames from 'classnames'
-import { includes, find } from 'lodash'
+import find from 'lodash/find'
+import includes from 'lodash/includes'
 
 import api from '@services/api'
 import app from '@services/request'
