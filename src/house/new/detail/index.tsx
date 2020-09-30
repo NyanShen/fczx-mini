@@ -5,9 +5,9 @@ import { View, Text } from '@tarojs/components'
 import api from '@services/api'
 import app from '@services/request'
 import NavBar from '@components/navbar/index'
-import './index.scss'
-import { SALE_STATUS } from '@house/constants/house'
 import { formatTimestamp } from '@utils/index'
+import { SALE_STATUS } from '@constants/house'
+import './index.scss'
 
 const INIT_HOUSE_DATA = {
     id: '',

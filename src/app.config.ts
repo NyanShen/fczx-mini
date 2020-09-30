@@ -2,7 +2,7 @@ import { Config } from '@tarojs/taro';
 
 export default {
   pages: [
-    // 'house/pages/new/askForm/index',
+    // 'house/new/askForm/index',
     'pages/index/index',
     'pages/chat/index',
     'pages/user/index'
@@ -11,26 +11,26 @@ export default {
     {
       root: 'house',
       pages: [
-        'pages/new/index/index',
-        'pages/new/album/index',
-        'pages/new/list/index',
-        'pages/new/search/index',
-        'pages/new/surround/index',
-        'pages/new/sand/index',
-        'pages/new/detail/index',
-        'pages/new/ask/index',
-        'pages/new/askForm/index',
-        'pages/new/comment/index',
-        'pages/new/commentForm/index',
-        'pages/city/index',
-        'pages/search/index',
+        'new/index/index',
+        'new/album/index',
+        'new/list/index',
+        'new/search/index',
+        'new/surround/index',
+        'new/sand/index',
+        'new/detail/index',
+        'new/ask/index',
+        'new/askForm/index',
+        'new/comment/index',
+        'new/commentForm/index',
+        'city/index',
+        'search/index',
       ]
     },
     {
       root: 'login',
       pages: [
-        'pages/index',
-        'pages/phone/index'
+        'index',
+        'phone/index'
       ]
     }
   ],

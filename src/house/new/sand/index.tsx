@@ -10,9 +10,8 @@ import classnames from 'classnames'
 import api from '@services/api'
 import app from '@services/request'
 import NavBar from '@components/navbar'
-import SandCommon from '@house/pages/new/sand/common'
+import SandCommon from '@house/new/sand/common'
 import '@styles/common/house.scss'
-import '@house/styles/common.scss'
 import './index.scss'
 
 const INIT_SAND_BUILDING = []

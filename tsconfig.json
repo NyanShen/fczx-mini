@@ -31,6 +31,7 @@
         "@utils/*": ["src/utils/*"],
         "@assets/*": ["src/assets/*"], // css, html中需要 `~@assets/*`
         "@styles/*": ["src/styles/*"],
+        "@pages/*": ["src/pages/*"],
         "@house/*": ["src/house/*"],
     }
   },

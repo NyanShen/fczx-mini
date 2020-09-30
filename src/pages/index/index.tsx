@@ -30,7 +30,7 @@ const Index = () => {
         success: function (res) {
           if (res.confirm) {
             Taro.navigateTo({
-              url: '/house/pages/city/index'
+              url: '/house/city/index'
             })
           }
         }
@@ -56,17 +56,17 @@ const Index = () => {
       {
         name: '新盘',
         icon: new_house,
-        path: '/house/pages/new/list/index'
+        path: '/house/new/list/index'
       },
       {
         name: '二手房',
         icon: second_house,
-        path: '/house/pages/esf/index'
+        path: '/house/esf/index'
       },
       {
         name: '租房',
         icon: rent_house,
-        path: '/house/pages/rent/index'
+        path: '/house/rent/index'
       },
       {
         name: '资讯',
@@ -78,7 +78,7 @@ const Index = () => {
 
   const clickHandler = () => {
     Taro.navigateTo({
-      url: '/house/pages/search/index'
+      url: '/house/search/index'
     })
   }
 
@@ -90,7 +90,7 @@ const Index = () => {
 
   const toCityList = () => {
     Taro.navigateTo({
-      url: '/house/pages/city/index'
+      url: '/house/city/index'
     })
   }
 

@@ -9,13 +9,13 @@ import { toUrlParam } from '@utils/urlHandler'
 import { formatTimestamp } from '@utils/index'
 import useNavData from '@hooks/useNavData'
 import NavBar from '@components/navbar/index'
-import Popup from '@house/components/popup/index'
-import SandCommon from '@house/pages/new/sand/common'
-import { SURROUND_TABS, ISurroundTab, SALE_STATUS, PRICE_TYPE } from '@house/constants/house'
+import Popup from '@components/popup/index'
+import SandCommon from '@house/new/sand/common'
+import { SALE_STATUS, PRICE_TYPE, SURROUND_TABS, ISurroundTab } from '@constants/house'
+
 import '@styles/common/house.scss'
-import '@house/styles/bottom-bar.scss'
-import '@house/styles/common.scss'
-import '@house/pages/new/surround/index.scss'
+import '@styles/common/bottom-bar.scss'
+import '@house/new/surround/index.scss'
 import './index.scss'
 
 interface IAlbumSwiper {
@@ -126,7 +126,7 @@ const House = () => {
             title: houseData.title
         })
         Taro.navigateTo({
-            url: `/house/pages/new/${module}/index${paramString}`
+            url: `/house/new/${module}/index${paramString}`
         })
     }
 
@@ -139,7 +139,7 @@ const House = () => {
             houseMarker: JSON.stringify(houseMarker),
         })
         Taro.navigateTo({
-            url: `/house/pages/new/surround/index${paramString}`
+            url: `/house/new/surround/index${paramString}`
         })
     }
 
@@ -150,7 +150,7 @@ const House = () => {
             currentBuilding: JSON.stringify(currentBuilding)
         })
         Taro.navigateTo({
-            url: `/house/pages/new/sand/index${paramString}`
+            url: `/house/new/sand/index${paramString}`
         })
     }
 

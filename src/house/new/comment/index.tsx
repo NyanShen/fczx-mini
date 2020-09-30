@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Taro, { getCurrentInstance } from '@tarojs/taro'
-import { View, Text, ScrollView } from '@tarojs/components'
+import { View, Image, Text, ScrollView } from '@tarojs/components'
 
 import api from '@services/api'
 import app from '@services/request'
@@ -12,7 +12,7 @@ import { IPage, INIT_PAGE, getTotalPage } from '@utils/page'
 
 import './index.scss'
 
-const HouseAsk = () => {
+const HouseComment = () => {
     const PAGE_LIMIT = 10
     const router = getCurrentInstance().router
     const houseId = router?.params.id
@@ -20,23 +20,23 @@ const HouseAsk = () => {
     const { contentHeight } = useNavData()
     const [showEmpty, setShowEmpty] = useState<boolean>(false)
     const [page, setPage] = useState<IPage>(INIT_PAGE)
-    const [askList, setAskList] = useState<any[]>([])
+    const [commentList, setCommentList] = useState<any[]>([])
 
     useEffect(() => {
-        fetchHouseAsk()
+        fetchHouseComment()
     }, [page.currentPage])
 
 
-    const fetchHouseAsk = () => {
+    const fetchHouseComment = () => {
         app.request({
-            url: app.areaApiUrl(api.getHouseAsk),
+            url: app.areaApiUrl(api.getHouseComment),
             data: {
                 page: page.currentPage,
                 limit: PAGE_LIMIT,
-                fang_house_id: houseId || '1000006',
+                fang_house_id: houseId,
             }
         }).then((result: any) => {
-            setAskList([...askList, ...result.data])
+            setCommentList([...commentList, ...result.data])
             setPage({
                 ...page,
                 totalCount: result.pagination.totalCount,
@@ -61,38 +61,42 @@ const HouseAsk = () => {
             title: houseTitle
         })
         Taro.navigateTo({
-            url: `/house/pages/new/${module}/index${paramString}`
+            url: `/house/new/${module}/index${paramString}`
         })
     }
     return (
-        <View className="ask">
-            <NavBar title="大家都在问" back={true}></NavBar>
-            <View className="ask-header">
-                <View className="title view-content">
-                    关于【{houseTitle}】的
-                    <Text className="count">{page.totalCount}个</Text>
-                    问题</View>
+        <View className="comment">
+            <NavBar title={`${houseTitle}-全部评论`} back={true}></NavBar>
+            <View className="comment-header">
+                <View className="title view-content">全部评论({page.totalCount})</View>
             </View>
-            <View className="ask-content">
+            <View className="comment-content">
                 <ScrollView
-                    className="ask-list"
+                    className="comment-list"
                     scrollY
                     style={{ height: contentHeight - 80 }}
                     lowerThreshold={40}
                     onScrollToLower={handleScrollToLower}
                 >
                     {
-                        askList.map((item: any, index: number) => (
-                            <View key={index} className="question-item">
-                                <View className="question">
-                                    <Text className="iconfont iconwen"></Text>
-                                    <Text className="text">{item.title}</Text>
+                        commentList.map((item: any, index: number) => (
+                            <View key={index} className="comment-item">
+                                <View className="user-photo">
+                                    <Image src={item.user.avatar} />
                                 </View>
-                                <View className="question">
-                                    <Text className="iconfont iconda"></Text>
-                                    <Text className="text da">{item.reply_content ? item.reply_content : '暂无回答'}</Text>
+                                <View className="context">
+                                    <View className="context-name">{item.user.nickname}</View>
+                                    <View className="context-content">{item.content}</View>
+                                    {
+                                        item.image_path &&
+                                        <View className="context-image">
+                                            <Image src={item.image_path} />
+                                        </View>
+                                    }
+                                    <View className="context-footer">
+                                        <View className="date">{formatTimestamp(item.modified, 'yy-MM-dd')}</View>
+                                    </View>
                                 </View>
-                                <View className="small-desc">{formatTimestamp(item.modified, 'yy-MM-dd')}</View>
                             </View>
                         ))
                     }
@@ -104,11 +108,11 @@ const HouseAsk = () => {
                     }
                 </ScrollView>
             </View>
-            <View className="fixed ask-footer" onClick={() => toHouseModule('askForm')}>
-                <View className="btn btn-primary">我要提问</View>
+            <View className="fixed comment-footer" onClick={() => toHouseModule('commentForm')}>
+                <View className="btn btn-primary">我也要点评</View>
             </View>
         </View>
     )
 }
 
-export default HouseAsk
+export default HouseComment
