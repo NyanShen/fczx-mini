@@ -12,6 +12,7 @@ export default {
     getHouseSand: '/house/get-sand',
     getHouseSandRoom: '/house/find-sand-room',
     getHouseAsk: '/house/ask-list',
+    postHouseAsk: '/house/ask',
     getHouseComment: '/house/comment-list',
     postHouseComment: '/house/comment',
     uploadFile: '/file/upload'

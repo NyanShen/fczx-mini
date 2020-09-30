@@ -237,7 +237,7 @@ const House = () => {
                     <View className="title">大家都在问</View>
                     {
                         ask.length > 0 &&
-                        <View className="more">
+                        <View className="more" onClick={() => toHouseModule('ask')}>
                             <Text>查看更多</Text>
                             <Text className="iconfont iconarrow-right-bold"></Text>
                         </View>
@@ -263,7 +263,7 @@ const House = () => {
                                 <View>对此楼盘有疑问？赶快去提问吧</View>
                             </View>
                     }
-                    <View className="btn btn-blue">
+                    <View className="btn btn-blue" onClick={() => toHouseModule('askForm')}>
                         <Text className="btn-name">我要提问</Text>
                     </View>
                 </View>
