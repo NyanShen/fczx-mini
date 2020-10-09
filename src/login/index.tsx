@@ -2,6 +2,8 @@ import React from 'react'
 import Taro from '@tarojs/taro'
 import { View, Text, Button } from '@tarojs/components'
 
+import storage from '@utils/storage'
+import { fetchSessionKey, fetchDecryptData } from '@services/login'
 import NavBar from '@components/navbar/index'
 import './index.scss'
 
@@ -18,8 +20,33 @@ const Login = () => {
         backgroundColor: navData.backgroundColor
     })
 
-    const getPhoneNumber = (e) => {
-        console.log(e)
+    const getUserInfo = (e) => {
+        const errMsg = e.detail.errMsg
+        if (errMsg === 'getUserInfo:ok') {
+            Taro.login({
+                success: function (res) {
+                    if (res.code) {
+                        fetchSessionKey(res.code).then((result: any) => {
+                            fetchDecryptData({
+                                sessionKey: result.session_key,
+                                encryptedData: e.detail.encryptedData,
+                                iv: e.detail.iv
+                            }).then((result: any) => {
+                                const user = {
+                                    nickName: result.nickName,
+                                    avatarUrl: result.avatarUrl,
+                                }
+                                storage.setItem('user', user, 'login')
+                                Taro.navigateBack({
+                                    delta: 1
+                                })
+                            })
+                        })
+                    }
+                }
+            })
+        }
+
     }
 
     const handleLoginByPhone = () => {
@@ -40,7 +67,7 @@ const Login = () => {
                     <View className="cut-line"></View>
                     <Text className="desc">推荐使用登录方式</Text>
                 </View>
-                <Button openType="getPhoneNumber" onGetPhoneNumber={getPhoneNumber} className="btn btn-primary">
+                <Button className="btn btn-primary" openType="getUserInfo" onGetUserInfo={getUserInfo}>
                     <Text>微信登录</Text>
                 </Button>
                 <View className="btn btn-plain" onClick={handleLoginByPhone}>

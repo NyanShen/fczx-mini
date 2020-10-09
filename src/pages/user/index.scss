@@ -1,15 +1,21 @@
 .user {
     height: 100vh;
     background-color: $bg-color;
+    &-item {
+        margin: 20px;
+        font-size: $font-basic;
+        background-color: $white;
+    }
     &-header {
         display: flex;
-        margin: 20px;
         padding: 40px 30px;
-        background-color: $white;
 
         .login-photo {
             width: 120px;
             height: 120px;
+            border-radius: 50%;
+            overflow: hidden;
+            background-color: $bg-color;
 
             &-image {
                 width: 100%;
@@ -20,6 +26,9 @@
             flex: 1;
             line-height: 120px;
             margin-left: 30px;
+            font-size: $font-32;
+            font-weight: bold;
+            color: $title-color;
         }
 
         .login-nav {
@@ -27,8 +36,13 @@
         }
 
         .iconfont {
-            font-size: $font-basic;
             color: $desc-color;
         }
+    }
+    &-logout {
+        height: 80px;
+        line-height: 80px;
+        text-align: center;
+        color: $text-color;
     }
 }

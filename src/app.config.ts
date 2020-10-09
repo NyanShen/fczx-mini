@@ -3,9 +3,9 @@ import { Config } from '@tarojs/taro';
 export default {
   pages: [
     // 'house/new/type/index',
+    'pages/user/index',
     'pages/index/index',
     'pages/chat/index',
-    'pages/user/index'
   ],
   subPackages: [
     {

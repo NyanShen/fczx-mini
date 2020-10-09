@@ -1,4 +1,6 @@
 export default {
+    getSessionKeyByCode: '/applet/get-session',
+    decryptData: '/applet/decrypt-data',
     getTestData: '/test/test',
     getCityList: '/index/city-list',
     getHouseList: '/house/list',
