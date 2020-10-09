@@ -120,7 +120,7 @@ const AlbumList = () => {
         <View className="album">
             <NavBar title="楼盘相册" back={true} />
             <View className="fixed">
-                <View className="album-tabs">
+                <ScrollView className="album-tabs" scrollX>
                     {
                         albumData.length > 0 && albumData.map((item: any, index: number) => (
                             <View
@@ -131,7 +131,7 @@ const AlbumList = () => {
                             </View>
                         ))
                     }
-                </View>
+                </ScrollView>
             </View>
             <View className="album-content view-content">
                 <ScrollView
@@ -199,7 +199,7 @@ const AlbumList = () => {
                         </Swiper>
                     </View>
                     <View className="album-swiper-footer">
-                        <View className="album-tabs">
+                        <ScrollView className="album-tabs" scrollX>
                             {
                                 albumData.length > 0 &&
                                 albumData.map((item: any, index: number) => (
@@ -211,7 +211,8 @@ const AlbumList = () => {
                                     </View>
                                 ))
                             }
-                        </View>
+                        </ScrollView>
+
                     </View>
                 </View>
             }
