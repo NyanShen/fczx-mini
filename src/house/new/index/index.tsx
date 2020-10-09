@@ -371,7 +371,7 @@ const House = () => {
                 <View className="house-item house-type mt20">
                     <View className="house-item-header">
                         <View className="title">主力户型({houseData.fangHouseRoom.length + 1})</View>
-                        <View className="more">
+                        <View className="more" onClick={() => toHouseModule('type')}>
                             <Text>更多</Text>
                             <Text className="iconfont iconarrow-right-bold"></Text>
                         </View>

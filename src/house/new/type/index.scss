@@ -1,0 +1,58 @@
+.house-type {
+    .type-tabs {
+        white-space: nowrap;
+        font-size: $font-basic;
+        margin: 20px 0;
+
+        .tab-item {
+            display: inline-block;
+            height: 60px;
+            line-height: 60px;
+            border-radius: $border-radius-base;
+            background-color: $bg-color;
+            padding: 0 20px;
+            margin-left: 30px;
+        }
+        .tab-item:last-child {
+            margin-right: 30px;
+        }
+    }
+
+    .type-content {
+        padding-top: 100px;
+        .type-list {
+            .type-item {
+                display: flex;
+                padding: 30px;
+                border-bottom: 1px solid $bg-color;
+                .type-image {
+                    width: 240px;
+                    height: 200px;
+                    background-color: $bg-color;
+                    margin-right: 30px;
+                    Image {
+                        max-width: 100%;
+                        max-height: 100%;
+                    }
+                }
+                .type-info {
+                    flex: 1;
+
+                    .title {
+                        font-size: $font-36;
+                        margin-bottom: 10px;
+                    }
+
+                    .price {
+                        font-size: $font-basic;
+                        margin-bottom: 10px;
+                    }
+                    .type {
+                        font-size: $font-basic;
+                        margin-bottom: 14px;
+                    }
+                }
+            }
+        }
+    }
+}

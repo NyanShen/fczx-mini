@@ -59,9 +59,10 @@ page {
 }
 
 .btn {
-  display: block;
-  line-height: 80px;
-  text-align: center;
+  display: flex;
+  height: 80px;
+  justify-content: center;
+  flex-direction: column;
   font-size: $font-basic;
   border-radius: $border-radius-10;
   border: $border;
@@ -93,6 +94,10 @@ page {
     color: $desc-color;
     border-color: $bg2-color;
     background-color: $bg2-color;
+  }
+
+  &-subtext {
+    font-size: $font-24;
   }
 }
 
