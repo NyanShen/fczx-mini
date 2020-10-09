@@ -1,4 +1,5 @@
 import React from 'react'
+import Taro from '@tarojs/taro'
 import { ScrollView, View, Image, Text } from '@tarojs/components'
 
 import NavBar from '@components/navbar'
@@ -10,6 +11,12 @@ import './index.scss'
 const HouseType = () => {
     const fixedHeight = 105
     const { contentHeight } = useNavData()
+
+    const handlePhoneCall = () => {
+        Taro.makePhoneCall({
+            phoneNumber: '1340000'
+          })
+    }
     return (
         <View className="house-type">
             <NavBar title="全部户型" back={true}></NavBar>
@@ -117,14 +124,12 @@ const HouseType = () => {
                         <View>微聊</View>
                         <View className="btn-subtext">快速在线咨询</View>
                     </View>
-
                 </View>
                 <View className="bar-item-btn">
-                    <View className="btn btn-primary btn-bar">
+                    <View className="btn btn-primary btn-bar" onClick={handlePhoneCall}>
                         <View>致电售楼处</View>
                         <View className="btn-subtext">保护你的真实号码</View>
                     </View>
-
                 </View>
             </View>
         </View>
