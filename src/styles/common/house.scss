@@ -79,12 +79,12 @@
 .price {
     font-size: 36px;
     font-weight: bold;
-    color: #f34;
+    color: $tip-color;
 }
 
 .price-unit {
     font-size: 30px;
-    color: #f34;
+    color: $tip-color;
 }
 
 // 销售状态

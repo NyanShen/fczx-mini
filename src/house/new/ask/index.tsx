@@ -12,6 +12,12 @@ import { IPage, INIT_PAGE, getTotalPage } from '@utils/page'
 
 import './index.scss'
 
+interface IAskParam {
+    currentPage: number
+}
+
+const INIT_PARAM = { currentPage: 1 }
+
 const HouseAsk = () => {
     const PAGE_LIMIT = 10
     const router = getCurrentInstance().router
@@ -20,25 +26,25 @@ const HouseAsk = () => {
     const { contentHeight } = useNavData()
     const [showEmpty, setShowEmpty] = useState<boolean>(false)
     const [page, setPage] = useState<IPage>(INIT_PAGE)
+    const [param, setParam] = useState<IAskParam>(INIT_PARAM)
     const [askList, setAskList] = useState<any[]>([])
 
     useEffect(() => {
         fetchHouseAsk()
-    }, [page.currentPage])
+    }, [param.currentPage])
 
 
     const fetchHouseAsk = () => {
         app.request({
             url: app.areaApiUrl(api.getHouseAsk),
             data: {
-                page: page.currentPage,
+                page: param.currentPage,
                 limit: PAGE_LIMIT,
                 fang_house_id: houseId || '1000006',
             }
         }).then((result: any) => {
             setAskList([...askList, ...result.data])
             setPage({
-                ...page,
                 totalCount: result.pagination.totalCount,
                 totalPage: getTotalPage(PAGE_LIMIT, result.pagination.totalCount)
             })
@@ -46,10 +52,9 @@ const HouseAsk = () => {
     }
 
     const handleScrollToLower = () => {
-        if (page.totalPage > page.currentPage) {
-            setPage({
-                ...page,
-                currentPage: page.currentPage + 1
+        if (page.totalPage > param.currentPage) {
+            setParam({
+                currentPage: param.currentPage + 1
             })
         } else {
             setShowEmpty(true)

@@ -12,6 +12,10 @@
             background-color: $bg-color;
             padding: 0 20px;
             margin-left: 30px;
+            &.actived {
+                background-color: $primary-color;
+                color: $white;
+            }
         }
         .tab-item:last-child {
             margin-right: 30px;
@@ -39,7 +43,7 @@
                     flex: 1;
 
                     .title {
-                        font-size: $font-36;
+                        font-size: $font-32;
                         margin-bottom: 10px;
                     }
 
