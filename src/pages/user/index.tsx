@@ -15,8 +15,6 @@ const INIT_USER: IUser = {
   avatarUrl: 'http://192.168.2.248/assets/mini/user_photo.png'
 }
 
-console.log("test")
-
 const User = () => {
   const [user, setUser] = useState<IUser>(INIT_USER)
 
