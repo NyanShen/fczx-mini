@@ -22,21 +22,56 @@
                 color: $title-color;
             }
         }
-        .detail-info {
-            display: flex;
-            flex-wrap: wrap;
-            margin-top: 30px;
 
-            .info-item {
-                flex: 1;
-                min-width: 33%;
-                line-height: 1;
-                margin-bottom: 30px;
+        .detail-content {
+            padding: 20px 30px 30px 30px;
+            .detail-info {
+                margin-top: 30px;
+                font-size: $font-32;
 
-                .label {
-                    font-size: $font-26;
-                    margin-top: 20px;
-                    color: $desc-color;
+                &-item {
+                    display: flex;
+                    line-height: 40px;
+                    margin-bottom: 30px;
+
+                    .label {
+                        min-width: 16%;
+                        text-align-last: justify;
+                        color: $desc-color;
+                    }
+                    .value {
+                        flex: 1;
+                        margin-left: 30px;
+                    }
+                }
+            }
+            .detail-contact {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                background-image: linear-gradient(to right, #d9e7fc, #dff5db);
+                padding: 20px;
+                margin-top: 30px;
+                box-sizing: border-box;
+
+                .phone-call {
+                    font-size: $font-36;
+                    font-weight: bold;
+                    color: $title-color;
+                }
+
+                .phone-desc {
+                    font-size: $font-basic;
+                    color: $text-color;
+                }
+
+                .phone-icon {
+                    background-color: $white;
+                    padding: 16px 20px;
+                    border-radius: 50%;
+                    .iconfont {
+                        color: $primary-color;
+                    }
                 }
             }
         }

@@ -154,6 +154,12 @@ const House = () => {
         })
     }
 
+    const toHouseTypeDetail = (item: any) => {
+        Taro.navigateTo({
+            url: `/house/new/type/detail?id=${item.id}`
+        })
+    }
+
     const renderPrice = (price: string, price_type: string) => {
         if (price === '0') {
             return <Text className="price">待定</Text>
@@ -381,7 +387,7 @@ const House = () => {
                             {
                                 houseData.fangHouseRoom.map((item: any, index: any) => (
                                     <SwiperItem key={index}>
-                                        <View className="swiper-item">
+                                        <View className="swiper-item" onClick={() => toHouseTypeDetail(item)}>
                                             <View className="item-image">
                                                 <Image src={item.image_path}></Image>
                                             </View>
@@ -447,6 +453,13 @@ const House = () => {
                 <View className="house-item house-consultant mt20">
                     <View className="house-item-header">
                         <View className="title">置业顾问</View>
+                        {
+                            houseData.length > 3 &&
+                            <View className="more" onClick={() => toHouseModule('consultant')}>
+                                <Text>更多</Text>
+                                <Text className="iconfont iconarrow-right-bold"></Text>
+                            </View>
+                        }
                     </View>
                     <View className="house-consultant-content clearfix">
                         {
@@ -460,7 +473,7 @@ const House = () => {
                                             <View className="item-name">{item.nickname}</View>
                                             <View className="item-btn">
                                                 <Button className="ovalbtn ovalbtn-brown">
-                                                    <Text className="iconfont"></Text>
+                                                    <Text className="iconfont iconmessage"></Text>
                                                     <Text>咨询</Text>
                                                 </Button>
                                             </View>

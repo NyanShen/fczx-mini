@@ -212,7 +212,6 @@ const AlbumList = () => {
                                 ))
                             }
                         </ScrollView>
-
                     </View>
                 </View>
             }

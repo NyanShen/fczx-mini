@@ -90,6 +90,12 @@ const HouseType = () => {
             })
         }
     }
+
+    const toDetail = (item: any) => {
+        Taro.navigateTo({
+            url: `/house/new/type/detail?id=${item.id}`
+        })
+    }
     return (
         <View className="house-type">
             <NavBar title="全部户型" back={true}></NavBar>
@@ -121,7 +127,7 @@ const HouseType = () => {
                 >
                     {
                         houseType.roomList.map((item: any, index: number) => (
-                            <View key={index} className="type-item">
+                            <View key={index} className="type-item" onClick={() => toDetail(item)}>
                                 <View className="type-image">
                                     <Image src={item.image_path}></Image>
                                 </View>
