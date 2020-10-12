@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Taro from '@tarojs/taro'
 import { View, Text, Button } from '@tarojs/components'
 
@@ -15,35 +15,41 @@ const Login = () => {
         backgroundColor: '#ffffff'
     }
 
+    const [code, setCode] = useState<string>('')
+
     Taro.setNavigationBarColor({
         frontColor: navData.color,
         backgroundColor: navData.backgroundColor
     })
 
+    const handleLogin = () => {
+        Taro.login({
+            success: function (res) {
+                if (res.code) {
+                    setCode(res.code) 
+                }
+            }
+        })
+    }
+
     const getUserInfo = (e) => {
         const errMsg = e.detail.errMsg
         if (errMsg === 'getUserInfo:ok') {
-            Taro.login({
-                success: function (res) {
-                    if (res.code) {
-                        fetchSessionKey(res.code).then((result: any) => {
-                            fetchDecryptData({
-                                sessionKey: result.session_key,
-                                encryptedData: e.detail.encryptedData,
-                                iv: e.detail.iv
-                            }).then((result: any) => {
-                                const user = {
-                                    nickName: result.nickName,
-                                    avatarUrl: result.avatarUrl,
-                                }
-                                storage.setItem('user', user, 'login')
-                                Taro.navigateBack({
-                                    delta: 1
-                                })
-                            })
-                        })
+            fetchSessionKey(code).then((result: any) => {
+                fetchDecryptData({
+                    sessionKey: result.session_key,
+                    encryptedData: e.detail.encryptedData,
+                    iv: e.detail.iv
+                }).then((result: any) => {
+                    const user = {
+                        nickName: result.nickName,
+                        avatarUrl: result.avatarUrl,
                     }
-                }
+                    storage.setItem('user', user, 'login')
+                    Taro.navigateBack({
+                        delta: 1
+                    })
+                })
             })
         }
 
@@ -67,7 +73,7 @@ const Login = () => {
                     <View className="cut-line"></View>
                     <Text className="desc">推荐使用登录方式</Text>
                 </View>
-                <Button className="btn btn-primary" openType="getUserInfo" onGetUserInfo={getUserInfo}>
+                <Button className="btn btn-primary" openType="getUserInfo" onGetUserInfo={getUserInfo} onClick={handleLogin}>
                     <Text>微信登录</Text>
                 </Button>
                 <View className="btn btn-plain" onClick={handleLoginByPhone}>
