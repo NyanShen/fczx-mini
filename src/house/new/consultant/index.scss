@@ -1,0 +1,48 @@
+.house-consultant {
+    padding: 20px;
+    &-content {
+        .consultant-item {
+            display: flex;
+            align-items: center;
+            padding: 30px;
+            margin-bottom: 20px;
+            background-color: rgb(246, 230, 215);
+            border-radius: 15px;
+            .item-image {
+                width: 100px;
+                height: 100px;
+                border-radius: 50%;
+                overflow: hidden;
+                background-color: $bg-color;
+                Image {
+                    max-width: 100%;
+                    max-height: 100%;
+                }
+            }
+            .item-text {
+                flex: 1;
+                margin-left: 20px;
+                .name {
+                    font-size: $font-32;
+                    font-weight: bold;
+                    margin-bottom: 10px;
+                }
+                .wechat {
+                    font-size: $font-26;
+                    color: $text-color;
+                }
+            }
+
+            .item-action {
+                padding: 16px 20px;
+                border-radius: 50%;
+                background-color: $primary-bg-color;
+                margin-left: 20px;
+
+                .iconfont {
+                    color: $primary-color;
+                }
+            }
+        }
+    }
+}

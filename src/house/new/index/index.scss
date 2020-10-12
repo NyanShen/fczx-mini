@@ -314,10 +314,10 @@
             min-width: 60px;
             text-align: justify;
             margin-right: 20px;
-            color: #999;
+            color: $desc-color;
         }
         .text {
-            color: #333;
+            color: $title-color;
         }
         .address {
             color: #8099af;
@@ -325,14 +325,14 @@
         .iconaddress {
             display: block;
             width: 200px;
-            color: #f60;
+            color: $search-actived;
         }
     }
 
     .subscrib {
         display: flex;
         justify-content: space-between;
-        color: #666;
+        color: $text-color;
 
         &-item {
             flex: 1;
@@ -341,7 +341,7 @@
 
             .iconfont {
                 margin-right: 10px;
-                color: #f34;
+                color: $tip-color;
             }
         }
     }
