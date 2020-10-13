@@ -19,5 +19,6 @@ export default {
     postHouseComment: '/house/comment',
     getHouseTypeList: '/house/room-list',
     getHouseTypeDetail: '/house/room-detail',
+    getHouseConsultantList: '/house/consultant-list',
     uploadFile: '/file/upload'
 }
