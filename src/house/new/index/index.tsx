@@ -505,7 +505,7 @@ const House = () => {
                     <Text className="iconfont icongroup"></Text>
                     <Text>团购</Text>
                 </View>
-                <View className="bar-item-btn">
+                <View className="bar-item-btn" onClick={() => toHouseModule('consultant')}>
                     <Text className="btn btn-yellow btn-bar">置业顾问</Text>
                 </View>
                 <View className="bar-item-btn">

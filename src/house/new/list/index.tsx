@@ -63,6 +63,7 @@ const NewHouse = () => {
     const [priceType, setPriceType] = useState<string>('unitPrice')
     const [selected, setSelected] = useState<IConditionState>(INIT_CONDITION)
     const [page, setPage] = useState<IPage>(INIT_PAGE)
+    const [loading, setLoading] = useState<boolean>(false)
     const [showEmpty, setShowEmpty] = useState<boolean>(false)
     const [condition, setCondition] = useState<any>()
     const [houseList, setHouseList] = useState<any>([])
@@ -132,7 +133,8 @@ const NewHouse = () => {
                 fang_property_type: selected.propertyType?.id,
                 fang_building_type: selected.fangBuildingType?.id
             }
-        }).then((result: any) => {
+        }, { loading: false }).then((result: any) => {
+            setLoading(false)
             const totalPage = getTotalPage(PAGE_LIMIT, result.pagination.totalCount)
             if (totalPage <= INIT_CONDITION.currentPage) {
                 setShowEmpty(true)
@@ -153,6 +155,7 @@ const NewHouse = () => {
     }
     const handleScrollToLower = () => {
         if (page.totalPage > selected.currentPage) {
+            setLoading(true)
             setSelected({
                 ...selected,
                 currentPage: selected.currentPage + 1
@@ -446,6 +449,12 @@ const NewHouse = () => {
                             ))
                         }
                     </View>
+                    {
+                        loading &&
+                        <View className="empty-container">
+                            <Text>正在加载中...</Text>
+                        </View>
+                    }
                     {
                         showEmpty &&
                         <View className="empty-container">
