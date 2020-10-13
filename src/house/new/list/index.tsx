@@ -9,6 +9,7 @@ import api from '@services/api'
 import app from '@services/request'
 import NavBar from '@components/navbar/index'
 import useNavData from '@hooks/useNavData'
+import { IPage, INIT_PAGE, getTotalPage } from '@utils/page'
 import { PRICE_TYPE, SALE_STATUS, SALE_STATUS_ATTR } from '@constants/house'
 import '@styles/common/house.scss'
 import '@styles/common/search-tab.scss'
@@ -21,6 +22,7 @@ interface IFilter {
 }
 
 interface IConditionState {
+    currentPage: number
     areaList?: IFilter
     unitPrice?: IFilter
     totalPrice?: IFilter
@@ -38,6 +40,7 @@ const initial_value = { id: '', name: '' }
 const default_value = { id: 'all', name: '不限' }
 
 const INIT_CONDITION = {
+    currentPage: 1,
     priceType: '',
     areaList: default_value,
     unitPrice: default_value,
@@ -52,12 +55,15 @@ const INIT_CONDITION = {
 
 const NewHouse = () => {
     const { appHeaderHeight, contentHeight } = useNavData()
+    const PAGE_LIMIT = 10
     const footerBtnHeight = 60
     const scrollHeight = contentHeight * 0.5 - footerBtnHeight
     const scrollMoreHeight = contentHeight * 0.6 - footerBtnHeight
     const [tab, setTab] = useState<string>('')
     const [priceType, setPriceType] = useState<string>('unitPrice')
     const [selected, setSelected] = useState<IConditionState>(INIT_CONDITION)
+    const [page, setPage] = useState<IPage>(INIT_PAGE)
+    const [showEmpty, setShowEmpty] = useState<boolean>(false)
     const [condition, setCondition] = useState<any>()
     const [houseList, setHouseList] = useState<any>([])
     const tabs = [
@@ -99,8 +105,8 @@ const NewHouse = () => {
     }, [])
 
     useEffect(() => {
-        fetchHouseList()
-    }, [selected.areaList, selected.unitPrice, selected.totalPrice, selected.room])
+        fetchHouseList(selected.currentPage)
+    }, [selected.currentPage, selected.areaList, selected.unitPrice, selected.totalPrice, selected.room])
 
     const fetchCondition = () => {
         app.request({
@@ -110,12 +116,12 @@ const NewHouse = () => {
         })
     }
 
-    const fetchHouseList = () => {
+    const fetchHouseList = (currentPage: number = 1) => {
         app.request({
             url: app.areaApiUrl(api.getHouseList),
             data: {
-                page: 0,
-                limit: 20,
+                page: currentPage,
+                limit: PAGE_LIMIT,
                 fang_area_id: filterParam(selected.areaList?.id),
                 price: filterParam(selected.unitPrice?.id || selected.totalPrice?.id),
                 price_type: filterParam(selected.priceType),
@@ -127,8 +133,33 @@ const NewHouse = () => {
                 fang_building_type: selected.fangBuildingType?.id
             }
         }).then((result: any) => {
-            setHouseList(result.data || [])
+            const totalPage = getTotalPage(PAGE_LIMIT, result.pagination.totalCount)
+            if (totalPage <= INIT_CONDITION.currentPage) {
+                setShowEmpty(true)
+            } else {
+                setShowEmpty(false)
+            }
+            setPage({
+                totalCount: result.pagination.totalCount,
+                totalPage
+            })
+
+            if (currentPage === 1) {
+                setHouseList(result.data)
+            } else {
+                setHouseList([...houseList, ...result.data])
+            }
         })
+    }
+    const handleScrollToLower = () => {
+        if (page.totalPage > selected.currentPage) {
+            setSelected({
+                ...selected,
+                currentPage: selected.currentPage + 1
+            })
+        } else {
+            setShowEmpty(true)
+        }
     }
 
     const filterParam = (id: any) => {
@@ -151,19 +182,22 @@ const NewHouse = () => {
                 ...selected,
                 totalPrice: initial_value,
                 priceType: '1',
-                [key]: item
+                [key]: item,
+                currentPage: INIT_CONDITION.currentPage
             })
         } else if (key === 'totalPrice') {
             setSelected({
                 ...selected,
                 unitPrice: initial_value,
                 priceType: '2',
-                [key]: item
+                [key]: item,
+                currentPage: INIT_CONDITION.currentPage
             })
         } else {
             setSelected({
                 ...selected,
-                [key]: item
+                [key]: item,
+                currentPage: INIT_CONDITION.currentPage
             })
         }
     }
@@ -377,7 +411,13 @@ const NewHouse = () => {
             <View className={classnames('mask', tab && 'show')} onClick={() => setTab('')}></View>
 
             <View className="newhouse-content">
-                <ScrollView className="house-list" scrollY style={{ maxHeight: contentHeight - 90 }}>
+                <ScrollView
+                    className="house-list"
+                    scrollY
+                    style={{ maxHeight: contentHeight - 90 }}
+                    lowerThreshold={30}
+                    onScrollToLower={handleScrollToLower}
+                >
                     <View className="house-list-ul">
                         {
                             houseList.length > 0 && houseList.map((item: any) => (
@@ -406,9 +446,12 @@ const NewHouse = () => {
                             ))
                         }
                     </View>
-                    <View className="empty-container">
-                        <Text>没有更多数据了</Text>
-                    </View>
+                    {
+                        showEmpty &&
+                        <View className="empty-container">
+                            <Text>没有更多数据了</Text>
+                        </View>
+                    }
                 </ScrollView>
             </View>
         </View>

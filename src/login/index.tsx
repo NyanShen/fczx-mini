@@ -15,7 +15,7 @@ const Login = () => {
         backgroundColor: '#ffffff'
     }
 
-    const [code, setCode] = useState<string>('')
+    const [loginCode, setLoginCode] = useState<string>('')
 
     Taro.setNavigationBarColor({
         frontColor: navData.color,
@@ -26,7 +26,7 @@ const Login = () => {
         Taro.login({
             success: function (res) {
                 if (res.code) {
-                    setCode(res.code) 
+                    setLoginCode(res.code)
                 }
             }
         })
@@ -35,7 +35,7 @@ const Login = () => {
     const getUserInfo = (e) => {
         const errMsg = e.detail.errMsg
         if (errMsg === 'getUserInfo:ok') {
-            fetchSessionKey(code).then((result: any) => {
+            fetchSessionKey(loginCode).then((result: any) => {
                 fetchDecryptData({
                     sessionKey: result.session_key,
                     encryptedData: e.detail.encryptedData,

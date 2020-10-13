@@ -24,6 +24,17 @@ app.testApiUrl = (uri: string) => {
     return `${agreement}192.168.2.248:12306${uri}`
 }
 
+
+app.randCode = (len: number) => {
+    const charset = 'abcdefghkmnprstuvwxyzABCDEFGHKMNPRSTUVWXYZ0123456789';
+    const charsetLen: number = charset.length - 1;
+    let code = '';
+    for (let i = 0; i < len; i++) {
+        code += charset[parseInt(`${charsetLen * Math.random()}`)];
+    }
+    return code;
+}
+
 app.request = (params: any, { loading = true, toast = true }: any = {}) => {
     if (!params.data) {
         params.data = {}

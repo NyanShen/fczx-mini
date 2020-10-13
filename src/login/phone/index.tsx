@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import { View, Text, Input } from '@tarojs/components'
 import classnames from 'classnames'
 
+import api from '@services/api'
+import app from '@services/request'
 import NavBar from '@components/navbar/index'
 import { PHONE_PATTERN } from '@constants/pattern'
 import './index.scss'
@@ -27,6 +29,7 @@ const INIT_VERIFY_STATUS: IVerifyStatus = {
 }
 
 const LoginPhone = () => {
+    const authorizationCode = app.randCode(16);
     const [loginPhone, setLoginPhone] = useState<ILoginPhone>(INIT_LOGIN_PHONE)
     const [verifyStatus, setVerifyStatus] = useState<IVerifyStatus>(INIT_VERIFY_STATUS)
     const phoneRegExp = new RegExp(PHONE_PATTERN)
@@ -54,29 +57,48 @@ const LoginPhone = () => {
         if (!verifyStatus.actived) {
             return
         }
-        let second = 60
-        setVerifyStatus({
-            actived: false,
-            verifyText: `${second}秒后重新获取`
-        })
-        let interval = setInterval(function () {
-            second--;
+        app.request({
+            url: app.apiUrl(api.getUserVerifyCode),
+            data: {
+                mobile: loginPhone.mobile
+            }
+        }).then(() => {
+            let second = 60
             setVerifyStatus({
                 actived: false,
                 verifyText: `${second}秒后重新获取`
             })
-            if (second <= 0) {
+            let interval = setInterval(function () {
+                second--;
                 setVerifyStatus({
-                    actived: true,
-                    verifyText: `重新获取`
+                    actived: false,
+                    verifyText: `${second}秒后重新获取`
                 })
-                clearInterval(interval);
-            }
-        }, 1000)
+                if (second <= 0) {
+                    setVerifyStatus({
+                        actived: true,
+                        verifyText: `重新获取`
+                    })
+                    clearInterval(interval);
+                }
+            }, 1000)
+        })
+
     }
 
     const handleSubmit = () => {
         if (phoneRegExp.test(loginPhone.mobile) && loginPhone.verifyCode) {
+            app.request({
+                method: 'POST',
+                url: app.apiUrl(api.loginByVerifyCode),
+                data: {
+                    mobile: loginPhone.mobile,
+                    randCode: loginPhone.verifyCode,
+                    requestId: authorizationCode
+                }
+            }).then((result: any) => {
+                console.log(result)
+            })
         }
     }
 
