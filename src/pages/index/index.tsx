@@ -71,7 +71,7 @@ const Index = () => {
       {
         name: '资讯',
         icon: news,
-        path: '/pages/news/index'
+        path: '/news/list/index'
       }
     ]
   }]

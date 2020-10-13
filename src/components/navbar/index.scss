@@ -9,7 +9,11 @@
 
     &-title {
         font-size: 28px;
-        margin-left: 20px;
+        margin-left: 10px;
+        max-width: 60%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .iconfont {

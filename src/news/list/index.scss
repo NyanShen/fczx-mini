@@ -1,0 +1,28 @@
+.news {
+    &-content {
+        .news-item {
+            display: flex;
+            padding: 30px 0;
+            border-bottom: 1px solid $bg-color;
+
+            .item-text {
+                flex: 1;
+                font-size: $font-32;
+                .date {
+                    margin-left: 16px;
+                }
+            }
+            .item-image {
+                width: 200px;
+                height: 150px;
+                margin-left: 20px;
+                background-color: $bg-color;
+
+                Image {
+                    max-width: 100%;
+                    max-height: 100%;
+                }
+            }
+        }
+    }
+}
