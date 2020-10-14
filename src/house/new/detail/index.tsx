@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { getCurrentInstance, useReady } from '@tarojs/taro'
+import { getCurrentInstance, useReady, makePhoneCall } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
 
 import api from '@services/api'
@@ -91,7 +91,7 @@ const HouseDetail = () => {
                     </View>
                     <View className="info-item">
                         <Text className="label">咨询电话：</Text>
-                        <Text className="text contact">{houseData.phone}</Text>
+                        <Text className="text contact" onClick={() => makePhoneCall({ phoneNumber: houseData.phone })}>{houseData.phone}</Text>
                     </View>
                     <View className="info-item">
                         <Text className="label">最新开盘：</Text>
@@ -135,7 +135,7 @@ const HouseDetail = () => {
                                     <Text className="item bind">
                                         {
                                             item.fangHouseLicenseBuilding &&
-                                            item.fangHouseLicenseBuilding.map((item:any) => {
+                                            item.fangHouseLicenseBuilding.map((item: any) => {
                                                 return item.fang_house_building_name
                                             }).join(',')
                                         }

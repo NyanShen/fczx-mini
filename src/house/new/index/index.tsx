@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react'
-import Taro, { getCurrentInstance, useReady } from '@tarojs/taro'
+import Taro, { getCurrentInstance, makePhoneCall, useReady } from '@tarojs/taro'
 import { View, ScrollView, Swiper, SwiperItem, Image, Text, Button, Map } from '@tarojs/components'
 import classnames from 'classnames'
 
@@ -360,7 +360,7 @@ const House = () => {
                         </View>
                     </View>
                 </View>
-                <View className="house-contact view-content mt20">
+                <View className="house-contact view-content mt20" onClick={() => makePhoneCall({phoneNumber: houseData.phone})}>
                     <View className="iconfont icontelephone-out"></View>
                     <View>
                         <View className="phone-call">{houseData.phone}</View>

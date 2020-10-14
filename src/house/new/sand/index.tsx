@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { getCurrentInstance } from '@tarojs/taro'
+import Taro, { getCurrentInstance } from '@tarojs/taro'
 import {
     View,
     Text,
@@ -41,7 +41,9 @@ const HouseSand = () => {
     }
 
     const handleRoomCheck = (item: any) => {
-        console.log(item)
+        Taro.navigateTo({
+            url: `/house/new/type/detail?id=${item.id}&houseId=${params.id}`
+        })
     }
 
     const getSandCommonComponent = useMemo(() => {
