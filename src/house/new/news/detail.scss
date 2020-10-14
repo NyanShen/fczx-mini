@@ -1,0 +1,14 @@
+.news-detail {
+    &-content {
+        .header {
+            margin: 30px 0;
+            .title {
+                font-size: $font-36;
+                color: $title-color;
+            }
+        }
+        .ml16 {
+            margin-left: 16px;
+        }
+    }
+}

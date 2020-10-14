@@ -22,6 +22,8 @@ export default {
         'new/detail/index',
         'new/type/index',
         'new/type/detail',
+        'new/news/index',
+        'new/news/detail',
         'new/ask/index',
         'new/askForm/index',
         'new/comment/index',
@@ -38,13 +40,13 @@ export default {
         'phone/index'
       ]
     },
-    // {
-    //   root: 'news',
-    //   pages: [
-    //     'list/index',
-    //     'detail/index'
-    //   ]
-    // }
+    {
+      root: 'news',
+      pages: [
+        'list/index',
+        'detail/index'
+      ]
+    }
   ],
   tabBar: {
     color: 'rgba(68, 68, 68, 1)',

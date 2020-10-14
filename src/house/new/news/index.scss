@@ -1,0 +1,33 @@
+.house-news {
+    .news-content {
+        margin-top: 30px;
+    }
+    .news-item {
+        margin-bottom: 30px;
+        .header {
+            margin-bottom: 16px;
+            line-height: 50px;
+            .tag {
+                font-size: $font-26;
+                padding: 8px 16px;
+                margin-right: 16px;
+                border: 1px solid $primary-color;
+                color: $primary-color;
+            }
+            .title {
+                font-size: $font-32;
+            }
+        }
+        .sub-title {
+            font-size: $font-basic;
+            margin-bottom: 16px;
+            color: $text-color;
+        }
+        .publish {
+            display: flex;
+            .date {
+                margin-left: 16px;
+            }
+        }
+    }
+}

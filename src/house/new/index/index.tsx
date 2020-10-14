@@ -16,6 +16,7 @@ import { SALE_STATUS, PRICE_TYPE, SURROUND_TABS, ISurroundTab } from '@constants
 import '@styles/common/house.scss'
 import '@styles/common/bottom-bar.scss'
 import '@house/new/surround/index.scss'
+import '@house/new/news/index.scss'
 import './index.scss'
 
 interface IAlbumSwiper {
@@ -39,6 +40,7 @@ const INIT_HOUSE_DATA = {
     title: '',
     tags: [],
     ask: [],
+    news: [],
     _renovationStatus: [],
     fangHouseRoom: [],
     imagesData: {},
@@ -57,10 +59,10 @@ const House = () => {
     useReady(() => {
         let currentRouter: any = getCurrentInstance().router
         let params: any = currentRouter.params
-        params.id = '1001'
+        params.id = '1000006'
         if (params.id) {
             app.request({
-                url: app.testApiUrl(api.getHouseById),
+                url: app.areaApiUrl(api.getHouseById),
                 data: {
                     id: params.id
                 }
@@ -168,6 +170,12 @@ const House = () => {
         })
         Taro.navigateTo({
             url: `/house/new/video/index${paramString}`
+        })
+    }
+
+    const toHouseNewsDetail = (newsId: string) => {
+        Taro.navigateTo({
+            url: `/house/new/news/detail?id=${newsId}`
         })
     }
 
@@ -360,7 +368,7 @@ const House = () => {
                         </View>
                     </View>
                 </View>
-                <View className="house-contact view-content mt20" onClick={() => makePhoneCall({phoneNumber: houseData.phone})}>
+                <View className="house-contact view-content mt20" onClick={() => makePhoneCall({ phoneNumber: houseData.phone })}>
                     <View className="iconfont icontelephone-out"></View>
                     <View>
                         <View className="phone-call">{houseData.phone}</View>
@@ -415,6 +423,32 @@ const House = () => {
                                 ))
                             }
                         </Swiper>
+                    </View>
+                </View>
+                <View className="house-item house-news mt20">
+                    <View className="house-item-header">
+                        <View className="title">楼盘动态</View>
+                        <View className="more" onClick={() => toHouseModule('news')}>
+                            <Text>更多</Text>
+                            <Text className="iconfont iconarrow-right-bold"></Text>
+                        </View>
+                    </View>
+                    <View className="house-item-content">
+                        {
+                            houseData.news.map((item: any, index: number) => (
+                                <View key={index} className="news-item" onClick={() => toHouseNewsDetail(item.id)}>
+                                    <View className="header">
+                                        <Text className="tag">{item.newsCate.name}</Text>
+                                        <Text className="title">{item.title}</Text>
+                                    </View>
+                                    <View className="sub-title">{item.sub_title}</View>
+                                    <View className="publish small-desc">
+                                        <View>{item.author}</View>
+                                        <View className="date">{formatTimestamp(item.modified)}</View>
+                                    </View>
+                                </View>
+                            ))
+                        }
                     </View>
                 </View>
                 <View className="house-item house-sand mt20">
