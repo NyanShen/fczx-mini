@@ -7,6 +7,7 @@ import api from '@services/api'
 import app from '@services/request'
 import { toUrlParam } from '@utils/urlHandler'
 import { formatTimestamp } from '@utils/index'
+import { checkLogin } from '@services/login'
 import useNavData from '@hooks/useNavData'
 import NavBar from '@components/navbar/index'
 import Popup from '@components/popup/index'
@@ -62,7 +63,7 @@ const House = () => {
         params.id = '1000006'
         if (params.id) {
             app.request({
-                url: app.areaApiUrl(api.getHouseById),
+                url: app.testApiUrl(api.getHouseById),
                 data: {
                     id: params.id
                 }
@@ -122,14 +123,17 @@ const House = () => {
         setPopup(false)
     }
 
-    const toHouseModule = (module: string) => {
+    const toHouseModule = (module: string, needCheck: boolean = false) => {
         const paramString = toUrlParam({
             id: houseData.id,
             title: houseData.title
         })
-        Taro.navigateTo({
-            url: `/house/new/${module}/index${paramString}`
-        })
+        const url = `/house/new/${module}/index${paramString}`
+        if (needCheck) {
+            checkLogin(url)
+            return
+        }
+        Taro.navigateTo({ url })
     }
 
     const toHouseSurround = (currentTab: ISurroundTab = INIT_SURROUND_TAB) => {
@@ -247,7 +251,7 @@ const House = () => {
                                 <View>暂无评论</View>
                             </View>
                     }
-                    <View className="btn btn-blue" onClick={() => toHouseModule('commentForm')}>
+                    <View className="btn btn-blue" onClick={() => toHouseModule('commentForm', true)}>
                         <Text className="btn-name">我要评论</Text>
                     </View>
                 </View>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Taro from '@tarojs/taro'
+import Taro, { getCurrentInstance } from '@tarojs/taro'
 import { View, Text, Button } from '@tarojs/components'
 
 import storage from '@utils/storage'
@@ -14,6 +14,8 @@ const Login = () => {
         color: '#000000',
         backgroundColor: '#ffffff'
     }
+    const currentRouter: any = getCurrentInstance().router
+    const backUrl: any = currentRouter.params?.backUrl
 
     const [loginCode, setLoginCode] = useState<string>('')
 
@@ -23,33 +25,32 @@ const Login = () => {
     })
 
     const handleLogin = () => {
-        Taro.login({
-            success: function (res) {
-                if (res.code) {
-                    setLoginCode(res.code)
-                }
-            }
+        fetchSessionKey().then((result: any) => {
+            setLoginCode(result)
         })
     }
 
     const getUserInfo = (e) => {
         const errMsg = e.detail.errMsg
-        if (errMsg === 'getUserInfo:ok') {
-            fetchSessionKey(loginCode).then((result: any) => {
-                fetchDecryptData({
-                    sessionKey: result.session_key,
-                    encryptedData: e.detail.encryptedData,
-                    iv: e.detail.iv
-                }).then((result: any) => {
-                    const user = {
-                        nickName: result.nickName,
-                        avatarUrl: result.avatarUrl,
-                    }
-                    storage.setItem('user', user, 'login')
+        if (errMsg === 'getPhoneNumber:ok') {
+            fetchDecryptData({
+                sessionKey: loginCode,
+                encryptedData: e.detail.encryptedData,
+                iv: e.detail.iv
+            }).then((result: any) => {
+                console.log(result)
+                const user = {
+                    nickName: result.nickName,
+                    avatarUrl: result.avatarUrl,
+                }
+                storage.setItem('user', user, 'login')
+                if (backUrl) {
+                    Taro.redirectTo({ url: backUrl })
+                } else {
                     Taro.navigateBack({
                         delta: 1
                     })
-                })
+                }
             })
         }
 
@@ -57,7 +58,7 @@ const Login = () => {
 
     const handleLoginByPhone = () => {
         Taro.navigateTo({
-            url: '/login/phone/index'
+            url: `/login/phone/index?backUrl=${backUrl}`
         })
     }
 
@@ -73,7 +74,7 @@ const Login = () => {
                     <View className="cut-line"></View>
                     <Text className="desc">推荐使用登录方式</Text>
                 </View>
-                <Button className="btn btn-primary" openType="getUserInfo" onGetUserInfo={getUserInfo} onClick={handleLogin}>
+                <Button className="btn btn-primary" openType="getPhoneNumber" onGetPhoneNumber={getUserInfo} onClick={handleLogin}>
                     <Text>微信登录</Text>
                 </Button>
                 <View className="btn btn-plain" onClick={handleLoginByPhone}>

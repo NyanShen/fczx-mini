@@ -4,6 +4,7 @@ import { Textarea, View, Text, Image } from '@tarojs/components'
 
 import api from '@services/api'
 import app from '@services/request'
+import storage from '@utils/storage'
 import NavBar from '@components/navbar'
 import './index.scss'
 
@@ -43,7 +44,7 @@ const HouseCommentForm = () => {
                         file: res.tempFiles[0]
                     },
                     header: {
-                        'X-Token': 'zrggSr9n1XFzDeaD'
+                        'X-Token': storage.getItem('token', 'login')
                     },
                     success: ((result: any) => {
                         setImagePath(JSON.parse(result.data).data)

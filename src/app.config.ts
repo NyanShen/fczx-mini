@@ -2,7 +2,7 @@ import { Config } from '@tarojs/taro';
 
 export default {
   pages: [
-    // 'news/detail/index',
+    'news/detail/index',
     // 'house/new/video/index',
     'pages/index/index',
     'pages/chat/index',
@@ -40,13 +40,13 @@ export default {
         'phone/index'
       ]
     },
-    {
-      root: 'news',
-      pages: [
-        'list/index',
-        'detail/index'
-      ]
-    }
+    // {
+    //   root: 'news',
+    //   pages: [
+    //     'list/index',
+    //     'detail/index'
+    //   ]
+    // }
   ],
   tabBar: {
     color: 'rgba(68, 68, 68, 1)',

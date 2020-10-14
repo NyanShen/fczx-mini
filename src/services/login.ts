@@ -1,18 +1,41 @@
+import Taro from '@tarojs/taro'
 
 import api from '@services/api'
 import app from '@services/request'
 import storage from '@utils/storage'
 
-export const fetchSessionKey = (code: string) => {
+export const checkLogin = (backUrl) => {
     return new Promise((resolve) => {
         app.request({
-            url: app.apiUrl(api.getSessionKeyByCode),
-            data: {
-                code
+            url: app.apiUrl(api.getUserData)
+        }, { loading: false }).then((result: any) => {
+            if (result) {
+                resolve(result)
+            } else {
+                Taro.navigateTo({
+                    url: `/login/index?backUrl=${backUrl}`
+                })
             }
-        }).then((result: any) => {
-            storage.setItem('session_key', result.session_key, 'login')
-            resolve(result)
+        })
+    })
+}
+
+export const fetchSessionKey = () => {
+    return new Promise((resolve) => {
+        Taro.login({
+            success: function (res) {
+                if (res.code) {
+                    app.request({
+                        url: app.apiUrl(api.getSessionKeyByCode),
+                        data: {
+                            code: res.code
+                        }
+                    }).then((result: any) => {
+                        storage.setItem('session_key', result.session_key, 'login')
+                        resolve(result.session_key)
+                    })
+                }
+            }
         })
     })
 }

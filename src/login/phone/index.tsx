@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Taro from '@tarojs/taro'
+import Taro, { getCurrentInstance } from '@tarojs/taro'
 import { View, Text, Input } from '@tarojs/components'
 import classnames from 'classnames'
 
@@ -31,6 +31,8 @@ const INIT_VERIFY_STATUS: IVerifyStatus = {
 }
 
 const LoginPhone = () => {
+    const currentRouter: any = getCurrentInstance().router
+    const backUrl: any = currentRouter.params?.backUrl
     const authorizationCode = app.randCode(16);
     const [loginPhone, setLoginPhone] = useState<ILoginPhone>(INIT_LOGIN_PHONE)
     const [verifyStatus, setVerifyStatus] = useState<IVerifyStatus>(INIT_VERIFY_STATUS)
@@ -100,9 +102,13 @@ const LoginPhone = () => {
                 }
             }).then((result: any) => {
                 storage.setItem('token', result, 'login')
-                Taro.switchTab({
-                    url: '/pages/user/index'
-                })
+                if (backUrl) {
+                    Taro.redirectTo({ url: backUrl })
+                } else {
+                    Taro.switchTab({
+                        url: '/pages/user/index'
+                    })
+                }
             })
         }
     }
