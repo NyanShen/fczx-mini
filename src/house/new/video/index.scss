@@ -1,0 +1,14 @@
+.house-video {
+    height: 100vh;
+    background-color: $title-color;
+    .video-wrapper {
+        position: fixed;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 100%;
+    
+        .video-content {
+            width: 100%;
+        }
+    }
+}

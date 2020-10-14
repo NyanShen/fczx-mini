@@ -93,7 +93,7 @@ const HouseType = () => {
 
     const toDetail = (item: any) => {
         Taro.navigateTo({
-            url: `/house/new/type/detail?id=${item.id}`
+            url: `/house/new/type/detail?id=${item.id}&houseId=${houseId}`
         })
     }
     return (

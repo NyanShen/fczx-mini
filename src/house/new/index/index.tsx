@@ -156,7 +156,18 @@ const House = () => {
 
     const toHouseTypeDetail = (item: any) => {
         Taro.navigateTo({
-            url: `/house/new/type/detail?id=${item.id}`
+            url: `/house/new/type/detail?id=${item.id}&houseId=${houseData.id}`
+        })
+    }
+
+    const toHouseVideo = (video: any) => {
+        const paramString = toUrlParam({
+            id: houseData.id,
+            title: houseData.title,
+            video: JSON.stringify(video)
+        })
+        Taro.navigateTo({
+            url: `/house/new/video/index${paramString}`
         })
     }
 
@@ -172,7 +183,7 @@ const House = () => {
         return (
             <SwiperItem
                 itemId={video.id}
-                onClick={() => toHouseModule('album')}
+                onClick={() => toHouseVideo(video)}
             >
                 <Image src={video.image_path} mode='widthFix'></Image>
                 <Text className="icon-vedio"></Text>

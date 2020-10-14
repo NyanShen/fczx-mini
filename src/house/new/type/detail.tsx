@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Taro from '@tarojs/taro'
+import Taro, {getCurrentInstance} from '@tarojs/taro'
 import { View, Image, Text, ScrollView, Swiper, SwiperItem } from '@tarojs/components'
 import classnames from 'classnames'
 
@@ -13,6 +13,8 @@ import './detail.scss'
 
 const HouseTypeDetail = () => {
     const bottomHeight = 55
+    const currentRouter: any = getCurrentInstance().router
+    const params: any = currentRouter.params
     const { appHeaderHeight, contentHeight } = useNavData()
     const [open, setOpen] = useState<boolean>(false)
     const [style, setStlye] = useState<any>({})
@@ -22,7 +24,7 @@ const HouseTypeDetail = () => {
         app.request({
             url: app.testApiUrl(api.getHouseTypeDetail),
             data: {
-                id: '1000006'
+                id: params.id
             }
         }).then((result: any) => {
             setHouseType(result)
@@ -49,10 +51,17 @@ const HouseTypeDetail = () => {
             })
         }
     }
+    
     const handlePhoneCall = () => {
         Taro.makePhoneCall({
             phoneNumber: houseType.fangHouse.phone
         })
+    }
+
+    const toNewHouse = () => {
+            Taro.navigateTo({
+                url: `/house/new/index/index?id=${params.houseId}`
+            })
     }
     return (
         <View className="house-type-detail">
@@ -111,7 +120,7 @@ const HouseTypeDetail = () => {
                             <View className="detail-info-item">
                                 <View className="label">所属楼盘</View>
                                 <View className="value">{houseType.fangHouse.title}</View>
-                                <View className="small-desc">
+                                <View className="small-desc" onClick={toNewHouse}>
                                     <Text>查看详情</Text>
                                     <Text className="iconfont iconarrow-right-bold"></Text>
                                 </View>

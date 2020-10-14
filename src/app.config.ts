@@ -2,7 +2,8 @@ import { Config } from '@tarojs/taro';
 
 export default {
   pages: [
-    'news/detail/index',
+    // 'news/detail/index',
+    // 'house/new/video/index',
     'pages/index/index',
     'pages/chat/index',
     'pages/user/index',
@@ -13,12 +14,14 @@ export default {
       pages: [
         'new/index/index',
         'new/album/index',
+        'new/video/index',
         'new/list/index',
         'new/search/index',
         'new/surround/index',
         'new/sand/index',
         'new/detail/index',
         'new/type/index',
+        'new/type/detail',
         'new/ask/index',
         'new/askForm/index',
         'new/comment/index',
