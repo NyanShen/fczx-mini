@@ -39,6 +39,10 @@ app.request = (params: any, { loading = true, toast = true }: any = {}) => {
     if (!params.data) {
         params.data = {}
     }
+
+    const token = { 'X-Token': storage.getItem('token', 'login') }
+    params.header = { ...params.header, ...token }  
+
     const { page, limit } = params.data
     if (typeof page != "undefined" && typeof limit != "undefined") {
         const pageParam = {

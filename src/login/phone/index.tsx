@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import Taro from '@tarojs/taro'
 import { View, Text, Input } from '@tarojs/components'
 import classnames from 'classnames'
 
@@ -7,6 +8,7 @@ import app from '@services/request'
 import NavBar from '@components/navbar/index'
 import { PHONE_PATTERN } from '@constants/pattern'
 import './index.scss'
+import storage from '@utils/storage'
 
 interface ILoginPhone {
     mobile: string
@@ -97,7 +99,10 @@ const LoginPhone = () => {
                     requestId: authorizationCode
                 }
             }).then((result: any) => {
-                console.log(result)
+                storage.setItem('token', result, 'login')
+                Taro.switchTab({
+                    url: '/pages/user/index'
+                })
             })
         }
     }

@@ -3,6 +3,8 @@ export default {
     loginByVerifyCode: '/user/login-by-code',
     getSessionKeyByCode: '/applet/get-session',
     decryptData: '/applet/decrypt-data',
+    getUserData: '/user/get',
+
     getTestData: '/test/test',
     getCityList: '/index/city-list',
     getHouseList: '/house/list',
@@ -22,5 +24,6 @@ export default {
     getHouseTypeList: '/house/room-list',
     getHouseTypeDetail: '/house/room-detail',
     getHouseConsultantList: '/house/consultant-list',
+
     uploadFile: '/file/upload'
 }
