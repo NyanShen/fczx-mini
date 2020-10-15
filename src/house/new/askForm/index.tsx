@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { getCurrentInstance } from '@tarojs/taro'
+import Taro, { getCurrentInstance } from '@tarojs/taro'
 import { Textarea, View } from '@tarojs/components'
 
 import api from '@services/api'
@@ -20,6 +20,8 @@ const INIT_TEXT_DATA = {
 const HouseAskForm = () => {
     const textCount = 35
     const router = getCurrentInstance().router
+    const houseId = router?.params.id
+    const houseTitle = router?.params.title
     const [textData, setTextData] = useState<ITextData>(INIT_TEXT_DATA)
 
     const handleInputChange = (e: any) => {
@@ -31,13 +33,22 @@ const HouseAskForm = () => {
     }
 
     const submitAsk = () => {
+        if (!textData.value) {
+            Taro.showToast({
+                title: '标题不能为空',
+                icon: "none"
+            })
+            return
+        }
         app.request({
             url: app.areaApiUrl(api.postHouseAsk),
             method: 'POST',
             data: {
-                fang_house_id: router?.params.id,
-                content: textData.value
+                fang_house_id: houseId,
+                title: textData.value
             }
+        }).then(() => {
+            Taro.redirectTo({ url: `/house/new/ask/index?id=${houseId}&title=${houseTitle}` })
         })
     }
 
@@ -46,7 +57,7 @@ const HouseAskForm = () => {
             <NavBar title="提问" back={true}></NavBar>
             <View className="ask-wrapper">
                 <View className="ask-title">
-                    写下对楼盘【{router?.params.title}】的疑问
+                    写下对楼盘【{houseTitle}】的疑问
                 </View>
                 <View className="ask-input">
                     <Textarea

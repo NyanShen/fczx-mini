@@ -16,7 +16,6 @@ const Login = () => {
     }
     const currentRouter: any = getCurrentInstance().router
     const backUrl: any = currentRouter.params?.backUrl
-
     const [loginCode, setLoginCode] = useState<string>('')
 
     Taro.setNavigationBarColor({
@@ -45,7 +44,7 @@ const Login = () => {
                 }
                 storage.setItem('user', user, 'login')
                 if (backUrl) {
-                    Taro.redirectTo({ url: backUrl })
+                    Taro.redirectTo({ url: decodeURIComponent(backUrl) })
                 } else {
                     Taro.navigateBack({
                         delta: 1

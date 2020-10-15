@@ -180,6 +180,10 @@ const House = () => {
         })
     }
 
+    const toHome = () => {
+        Taro.switchTab({ url: '/pages/index/index' })
+    }
+
     const renderPrice = (price: string, price_type: string) => {
         if (price === '0') {
             return <Text className="price">待定</Text>
@@ -263,7 +267,7 @@ const House = () => {
                     <View className="title">大家都在问</View>
                     {
                         ask.length > 0 &&
-                        <View className="more" onClick={() => toHouseModule('ask', true)}>
+                        <View className="more" onClick={() => toHouseModule('ask')}>
                             <Text>查看更多</Text>
                             <Text className="iconfont iconarrow-right-bold"></Text>
                         </View>
@@ -289,7 +293,7 @@ const House = () => {
                                 <View>对此楼盘有疑问？赶快去提问吧</View>
                             </View>
                     }
-                    <View className="btn btn-blue" onClick={() => toHouseModule('askForm')}>
+                    <View className="btn btn-blue" onClick={() => toHouseModule('askForm', true)}>
                         <Text className="btn-name">我要提问</Text>
                     </View>
                 </View>
@@ -561,15 +565,15 @@ const House = () => {
                 </View>
             </ScrollView>
             <View className="bottom-bar">
-                <View className="bar-item">
+                <View className="bar-item" onClick={toHome}>
                     <Text className="iconfont iconhome"></Text>
                     <Text>首页</Text>
                 </View>
-                <View className="line-split"></View>
+                {/* <View className="line-split"></View>
                 <View className="bar-item">
                     <Text className="iconfont icongroup"></Text>
                     <Text>团购</Text>
-                </View>
+                </View> */}
                 <View className="bar-item-btn" onClick={() => toHouseModule('consultant')}>
                     <Text className="btn btn-yellow btn-bar">置业顾问</Text>
                 </View>

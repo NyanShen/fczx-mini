@@ -21,6 +21,8 @@ const INIT_TEXT_DATA = {
 const HouseCommentForm = () => {
     const textCount = 150
     const router = getCurrentInstance().router
+    const houseId = router?.params.id
+    const houseTitle = router?.params.title
     const [textData, setTextData] = useState<ITextData>(INIT_TEXT_DATA)
     const [imagePath, setImagePath] = useState<string>('')
 
@@ -59,10 +61,12 @@ const HouseCommentForm = () => {
             url: app.areaApiUrl(api.postHouseComment),
             method: 'POST',
             data: {
-                fang_house_id: router?.params.id,
+                fang_house_id: houseId,
                 content: textData.value,
                 image_path: imagePath
             }
+        }).then(() => {
+            Taro.redirectTo({ url: `/house/new/comment/index?id=${houseId}&title=${houseTitle}` })
         })
     }
 
@@ -71,7 +75,7 @@ const HouseCommentForm = () => {
             <NavBar title="点评" back={true}></NavBar>
             <View className="comment-wrapper">
                 <View className="comment-title">
-                    写下对楼盘【{router?.params.title}】的点评
+                    写下对楼盘【{houseTitle}】的点评
                 </View>
                 <View className="comment-input">
                     <Textarea

@@ -4,6 +4,7 @@ import { View, Image, Text, ScrollView } from '@tarojs/components'
 
 import api from '@services/api'
 import app from '@services/request'
+import { fetchUserData } from '@services/login'
 import NavBar from '@components/navbar'
 import useNavData from '@hooks/useNavData'
 import { formatTimestamp } from '@utils/index'
@@ -12,6 +13,12 @@ import { IPage, INIT_PAGE, getTotalPage } from '@utils/page'
 
 import './index.scss'
 
+interface IParam {
+    currentPage: number
+}
+
+const INIT_PARAM = { currentPage: 1 }
+
 const HouseComment = () => {
     const PAGE_LIMIT = 10
     const router = getCurrentInstance().router
@@ -19,19 +26,20 @@ const HouseComment = () => {
     const houseTitle = router?.params.title
     const { contentHeight } = useNavData()
     const [showEmpty, setShowEmpty] = useState<boolean>(false)
+    const [param, setParam] = useState<IParam>(INIT_PARAM)
     const [page, setPage] = useState<IPage>(INIT_PAGE)
     const [commentList, setCommentList] = useState<any[]>([])
 
     useEffect(() => {
         fetchHouseComment()
-    }, [page.currentPage])
+    }, [param.currentPage])
 
 
     const fetchHouseComment = () => {
         app.request({
             url: app.areaApiUrl(api.getHouseComment),
             data: {
-                page: page.currentPage,
+                page: param.currentPage,
                 limit: PAGE_LIMIT,
                 fang_house_id: houseId,
             }
@@ -46,10 +54,9 @@ const HouseComment = () => {
     }
 
     const handleScrollToLower = () => {
-        if (page.totalPage > page.currentPage) {
-            setPage({
-                ...page,
-                currentPage: page.currentPage + 1
+        if (page.totalPage > param.currentPage) {
+            setParam({
+                currentPage: param.currentPage + 1
             })
         } else {
             setShowEmpty(true)
@@ -60,9 +67,11 @@ const HouseComment = () => {
             id: houseId,
             title: houseTitle
         })
-        Taro.navigateTo({
-            url: `/house/new/${module}/index${paramString}`
-        })
+        const targetUrl = `/house/new/${module}/index${paramString}`
+        fetchUserData(targetUrl)
+            .then(() => {
+                Taro.navigateTo({ url: targetUrl })
+            })
     }
     return (
         <View className="comment">

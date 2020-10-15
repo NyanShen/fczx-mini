@@ -4,6 +4,7 @@ import { View, Text, ScrollView } from '@tarojs/components'
 
 import api from '@services/api'
 import app from '@services/request'
+import { fetchUserData } from '@services/login'
 import NavBar from '@components/navbar'
 import useNavData from '@hooks/useNavData'
 import { formatTimestamp } from '@utils/index'
@@ -65,9 +66,11 @@ const HouseAsk = () => {
             id: houseId,
             title: houseTitle
         })
-        Taro.navigateTo({
-            url: `/house/new/${module}/index${paramString}`
-        })
+        const targetUrl = `/house/new/${module}/index${paramString}`
+        fetchUserData(targetUrl)
+            .then(() => {
+                Taro.navigateTo({ url: targetUrl })
+            })
     }
     return (
         <View className="ask">

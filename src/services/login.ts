@@ -13,7 +13,7 @@ export const fetchUserData = (backUrl: string = '') => {
                 resolve(result)
             } else {
                 Taro.navigateTo({
-                    url: `/login/index?backUrl=${backUrl}`
+                    url: `/login/index?backUrl=${encodeURIComponent(backUrl)}`
                 })
             }
         })

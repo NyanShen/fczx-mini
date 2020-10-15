@@ -103,7 +103,7 @@ const LoginPhone = () => {
             }).then((result: any) => {
                 storage.setItem('token', result, 'login')
                 if (backUrl) {
-                    Taro.redirectTo({ url: backUrl })
+                    Taro.redirectTo({ url: decodeURIComponent(backUrl) })
                 } else {
                     Taro.switchTab({
                         url: '/pages/user/index'
