@@ -91,26 +91,31 @@ const LoginPhone = () => {
     }
 
     const handleSubmit = () => {
-        if (phoneRegExp.test(loginPhone.mobile) && loginPhone.verifyCode) {
-            app.request({
-                method: 'POST',
-                url: app.apiUrl(api.loginByVerifyCode),
-                data: {
-                    mobile: loginPhone.mobile,
-                    randCode: loginPhone.verifyCode,
-                    requestId: authorizationCode
-                }
-            }).then((result: any) => {
-                storage.setItem('token', result, 'login')
-                if (backUrl) {
-                    Taro.redirectTo({ url: decodeURIComponent(backUrl) })
-                } else {
-                    Taro.switchTab({
-                        url: '/pages/user/index'
-                    })
-                }
+        if (!phoneRegExp.test(loginPhone.mobile) || !loginPhone.verifyCode) {
+            Taro.showToast({
+                title: '手机号或验证码不正确',
+                icon: 'none'
             })
+            return
         }
+        app.request({
+            method: 'POST',
+            url: app.apiUrl(api.loginByVerifyCode),
+            data: {
+                mobile: loginPhone.mobile,
+                randCode: loginPhone.verifyCode,
+                requestId: authorizationCode
+            }
+        }).then((result: any) => {
+            storage.setItem('token', result, 'login')
+            if (backUrl) {
+                Taro.redirectTo({ url: decodeURIComponent(backUrl) })
+            } else {
+                Taro.switchTab({
+                    url: '/pages/user/index'
+                })
+            }
+        })
     }
 
     return (
