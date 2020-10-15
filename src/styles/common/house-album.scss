@@ -1,0 +1,54 @@
+.house-album {
+    position: relative;
+
+    Image {
+        width: 100%;
+        height: 480px;
+    }
+
+    .icon-vedio {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+        width: 120px;
+        height: 120px;
+        background-image: url("http://192.168.2.248/assets/icons/video.png");
+        background-size: 120px 120px;
+        background-repeat: no-repeat;
+    }
+
+    .album-count {
+        position: absolute;
+        right: 20px;
+        bottom: 20px;
+        font-size: 24px;
+        padding: 8px 16px;
+        border-radius: 15px;
+        color: #fff;
+        background-color: rgba($color: #000000, $alpha: 0.6);
+    }
+
+    .album-text {
+        position: absolute;
+        left: 50%;
+        bottom: 30px;
+        transform: translateX(-50%);
+        color: #333;
+
+        &-item {
+            font-size: 24px;
+            padding: 8px 16px;
+            background-color: rgba($color: #ffffff, $alpha: 0.8);
+            border-radius: 15px;
+            margin: 0 10px;
+        }
+
+        &-actived {
+            color: #fff;
+            background-color: #11a43c;
+        }
+    }
+}

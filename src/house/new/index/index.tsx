@@ -15,6 +15,7 @@ import SandCommon from '@house/new/sand/common'
 import { SALE_STATUS, PRICE_TYPE, SURROUND_TABS, ISurroundTab } from '@constants/house'
 
 import '@styles/common/house.scss'
+import '@styles/common/house-album.scss'
 import '@styles/common/bottom-bar.scss'
 import '@house/new/surround/index.scss'
 import '@house/new/news/index.scss'
@@ -316,7 +317,7 @@ const House = () => {
     return (
         <View className="house">
             <NavBar title={houseData.title} back={true} />
-            <ScrollView style={{ height: `${contentHeight - 55}px`, backgroundColor: '#f7f7f7' }} scrollY>
+            <ScrollView style={{ maxHeight: `${contentHeight - 55}px`, backgroundColor: '#f7f7f7' }} scrollY>
                 <View className="house-album">
                     <Swiper
                         style={{ height: '225px' }}

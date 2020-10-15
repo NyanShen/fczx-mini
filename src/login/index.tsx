@@ -37,12 +37,7 @@ const Login = () => {
                 encryptedData: e.detail.encryptedData,
                 iv: e.detail.iv
             }).then((result: any) => {
-                console.log(result)
-                const user = {
-                    nickName: result.nickName,
-                    avatarUrl: result.avatarUrl,
-                }
-                storage.setItem('user', user, 'login')
+                storage.setItem('token', result, 'login')
                 if (backUrl) {
                     Taro.redirectTo({ url: decodeURIComponent(backUrl) })
                 } else {
