@@ -364,6 +364,7 @@ const House = () => {
                     <View className="subscrib">
                         <View className="subscrib-item">
                             <Popup
+                                type="1"
                                 houseId={houseData.id}
                                 btnText="变价提醒"
                                 iconClass="icondata-view"
@@ -372,6 +373,7 @@ const House = () => {
                         </View>
                         <View className="subscrib-item">
                             <Popup
+                                type="2"
                                 houseId={houseData.id}
                                 btnText="开盘通知"
                                 iconClass="iconnotice"
