@@ -1,96 +1,102 @@
-.popup-wrap {
-    .popup-box {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 80%;
-        transform: translate(-50%, -50%);
-        background-color: #fff;
-        z-index: 98;
-        opacity: 1;
-    }
-
-    .popup-cont {
-        padding: 30px 40px 50px 40px;
-
-        .popup-header {
-            position: relative;
-            margin-bottom: 40px;
-
-            .popup-title {
-                font-size: 40px;
-                font-weight: bold;
-                margin-bottom: 18px;
-                color: $primary-color;
-            }
-
-            .popup-sub-title {
-                font-size: 28px;
-                color: $desc-color;
-            }
-
-            .popup-close {
-                position: absolute;
-                top: 0;
-                right: 0;
-                font-size: 36px;
-                color: $desc-color;
-            }
-        }
-
-        .popup-desc {
-            line-height: 32px;
-            margin-bottom: 30px;
-            color: $text-color;
-        }
-
-        .popup-form {
-            .form-item {
-                position: relative;
-                height: 80px;
-                line-height: 80px;
-                margin-bottom: 30px;
-                background-color: $bg-color;
-                &-input {
-                    height: 100%;
-                    padding-left: 30px;
-
-                    &.code-input {
-                        width: 50%;
-                    }
-                }
-                .verfiy {
-                    position: absolute;
-                    top: 0;
-                    right: 20px;
-                    padding-left: 20px;
-                    color: $primary-color;
-                }
-            }
-
-            .form-btn {
-                text-align: center;
-                border-radius: 5px;
-                color: $white;
-                background-color: $primary-color;
-
-                &.disabled {
-                    background-color: $dis-color;
-                }
-            }
+.popup {
+    &-btn {
+        text-align: center;
+        &-text {
+            font-size: $font-basic;
         }
     }
-
-    .popup-mask {
+    &-wrap {
         position: fixed;
         width: 100%;
         height: 100vh;
         top: 0;
         bottom: 0;
-        transition: 0.3s;
-        &.popup-show {
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 90;
+        left: 0;
+        right: 0;
+        z-index: 999;
+        .popup-box {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 80%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            z-index: 998;
+            opacity: 1;
+        }
+
+        .popup-cont {
+            text-align: left;
+            padding: 30px 40px 50px 40px;
+
+            .popup-header {
+                position: relative;
+                margin-bottom: 30px;
+
+                .popup-title {
+                    font-size: 40px;
+                    font-weight: bold;
+                    color: $primary-color;
+                }
+
+                .popup-sub-title {
+                    font-size: 28px;
+                    margin-top: 20px;
+                    color: $desc-color;
+                }
+
+                .popup-close {
+                    position: absolute;
+                    top: 0;
+                    right: 0;
+                    font-size: 36px;
+                    color: $desc-color;
+                }
+            }
+
+            .popup-desc {
+                line-height: 32px;
+                color: $text-color;
+            }
+
+            .popup-form {
+                .form-item {
+                    position: relative;
+                    height: 80px;
+                    line-height: 80px;
+                    margin-bottom: 30px;
+                    background-color: $bg-color;
+                    &-input {
+                        height: 100%;
+                        padding-left: 30px;
+                        color: $text-color;
+                    }
+                }
+
+                .form-btn {
+                    text-align: center;
+                    border-radius: 5px;
+                    color: $white;
+                    background-color: $primary-color;
+
+                    &.disabled {
+                        background-color: $dis-color;
+                    }
+                }
+            }
+        }
+
+        .popup-mask {
+            position: fixed;
+            width: 100%;
+            height: 100vh;
+            top: 0;
+            bottom: 0;
+            transition: 0.3s;
+            &.popup-show {
+                background-color: rgba(0, 0, 0, 0.5);
+                z-index: 997;
+            }
         }
     }
 }

@@ -94,7 +94,7 @@ const SandCommon = (props: IProps) => {
             data: {
                 id: houseId
             }
-        }).then((result: any) => {
+        }, { loading: false }).then((result: any) => {
             setSandData(result)
             showSandBuilding(INIT_SAND_STATE, result.sandBuilding)
             props.updateSandBuilding(result.sandBuilding)

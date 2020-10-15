@@ -24,6 +24,7 @@ export default {
     getHouseTypeList: '/house/room-list',
     getHouseTypeDetail: '/house/room-detail',
     getHouseConsultantList: '/house/consultant-list',
+    postHouseCustomer: '/house/customer',
 
     uploadFile: '/file/upload'
 }

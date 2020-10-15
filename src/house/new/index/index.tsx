@@ -7,7 +7,7 @@ import api from '@services/api'
 import app from '@services/request'
 import { toUrlParam } from '@utils/urlHandler'
 import { formatTimestamp } from '@utils/index'
-import { checkLogin } from '@services/login'
+import { fetchUserData } from '@services/login'
 import useNavData from '@hooks/useNavData'
 import NavBar from '@components/navbar/index'
 import Popup from '@components/popup/index'
@@ -52,14 +52,13 @@ const INIT_HOUSE_DATA = {
 const imageId = "image_1"
 
 const House = () => {
+    let currentRouter: any = getCurrentInstance().router
+    let params: any = currentRouter.params
     const { contentHeight } = useNavData()
     const [albumSwiper, setAlbumSwiper] = useState<IAlbumSwiper>(INIT_ALBUM_SWIPER)
     const [houseData, setHouseData] = useState<any>(INIT_HOUSE_DATA)
-    const [popup, setPopup] = useState<boolean>(false)
 
     useReady(() => {
-        let currentRouter: any = getCurrentInstance().router
-        let params: any = currentRouter.params
         params.id = '1000006'
         if (params.id) {
             app.request({
@@ -118,22 +117,20 @@ const House = () => {
         })
     }
 
-    const handlePopupConfirm = (popupData) => {
-        console.log(popupData)
-        setPopup(false)
-    }
-
-    const toHouseModule = (module: string, needCheck: boolean = false) => {
+    const toHouseModule = (module: string, checkLogin: boolean = false) => {
         const paramString = toUrlParam({
             id: houseData.id,
             title: houseData.title
         })
-        const url = `/house/new/${module}/index${paramString}`
-        if (needCheck) {
-            checkLogin(url)
+        const targetUrl = `/house/new/${module}/index${paramString}`
+        if (checkLogin) {
+            fetchUserData(targetUrl)
+                .then(() => {
+                    Taro.navigateTo({ url: targetUrl })
+                })
             return
         }
-        Taro.navigateTo({ url })
+        Taro.navigateTo({ url: targetUrl })
     }
 
     const toHouseSurround = (currentTab: ISurroundTab = INIT_SURROUND_TAB) => {
@@ -266,7 +263,7 @@ const House = () => {
                     <View className="title">大家都在问</View>
                     {
                         ask.length > 0 &&
-                        <View className="more" onClick={() => toHouseModule('ask')}>
+                        <View className="more" onClick={() => toHouseModule('ask', true)}>
                             <Text>查看更多</Text>
                             <Text className="iconfont iconarrow-right-bold"></Text>
                         </View>
@@ -361,14 +358,25 @@ const House = () => {
                     <View className="btn btn-blue mt20" onClick={() => toHouseModule('detail')}>
                         <Text className="btn-name">查看更多楼盘详情</Text>
                     </View>
+
+                </View>
+                <View className="house-custom">
                     <View className="subscrib">
                         <View className="subscrib-item">
-                            <Text className="iconfont icondata-view"></Text>
-                            <Text onClick={() => setPopup(true)}>变价通知</Text>
+                            <Popup
+                                houseId={houseData.id}
+                                btnText="变价提醒"
+                                iconClass="icondata-view"
+                                backUrl={currentRouter.path}
+                            ></Popup>
                         </View>
                         <View className="subscrib-item">
-                            <Text className="iconfont iconnotice"></Text>
-                            <Text onClick={() => setPopup(true)}>开盘通知</Text>
+                            <Popup
+                                houseId={houseData.id}
+                                btnText="开盘通知"
+                                iconClass="iconnotice"
+                                backUrl={currentRouter.path}
+                            ></Popup>
                         </View>
                     </View>
                 </View>
@@ -391,7 +399,13 @@ const House = () => {
                                 <View className="desc">{houseData.enableFangHouseDiscount.title}</View>
                             </View>
                             <View className="item-action">
-                                <Button className="ovalbtn ovalbtn-pink">预约优惠</Button>
+                                <View className="ovalbtn ovalbtn-pink">
+                                    <Popup
+                                        houseId={houseData.id}
+                                        btnText="预约优惠"
+                                        backUrl={currentRouter.path}
+                                    ></Popup>
+                                </View>
                             </View>
                         </View>
                     </View>
@@ -561,16 +575,6 @@ const House = () => {
                     <Text className="btn btn-primary btn-bar">电话咨询</Text>
                 </View>
             </View>
-            {
-                popup &&
-                <Popup
-                    title="楼盘"
-                    subTitle="订阅消息"
-                    onConfirm={handlePopupConfirm}
-                    onCancel={() => setPopup(false)}
-                ></Popup>
-            }
-
         </View>
     )
 }

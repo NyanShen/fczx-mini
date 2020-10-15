@@ -4,7 +4,7 @@ import api from '@services/api'
 import app from '@services/request'
 import storage from '@utils/storage'
 
-export const checkLogin = (backUrl) => {
+export const fetchUserData = (backUrl: string = '') => {
     return new Promise((resolve) => {
         app.request({
             url: app.apiUrl(api.getUserData)
