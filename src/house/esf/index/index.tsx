@@ -84,6 +84,20 @@ const esfHouse = () => {
                             </View>
                         </View>
                     </View>
+
+                    <View className="header">
+                        <Text className="title">房源描述</Text>
+                    </View>
+                    <View className="esf-info-consultant">
+                        <View className="user-photo">
+                            <Image src=""></Image>
+                        </View>
+                        <View>
+                            <View>苏家园</View>
+                            <View className="small-desc">置业顾问</View>
+                        </View>
+                    </View>
+
                     <View className="esf-info-item">
                         <View className="sub-title">核心卖点</View>
                         <View className="item-content">
@@ -112,6 +126,26 @@ const esfHouse = () => {
                         <View className="more">
                             <Text>查看</Text>
                             <Text className="iconfont iconarrow-right-bold"></Text>
+                        </View>
+                    </View>
+                    <View className="plot-content">
+                        <View className="plot-name">天润颐景园</View>
+                        <View className="plot-info">
+                            <View className="plot-item">
+                                <View className="label">参考均价</View>
+                                <View className="value price-unit">7980元/㎡</View>
+                            </View>
+                            <View className="plot-item">
+                                <View className="label">环比上月</View>
+                                <View className="value">
+                                    <Text className="iconfont"></Text>
+                                    <Text className="tip-color">1.78%</Text>
+                                </View>
+                            </View>
+                            <View className="plot-item">
+                                <View className="label">小区地址</View>
+                                <View className="value">襄阳万达广场</View>
+                            </View>
                         </View>
                     </View>
                 </View>

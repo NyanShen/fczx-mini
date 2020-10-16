@@ -6,6 +6,9 @@
         padding: 30px;
         background-color: $white;
         margin-bottom: 20px;
+        &:last-child {
+            margin-bottom: 0;
+        }
         .header {
             display: flex;
             justify-content: space-between;
@@ -41,6 +44,9 @@
             }
         }
         .esf-info-other {
+            border-bottom: 1px solid $bg-color;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
             .other-item {
                 display: flex;
                 font-size: $font-32;
@@ -61,6 +67,16 @@
                 }
             }
         }
+        .esf-info-consultant {
+            display: flex;
+            background-color: $primary-bg-color;
+            border-radius: $border-radius-base;
+            padding: 20px 30px;
+            margin-bottom: 20px;
+            .user-photo {
+                margin-right: 20px;
+            }
+        }
         .esf-info-item {
             margin-bottom: 20px;
             .sub-title {
@@ -72,6 +88,30 @@
             .item-content {
                 font-size: $font-basic;
                 color: $text-color;
+            }
+        }
+
+        .plot-content {
+            border: 1px solid $bg-color;
+            border-radius: $border-radius-base;
+            padding: 30px 20px;
+            .plot-name {
+                font-size: $font-32;
+                margin-bottom: 20px;
+            }
+            .plot-info {
+                .plot-item {
+                    display: flex;
+                    line-height: 50px;
+                    font-size: $font-basic;
+                    .label {
+                        color: $desc-color;
+                        margin-right: 20px;
+                    }
+                    .value {
+                        flex: 1;
+                    }
+                }
             }
         }
     }
