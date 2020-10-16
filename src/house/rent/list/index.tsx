@@ -21,14 +21,13 @@ interface IFilter {
 interface IConditionState {
     currentPage: number
     areaList?: IFilter
-    unitPrice?: IFilter
-    totalPrice?: IFilter
-    priceType?: string
+    rentPrice?: IFilter
     room?: IFilter
+    rentType?: IFilter
     propertyType?: IFilter
     fangBuildingType?: IFilter
     renovationStatus?: IFilter
-    projectFeature?: IFilter
+    fangDirectionType?: IFilter
 
 }
 
@@ -37,25 +36,34 @@ const default_value = { id: 'all', name: '不限' }
 
 const INIT_CONDITION = {
     currentPage: 1,
-    priceType: '',
     areaList: default_value,
-    unitPrice: default_value,
-    totalPrice: initial_value,
+    rentPrice: default_value,
     room: default_value,
+    rentType: initial_value,
     propertyType: initial_value,
     fangBuildingType: initial_value,
     renovationStatus: initial_value,
-    projectFeature: initial_value
+    fangDirectionType: initial_value,
 }
 
-const esfList = () => {
+const RENT_TYPE_ATTR = [
+    {
+        id: '1',
+        name: '整租'
+    },
+    {
+        id: '2',
+        name: '合租'
+    }
+]
+
+const RentList = () => {
     const { appHeaderHeight, contentHeight } = useNavData()
     const PAGE_LIMIT = 10
     const footerBtnHeight = 60
     const scrollHeight = contentHeight * 0.5 - footerBtnHeight
     const scrollMoreHeight = contentHeight * 0.6 - footerBtnHeight
     const [tab, setTab] = useState<string>('')
-    const [priceType, setPriceType] = useState<string>('unitPrice')
     const [selected, setSelected] = useState<IConditionState>(INIT_CONDITION)
     const [page, setPage] = useState<IPage>(INIT_PAGE)
     const [loading, setLoading] = useState<boolean>(false)
@@ -69,9 +77,9 @@ const esfList = () => {
             keys: ['areaList']
         },
         {
-            type: 'price',
-            name: '价格',
-            keys: ['totalPrice', 'unitPrice']
+            type: 'rentPrice',
+            name: '租金',
+            keys: ['rentPrice']
         },
         {
             type: 'room',
@@ -80,21 +88,9 @@ const esfList = () => {
         },
         {
             type: 'more',
-            name: '更多',
-            keys: ['propertyType', 'fangBuildingType', 'renovationStatus', 'projectFeature']
+            name: '筛选',
+            keys: ['rentType', 'propertyType', 'fangBuildingType', 'renovationStatus', 'fangDirectionType']
         }]
-    const priceTabs = [
-        {
-            id: '1',
-            name: '按单价',
-            value: "unitPrice"
-        },
-        {
-            id: '2',
-            name: '按总价',
-            value: "totalPrice"
-        }
-    ]
 
     useEffect(() => {
         fetchCondition()
@@ -102,13 +98,13 @@ const esfList = () => {
 
     useEffect(() => {
         fetchHouseList(selected.currentPage)
-    }, [selected.currentPage, selected.areaList, selected.unitPrice, selected.totalPrice, selected.room])
+    }, [selected.currentPage, selected.areaList, selected.rentPrice, selected.room])
 
     const fetchCondition = () => {
         app.request({
             url: app.testApiUrl(api.getHouseAttr)
         }).then((result: any) => {
-            setCondition(result)
+            setCondition({ ...result, rentType: RENT_TYPE_ATTR })
         })
     }
 
@@ -119,11 +115,11 @@ const esfList = () => {
                 page: currentPage,
                 limit: PAGE_LIMIT,
                 fang_area_id: filterParam(selected.areaList?.id),
-                price: filterParam(selected.unitPrice?.id || selected.totalPrice?.id),
-                price_type: filterParam(selected.priceType),
+                rent_price: filterParam(selected.rentPrice?.id),
                 fang_room_type: filterParam(selected.room?.id),
-                fang_project_feature: selected.projectFeature?.id,
+                rent_type: selected.rentType?.id,
                 fang_renovation_status: selected.renovationStatus?.id,
+                fang_direction_type: selected.fangDirectionType?.id,
                 fang_property_type: selected.propertyType?.id,
                 fang_building_type: selected.fangBuildingType?.id
             }
@@ -173,31 +169,13 @@ const esfList = () => {
 
     const handleSingleClick = (key: string, item: any) => {
         setTab('')
-
-        if (key === 'unitPrice') {
-            setSelected({
-                ...selected,
-                totalPrice: initial_value,
-                priceType: '1',
-                [key]: item,
-                currentPage: INIT_CONDITION.currentPage
-            })
-        } else if (key === 'totalPrice') {
-            setSelected({
-                ...selected,
-                unitPrice: initial_value,
-                priceType: '2',
-                [key]: item,
-                currentPage: INIT_CONDITION.currentPage
-            })
-        } else {
-            setSelected({
-                ...selected,
-                [key]: item,
-                currentPage: INIT_CONDITION.currentPage
-            })
-        }
+        setSelected({
+            ...selected,
+            [key]: item,
+            currentPage: INIT_CONDITION.currentPage
+        })
     }
+
     const handleMultiClick = (key: string, item: any) => {
         let selectedValue = selected[key]
         if (selectedValue instanceof Object) {
@@ -218,9 +196,10 @@ const esfList = () => {
     const handleReset = () => {
         setSelected({
             ...selected,
+            rentType: initial_value,
             propertyType: initial_value,
             renovationStatus: initial_value,
-            projectFeature: initial_value
+            fangDirectionType: initial_value,
         })
     }
 
@@ -231,13 +210,13 @@ const esfList = () => {
 
     const handleHouseItemClick = (item: any) => {
         Taro.navigateTo({
-            url: `/house/esf/index/index?id=${item.id}&name=${item.title}`
+            url: `/house/rent/index/index?id=${item.id}&name=${item.title}`
         })
     }
 
     const handleSearchClick = () => {
         Taro.navigateTo({
-            url: `/house/esf/search/index`
+            url: `/house/rent/search/index`
         })
     }
 
@@ -303,18 +282,17 @@ const esfList = () => {
         return showList.join(',')
     }
     return (
-        <View className="esf">
-            <NavBar title="二手房" back={true} />
+        <View className="rent">
+            <NavBar title="租房" back={true} />
             <View className="fixed" style={{ top: appHeaderHeight }}>
-                <View className="esf-header view-content">
-                    <View className="esf-search" onClick={handleSearchClick}>
+                <View className="rent-header view-content">
+                    <View className="rent-search" onClick={handleSearchClick}>
                         <Text className="iconfont iconsearch"></Text>
-                        <Text className="esf-search-text placeholder">请输入小区或地址</Text>
+                        <Text className="rent-search-text placeholder">请输入小区或地址</Text>
                     </View>
                 </View>
                 <View className="search-tab">
                     {
-
                         tabs.map((item: any, index: number) => {
                             let showName = renderShowName(item)
                             return (
@@ -340,22 +318,10 @@ const esfList = () => {
                         </View>
                     </View>
                 </View>
-                <View className={classnames('search-container', tab === 'price' && 'actived')}>
+                <View className={classnames('search-container', tab === 'rentPrice' && 'actived')}>
                     <View className="search-content">
                         <View className="search-split">
-                            <View className="split-type flex-item">
-                                {
-                                    priceTabs.map((item: any) => (
-                                        <View
-                                            key={item.id}
-                                            className={classnames("split-item", item.value === priceType && 'actived')}
-                                            onClick={() => setPriceType(item.value)}>
-                                            {item.name}
-                                        </View>
-                                    ))
-                                }
-                            </View>
-                            {renderSplitItem(priceType)}
+                            {renderSplitItem('rentPrice')}
                         </View>
                     </View>
                 </View>
@@ -368,9 +334,10 @@ const esfList = () => {
                 </View>
                 <View className={classnames('search-container', 'search-multi-container', tab === 'more' && 'actived')}>
                     <ScrollView className="search-content search-content-scroll" scrollY style={{ maxHeight: scrollMoreHeight }}>
+                        {renderMultiItem('rentType', '租房类型')}
                         {renderMultiItem('propertyType', '建筑类型')}
                         {renderMultiItem('renovationStatus', '装修状况')}
-                        {renderMultiItem('projectFeature', '项目特色')}
+                        {renderMultiItem('fangDirectionType', '朝向')}
                     </ScrollView>
                     <View className="search-footer">
                         <View className="btn reset-btn" onClick={handleReset}>重置</View>
@@ -380,7 +347,7 @@ const esfList = () => {
             </View>
             <View className={classnames('mask', tab && 'show')} onClick={() => setTab('')}></View>
 
-            <View className="esf-content">
+            <View className="rent-content">
                 <ScrollView
                     className="house-list"
                     scrollY
@@ -404,13 +371,11 @@ const esfList = () => {
                                     <Text className="ml20">天润颐景园小区</Text>
                                 </View>
                                 <View className="text-item mb8">
-                                    <Text className="price">324</Text>
-                                    <Text className="price-unit">万</Text>
-                                    <Text className="small-desc ml20">23443元/m²</Text>
+                                    <Text className="price">1324</Text>
+                                    <Text className="price-unit">元/月</Text>
                                 </View>
                                 <View className="text-item tags">
-                                    <Text className="tags-item">特色房</Text>
-                                    <Text className="tags-item">南</Text>
+                                    <Text className="tags-item sale-status-2">整租</Text>
                                     <Text className="tags-item">精装修</Text>
                                 </View>
                             </View>
@@ -433,4 +398,4 @@ const esfList = () => {
         </View>
     )
 }
-export default esfList
+export default RentList

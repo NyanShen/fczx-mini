@@ -9,6 +9,7 @@ import NavBar from '@components/navbar/index'
 import new_house from '@assets/icons/new_house.png'
 import second_house from '@assets/icons/house.png'
 import rent_house from '@assets/icons/rent_house.png'
+import plot from '@assets/icons/plot.png'
 import news from '@assets/icons/news.png'
 import '@styles/common/house.scss'
 import './index.scss'
@@ -36,7 +37,7 @@ const Index = () => {
         }
       })
       return
-    } 
+    }
     if (currentCity.id !== city.id) {
       setCity(currentCity)
       fetchHouseList()
@@ -61,12 +62,17 @@ const Index = () => {
       {
         name: '二手房',
         icon: second_house,
-        path: '/house/esf/index'
+        path: '/house/esf/list/index'
       },
       {
         name: '租房',
         icon: rent_house,
-        path: '/house/rent/index'
+        path: '/house/rent/list/index'
+      },
+      {
+        name: '小区',
+        icon: plot,
+        path: '/house/plot/list/index'
       },
       {
         name: '资讯',
@@ -138,15 +144,15 @@ const Index = () => {
               <Image src="http://192.168.2.248/assets/images/1400x933_1.jpg"></Image>
             </View>
             <View className="li-text">
-              <View className="title mb10">
+              <View className="title mb8">
                 <Text>襄阳吾悦广场</Text>
               </View>
-              <View className="small-desc mb10">
+              <View className="small-desc mb8">
                 <Text>樊城区-樊城区</Text>
                 <Text className="line-split"></Text>
                 <Text>建面85-0139平米</Text>
               </View>
-              <View className="mb10">
+              <View className="mb8">
                 <Text className="price">1200</Text>
                 <Text className="price-unit">元/m²</Text>
               </View>
@@ -160,15 +166,15 @@ const Index = () => {
               <Image src="http://192.168.2.248/assets/images/1400x933_1.jpg"></Image>
             </View>
             <View className="li-text">
-              <View className="title mb10">
+              <View className="title mb8">
                 <Text>襄阳吾悦广场</Text>
               </View>
-              <View className="small-desc mb10">
+              <View className="small-desc mb8">
                 <Text>樊城区-樊城区</Text>
                 <Text className="line-split"></Text>
                 <Text>建面85-0139平米</Text>
               </View>
-              <View className="mb10">
+              <View className="mb8">
                 <Text className="price">1200</Text>
                 <Text className="price-unit">元/m²</Text>
               </View>

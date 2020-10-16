@@ -31,6 +31,14 @@ export default {
         'new/consultant/index',
         'city/index',
         'search/index',
+
+        'esf/index/index',
+        'esf/list/index',
+        'esf/search/index',
+
+        'rent/index/index',
+        'rent/list/index',
+        'rent/search/index',
       ]
     },
     {

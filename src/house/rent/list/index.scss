@@ -1,4 +1,4 @@
-.esf-header {
+.rent-header {
     display: flex;
     height: 70px;
     line-height: 70px;
@@ -7,13 +7,13 @@
     background-color: $white;
     z-index: 100;
 
-    .esf-search {
+    .rent-search {
         flex: 1;
         border-radius: 5px;
         padding: 0 20px;
         background-color: $bg-color;
 
-        .esf-search-text {
+        .rent-search-text {
             padding-left: 20px;
             &.placeholder {
                 color: $desc-color;
@@ -23,6 +23,6 @@
     
 }
 
-.esf-content {
+.rent-content {
     padding-top: 181px;
 }

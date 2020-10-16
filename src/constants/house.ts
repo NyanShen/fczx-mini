@@ -10,21 +10,6 @@ export const SALE_STATUS = {
     "3": "售罄"
 }
 
-export const SALE_STATUS_ATTR = [
-    {
-        id: '1',
-        name: '在售'
-    },
-    {
-        id: '2',
-        name: '待售'
-    },
-    {
-        id: '3',
-        name: '售罄'
-    }
-]
-
 export interface ISurroundTab {
     name: string
     type: string

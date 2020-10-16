@@ -10,7 +10,7 @@ import app from '@services/request'
 import NavBar from '@components/navbar/index'
 import useNavData from '@hooks/useNavData'
 import { IPage, INIT_PAGE, getTotalPage } from '@utils/page'
-import { PRICE_TYPE, SALE_STATUS, SALE_STATUS_ATTR } from '@constants/house'
+import { PRICE_TYPE, SALE_STATUS } from '@constants/house'
 import '@styles/common/house.scss'
 import '@styles/common/search-tab.scss'
 import './index.scss'
@@ -52,6 +52,21 @@ const INIT_CONDITION = {
     renovationStatus: initial_value,
     projectFeature: initial_value
 }
+
+const SALE_STATUS_ATTR = [
+    {
+        id: '1',
+        name: '在售'
+    },
+    {
+        id: '2',
+        name: '待售'
+    },
+    {
+        id: '3',
+        name: '售罄'
+    }
+]
 
 const NewHouse = () => {
     const { appHeaderHeight, contentHeight } = useNavData()
@@ -429,15 +444,15 @@ const NewHouse = () => {
                                         <Image src={item.image_path}></Image>
                                     </View>
                                     <View className="li-text">
-                                        <View className="text-item title mb10">
+                                        <View className="text-item title mb8">
                                             <Text>{item.title}</Text>
                                         </View>
-                                        <View className="text-item small-desc mb10">
+                                        <View className="text-item small-desc mb8">
                                             <Text>{item.area && item.area.name}</Text>
                                             <Text className="line-split"></Text>
                                             <Text>{item.address}</Text>
                                         </View>
-                                        <View className="mb10">
+                                        <View className="mb8">
                                             <Text className="price">{item.price}</Text>
                                             <Text className="price-unit">{PRICE_TYPE[item.price_type]}</Text>
                                         </View>
