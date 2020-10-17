@@ -149,6 +149,11 @@ const esfHouse = () => {
                         </View>
                     </View>
                 </View>
+                <View className="esf-item">
+                    <Text className="small-desc">
+                        免责声明：房源信息由网站用户提供，其真实性、合法性由信息提供者负责，最终以政府部门登记备案为准。本网站不声明或保证内容之正确性和可靠性，购买房屋时，请谨慎核查。请您在签订合同之前，切勿支付任何形式的费用，以免上当受骗。
+                    </Text>
+                </View>
             </ScrollView>
             <View className="bottom-bar">
                 <View className="bar-item">

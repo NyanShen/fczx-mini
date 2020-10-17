@@ -560,7 +560,7 @@ const House = () => {
                     </View>
                     <View className="house-item">
                         <View className="house-item-content">
-                            楼盘信息来源政府网站、开发商、第三方公众平台,最终以政府部门登记备案为主,请谨慎核查。如楼盘信息有误或者其他疑议，请拨打客服电话0632-00000000
+                            楼盘信息来源政府网站、开发商、第三方公众平台,最终以政府部门登记备案为主,请谨慎核查。
                         </View>
                     </View>
                 </View>
