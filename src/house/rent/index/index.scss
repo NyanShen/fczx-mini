@@ -1,10 +1,17 @@
 .rent {
-    &-content {
+    width: 100%;
+    height: 100vh;
+    background-color: $bg-color;
+    &-item {
         padding: 30px;
+        margin-bottom: 20px;
+        background-color: $white;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
 
         &-header {
-            padding-bottom: 30px;
-            border-bottom: 1px solid $bg-color;
             .mb16 {
                 margin-bottom: 16px;
             }
@@ -20,25 +27,113 @@
         }
 
         &-info {
-            margin-top: 30px;
+            .header {
+                height: 70px;
+                font-size: $font-32;
+            }
 
+            .plot-header {
+                display: flex;
+                justify-content: space-between;
+                height: 60px;
+                border-bottom: $border;
+                font-size: $font-basic;
+
+                .link {
+                    color: $pink;
+                }
+
+                .more {
+                    font-size: $font-24;
+                    color: $desc-color;
+                }
+            }
             .info-list {
                 display: flex;
                 flex-wrap: wrap;
-
                 .info-item {
                     width: 50%;
                     margin-top: 20px;
                     box-sizing: border-box;
                     font-size: $font-basic;
                     color: $title-color;
-                    .label {
-                        margin-right: 20px;
-                        color: $desc-color;
-                        letter-spacing: 4px;
+                }
+            }
+
+            .facility-content {
+                margin-top: 20px;
+
+                .facility-list {
+                    display: flex;
+                    flex-wrap: wrap;
+                    align-items: center;
+                    padding: 20px 0 30px 0;
+                    font-size: $font-basic;
+                    .facility-item {
+                        width: 25%;
+                        height: 50px;
+                        line-height: 50px;
+                        .iconcheck {
+                            margin-right: 10px;
+                            color: $pink;
+                            vertical-align: 2px;
+                        }
                     }
                 }
             }
+
+            .label {
+                margin-right: 20px;
+                color: $desc-color;
+                letter-spacing: 4px;
+                font-size: $font-basic;
+            }
+
+            .rent-tip {
+                padding-top: 30px;
+                border-top: 1px solid $bg-color;
+                font-size: $font-26;
+                color: $pink;
+            }
+
+            .rent-desc {
+                font-size: $font-basic;
+                color: $text-color;
+            }
+
+            .rent-info-consultant {
+                display: flex;
+                background-color: $primary-bg-color;
+                border-radius: $border-radius-base;
+                padding: 20px 30px;
+                margin-bottom: 20px;
+                .user-photo {
+                    margin-right: 20px;
+                }
+            }
+
+            .rent-map {
+                width: 100%;
+                height: 240px;
+                margin-top: 30px;
+                .map {
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+        }
+    }
+    .user-photo {
+        width: 80px;
+        height: 80px;
+        margin-right: 10px;
+        background-color: $bg-color;
+        border-radius: 50%;
+        overflow: hidden;
+
+        Image {
+            max-width: 100%;
+            max-height: 100%;
         }
     }
 }

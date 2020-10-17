@@ -15,6 +15,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.iconcheck:before {
+  content: "\e614";
+}
+
 .iconcopy:before {
   content: "\e706";
 }
