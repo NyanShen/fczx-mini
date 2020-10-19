@@ -70,12 +70,12 @@
 // 房源标签
 
 .tags {
-    height: 40px;
-    line-height: 40px;
     font-size: 24px;
     white-space: nowrap;
     overflow: hidden;
     &-item {
+        height: 40px;
+        line-height: 40px;
         margin-right: 20px;
         padding: 5px 10px;
         border-radius: 5px;

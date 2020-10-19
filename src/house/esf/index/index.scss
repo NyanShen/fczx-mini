@@ -15,7 +15,7 @@
             align-items: center;
             font-size: $font-40;
             color: $title-color;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             .title {
                 font-weight: bold;
             }
@@ -29,9 +29,25 @@
                 }
             }
         }
+        .address {
+            display: flex;
+            justify-content: space-between;
+            font-size: $font-basic;
+            margin-bottom: 20px;
+
+            .name {
+                flex: 1;
+                color: $desc-color;
+            }
+            .iconfont {
+                margin-left: 20px;
+                color: $search-actived;
+            }
+        }
         .esf-main-info {
             display: flex;
             justify-content: space-between;
+            margin-bottom: 20px;
             .main-item {
                 color: $tip-color;
                 .value {

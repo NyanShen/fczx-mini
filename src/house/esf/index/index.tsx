@@ -1,46 +1,99 @@
+import React, { useState } from 'react'
+import Taro, { getCurrentInstance, useReady } from '@tarojs/taro'
+import { ScrollView, View, Text, Image, Swiper, SwiperItem } from '@tarojs/components'
+
+import api from '@services/api'
+import app from '@services/request'
 import NavBar from '@components/navbar'
 import useNavData from '@hooks/useNavData'
-import { ScrollView, View, Text, Image } from '@tarojs/components'
-import React from 'react'
-
 import '@styles/common/house.scss'
+import '@styles/common/house-album.scss'
 import '@styles/common/bottom-bar.scss'
 import './index.scss'
-
+import { PRICE_TYPE } from '@constants/house'
+const INIT_ESF_DATA = {
+    esfImage: [],
+    tags: [],
+    area: {},
+    fangHouse: {},
+    fangRenovationStatus: {},
+    fangDirectionType: {},
+    fangPropertyType: {}
+}
 const esfHouse = () => {
+    const currentRouter: any = getCurrentInstance().router
+    const params: any = currentRouter.params
     const { contentHeight } = useNavData()
+    const [esfData, setEsfData] = useState<any>(INIT_ESF_DATA)
+
+    useReady(() => {
+        params.id = '1000027'
+        if (params.id) {
+            app.request({
+                url: app.testApiUrl(api.getEsfById),
+                data: {
+                    id: params.id
+                }
+            }).then((result: any) => {
+                setEsfData(result)
+            })
+        }
+    })
+
+    const toPlotIndex = () => {
+        Taro.navigateTo({
+            url: `/house/plot/index/index?Id=${esfData.fangHouse.id}`
+        })
+    }
+
     return (
         <View className="esf">
-            <NavBar title="二手房主页" back={true}></NavBar>
+            <NavBar title={esfData.title} back={true}></NavBar>
             <ScrollView style={{ maxHeight: contentHeight - 55 }} scrollY>
                 <View className="house-album">
-
+                    <Swiper style={{ height: '225px' }}>
+                        {
+                            esfData.esfImage.map((item: any, index: number) => (
+                                <SwiperItem key={index} itemId={item.id}>
+                                    <Image src={item.image_path}></Image>
+                                </SwiperItem>
+                            ))
+                        }
+                    </Swiper>
+                    <View className="album-count">共{esfData.esfImage.length}张</View>
                 </View>
                 <View className="esf-item">
                     <View className="header">
-                        <Text>家乐福商圈 天润颐景园 大三室，边户采光好 单价低 户型规整</Text>
+                        <Text>{esfData.title}</Text>
+                    </View>
+                    <View className="address">
+                        <View className="name">{esfData.area.name}-{esfData.address}</View>
+                        <View className="iconfont iconaddress">地址</View>
                     </View>
                     <View className="esf-main-info">
                         <View className="main-item">
-                            <Text className="value">85</Text>
+                            <Text className="value">{esfData.price_total}</Text>
                             <Text className="unit">万</Text>
                         </View>
                         <View className="main-item">
-                            <Text className="value">3</Text>
+                            <Text className="value">{esfData.room}</Text>
                             <Text className="unit">室</Text>
-                            <Text className="value">2</Text>
+                            <Text className="value">{esfData.office}</Text>
                             <Text className="unit">厅</Text>
-                            <Text className="value">1</Text>
+                            <Text className="value">{esfData.toilet}</Text>
                             <Text className="unit">卫</Text>
                         </View>
                         <View className="main-item">
-                            <Text className="value">112</Text>
+                            <Text className="value">{esfData.building_area}</Text>
                             <Text className="unit">㎡</Text>
                         </View>
                     </View>
-                    <View className="tags mt20">
-                        <Text className="tags-item">精装</Text>
-                        <Text className="tags-item">新上房源</Text>
+                    <View className="tags">
+                        {
+                            esfData.tags.map((item: string, index: number) => (
+                                <Text key={index} className="tags-item">{item}</Text>
+                            ))
+                        }
                     </View>
                 </View>
                 <View className="esf-item">
@@ -51,35 +104,35 @@ const esfHouse = () => {
                         <View className="other-item">
                             <View className="subitem">
                                 <Text className="label">单价</Text>
-                                <Text className="value">7760元/㎡</Text>
+                                <Text className="value">{esfData.price_unit}元/㎡</Text>
                             </View>
                         </View>
                         <View className="other-item">
                             <View className="subitem">
                                 <Text className="label">楼层</Text>
-                                <Text className="value">中层/29层</Text>
+                                <Text className="value">第{esfData.height_self}层/共{esfData.height_total}层</Text>
                             </View>
                             <View className="subitem">
                                 <Text className="label">装修</Text>
-                                <Text className="value">精装</Text>
+                                <Text className="value">{esfData.fangRenovationStatus.name}</Text>
                             </View>
                         </View>
                         <View className="other-item">
                             <View className="subitem">
                                 <Text className="label">朝向</Text>
-                                <Text className="value">南</Text>
+                                <Text className="value">{esfData.fangDirectionType.name}</Text>
                             </View>
                             <View className="subitem">
                                 <Text className="label">年代</Text>
-                                <Text className="value">2017</Text>
+                                <Text className="value">{esfData.build_year}年</Text>
                             </View>
                         </View>
                         <View className="other-item">
                             <View className="subitem">
                                 <Text className="label">小区</Text>
-                                <Text className="value">旺达广场</Text>
+                                <Text className="value">{esfData.fangHouse.title}</Text>
                             </View>
-                            <View className="subitem link">
+                            <View className="subitem link" onClick={toPlotIndex}>
                                 <Text className="iconfont iconarrow-right-bold"></Text>
                             </View>
                         </View>
@@ -101,50 +154,42 @@ const esfHouse = () => {
                     <View className="esf-info-item">
                         <View className="sub-title">核心卖点</View>
                         <View className="item-content">
-                            【房屋位置】：绿地中央广场斜对面，如日电器家属楼
-                            【户型朝向】：南向
-                            【装修情况】：简装，现房
-                            【房屋信息】：2室1厅1卫，面积41.9平米
+                            {esfData.selling_point}
                         </View>
                     </View>
                     <View className="esf-info-item">
                         <View className="sub-title">业主心态</View>
                         <View className="item-content">
-                            郑重！此房源为新盘，不会产生任何费用,预约可带看，享团购优惠,欢迎您的咨询，享受额外渠道到访优惠价
+                            {esfData.attitude_point}
                         </View>
                     </View>
                     <View className="esf-info-item">
                         <View className="sub-title">服务介绍</View>
                         <View className="item-content">
-                            本人从事房地产多年，公司有大量好房源，欢迎进入我的店铺查看，欢迎随时电话咨询，相信我的专业，为您置业安家保驾护航。
+                            {esfData.service_point}
                         </View>
                     </View>
                 </View>
                 <View className="esf-item">
                     <View className="header">
                         <View>小区详情</View>
-                        <View className="more">
+                        <View className="more" onClick={toPlotIndex}>
                             <Text>查看</Text>
                             <Text className="iconfont iconarrow-right-bold"></Text>
                         </View>
                     </View>
                     <View className="plot-content">
-                        <View className="plot-name">天润颐景园</View>
+                        <View className="plot-name">{esfData.fangHouse.title}</View>
                         <View className="plot-info">
                             <View className="plot-item">
                                 <View className="label">参考均价</View>
-                                <View className="value price-unit">7980元/㎡</View>
-                            </View>
-                            <View className="plot-item">
-                                <View className="label">环比上月</View>
-                                <View className="value">
-                                    <Text className="iconfont"></Text>
-                                    <Text className="tip-color">1.78%</Text>
+                                <View className="value price-unit">
+                                    {esfData.fangHouse.price}{PRICE_TYPE[esfData.fangHouse.price_type]}
                                 </View>
                             </View>
                             <View className="plot-item">
                                 <View className="label">小区地址</View>
-                                <View className="value">襄阳万达广场</View>
+                                <View className="value">{esfData.fangHouse.address}</View>
                             </View>
                         </View>
                     </View>

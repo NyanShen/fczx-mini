@@ -114,7 +114,7 @@ const esfList = () => {
 
     const fetchHouseList = (currentPage: number = 1) => {
         app.request({
-            url: app.areaApiUrl(api.getHouseList),
+            url: app.testApiUrl(api.getEsfList),
             data: {
                 page: currentPage,
                 limit: PAGE_LIMIT,
@@ -389,32 +389,38 @@ const esfList = () => {
                     onScrollToLower={handleScrollToLower}
                 >
                     <View className="house-list-ul">
-                        <View className="house-list-li" onClick={() => handleHouseItemClick({})}>
-                            <View className="li-image">
-                                <Image src=""></Image>
-                            </View>
-                            <View className="li-text">
-                                <View className="text-item row2">
-                                    <Text>家乐福商圈 天润颐景园 大三室，边户采光好 单价低 户型规整</Text>
+                        {
+                            houseList.map((item: any, index: number) => (
+                                <View key={index} className="house-list-li" onClick={() => handleHouseItemClick({})}>
+                                    <View className="li-image">
+                                        <Image src={item.image_path}></Image>
+                                    </View>
+                                    <View className="li-text">
+                                        <View className="text-item row2">
+                                            <Text>{item.title}</Text>
+                                        </View>
+                                        <View className="text-item text-item-small">
+                                            <Text>{item.room}室{item.office}厅{item.toilet}卫</Text>
+                                            <Text className="line-split"></Text>
+                                            <Text>{item.building_area}m²</Text>
+                                            <Text className="ml20">{item.community}</Text>
+                                        </View>
+                                        <View className="text-item mb8">
+                                            <Text className="price">{item.price_total}</Text>
+                                            <Text className="price-unit">万</Text>
+                                            <Text className="small-desc ml20">{item.price_unit}元/m²</Text>
+                                        </View>
+                                        <View className="text-item tags">
+                                            {
+                                                item.tags.map((item: string, index: number) => (
+                                                    <Text key={index} className="tags-item">{item}</Text>
+                                                ))
+                                            }
+                                        </View>
+                                    </View>
                                 </View>
-                                <View className="text-item text-item-small">
-                                    <Text>2室2厅1卫</Text>
-                                    <Text className="line-split"></Text>
-                                    <Text>120m²</Text>
-                                    <Text className="ml20">天润颐景园小区</Text>
-                                </View>
-                                <View className="text-item mb8">
-                                    <Text className="price">324</Text>
-                                    <Text className="price-unit">万</Text>
-                                    <Text className="small-desc ml20">23443元/m²</Text>
-                                </View>
-                                <View className="text-item tags">
-                                    <Text className="tags-item">特色房</Text>
-                                    <Text className="tags-item">南</Text>
-                                    <Text className="tags-item">精装修</Text>
-                                </View>
-                            </View>
-                        </View>
+                            ))
+                        }
                     </View>
                     {
                         loading &&

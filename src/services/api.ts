@@ -26,5 +26,8 @@ export default {
     getHouseConsultantList: '/house/consultant-list',
     postHouseCustomer: '/house/customer',
 
+    getEsfList: '/esf/list',
+    getEsfById: '/esf/get',
+
     uploadFile: '/file/upload'
 }

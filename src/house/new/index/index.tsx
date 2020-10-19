@@ -199,7 +199,7 @@ const House = () => {
                 itemId={video.id}
                 onClick={() => toHouseVideo(video)}
             >
-                <Image src={video.image_path} mode='widthFix'></Image>
+                <Image src={video.image_path}></Image>
                 <Text className="icon-vedio"></Text>
             </SwiperItem>
         )
@@ -326,7 +326,7 @@ const House = () => {
                     >
                         {houseData.imagesData.video && renderVideo(houseData.imagesData.video)}
                         <SwiperItem itemId={imageId} onClick={() => toHouseModule('album')}>
-                            <Image src={houseData.image_path} mode='widthFix'></Image>
+                            <Image src={houseData.image_path}></Image>
                         </SwiperItem>
                     </Swiper>
                     <View className="album-count">共{houseData.imagesData.imageCount}张</View>
