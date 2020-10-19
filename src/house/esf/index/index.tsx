@@ -12,7 +12,7 @@ const esfHouse = () => {
     return (
         <View className="esf">
             <NavBar title="二手房主页" back={true}></NavBar>
-            <ScrollView style={{ maxHeight: `${contentHeight - 55}px` }} scrollY>
+            <ScrollView style={{ maxHeight: contentHeight - 55 }} scrollY>
                 <View className="house-album">
 
                 </View>

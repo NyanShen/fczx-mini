@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import Taro from '@tarojs/taro'
 import { View, ScrollView, Text, Image, Map } from '@tarojs/components'
 
 import NavBar from '@components/navbar'
@@ -33,10 +34,16 @@ const RentIndex = () => {
     const { contentHeight } = useNavData()
     const [rentData] = useState<any>({ rentMarker: initMarker })
 
+    const toPlotIndex = () => {
+        Taro.navigateTo({
+            url: '/house/plot/index/index'
+        })
+    }
+
     return (
         <View className="rent">
             <NavBar title="租房" back={true}></NavBar>
-            <ScrollView style={{ maxHeight: `${contentHeight - 55}px` }} scrollY>
+            <ScrollView style={{ maxHeight: contentHeight - 55 }} scrollY>
                 <View className="house-album">
 
                 </View>
@@ -142,7 +149,7 @@ const RentIndex = () => {
                 </View>
                 <View className="rent-item">
                     <View className="rent-item-info">
-                        <View className="plot-header">
+                        <View className="plot-header" onClick={toPlotIndex}>
                             <View className="title">
                                 <Text>小区详情：</Text>
                                 <Text className="link">中豪旁边天然气小区</Text>

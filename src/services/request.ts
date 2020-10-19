@@ -50,7 +50,7 @@ app.request = (params: any, { loading = true, toast = true }: any = {}) => {
             'X-Page-Size': limit
         }
         params.header = { ...params.header, ...pageParam }
-        delete params.data.Page
+        delete params.data.page
         delete params.data.limit
     }
     return new Promise((resolve, reject) => {
