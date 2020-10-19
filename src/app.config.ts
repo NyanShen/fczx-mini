@@ -3,7 +3,7 @@ import { Config } from '@tarojs/taro';
 export default {
   pages: [
     // 'news/detail/index',
-    // 'house/plot/index/index',
+    // 'house/plot/list/index',
     'pages/index/index',
     'pages/chat/index',
     'pages/user/index',
@@ -40,7 +40,9 @@ export default {
         'rent/list/index',
         'rent/search/index',
 
-        'plot/index/index'
+        'plot/index/index',
+        'plot/list/index',
+        'plot/search/index'
       ]
     },
     {

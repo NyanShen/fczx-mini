@@ -1,0 +1,27 @@
+.plot-header {
+    display: flex;
+    height: 70px;
+    line-height: 70px;
+    padding-top: 20px;
+    font-size: $font-basic;
+    background-color: $white;
+    z-index: 100;
+
+    .plot-search {
+        flex: 1;
+        border-radius: 5px;
+        padding: 0 20px;
+        background-color: $bg-color;
+
+        .plot-search-text {
+            padding-left: 20px;
+            &.placeholder {
+                color: $desc-color;
+            }
+        }
+    }
+}
+
+.plot-content {
+    padding-top: 181px;
+}
