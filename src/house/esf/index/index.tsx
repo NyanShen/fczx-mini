@@ -20,10 +20,21 @@ const INIT_ESF_DATA = {
     fangDirectionType: {},
     fangPropertyType: {}
 }
+
+interface IAlbum {
+    currentIdex: number
+}
+
+const INIT_ALNUM = {
+    currentIdex: 0
+}
+
 const esfHouse = () => {
     const currentRouter: any = getCurrentInstance().router
     const params: any = currentRouter.params
-    const { contentHeight } = useNavData()
+    const { appHeaderHeight, contentHeight } = useNavData()
+    const [open, setOpen] = useState<boolean>(false)
+    const [album, setAlbum] = useState<IAlbum>(INIT_ALNUM)
     const [esfData, setEsfData] = useState<any>(INIT_ESF_DATA)
 
     useReady(() => {
@@ -40,6 +51,13 @@ const esfHouse = () => {
         }
     })
 
+    const onSwiperChange = (event) => {
+        let swiperIndex = event.detail.current;
+        setAlbum({
+            currentIdex: swiperIndex
+        })
+    }
+
     const toPlotIndex = () => {
         Taro.navigateTo({
             url: `/house/plot/index/index?Id=${esfData.fangHouse.id}`
@@ -51,10 +69,14 @@ const esfHouse = () => {
             <NavBar title={esfData.title} back={true}></NavBar>
             <ScrollView style={{ maxHeight: contentHeight - 55 }} scrollY>
                 <View className="house-album">
-                    <Swiper style={{ height: '225px' }}>
+                    <Swiper
+                        style={{ height: '225px' }}
+                        current={album.currentIdex}
+                        onChange={onSwiperChange}
+                    >
                         {
                             esfData.esfImage.map((item: any, index: number) => (
-                                <SwiperItem key={index} itemId={item.id}>
+                                <SwiperItem key={index} itemId={item.id} onClick={() => setOpen(true)}>
                                     <Image src={item.image_path}></Image>
                                 </SwiperItem>
                             ))
@@ -217,6 +239,33 @@ const esfHouse = () => {
                     <Text className="btn btn-primary btn-bar">电话咨询</Text>
                 </View>
             </View>
+            {
+                open &&
+                <View className="album-swiper" style={{ top: appHeaderHeight }}>
+                    <View className="album-swiper-header">
+                        <View className="album-count">
+                            <Text>{album.currentIdex + 1}/{esfData.esfImage.length}</Text>
+                        </View>
+                        <View className="iconfont iconclose" onClick={() => setOpen(false)}></View>
+                    </View>
+                    <View className="album-swiper-content">
+                        <Swiper
+                            style={{ height: contentHeight - 80 }}
+                            current={album.currentIdex}
+                            onChange={onSwiperChange}
+                        >
+                            {
+                                esfData.esfImage.map((item: any, index: number) => (
+                                    <SwiperItem key={index}>
+                                        <Image className="swiper-image" src={item.image_path} mode='widthFix'></Image>
+                                        <View className="swiper-text"></View>
+                                    </SwiperItem>
+                                ))
+                            }
+                        </Swiper>
+                    </View>
+                </View>
+            }
         </View>
     )
 }
