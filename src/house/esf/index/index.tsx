@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Taro, { getCurrentInstance, useReady } from '@tarojs/taro'
+import Taro, { getCurrentInstance, makePhoneCall, useReady } from '@tarojs/taro'
 import { ScrollView, View, Text, Image, Swiper, SwiperItem } from '@tarojs/components'
 
 import api from '@services/api'
@@ -61,6 +61,12 @@ const esfHouse = () => {
     const toPlotIndex = () => {
         Taro.navigateTo({
             url: `/house/plot/index/index?Id=${esfData.fangHouse.id}`
+        })
+    }
+
+    const handlePhoneCall = () => {
+        makePhoneCall({
+            phoneNumber: esfData.mobile
         })
     }
 
@@ -235,7 +241,7 @@ const esfHouse = () => {
                 <View className="bar-item-btn">
                     <Text className="btn btn-yellow btn-bar">在线咨询</Text>
                 </View>
-                <View className="bar-item-btn">
+                <View className="bar-item-btn" onClick={handlePhoneCall}>
                     <Text className="btn btn-primary btn-bar">电话咨询</Text>
                 </View>
             </View>

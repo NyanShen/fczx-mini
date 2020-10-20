@@ -13,7 +13,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: $font-40;
+            font-size: $font-36;
             color: $title-color;
             margin-bottom: 20px;
             .title {
@@ -51,7 +51,7 @@
             .main-item {
                 color: $tip-color;
                 .value {
-                    font-size: $font-40;
+                    font-size: $font-36;
                     font-weight: bold;
                 }
                 .unit {
@@ -65,7 +65,7 @@
             margin-bottom: 30px;
             .other-item {
                 display: flex;
-                font-size: $font-32;
+                font-size: $font-30;
                 .subitem {
                     flex: 1;
                     margin-bottom: 20px;
