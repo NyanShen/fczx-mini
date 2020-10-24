@@ -29,5 +29,8 @@ export default {
     getEsfList: '/esf/list',
     getEsfById: '/esf/get',
 
+    getRentList: '/rent/list',
+    getRentById: '/rent/get',
+
     uploadFile: '/file/upload'
 }

@@ -302,17 +302,15 @@ const House = () => {
         )
     }
 
-    const getSandCommonComponent = useMemo(() => {
-        return (
-            <SandCommon
-                houseId={houseData.id}
-                outerHeight={200}
-                currentBuilding={{}}
-                setCurrentBuilding={toHouseSand}
-                updateSandBuilding={() => { }}
-            />
-        )
-    }, [houseData.id])
+    const getSandCommonComponent = useMemo(() => (
+        <SandCommon
+            houseId={houseData.id}
+            outerHeight={200}
+            currentBuilding={{}}
+            setCurrentBuilding={toHouseSand}
+            updateSandBuilding={() => { }}
+        />
+    ), [houseData.id])
 
     return (
         <View className="house">
