@@ -73,7 +73,7 @@ const House = () => {
                 if (video) {
                     setAlbumSwiper({ albumId: video.id, swiperIndex: 0 })
                 } else {
-                    setAlbumSwiper({ albumId: imageId, swiperIndex: 1 })
+                    setAlbumSwiper({ albumId: imageId, swiperIndex: 0 })
                 }
             })
         }

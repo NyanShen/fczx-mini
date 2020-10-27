@@ -1,8 +1,26 @@
 .news {
+    &-cate {
+        width: 100%;
+        height: 80px;
+        line-height: 80px;
+        font-size: $font-30;
+        white-space: nowrap;
+        border-bottom: $border;
+
+        .news-cate-item {
+            padding: 0 30px;
+            display: inline-block;
+
+            &.actived {
+                color: $primary-color;
+                border-bottom: 4px solid $primary-color;
+            }
+        }
+    }
     &-content {
         .news-item {
             display: flex;
-            padding: 30px 0;
+            padding: 30px;
             border-bottom: 1px solid $bg-color;
 
             .item-text {

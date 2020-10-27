@@ -99,7 +99,7 @@ const RentIndex = () => {
         })
     }
 
-    const toPlotIndex = () => {
+    const toCommunity = () => {
         Taro.navigateTo({
             url: '/house/community/index/index'
         })
@@ -218,7 +218,7 @@ const RentIndex = () => {
                 </View>
                 <View className="rent-item">
                     <View className="rent-item-info">
-                        <View className="community-header" onClick={toPlotIndex}>
+                        <View className="community-header" onClick={toCommunity}>
                             <View className="title">
                                 <Text>小区详情：</Text>
                                 <Text className="link">{rentData.fangHouse.title}</Text>

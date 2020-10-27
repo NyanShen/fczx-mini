@@ -35,5 +35,9 @@ export default {
     getCommunityList: '/community/list',
     getCommunityById: '/community/get',
 
+    getNewsById: '/news/get',
+    getNewsList: '/news/list',
+    getNewsCateList: '/news/cate-list',
+
     uploadFile: '/file/upload'
 }

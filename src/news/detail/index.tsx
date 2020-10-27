@@ -1,23 +1,44 @@
-import React from 'react'
-import { View, Text } from '@tarojs/components'
+import React, { useEffect, useState } from 'react'
+import { View, Text, RichText } from '@tarojs/components'
 
+import api from '@services/api'
+import app from '@services/request'
 import NavBar from '@components/navbar'
+import { formatTimestamp } from '@utils/index'
+import { getCurrentInstance } from '@tarojs/taro'
 import './index.scss'
 
 const NewsDetail = () => {
+    const router = getCurrentInstance().router
+    const [newsData, setNewData] = useState<any>({ newsInfo: {} })
+
+    useEffect(() => {
+        app.request({
+            url: app.areaApiUrl(api.getNewsById),
+            data: {
+                id: router?.params.id
+            }
+        }).then((result: any) => {
+            setNewData(result)
+        })
+    }, [])
+
     return (
         <View className="news-detail">
-            <NavBar title="君瑞城十月工程进度|抓住黄金施工期 加速度前进！" back={true}></NavBar>
+            <NavBar title={newsData.title} back={true}></NavBar>
             <View className="news-detail-content view-content">
                 <View className="header">
-                    <Text className="title">君瑞城十月工程进度|抓住黄金施工期 加速度前进！</Text>
+                    <Text className="title">{newsData.title}</Text>
                 </View>
                 <View className="small-desc">
-                    <Text>房产在线</Text>
-                    <Text className="ml16">2020-10-13 17:50:55</Text>
+                    <Text>{newsData.author}</Text>
+                    <Text className="ml16">{newsData.modified && formatTimestamp(newsData.modified)}</Text>
                 </View>
                 <View className="content">
-                    内容
+                    {
+                        newsData.newsInfo.content &&
+                        <RichText nodes={newsData.newsInfo.content.replace(/img/ig, 'img style="width: 100%; height: auto;"')}></RichText>
+                    }
                 </View>
             </View>
         </View>

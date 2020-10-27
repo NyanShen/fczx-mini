@@ -58,7 +58,7 @@ const esfHouse = () => {
         })
     }
 
-    const toPlotIndex = () => {
+    const toCommunity = () => {
         Taro.navigateTo({
             url: `/house/community/index/index?Id=${esfData.fangHouse.id}`
         })
@@ -160,7 +160,7 @@ const esfHouse = () => {
                                 <Text className="label">小区</Text>
                                 <Text className="value">{esfData.fangHouse.title}</Text>
                             </View>
-                            <View className="subitem link" onClick={toPlotIndex}>
+                            <View className="subitem link" onClick={toCommunity}>
                                 <Text className="iconfont iconarrow-right-bold"></Text>
                             </View>
                         </View>
@@ -201,7 +201,7 @@ const esfHouse = () => {
                 <View className="esf-item">
                     <View className="header">
                         <View>小区详情</View>
-                        <View className="more" onClick={toPlotIndex}>
+                        <View className="more" onClick={toCommunity}>
                             <Text>查看</Text>
                             <Text className="iconfont iconarrow-right-bold"></Text>
                         </View>

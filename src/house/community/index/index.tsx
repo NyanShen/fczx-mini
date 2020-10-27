@@ -1,13 +1,27 @@
 import React, { useEffect, useState } from 'react'
-import { getCurrentInstance } from '@tarojs/taro'
-import { View, ScrollView, Text, Map } from '@tarojs/components'
+import Taro, { getCurrentInstance } from '@tarojs/taro'
+import { View, ScrollView, Text, Map, Swiper, SwiperItem, Image } from '@tarojs/components'
+import classnames from 'classnames'
 
 import api from '@services/api'
 import app from '@services/request'
 import NavBar from '@components/navbar'
 import useNavData from '@hooks/useNavData'
-import './index.scss'
+import { toUrlParam } from '@utils/urlHandler'
+import { fetchUserData } from '@services/login'
 import { PRICE_TYPE } from '@constants/house'
+import '@styles/common/house-album.scss'
+import './index.scss'
+
+interface IAlbumSwiper {
+    albumId: string,
+    swiperIndex: number
+}
+
+const INIT_ALBUM_SWIPER = {
+    albumId: '',
+    swiperIndex: 0
+}
 
 const INIT_HOUSE_DATA = {
     id: '',
@@ -15,14 +29,18 @@ const INIT_HOUSE_DATA = {
     tags: [],
     marker: [],
     area: {},
+    imagesData: {},
     fangHouseInfo: {},
 }
+const imageId = "image_1"
+
 const CommunityIndex = () => {
 
     const { contentHeight } = useNavData()
     let currentRouter: any = getCurrentInstance().router
-    let params: any = currentRouter.params
+    let params: any = currentRouter?.params
     const [communityData, setCommunityData] = useState<any>(INIT_HOUSE_DATA)
+    const [albumSwiper, setAlbumSwiper] = useState<IAlbumSwiper>(INIT_ALBUM_SWIPER)
 
     useEffect(() => {
         params.id = '1000006'
@@ -55,13 +73,83 @@ const CommunityIndex = () => {
                     }
                 ]
                 setCommunityData({ ...result, marker: initMarker })
-
+                const video = result.imagesData.video
+                if (video) {
+                    setAlbumSwiper({ albumId: video.id, swiperIndex: 0 })
+                } else {
+                    setAlbumSwiper({ albumId: imageId, swiperIndex: 0 })
+                }
             })
         }
     }, [])
 
+    const onSwiperChange = (event) => {
+        let swiperIndex = event.detail.current;
+        let currentItem = event.detail.currentItemId.split(',');
+        let albumId = currentItem[0];
+        setAlbumSwiper({
+            albumId,
+            swiperIndex
+        })
+    }
+
+    const switchAlbum = (albumId: string, swiperIndex: number) => {
+        setAlbumSwiper({
+            albumId,
+            swiperIndex
+        })
+    }
+
+    const toHouseModule = (module: string, checkLogin: boolean = false) => {
+        const paramString = toUrlParam({
+            id: communityData.id,
+            title: communityData.title
+        })
+        const targetUrl = `/house/new/${module}/index${paramString}`
+        if (checkLogin) {
+            fetchUserData(targetUrl)
+                .then(() => {
+                    Taro.navigateTo({ url: targetUrl })
+                })
+            return
+        }
+        Taro.navigateTo({ url: targetUrl })
+    }
+
+    const toHouseVideo = (video: any) => {
+        const paramString = toUrlParam({
+            id: communityData.id,
+            title: communityData.title,
+            video: JSON.stringify(video)
+        })
+        Taro.navigateTo({
+            url: `/house/new/video/index${paramString}`
+        })
+    }
+
     const valueFilter = (value, unit: string = '') => {
         return value ? `${value}${unit}` : '暂无'
+    }
+
+    const renderVideo = (video: any) => {
+        return (
+            <SwiperItem
+                itemId={video.id}
+                onClick={() => toHouseVideo(video)}
+            >
+                <Image src={video.image_path}></Image>
+                <Text className="icon-vedio"></Text>
+            </SwiperItem>
+        )
+    }
+
+    const renderVideoTab = (video: any) => {
+        return (
+            <Text
+                className={classnames('album-text-item', video.id == albumSwiper.albumId && 'album-text-actived')}
+                onClick={() => switchAlbum(video.id, 0)}
+            >视频</Text>
+        )
     }
 
     return (
@@ -69,7 +157,24 @@ const CommunityIndex = () => {
             <NavBar title={communityData.title} back={true}></NavBar>
             <ScrollView style={{ maxHeight: contentHeight }} scrollY>
                 <View className="house-album">
-
+                    <Swiper
+                        style={{ height: '225px' }}
+                        current={albumSwiper.swiperIndex}
+                        onChange={onSwiperChange}
+                    >
+                        {communityData.imagesData.video && renderVideo(communityData.imagesData.video)}
+                        <SwiperItem itemId={imageId} onClick={() => toHouseModule('album')}>
+                            <Image src={communityData.image_path}></Image>
+                        </SwiperItem>
+                    </Swiper>
+                    <View className="album-count">共{communityData.imagesData.imageCount}张</View>
+                    <View className="album-text">
+                        {communityData.imagesData.video && renderVideoTab(communityData.imagesData.video)}
+                        <Text
+                            className={classnames('album-text-item', imageId == albumSwiper.albumId && 'album-text-actived')}
+                            onClick={() => switchAlbum(imageId, 1)}
+                        >图片</Text>
+                    </View>
                 </View>
                 <View className="community-content view-content">
                     <View className="community-item">
@@ -120,8 +225,8 @@ const CommunityIndex = () => {
                                 <Text className="value">{valueFilter(communityData.build_year)}</Text>
                             </View>
                             <View className="community-info-item">
-                                <Text className="label">建筑类型</Text>
-                                <Text className="value">板楼</Text>
+                                <Text className="label">产权年限</Text>
+                                <Text className="value">{valueFilter(communityData.fangHouseInfo.property_rights)}</Text>
                             </View>
                             <View className="community-info-item">
                                 <Text className="label">物业费</Text>
