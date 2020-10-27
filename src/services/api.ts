@@ -32,5 +32,8 @@ export default {
     getRentList: '/rent/list',
     getRentById: '/rent/get',
 
+    getCommunityList: '/community/list',
+    getCommunityById: '/community/get',
+
     uploadFile: '/file/upload'
 }

@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import Taro, { getCurrentInstance, makePhoneCall, useReady } from '@tarojs/taro'
+import React, { useEffect, useState } from 'react'
+import Taro, { getCurrentInstance, makePhoneCall } from '@tarojs/taro'
 import { ScrollView, View, Text, Image, Swiper, SwiperItem } from '@tarojs/components'
 
 import api from '@services/api'
@@ -37,7 +37,7 @@ const esfHouse = () => {
     const [album, setAlbum] = useState<IAlbum>(INIT_ALNUM)
     const [esfData, setEsfData] = useState<any>(INIT_ESF_DATA)
 
-    useReady(() => {
+    useEffect(() => {
         params.id = '1000027'
         if (params.id) {
             app.request({
@@ -49,7 +49,7 @@ const esfHouse = () => {
                 setEsfData(result)
             })
         }
-    })
+    }, [])
 
     const onSwiperChange = (event) => {
         let swiperIndex = event.detail.current;
@@ -60,7 +60,7 @@ const esfHouse = () => {
 
     const toPlotIndex = () => {
         Taro.navigateTo({
-            url: `/house/plot/index/index?Id=${esfData.fangHouse.id}`
+            url: `/house/community/index/index?Id=${esfData.fangHouse.id}`
         })
     }
 
@@ -206,16 +206,16 @@ const esfHouse = () => {
                             <Text className="iconfont iconarrow-right-bold"></Text>
                         </View>
                     </View>
-                    <View className="plot-content">
-                        <View className="plot-name">{esfData.fangHouse.title}</View>
-                        <View className="plot-info">
-                            <View className="plot-item">
+                    <View className="community-content">
+                        <View className="community-name">{esfData.fangHouse.title}</View>
+                        <View className="community-info">
+                            <View className="community-item">
                                 <View className="label">参考均价</View>
                                 <View className="value price-unit">
                                     {esfData.fangHouse.price}{PRICE_TYPE[esfData.fangHouse.price_type]}
                                 </View>
                             </View>
-                            <View className="plot-item">
+                            <View className="community-item">
                                 <View className="label">小区地址</View>
                                 <View className="value">{esfData.fangHouse.address}</View>
                             </View>

@@ -9,7 +9,7 @@ import NavBar from '@components/navbar/index'
 import new_house from '@assets/icons/new_house.png'
 import second_house from '@assets/icons/house.png'
 import rent_house from '@assets/icons/rent_house.png'
-import plot from '@assets/icons/plot.png'
+import community from '@assets/icons/community.png'
 import news from '@assets/icons/news.png'
 import '@styles/common/house.scss'
 import './index.scss'
@@ -71,8 +71,8 @@ const Index = () => {
       },
       {
         name: '小区',
-        icon: plot,
-        path: '/house/plot/list/index'
+        icon: community,
+        path: '/house/community/list/index'
       },
       {
         name: '资讯',

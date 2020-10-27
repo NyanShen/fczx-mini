@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { getCurrentInstance, useReady, makePhoneCall } from '@tarojs/taro'
+import React, { useEffect, useState } from 'react'
+import { getCurrentInstance, makePhoneCall } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
 
 import api from '@services/api'
@@ -22,7 +22,7 @@ const INIT_HOUSE_DATA = {
 
 const HouseDetail = () => {
     const [houseData, setHouseData] = useState<any>(INIT_HOUSE_DATA)
-    useReady(() => {
+    useEffect(() => {
         let currentRouter: any = getCurrentInstance().router
         let params: any = currentRouter.params
         params.id = '1001'
@@ -37,7 +37,8 @@ const HouseDetail = () => {
 
             })
         }
-    })
+    }, [])
+
     const renderDetail = (value: string) => {
         return value ? value : '待更新'
     }

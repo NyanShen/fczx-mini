@@ -102,7 +102,7 @@ const RentList = () => {
 
     const fetchCondition = () => {
         app.request({
-            url: app.testApiUrl(api.getHouseAttr)
+            url: app.areaApiUrl(api.getHouseAttr)
         }).then((result: any) => {
             setCondition({ ...result, rentType: RENT_TYPE_ATTR })
         })

@@ -1,6 +1,6 @@
-.plot {
+.community {
     &-content {
-        .plot-item {
+        .community-item {
             margin-top: 30px;
             .header {
                 font-size: $font-32;
@@ -25,12 +25,12 @@
                     color: $search-actived;
                 }
             }
-            .plot-price {
+            .community-price {
                 display: flex;
                 justify-content: space-between;
                 font-size: $font-basic;
             }
-            .plot-house {
+            .community-house {
                 display: flex;
                 justify-content: space-around;
                 border: $border;
@@ -62,7 +62,7 @@
                     background-color: $bg-color;
                 }
             }
-            .plot-info {
+            .community-info {
                 display: flex;
                 flex-wrap: wrap;
                 font-size: $font-basic;
@@ -81,7 +81,7 @@
                 }
             }
 
-            .plot-map {
+            .community-map {
                 width: 100%;
                 height: 240px;
 

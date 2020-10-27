@@ -5,13 +5,13 @@ import { View } from '@tarojs/components'
 import api from '@services/api'
 import Search, { ISearchOption } from '@components/search/index'
 
-const PlotSearch = () => {
+const CommunitySearch = () => {
 
-  const searchOption: ISearchOption[] = [{ type: "plot", name: "小区" }]
+  const searchOption: ISearchOption[] = [{ type: "community", name: "小区" }]
 
   const handleItemClick = (item: any) => {
     Taro.navigateTo({
-      url: `/house/plot/index/index?id=${item.id}&name=${item.name}`
+      url: `/house/community/index/index?id=${item.id}&name=${item.name}`
     })
   }
 
@@ -29,5 +29,5 @@ const PlotSearch = () => {
   )
 }
 
-export default PlotSearch
+export default CommunitySearch
 

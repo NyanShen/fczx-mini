@@ -1,5 +1,5 @@
-import React, { useMemo, useState } from 'react'
-import Taro, { getCurrentInstance, makePhoneCall, useReady } from '@tarojs/taro'
+import React, { useEffect, useMemo, useState } from 'react'
+import Taro, { getCurrentInstance, makePhoneCall } from '@tarojs/taro'
 import { View, ScrollView, Swiper, SwiperItem, Image, Text, Button, Map } from '@tarojs/components'
 import classnames from 'classnames'
 
@@ -59,7 +59,7 @@ const House = () => {
     const [albumSwiper, setAlbumSwiper] = useState<IAlbumSwiper>(INIT_ALBUM_SWIPER)
     const [houseData, setHouseData] = useState<any>(INIT_HOUSE_DATA)
 
-    useReady(() => {
+    useEffect(() => {
         params.id = '1000006'
         if (params.id) {
             app.request({
@@ -77,7 +77,7 @@ const House = () => {
                 }
             })
         }
-    })
+    }, [])
 
     const initHouseMarker = (houseData) => {
         return {

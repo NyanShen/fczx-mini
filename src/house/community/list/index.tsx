@@ -11,6 +11,7 @@ import { IPage, INIT_PAGE, getTotalPage } from '@utils/page'
 import '@styles/common/house.scss'
 import '@styles/common/search-tab.scss'
 import './index.scss'
+import { PRICE_TYPE } from '@constants/house'
 
 interface IFilter {
     id: string
@@ -21,8 +22,8 @@ interface IFilter {
 interface IConditionState {
     currentPage: number
     areaList?: IFilter
-    price?: IFilter
-    year?: IFilter
+    unitPrice?: IFilter
+    buildYear?: IFilter
 }
 
 const default_value = { id: 'all', name: '不限' }
@@ -30,11 +31,11 @@ const default_value = { id: 'all', name: '不限' }
 const INIT_CONDITION = {
     currentPage: 1,
     areaList: default_value,
-    price: default_value,
-    year: default_value
+    unitPrice: default_value,
+    buildYear: default_value
 }
 
-const PlotList = () => {
+const CommunityList = () => {
     const { appHeaderHeight, contentHeight } = useNavData()
     const PAGE_LIMIT = 10
     const footerBtnHeight = 60
@@ -53,14 +54,14 @@ const PlotList = () => {
             keys: ['areaList']
         },
         {
-            type: 'price',
+            type: 'unitPrice',
             name: '均价',
-            keys: ['price']
+            keys: ['unitPrice']
         },
         {
-            type: 'year',
+            type: 'buildYear',
             name: '房龄',
-            keys: ['year']
+            keys: ['buildYear']
         }]
 
     useEffect(() => {
@@ -69,7 +70,7 @@ const PlotList = () => {
 
     useEffect(() => {
         fetchHouseList(selected.currentPage)
-    }, [selected.currentPage, selected.areaList, selected.price, selected.year])
+    }, [selected.currentPage, selected.areaList, selected.unitPrice, selected.buildYear])
 
     const fetchCondition = () => {
         app.request({
@@ -81,13 +82,13 @@ const PlotList = () => {
 
     const fetchHouseList = (currentPage: number = 1) => {
         app.request({
-            url: app.areaApiUrl(api.getHouseList),
+            url: app.areaApiUrl(api.getCommunityList),
             data: {
                 page: currentPage,
                 limit: PAGE_LIMIT,
                 fang_area_id: filterParam(selected.areaList?.id),
-                price: filterParam(selected.price?.id),
-                fang_year: filterParam(selected.year?.id),
+                price: filterParam(selected.unitPrice?.id),
+                buildYear: filterParam(selected.buildYear?.id),
 
             }
         }, { loading: false }).then((result: any) => {
@@ -145,13 +146,13 @@ const PlotList = () => {
 
     const handleHouseItemClick = (item: any) => {
         Taro.navigateTo({
-            url: `/house/plot/index/index?id=${item.id}&name=${item.title}`
+            url: `/house/community/index/index?id=${item.id}&name=${item.title}`
         })
     }
 
     const handleSearchClick = () => {
         Taro.navigateTo({
-            url: `/house/plot/search/index`
+            url: `/house/community/search/index`
         })
     }
 
@@ -196,13 +197,13 @@ const PlotList = () => {
         return showList.join(',')
     }
     return (
-        <View className="plot">
+        <View className="community">
             <NavBar title="小区" back={true} />
             <View className="fixed" style={{ top: appHeaderHeight }}>
-                <View className="plot-header view-content">
-                    <View className="plot-search" onClick={handleSearchClick}>
+                <View className="community-header view-content">
+                    <View className="community-search" onClick={handleSearchClick}>
                         <Text className="iconfont iconsearch"></Text>
-                        <Text className="plot-search-text placeholder">请输入小区或地址</Text>
+                        <Text className="community-search-text placeholder">请输入小区或地址</Text>
                     </View>
                 </View>
                 <View className="search-tab">
@@ -233,24 +234,24 @@ const PlotList = () => {
                         </View>
                     </View>
                 </View>
-                <View className={classnames('search-container', tab === 'price' && 'actived')}>
+                <View className={classnames('search-container', tab === 'unitPrice' && 'actived')}>
                     <View className="search-content">
                         <View className="search-split">
-                            {renderSplitItem('price')}
+                            {renderSplitItem('unitPrice')}
                         </View>
                     </View>
                 </View>
-                <View className={classnames('search-container', tab === 'year' && 'actived')}>
+                <View className={classnames('search-container', tab === 'buildYear' && 'actived')}>
                     <View className="search-content">
                         <View className="search-split">
-                            {renderSplitItem('year')}
+                            {renderSplitItem('buildYear')}
                         </View>
                     </View>
                 </View>
             </View>
             <View className={classnames('mask', tab && 'show')} onClick={() => setTab('')}></View>
 
-            <View className="plot-content">
+            <View className="community-content">
                 <ScrollView
                     className="house-list"
                     scrollY
@@ -259,29 +260,33 @@ const PlotList = () => {
                     onScrollToLower={handleScrollToLower}
                 >
                     <View className="house-list-ul">
-                        <View className="house-list-li" onClick={() => handleHouseItemClick({})}>
-                            <View className="li-image">
-                                <Image src=""></Image>
-                            </View>
-                            <View className="li-text">
-                                <View className="text-item row2">
-                                    <Text>天润颐景园小区</Text>
+                        {
+                            houseList.map((item: any, index: number) => (
+                                <View key={index} className="house-list-li" onClick={() => handleHouseItemClick(item)}>
+                                    <View className="li-image">
+                                        <Image src={item.image_path}></Image>
+                                    </View>
+                                    <View className="li-text">
+                                        <View className="text-item row2">
+                                            <Text>{item.title}</Text>
+                                        </View>
+                                        <View className="text-item text-item-small">
+                                            <Text>{item.area.name}</Text>
+                                            <Text className="ml20">{item.address}</Text>
+                                        </View>
+                                        <View className="text-item mb8">
+                                            <Text className="price">{item.price}</Text>
+                                            <Text className="price-unit">{PRICE_TYPE[item.price_type]}</Text>
+                                        </View>
+                                        <View className="text-item text-item-small">
+                                            <Text>二手房({item.house_num})</Text>
+                                            <Text className="ml20">租房({item.rent_num})</Text>
+                                            <Text className="ml20">{item.build_year}年</Text>
+                                        </View>
+                                    </View>
                                 </View>
-                                <View className="text-item text-item-small">
-                                    <Text>樊城区</Text>
-                                    <Text className="ml20">万达广场</Text>
-                                </View>
-                                <View className="text-item mb8">
-                                    <Text className="price">23443</Text>
-                                    <Text className="price-unit">元/m²</Text>
-                                </View>
-                                <View className="text-item text-item-small">
-                                    <Text>二手房(323)</Text>
-                                    <Text className="ml20">租房(102)</Text>
-                                    <Text className="ml20">2011年</Text>
-                                </View>
-                            </View>
-                        </View>
+                            ))
+                        }
                     </View>
                     {
                         loading &&
@@ -300,4 +305,4 @@ const PlotList = () => {
         </View>
     )
 }
-export default PlotList
+export default CommunityList

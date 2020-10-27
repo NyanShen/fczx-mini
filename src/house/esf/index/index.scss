@@ -107,16 +107,16 @@
             }
         }
 
-        .plot-content {
+        .community-content {
             border: 1px solid $bg-color;
             border-radius: $border-radius-base;
             padding: 30px 20px;
-            .plot-name {
+            .community-name {
                 font-size: $font-32;
                 margin-bottom: 20px;
             }
-            .plot-info {
-                .plot-item {
+            .community-info {
+                .community-item {
                     display: flex;
                     line-height: 50px;
                     font-size: $font-basic;
