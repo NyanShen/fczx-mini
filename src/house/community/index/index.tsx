@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Taro, { getCurrentInstance } from '@tarojs/taro'
-import { View, ScrollView, Text, Map, Swiper, SwiperItem, Image } from '@tarojs/components'
+import { View, ScrollView, Text, Swiper, SwiperItem, Image } from '@tarojs/components'
 import classnames from 'classnames'
 
 import api from '@services/api'
@@ -9,9 +9,13 @@ import NavBar from '@components/navbar'
 import useNavData from '@hooks/useNavData'
 import { toUrlParam } from '@utils/urlHandler'
 import { fetchUserData } from '@services/login'
-import { PRICE_TYPE } from '@constants/house'
+import { PRICE_TYPE, SURROUND_TABS, ISurroundTab, INIT_SURROUND_TAB } from '@constants/house'
+
+import '@styles/common/house.scss'
 import '@styles/common/house-album.scss'
+import '@house/new/surround/index.scss'
 import './index.scss'
+import { getStaticMap } from '@utils/map'
 
 interface IAlbumSwiper {
     albumId: string,
@@ -51,28 +55,8 @@ const CommunityIndex = () => {
                     id: params.id
                 }
             }).then((result: any) => {
-                const initMarker = [
-                    {
-                        latitude: result.latitude,
-                        longitude: result.longitude,
-                        width: 30,
-                        height: 30,
-                        iconPath: 'http://192.168.2.248/assets/mini/location.png',
-                        callout: {
-                            content: result.title,
-                            color: '#fff',
-                            fontSize: 14,
-                            borderWidth: 2,
-                            borderRadius: 5,
-                            borderColor: '#11a43c',
-                            bgColor: '#11a43c',
-                            padding: 5,
-                            display: 'ALWAYS',
-                            textAlign: 'center'
-                        }
-                    }
-                ]
-                setCommunityData({ ...result, marker: initMarker })
+                const static_map = getStaticMap(result.longitude, result.latitude)
+                setCommunityData({ ...result, static_map: static_map })
                 const video = result.imagesData.video
                 if (video) {
                     setAlbumSwiper({ albumId: video.id, swiperIndex: 0 })
@@ -124,6 +108,20 @@ const CommunityIndex = () => {
         })
         Taro.navigateTo({
             url: `/house/new/video/index${paramString}`
+        })
+    }
+
+    const toHouseSurround = (currentTab: ISurroundTab = INIT_SURROUND_TAB) => {
+        const { id, title, latitude, longitude } = communityData
+        const paramString = toUrlParam({
+            id,
+            title: title,
+            latitude,
+            longitude,
+            tab: JSON.stringify(currentTab),
+        })
+        Taro.navigateTo({
+            url: `/house/new/surround/index${paramString}`
         })
     }
 
@@ -250,16 +248,28 @@ const CommunityIndex = () => {
                         <View className="header">
                             <Text>小区位置及周边</Text>
                         </View>
-                        <View className="community-map">
-                            <Map
-                                id="communityMap"
-                                className="map"
-                                latitude={communityData.latitude}
-                                longitude={communityData.longitude}
-                                enableZoom={false}
-                                markers={communityData.marker}
-                            >
-                            </Map>
+                        <View className="surround-wrapper">
+                            <View className="map">
+                                <Image className="map-image" src={communityData.static_map} mode="center"></Image>
+                                <View className="map-label">
+                                    <View className="text">{communityData.title}</View>
+                                    <View className="iconfont iconmap"></View>
+                                </View>
+                            </View>
+                            <View className="surround-tabs">
+                                {
+                                    SURROUND_TABS.map((item: any, index: number) => (
+                                        <View
+                                            key={index}
+                                            className={classnames('tabs-item')}
+                                            onClick={() => toHouseSurround(item)}
+                                        >
+                                            <Text className={classnames('iconfont', item.icon)}></Text>
+                                            <Text className="text">{item.name}</Text>
+                                        </View>
+                                    ))
+                                }
+                            </View>
                         </View>
                     </View>
                     <View className="community-item">

@@ -7,17 +7,41 @@ import api from '@services/api'
 import app from '@services/request'
 import NavBar from '@components/navbar/index'
 import useNavData from '@hooks/useNavData'
+import { bMapTransQQMap } from '@utils/map'
 import { SURROUND_TABS, ISurroundTab } from '@constants/house'
 import './index.scss'
 
 const houseSurround = () => {
-    let currentRouter: any = getCurrentInstance().router
-    let params: any = currentRouter.params
-    const currentTab = JSON.parse(params.tab)
-    const houseMarker = JSON.parse(params.houseMarker)
+
+    const router: any = getCurrentInstance().router
+    const currentTab = JSON.parse(router?.params.tab)
+    const title = router?.params.title
+    const b_latitude = router?.params.latitude
+    const b_longitude = router?.params.longitude
+    const { latitude, longitude } = bMapTransQQMap(b_latitude, b_longitude)
     const { contentHeight } = useNavData()
     const [tab, setTab] = useState<ISurroundTab>(currentTab)
-    const [markers, setMarkers] = useState<any[]>([houseMarker]);
+    const [markers, setMarkers] = useState<any[]>([]);
+
+    const houseMarker = {
+        latitude: latitude,
+        longitude: longitude,
+        width: 30,
+        height: 30,
+        iconPath: 'http://192.168.2.248/assets/mini/location.png',
+        callout: {
+            content: title,
+            color: '#fff',
+            fontSize: 14,
+            borderWidth: 2,
+            borderRadius: 5,
+            borderColor: '#11a43c',
+            bgColor: '#11a43c',
+            padding: 5,
+            display: 'ALWAYS',
+            textAlign: 'center'
+        }
+    }
 
     useEffect(() => {
         app.request({
@@ -28,9 +52,10 @@ const houseSurround = () => {
         }).then((result: any) => {
             const surroundMarkers: any[] = []
             for (const item of result) {
+                const { latitude, longitude } = bMapTransQQMap(item.latitude, item.longitude)
                 surroundMarkers.push({
-                    latitude: item.lat,
-                    longitude: item.lng,
+                    latitude,
+                    longitude,
                     width: 24,
                     height: 36,
                     iconPath: `http://192.168.2.248/assets/mini/${tab.type}.png`,
@@ -52,15 +77,14 @@ const houseSurround = () => {
 
     return (
         <View className="surround">
-            <NavBar title="楼盘周边" back={true} />
+            <NavBar title={title || '周边及配套'} back={true} />
             <View className="surround-wrapper" style={{ height: contentHeight }}>
                 <Map
                     id="surroundMap"
                     className="surround-map"
-                    latitude={houseMarker.latitude}
-                    longitude={houseMarker.longitude}
+                    latitude={latitude}
+                    longitude={longitude}
                     markers={markers}
-                    enableZoom={false}
                 >
                 </Map>
                 <View className="surround-tabs">

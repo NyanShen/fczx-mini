@@ -46,17 +46,6 @@ const INIT_CONDITION = {
     fangDirectionType: initial_value,
 }
 
-const RENT_TYPE_ATTR = [
-    {
-        id: '1',
-        name: '整租'
-    },
-    {
-        id: '2',
-        name: '合租'
-    }
-]
-
 const RentList = () => {
     const { appHeaderHeight, contentHeight } = useNavData()
     const PAGE_LIMIT = 10
@@ -104,7 +93,7 @@ const RentList = () => {
         app.request({
             url: app.areaApiUrl(api.getHouseAttr)
         }).then((result: any) => {
-            setCondition({ ...result, rentType: RENT_TYPE_ATTR })
+            setCondition(result)
         })
     }
 

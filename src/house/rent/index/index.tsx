@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Taro, { getCurrentInstance, makePhoneCall } from '@tarojs/taro'
-import { View, ScrollView, Text, Image, Map, Swiper, SwiperItem } from '@tarojs/components'
+import { View, ScrollView, Text, Image, Swiper, SwiperItem } from '@tarojs/components'
 
 import api from '@services/api'
 import app from '@services/request'
@@ -9,6 +9,7 @@ import useNavData from '@hooks/useNavData'
 import { formatTimestamp } from '@utils/index'
 import '@styles/common/bottom-bar.scss'
 import './index.scss'
+import { getStaticMap } from '@utils/map'
 
 interface IAlbum {
     currentIdex: number
@@ -65,29 +66,9 @@ const RentIndex = () => {
                     id: params.id
                 }
             }).then((result: any) => {
-
-                const INIT_MARKER = [
-                    {
-                        latitude: result.fangHouse.latitude,
-                        longitude: result.fangHouse.longitude,
-                        width: 30,
-                        height: 30,
-                        iconPath: 'http://192.168.2.248/assets/mini/location.png',
-                        callout: {
-                            content: result.fangHouse.title,
-                            color: '#fff',
-                            fontSize: 14,
-                            borderWidth: 2,
-                            borderRadius: 5,
-                            borderColor: '#11a43c',
-                            bgColor: '#11a43c',
-                            padding: 5,
-                            display: 'ALWAYS',
-                            textAlign: 'center'
-                        }
-                    }
-                ]
-                setRentData({ ...result, ...{ rentMarker: INIT_MARKER } })
+                const { longitude, latitude } = result.fangHouse
+                const static_map = getStaticMap(longitude, latitude)
+                setRentData({ ...result, ...{ static_map: static_map } })
             })
         }
     }, [])
@@ -103,6 +84,18 @@ const RentIndex = () => {
         Taro.navigateTo({
             url: '/house/community/index/index'
         })
+    }
+
+    const toLocation = () => {
+        const { longitude, latitude } = rentData.fangHouse
+        Taro.openLocation({
+            latitude: Number(latitude),
+            longitude: Number(longitude),
+            scale: 18,
+            name: rentData.title,
+            address: rentData.address
+        })
+
     }
 
     return (
@@ -130,7 +123,10 @@ const RentIndex = () => {
                         <View className="title mb16">
                             {rentData.title}
                         </View>
-                        <View className="address mb16">{rentData.area.name}-{rentData.address}</View>
+                        <View className="address mb16">
+                            <View className="name">{rentData.area.name}-{rentData.address}</View>
+                            <View className="iconfont iconaddress" onClick={toLocation}>地址</View>
+                        </View>
                         <View className="small-desc mb16">
                             更新时间：{formatTimestamp(rentData.modified)}
                         </View>
@@ -227,16 +223,12 @@ const RentIndex = () => {
                                 <Text className="iconfont iconarrow-right-bold"></Text>
                             </View>
                         </View>
-                        <View className="rent-map">
-                            <Map
-                                id="rentMap"
-                                className="map"
-                                latitude={rentData.fangHouse.latitude}
-                                longitude={rentData.fangHouse.longitude}
-                                enableZoom={false}
-                                markers={rentData.rentMarker}
-                            >
-                            </Map>
+                        <View className="map" onClick={toLocation}>
+                            <Image className="map-image" src={rentData.static_map} mode="center"></Image>
+                            <View className="map-label">
+                                <View className="text">{rentData.fangHouse.title}</View>
+                                <View className="iconfont iconmap"></View>
+                            </View>
                         </View>
                     </View>
                 </View>

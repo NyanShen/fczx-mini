@@ -82,7 +82,7 @@ const CommunityList = () => {
 
     const fetchHouseList = (currentPage: number = 1) => {
         app.request({
-            url: app.areaApiUrl(api.getCommunityList),
+            url: app.testApiUrl(api.getCommunityList),
             data: {
                 page: currentPage,
                 limit: PAGE_LIMIT,

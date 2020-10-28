@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import Taro, { getCurrentInstance, makePhoneCall } from '@tarojs/taro'
-import { View, ScrollView, Swiper, SwiperItem, Image, Text, Button, Map } from '@tarojs/components'
+import { View, ScrollView, Swiper, SwiperItem, Image, Text, Button } from '@tarojs/components'
 import classnames from 'classnames'
 
 import api from '@services/api'
@@ -12,7 +12,8 @@ import useNavData from '@hooks/useNavData'
 import NavBar from '@components/navbar/index'
 import Popup from '@components/popup/index'
 import SandCommon from '@house/new/sand/common'
-import { SALE_STATUS, PRICE_TYPE, SURROUND_TABS, ISurroundTab } from '@constants/house'
+import { getStaticMap } from '@utils/map'
+import { SALE_STATUS, PRICE_TYPE, SURROUND_TABS, ISurroundTab, INIT_SURROUND_TAB } from '@constants/house'
 
 import '@styles/common/house.scss'
 import '@styles/common/house-album.scss'
@@ -29,12 +30,6 @@ interface IAlbumSwiper {
 const INIT_ALBUM_SWIPER = {
     albumId: '',
     swiperIndex: 0
-}
-
-const INIT_SURROUND_TAB = {
-    name: '交通',
-    type: 'traffic',
-    icon: 'icontraffic'
 }
 
 const INIT_HOUSE_DATA = {
@@ -68,7 +63,8 @@ const House = () => {
                     id: params.id
                 }
             }).then((result: any) => {
-                setHouseData({ ...result, houseMarker: initHouseMarker(result) })
+                const static_map = getStaticMap(result.longitude, result.latitude)
+                setHouseData({ ...result, ...{ static_map: static_map } })
                 const video = result.imagesData.video
                 if (video) {
                     setAlbumSwiper({ albumId: video.id, swiperIndex: 0 })
@@ -78,28 +74,6 @@ const House = () => {
             })
         }
     }, [])
-
-    const initHouseMarker = (houseData) => {
-        return {
-            latitude: houseData.latitude,
-            longitude: houseData.longitude,
-            width: 30,
-            height: 30,
-            iconPath: 'http://192.168.2.248/assets/mini/location.png',
-            callout: {
-                content: houseData.title,
-                color: '#fff',
-                fontSize: 14,
-                borderWidth: 2,
-                borderRadius: 5,
-                borderColor: '#11a43c',
-                bgColor: '#11a43c',
-                padding: 5,
-                display: 'ALWAYS',
-                textAlign: 'center'
-            }
-        }
-    }
 
     const onSwiperChange = (event) => {
         let swiperIndex = event.detail.current;
@@ -135,12 +109,13 @@ const House = () => {
     }
 
     const toHouseSurround = (currentTab: ISurroundTab = INIT_SURROUND_TAB) => {
-        const { id, title, houseMarker } = houseData
+        const { id, title, latitude, longitude } = houseData
         const paramString = toUrlParam({
             id,
             title: title,
+            latitude,
+            longitude,
             tab: JSON.stringify(currentTab),
-            houseMarker: JSON.stringify(houseMarker),
         })
         Taro.navigateTo({
             url: `/house/new/surround/index${paramString}`
@@ -489,16 +464,14 @@ const House = () => {
                         </View>
                     </View>
                     <View className="house-item-content surround">
-                        <View className="surround-wrapper" style={{ height: 225 }}>
-                            <Map
-                                id="surroundMap"
-                                className="surround-map"
-                                latitude={houseData.latitude}
-                                longitude={houseData.longitude}
-                                markers={[houseData.houseMarker]}
-                                enableZoom={false}
-                            >
-                            </Map>
+                        <View className="surround-wrapper">
+                            <View className="map">
+                                <Image className="map-image" src={houseData.static_map} mode="center"></Image>
+                                <View className="map-label">
+                                    <View className="text">{houseData.title}</View>
+                                    <View className="iconfont iconmap"></View>
+                                </View>
+                            </View>
                             <View className="surround-tabs">
                                 {
                                     SURROUND_TABS.map((item: any, index: number) => (

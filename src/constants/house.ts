@@ -43,3 +43,9 @@ export const SURROUND_TABS: ISurroundTab[] = [
         icon: 'iconShopping'
     }
 ]
+
+export const INIT_SURROUND_TAB = {
+    name: '',
+    type: '',
+    icon: ''
+}

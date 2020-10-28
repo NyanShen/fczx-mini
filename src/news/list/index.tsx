@@ -30,7 +30,7 @@ const NewsList = () => {
     useEffect(() => {
         app.request({
             url: app.areaApiUrl(api.getNewsCateList),
-        }).then((result: any) => {
+        }, { loading: false }).then((result: any) => {
             setNewsCate(result)
             setParam({
                 newsCateId: result[0].id,
