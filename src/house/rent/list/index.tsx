@@ -349,7 +349,7 @@ const RentList = () => {
                             houseList.map((item: any, index: number) => (
                                 <View key={index} className="house-list-li" onClick={() => handleHouseItemClick(item)}>
                                     <View className="li-image">
-                                        <Image src={item.image_path}></Image>
+                                        <Image src={item.image_path} mode="aspectFill"></Image>
                                     </View>
                                     <View className="li-text">
                                         <View className="text-item row2">

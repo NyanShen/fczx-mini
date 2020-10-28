@@ -441,7 +441,7 @@ const NewHouse = () => {
                             houseList.length > 0 && houseList.map((item: any) => (
                                 <View className="house-list-li" key={item.id} onClick={() => handleHouseItemClick(item)}>
                                     <View className="li-image">
-                                        <Image src={item.image_path}></Image>
+                                        <Image src={item.image_path} mode="aspectFill"></Image>
                                     </View>
                                     <View className="li-text">
                                         <View className="text-item title mb8">

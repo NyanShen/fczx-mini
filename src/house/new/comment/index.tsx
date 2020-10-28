@@ -99,7 +99,7 @@ const HouseComment = () => {
                                     {
                                         item.image_path &&
                                         <View className="context-image">
-                                            <Image src={item.image_path} />
+                                            <Image src={item.image_path} mode="aspectFill" />
                                         </View>
                                     }
                                     <View className="context-footer">

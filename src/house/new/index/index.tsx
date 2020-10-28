@@ -406,7 +406,7 @@ const House = () => {
                                     <SwiperItem key={index}>
                                         <View className="swiper-item" onClick={() => toHouseTypeDetail(item)}>
                                             <View className="item-image">
-                                                <Image src={item.image_path}></Image>
+                                                <Image src={item.image_path} mode="aspectFill"></Image>
                                             </View>
                                             <View className="item-text tags">
                                                 <Text>{item.room}室{item.office}厅{item.toilet}卫</Text>

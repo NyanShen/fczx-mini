@@ -17,7 +17,6 @@ const HouseTypeDetail = () => {
     const params: any = currentRouter.params
     const { appHeaderHeight, contentHeight } = useNavData()
     const [open, setOpen] = useState<boolean>(false)
-    const [style, setStlye] = useState<any>({})
     const [houseType, setHouseType] = useState<any>({ tags: [], fangHouse: {} })
 
     useEffect(() => {
@@ -30,27 +29,6 @@ const HouseTypeDetail = () => {
             setHouseType(result)
         })
     }, [])
-
-    const handleLoaded = (e) => {
-        const maxWidth = Taro.getSystemInfoSync().windowWidth
-        const maxHeight = 280
-        const ratio = maxWidth / maxHeight
-        const realWidth = e.detail.width
-        const realHeight = e.detail.height
-        const imgRatio = realWidth / realHeight
-
-        if (ratio > imgRatio) {
-            setStlye({
-                width: realWidth * (maxHeight / realHeight),
-                height: maxHeight
-            })
-        } else {
-            setStlye({
-                width: maxWidth,
-                height: realHeight * (maxWidth / realWidth)
-            })
-        }
-    }
     
     const handlePhoneCall = () => {
         Taro.makePhoneCall({
@@ -72,11 +50,7 @@ const HouseTypeDetail = () => {
                     style={{ maxHeight: contentHeight - bottomHeight }}
                 >
                     <View className="detail-image" onClick={() => setOpen(true)}>
-                        <Image
-                            src={houseType.image_path}
-                            onLoad={handleLoaded}
-                            style={style}
-                        ></Image>
+                        <Image src={houseType.image_path} mode="aspectFit"></Image>
                     </View>
                     <View className="detail-header">
                         <View className="title">{houseType.name}</View>

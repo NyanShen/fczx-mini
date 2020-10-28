@@ -154,7 +154,7 @@ const AlbumList = () => {
                                                 className="album-list-item"
                                                 onClick={() => handleImageClick(item, imageIndex)}
                                             >
-                                                <Image src={imageItem.image_path}></Image>
+                                                <Image src={imageItem.image_path} mode="aspectFill"></Image>
                                             </View>
                                         ))
                                     }
