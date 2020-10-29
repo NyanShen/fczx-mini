@@ -23,7 +23,6 @@ interface ISearchProps {
   searchRemark?: string
   searchUrl: string
   hotListUrl?: string
-  onItemClick: (any, ISearchOption) => void
 }
 
 const Search = (props: ISearchProps) => {
@@ -31,7 +30,6 @@ const Search = (props: ISearchProps) => {
   const INIT_OPTION = props.searchOption[0]
   const INIT_HISTORIES = storage.getItem('histories', `search_${INIT_OPTION.name}`) || []
   const { contentHeight } = useNavData()
-  const [clear, setClear] = useState(false)
   const [hotList, setHotList] = useState([])
   const [matcheList, setMatcheList] = useState([])
   const [searchValue, setSearchValue] = useState("")
@@ -65,18 +63,29 @@ const Search = (props: ISearchProps) => {
       searchHistories.push(item)
     }
     storage.setItem('histories', searchHistories, `search_${option.name}`)
-    props.onItemClick(item, option)
+    Taro.navigateTo({
+      url: `/house/${option.type}/index/index?id=${item.id}&title=${item.title}`
+    })
   }
 
   const handleInput = (event) => {
+    console.log('handleInput')
     let keyValue = event.currentTarget.value
     if (keyValue) {
-      setClear(true)
+      updateKeyList(keyValue)
     } else {
-      setClear(false)
+      setMatcheList([])
     }
     setSearchValue(keyValue)
-    updateKeyList(keyValue)
+  }
+
+  const handleConfirm = () => {
+    if (searchValue) {
+      storage.setItem('histories', searchHistories, `search_${option.name}`)
+      Taro.redirectTo({
+        url: `/house/${option.type}/list/index?title=${searchValue}`
+      })
+    }
   }
 
   const updateKeyList = (keyValue) => {
@@ -88,12 +97,11 @@ const Search = (props: ISearchProps) => {
         limit: 50
       }
     }, { loading: false }).then((result: any) => {
-      setMatcheList(result.data || [])
+      setMatcheList(result.data)
     })
   }
 
   const clearSearchValue = () => {
-    setClear(false)
     setSearchValue("")
   }
 
@@ -158,8 +166,16 @@ const Search = (props: ISearchProps) => {
             <Text className="search-label-text">{option.name}</Text>
             <Text className={classnames('iconfont', isMultiply ? 'iconarrow-down-bold' : 'iconsearch')}></Text>
           </View>
-          <Input className="search-input" placeholder={props.searchRemark} onInput={handleInput} value={searchValue} autoFocus></Input>
-          {clear && <Text className="iconfont iconclear" onClick={clearSearchValue}></Text>}
+          <Input
+            className="search-input"
+            placeholder={props.searchRemark}
+            onInput={handleInput}
+            onConfirm={handleConfirm}
+            value={searchValue}
+            confirmType="search"
+            autoFocus
+          ></Input>
+          {searchValue && <Text className="iconfont iconclear" onClick={clearSearchValue}></Text>}
           {showOption &&
             <View className="search-options">
               <View className="triangle-up">
@@ -174,6 +190,10 @@ const Search = (props: ISearchProps) => {
       <ScrollView scrollY style={{ maxHeight: contentHeight - 50 }}>
         {searchValue ?
           <View className="search-matches">
+            <View className="match-header" onClick={handleConfirm}>
+              <View>搜索“{searchValue}”</View>
+              <View className="iconfont iconarrow-right-bold"></View>
+            </View>
             {
               matcheList.map((item: any, index: number) => {
                 return (

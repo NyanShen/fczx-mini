@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Taro from '@tarojs/taro'
+import Taro, { getCurrentInstance } from '@tarojs/taro'
 import { View, Text, ScrollView, Image } from '@tarojs/components'
 import classnames from 'classnames'
 import find from 'lodash/find'
@@ -82,6 +82,8 @@ const NewHouse = () => {
     const [showEmpty, setShowEmpty] = useState<boolean>(false)
     const [condition, setCondition] = useState<any>()
     const [houseList, setHouseList] = useState<any>([])
+    const router = getCurrentInstance().router
+    const title = router?.params.title
     const tabs = [
         {
             type: 'areaList',
@@ -136,6 +138,7 @@ const NewHouse = () => {
         app.request({
             url: app.areaApiUrl(api.getHouseList),
             data: {
+                title: title || '',
                 page: currentPage,
                 limit: PAGE_LIMIT,
                 fang_area_id: filterParam(selected.areaList?.id),
@@ -347,7 +350,9 @@ const NewHouse = () => {
                 <View className="newhouse-header view-content">
                     <View className="newhouse-search" onClick={handleSearchClick}>
                         <Text className="iconfont iconsearch"></Text>
-                        <Text className="newhouse-search-text placeholder">请输入楼盘名称或地址</Text>
+                        <Text className={classnames('newhouse-search-text', !title && 'placeholder')}>
+                            {title ? title : '请输入楼盘名称或地址'}
+                        </Text>
                     </View>
                     <View className="newhouse-nav-right">
                         <Text className="iconfont iconaddress"></Text>

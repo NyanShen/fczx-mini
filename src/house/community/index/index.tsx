@@ -125,6 +125,12 @@ const CommunityIndex = () => {
         })
     }
 
+    const toList = (name: string) => {
+        Taro.navigateTo({
+            url: `/house/${name}/list/index?title=${communityData.title}`
+        })
+    }
+
     const valueFilter = (value, unit: string = '') => {
         return value ? `${value}${unit}` : '暂无'
     }
@@ -177,7 +183,7 @@ const CommunityIndex = () => {
                 <View className="community-content view-content">
                     <View className="community-item">
                         <View className="title">{communityData.title}</View>
-                        <View className="address">
+                        <View className="address" onClick={() => toHouseSurround(INIT_SURROUND_TAB)}>
                             <View className="name">{communityData.area.name}-{communityData.address}</View>
                             <View className="iconfont iconaddress">地址</View>
                         </View>
@@ -190,7 +196,7 @@ const CommunityIndex = () => {
                             </View> */}
                         </View>
                         <View className="community-house mt20">
-                            <View className="community-house-item">
+                            <View className="community-house-item" onClick={() => toList('esf')}>
                                 <View className="count">
                                     <Text>{communityData.house_num}</Text>
                                     <Text className="unit">套</Text>
@@ -201,7 +207,7 @@ const CommunityIndex = () => {
                                 </View>
                             </View>
                             <View className="split-line"></View>
-                            <View className="community-house-item">
+                            <View className="community-house-item" onClick={() => toList('rent')}>
                                 <View className="count">
                                     <Text>{communityData.rent_num}</Text>
                                     <Text className="unit">套</Text>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Taro from '@tarojs/taro'
+import Taro, { getCurrentInstance } from '@tarojs/taro'
 import { View, Text, ScrollView, Image } from '@tarojs/components'
 import classnames from 'classnames'
 
@@ -47,6 +47,8 @@ const CommunityList = () => {
     const [showEmpty, setShowEmpty] = useState<boolean>(false)
     const [condition, setCondition] = useState<any>()
     const [houseList, setHouseList] = useState<any>([])
+    const router = getCurrentInstance().router
+    const title = router?.params.title
     const tabs = [
         {
             type: 'areaList',
@@ -84,6 +86,7 @@ const CommunityList = () => {
         app.request({
             url: app.testApiUrl(api.getCommunityList),
             data: {
+                title: title || '',
                 page: currentPage,
                 limit: PAGE_LIMIT,
                 fang_area_id: filterParam(selected.areaList?.id),
@@ -203,7 +206,9 @@ const CommunityList = () => {
                 <View className="community-header view-content">
                     <View className="community-search" onClick={handleSearchClick}>
                         <Text className="iconfont iconsearch"></Text>
-                        <Text className="community-search-text placeholder">请输入小区或地址</Text>
+                        <Text className={classnames('community-search-text', !title && 'placeholder')}>
+                            {title ? title : '请输入小区或地址'}
+                        </Text>
                     </View>
                 </View>
                 <View className="search-tab">

@@ -135,6 +135,18 @@
     &-matches {
         background-color: #fff;
 
+        .match-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            border-bottom: 1px solid #f7f7f7;
+
+            .iconfont {
+                color: $desc-color;
+            }
+        }
+
         .match-item {
             padding: 20px 30px;
             border-bottom: 1px solid #f7f7f7;

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Taro from '@tarojs/taro'
+import Taro, { getCurrentInstance } from '@tarojs/taro'
 import { View, Text, ScrollView, Image } from '@tarojs/components'
 import classnames from 'classnames'
 
@@ -59,6 +59,8 @@ const RentList = () => {
     const [showEmpty, setShowEmpty] = useState<boolean>(false)
     const [condition, setCondition] = useState<any>()
     const [houseList, setHouseList] = useState<any>([])
+    const router = getCurrentInstance().router
+    const title = router?.params.title
     const tabs = [
         {
             type: 'areaList',
@@ -101,6 +103,7 @@ const RentList = () => {
         app.request({
             url: app.testApiUrl(api.getRentList),
             data: {
+                title: title || '',
                 page: currentPage,
                 limit: PAGE_LIMIT,
                 fang_area_id: filterParam(selected.areaList?.id),
@@ -205,7 +208,7 @@ const RentList = () => {
 
     const handleSearchClick = () => {
         Taro.navigateTo({
-            url: `/house/rent/search/index`
+            url: `/house/rent/search/index?title=${title}`
         })
     }
 
@@ -277,7 +280,9 @@ const RentList = () => {
                 <View className="rent-header view-content">
                     <View className="rent-search" onClick={handleSearchClick}>
                         <Text className="iconfont iconsearch"></Text>
-                        <Text className="rent-search-text placeholder">请输入小区或地址</Text>
+                        <Text className={classnames('rent-search-text', !title && 'placeholder')}>
+                            {title ? title : '请输入小区或地址'}
+                        </Text>
                     </View>
                 </View>
                 <View className="search-tab">
