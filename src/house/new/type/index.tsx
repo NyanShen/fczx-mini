@@ -129,7 +129,7 @@ const HouseType = () => {
                         houseType.roomList.map((item: any, index: number) => (
                             <View key={index} className="type-item" onClick={() => toDetail(item)}>
                                 <View className="type-image">
-                                    <Image src={item.image_path}></Image>
+                                    <Image src={item.image_path} mode="aspectFill"></Image>
                                 </View>
                                 <View className="type-info">
                                     <View className="title">{item.room}室{item.office}厅{item.toilet}卫  {item.building_area}m²</View>

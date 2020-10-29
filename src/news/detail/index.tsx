@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react'
+import { getCurrentInstance } from '@tarojs/taro'
 import { View, Text, RichText } from '@tarojs/components'
 
 import api from '@services/api'
 import app from '@services/request'
 import NavBar from '@components/navbar'
 import { formatTimestamp } from '@utils/index'
-import { getCurrentInstance } from '@tarojs/taro'
 import './index.scss'
 
 const NewsDetail = () => {
     const router = getCurrentInstance().router
-    const [newsData, setNewData] = useState<any>({ newsInfo: {} })
+    const [newsData, setNewsData] = useState<any>({ newsInfo: {} })
 
     useEffect(() => {
         app.request({
@@ -19,7 +19,7 @@ const NewsDetail = () => {
                 id: router?.params.id
             }
         }).then((result: any) => {
-            setNewData(result)
+            setNewsData(result)
         })
     }, [])
 
