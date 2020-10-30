@@ -6,11 +6,12 @@ import api from '@services/api'
 import app from '@services/request'
 import NavBar from '@components/navbar'
 import useNavData from '@hooks/useNavData'
+import { PRICE_TYPE } from '@constants/house'
+import { bMapTransQQMap, getStaticMap } from '@utils/map'
 import '@styles/common/house.scss'
 import '@styles/common/house-album.scss'
 import '@styles/common/bottom-bar.scss'
 import './index.scss'
-import { PRICE_TYPE } from '@constants/house'
 const INIT_ESF_DATA = {
     esfImage: [],
     tags: [],
@@ -46,7 +47,9 @@ const esfHouse = () => {
                     id: params.id
                 }
             }).then((result: any) => {
-                setEsfData(result)
+                const { latitude, longitude } = result.fangHouse
+                const static_map = getStaticMap(latitude, longitude)
+                setEsfData({ ...result, ...{ static_map: static_map } })
             })
         }
     }, [])
@@ -68,6 +71,19 @@ const esfHouse = () => {
         makePhoneCall({
             phoneNumber: esfData.mobile
         })
+    }
+
+    const toLocation = () => {
+        const { latitude, longitude } = esfData.fangHouse
+        const location = bMapTransQQMap(latitude, longitude)
+        Taro.openLocation({
+            latitude: Number(location.latitude),
+            longitude: Number(location.longitude),
+            scale: 18,
+            name: esfData.title,
+            address: esfData.address
+        })
+
     }
 
     return (
@@ -94,7 +110,7 @@ const esfHouse = () => {
                     <View className="header">
                         <Text>{esfData.title}</Text>
                     </View>
-                    <View className="address">
+                    <View className="address" onClick={toLocation}>
                         <View className="name">{esfData.area.name}-{esfData.address}</View>
                         <View className="iconfont iconaddress">地址</View>
                     </View>
@@ -218,6 +234,13 @@ const esfHouse = () => {
                             <View className="community-item">
                                 <View className="label">小区地址</View>
                                 <View className="value">{esfData.fangHouse.address}</View>
+                            </View>
+                        </View>
+                        <View className="map" onClick={toLocation}>
+                            <Image className="map-image" src={esfData.static_map} mode="center"></Image>
+                            <View className="map-label">
+                                <View className="text">{esfData.fangHouse.title}</View>
+                                <View className="iconfont iconmap"></View>
                             </View>
                         </View>
                     </View>

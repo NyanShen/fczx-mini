@@ -6,7 +6,7 @@ import Search, { ISearchOption } from '@components/search/index'
 
 const NewHouseSearch = () => {
 
-  const searchOption: ISearchOption[] = [{ type: "new", name: "新房" }]
+  const searchOption: ISearchOption[] = [{ type: "new", name: "新房", searchUrl:  api.getHouseList}]
 
   return (
     <View className="house-search">
@@ -15,7 +15,6 @@ const NewHouseSearch = () => {
         searchOption={searchOption}
         searchRemark="请输入楼盘名称或地址"
         hotListUrl={api.getHouseSearchHot}
-        searchUrl={api.getHouseList}
       ></Search>
     </View>
   )

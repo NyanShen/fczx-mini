@@ -15,20 +15,20 @@ import './index.scss'
 export interface ISearchOption {
   type: string
   name: string
+  searchUrl?: string
 }
 
 interface ISearchProps {
   searchTitle: string
   searchOption: any[]
   searchRemark?: string
-  searchUrl: string
   hotListUrl?: string
 }
 
 const Search = (props: ISearchProps) => {
   const isMultiply = props.searchOption.length > 1
   const INIT_OPTION = props.searchOption[0]
-  const INIT_HISTORIES = storage.getItem('histories', `search_${INIT_OPTION.name}`) || []
+  const INIT_HISTORIES = storage.getItem('histories', `search_${INIT_OPTION.type}`) || []
   const { contentHeight } = useNavData()
   const [hotList, setHotList] = useState([])
   const [matcheList, setMatcheList] = useState([])
@@ -38,11 +38,13 @@ const Search = (props: ISearchProps) => {
   const [showOption, setShowOption] = useState<boolean>(false)
 
   useEffect(() => {
-    app.request({
-      url: app.areaApiUrl(props.hotListUrl)
-    }, { loading: false }).then((result: any) => {
-      setHotList(result || [])
-    })
+    if (props.hotListUrl) {
+      app.request({
+        url: app.areaApiUrl(props.hotListUrl)
+      }, { loading: false }).then((result: any) => {
+        setHotList(result || [])
+      })
+    }
   }, [])
 
   const navData = {
@@ -62,17 +64,16 @@ const Search = (props: ISearchProps) => {
     if (!includes(ids, item.id)) {
       searchHistories.push(item)
     }
-    storage.setItem('histories', searchHistories, `search_${option.name}`)
+    storage.setItem('histories', searchHistories, `search_${option.type}`)
     Taro.navigateTo({
       url: `/house/${option.type}/index/index?id=${item.id}&title=${item.title}`
     })
   }
 
   const handleInput = (event) => {
-    console.log('handleInput')
     let keyValue = event.currentTarget.value
     if (keyValue) {
-      updateKeyList(keyValue)
+      updateKeyList(keyValue, option.searchUrl)
     } else {
       setMatcheList([])
     }
@@ -81,16 +82,19 @@ const Search = (props: ISearchProps) => {
 
   const handleConfirm = () => {
     if (searchValue) {
-      storage.setItem('histories', searchHistories, `search_${option.name}`)
+      storage.setItem('histories', searchHistories, `search_${option.type}`)
       Taro.redirectTo({
         url: `/house/${option.type}/list/index?title=${searchValue}`
       })
     }
   }
 
-  const updateKeyList = (keyValue) => {
+  const updateKeyList = (keyValue: string, searchUrl: string = '') => {
+    if (!keyValue || !searchUrl) {
+      return
+    }
     app.request({
-      url: app.areaApiUrl(props.searchUrl),
+      url: app.areaApiUrl(searchUrl),
       data: {
         title: keyValue,
         page: 0,
@@ -110,7 +114,7 @@ const Search = (props: ISearchProps) => {
   }
 
   const handleClearClick = () => {
-    storage.clear(`search_${option.name}`)
+    storage.clear(`search_${option.type}`)
     setSearchHistories([])
   }
 
@@ -120,7 +124,8 @@ const Search = (props: ISearchProps) => {
       return
     }
     setOption(item)
-    setSearchHistories(storage.getItem('histories', `search_${item.name}`) || [])
+    setSearchHistories(storage.getItem('histories', `search_${item.type}`) || [])
+    updateKeyList(searchValue, item.searchUrl)
   }
 
   const renderSearchKeys = (title, className, keyList, allowClear = false) => {
@@ -129,7 +134,7 @@ const Search = (props: ISearchProps) => {
         <View className={classnames("search-record", className)}>
           <View className="search-header clearfix">
             <Text className="title">{title}</Text>
-            {allowClear && <Text className="iconfont iconclear1" onClick={handleClearClick}></Text>}
+            {allowClear && <Text className="iconfont icontrash" onClick={handleClearClick}></Text>}
           </View>
           <View className="search-list clearfix">
             {keyList.map((item: any) => {
@@ -207,7 +212,7 @@ const Search = (props: ISearchProps) => {
           </View> :
           <View className="search-category">
             {renderSearchKeys('搜索历史', 'search-history', searchHistories, true)}
-            {renderSearchKeys('热门搜索', 'search-hot', hotList)}
+            {hotList.length > 0 && renderSearchKeys('热门搜索', 'search-hot', hotList)}
           </View>
         }
       </ScrollView>

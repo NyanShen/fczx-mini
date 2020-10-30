@@ -6,7 +6,13 @@ import Search, { ISearchOption } from '@components/search/index'
 
 const EsfSearch = () => {
 
-  const searchOption: ISearchOption[] = [{ type: "esf", name: "二手房" }]
+  const searchOption: ISearchOption[] = [
+    {
+      type: "esf",
+      name: "二手房",
+      searchUrl: api.getEsfList
+    }
+  ]
 
   return (
     <View className="house-search">
@@ -14,8 +20,6 @@ const EsfSearch = () => {
         searchTitle="搜索二手房"
         searchOption={searchOption}
         searchRemark="请输入小区或地址"
-        hotListUrl={api.getHouseSearchHot}
-        searchUrl={api.getEsfList}
       ></Search>
     </View>
   )
