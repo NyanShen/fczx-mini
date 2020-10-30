@@ -9,7 +9,7 @@ import useNavData from '@hooks/useNavData'
 import { formatTimestamp } from '@utils/index'
 import '@styles/common/bottom-bar.scss'
 import './index.scss'
-import { getStaticMap } from '@utils/map'
+import { bMapTransQQMap, getStaticMap } from '@utils/map'
 
 interface IAlbum {
     currentIdex: number
@@ -67,7 +67,7 @@ const RentIndex = () => {
                 }
             }).then((result: any) => {
                 const { longitude, latitude } = result.fangHouse
-                const static_map = getStaticMap(longitude, latitude)
+                const static_map = getStaticMap(latitude, longitude)
                 setRentData({ ...result, ...{ static_map: static_map } })
             })
         }
@@ -87,10 +87,11 @@ const RentIndex = () => {
     }
 
     const toLocation = () => {
-        const { longitude, latitude } = rentData.fangHouse
+        const { latitude, longitude } = rentData.fangHouse
+        const location = bMapTransQQMap(latitude, longitude)
         Taro.openLocation({
-            latitude: Number(latitude),
-            longitude: Number(longitude),
+            latitude: Number(location.latitude),
+            longitude: Number(location.longitude),
             scale: 18,
             name: rentData.title,
             address: rentData.address

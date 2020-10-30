@@ -1,7 +1,3 @@
-export const getStaticMap = (lng: number, lat: number, zoom: number = 16) => {
-    return `http://api.map.baidu.com/staticimage?center=${lng},${lat}&markerStyles=l&zoom=${zoom}`
-}
-
 export const bMapTransQQMap = (lat, lng) => {
     let x_pi = 3.14159265358979324 * 3000.0 / 180.0;
     let x = lng - 0.0065;
@@ -14,4 +10,12 @@ export const bMapTransQQMap = (lat, lng) => {
         latitude: lat_new,
         longitude: lng_new
     }
+}
+
+export const QQ_MAP_KEY = "LCCBZ-3MO6G-YORQJ-IGG74-EASA7-E4BPD"
+
+export const getStaticMap = (lat: number, lng: number, zoom: number = 16) => {
+    const location = bMapTransQQMap(lat, lng)
+    const center = `${location.latitude},${location.longitude}`
+    return `https://apis.map.qq.com/ws/staticmap/v2/?center=${center}&zoom=${zoom}&size=600*300&key=${QQ_MAP_KEY}`
 }

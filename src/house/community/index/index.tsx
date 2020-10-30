@@ -55,7 +55,7 @@ const CommunityIndex = () => {
                     id: params.id
                 }
             }).then((result: any) => {
-                const static_map = getStaticMap(result.longitude, result.latitude)
+                const static_map = getStaticMap(result.latitude, result.longitude)
                 setCommunityData({ ...result, static_map: static_map })
                 const video = result.imagesData.video
                 if (video) {

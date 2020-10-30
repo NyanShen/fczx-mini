@@ -63,7 +63,7 @@ const House = () => {
                     id: params.id
                 }
             }).then((result: any) => {
-                const static_map = getStaticMap(result.longitude, result.latitude)
+                const static_map = getStaticMap(result.latitude, result.longitude)
                 setHouseData({ ...result, ...{ static_map: static_map } })
                 const video = result.imagesData.video
                 if (video) {
