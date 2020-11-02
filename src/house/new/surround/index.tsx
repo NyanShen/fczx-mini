@@ -50,7 +50,6 @@ const houseSurround = () => {
                 keyword: tab.name,
                 location: { latitude, longitude },
                 success: (result: any) => {
-                    console.log('result', result)
                     const surroundMarkers: any[] = []
                     for (const item of result.data) {
                         surroundMarkers.push({

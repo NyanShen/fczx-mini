@@ -17,6 +17,7 @@ export default {
         'new/album/index',
         'new/video/index',
         'new/list/index',
+        'new/map/index',
         'new/search/index',
         'new/surround/index',
         'new/sand/index',

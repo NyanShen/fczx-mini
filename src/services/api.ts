@@ -9,6 +9,7 @@ export default {
     getCityList: '/index/city-list',
     
     getHouseList: '/house/list',
+    getHouseMap: '/house/area-house',
     getHouseSearchHot: '/house/hot-search',
     getHouseById: '/house/get',
     getHouseAttr: '/house/attr',
