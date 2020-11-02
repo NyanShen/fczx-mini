@@ -38,5 +38,10 @@ export default {
     getNewsList: '/news/list',
     getNewsCateList: '/news/cate-list',
 
+    getChatDialog: '/chat/dialog',
+    getChatRead: '/chat/read',
+    postChatSend: '/chat/send',
+    getUnread: '/chat/get-to-rend',
+    getChatData: '/chat/chat-data',
     uploadFile: '/file/upload'
 }
