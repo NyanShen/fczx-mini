@@ -11,6 +11,7 @@ const getCityAlias = (): string => {
 
 const agreement: string = 'http://'
 const topDomain: string = '.fczx.com'
+const uploadFileUrl = `${agreement}api${topDomain}/file/upload`
 const app: any = {};
 app.apiUrl = (uri: string) => {
     return `${agreement}api${topDomain}${uri}`
@@ -23,7 +24,6 @@ app.areaApiUrl = (uri: string) => {
 app.testApiUrl = (uri: string) => {
     return `${agreement}192.168.2.248:12306${uri}`
 }
-
 
 app.randCode = (len: number) => {
     const charset = 'abcdefghkmnprstuvwxyzABCDEFGHKMNPRSTUVWXYZ0123456789';
@@ -41,7 +41,7 @@ app.request = (params: any, { loading = true, toast = true }: any = {}) => {
     }
 
     const token = { 'X-Token': storage.getItem('token', 'login') }
-    params.header = { ...params.header, ...token }  
+    params.header = { ...params.header, ...token }
 
     const { page, limit } = params.data
     if (typeof page != "undefined" && typeof limit != "undefined") {
@@ -96,6 +96,28 @@ app.request = (params: any, { loading = true, toast = true }: any = {}) => {
                 reject(err)
             }
         })
+    })
+}
+
+app.uploadFile = (data: any) => {
+    return new Promise((resolve: any) => {
+        for (let i = 0; i <= data.tempFiles.length; i++) {
+            Taro.uploadFile({
+                url: uploadFileUrl,
+                filePath: data.tempFilePaths[i],
+                name: 'file',
+                formData: {
+                    file: data.tempFiles[i]
+                },
+                header: {
+                    'X-Token': storage.getItem('token', 'login')
+                },
+                success: ((result: any) => {
+                    console.log(result)
+                    resolve(JSON.parse(result.data).data)
+                })
+            })
+        }
     })
 }
 

@@ -15,6 +15,18 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.iconphoto:before {
+  content: "\e66b";
+}
+
+.iconphotograph:before {
+  content: "\e60a";
+}
+
+.iconadd:before {
+  content: "\e76f";
+}
+
 .iconcheck:before {
   content: "\e614";
 }

@@ -38,19 +38,8 @@ const HouseCommentForm = () => {
         Taro.chooseImage({
             count: 1,
             success: ((res: any) => {
-                Taro.uploadFile({
-                    url: app.areaApiUrl(api.uploadFile),
-                    filePath: res.tempFilePaths[0],
-                    name: 'file',
-                    formData: {
-                        file: res.tempFiles[0]
-                    },
-                    header: {
-                        'X-Token': storage.getItem('token', 'login')
-                    },
-                    success: ((result: any) => {
-                        setImagePath(JSON.parse(result.data).data)
-                    })
+                app.uploadFile(res).then((result: any) => {
+                    setImagePath(result)
                 })
             })
         })

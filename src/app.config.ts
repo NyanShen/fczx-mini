@@ -4,9 +4,8 @@ export default {
   pages: [
     // 'news/detail/index',
     // 'house/community/list/index',
-    'pages/index/index',
     'pages/chat/index',
-    'pages/chat/room/index',
+    'pages/index/index',
     'pages/user/index', 
   ],
   subPackages: [
@@ -59,6 +58,12 @@ export default {
       pages: [
         'list/index',
         'detail/index'
+      ]
+    },
+    {
+      root: 'chat',
+      pages: [
+        'room/index'
       ]
     }
   ],

@@ -15,7 +15,8 @@ const Login = () => {
         backgroundColor: '#ffffff'
     }
     const currentRouter: any = getCurrentInstance().router
-    const backUrl: any = currentRouter.params?.backUrl
+    const isTab: string = currentRouter.params?.isTab
+    const backUrl: string = currentRouter.params?.backUrl
     const [loginCode, setLoginCode] = useState<string>('')
 
     Taro.setNavigationBarColor({
@@ -40,7 +41,11 @@ const Login = () => {
                 storage.setItem('token', result, 'login')
                 if (backUrl) {
                     Taro.redirectTo({ url: decodeURIComponent(backUrl) })
-                } else {
+                }
+                else if (isTab) {
+                    Taro.switchTab({ url: backUrl })
+                }
+                else {
                     Taro.navigateBack({
                         delta: 1
                     })
@@ -52,7 +57,7 @@ const Login = () => {
 
     const handleLoginByPhone = () => {
         Taro.navigateTo({
-            url: `/login/phone/index?backUrl=${backUrl}`
+            url: `/login/phone/index?backUrl=${backUrl}isTab=${isTab}`
         })
     }
 

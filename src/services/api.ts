@@ -42,6 +42,5 @@ export default {
     getChatRead: '/chat/read',
     postChatSend: '/chat/send',
     getUnread: '/chat/get-to-rend',
-    getChatData: '/chat/chat-data',
-    uploadFile: '/file/upload'
+    getChatData: '/chat/chat-data'
 }

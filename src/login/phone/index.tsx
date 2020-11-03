@@ -32,7 +32,8 @@ const INIT_VERIFY_STATUS: IVerifyStatus = {
 
 const LoginPhone = () => {
     const currentRouter: any = getCurrentInstance().router
-    const backUrl: any = currentRouter.params?.backUrl
+    const isTab: string = currentRouter.params?.isTab
+    const backUrl: string = currentRouter.params?.backUrl
     const authorizationCode = app.randCode(16);
     const [loginPhone, setLoginPhone] = useState<ILoginPhone>(INIT_LOGIN_PHONE)
     const [verifyStatus, setVerifyStatus] = useState<IVerifyStatus>(INIT_VERIFY_STATUS)
@@ -110,7 +111,11 @@ const LoginPhone = () => {
             storage.setItem('token', result, 'login')
             if (backUrl) {
                 Taro.redirectTo({ url: decodeURIComponent(backUrl) })
-            } else {
+            }
+            else if (isTab) {
+                Taro.switchTab({ url: backUrl })
+            }
+            else {
                 Taro.switchTab({
                     url: '/pages/user/index'
                 })
