@@ -109,11 +109,11 @@ const LoginPhone = () => {
             }
         }).then((result: any) => {
             storage.setItem('token', result, 'login')
-            if (backUrl) {
+            if (backUrl && !isTab) {
                 Taro.redirectTo({ url: decodeURIComponent(backUrl) })
             }
             else if (isTab) {
-                Taro.switchTab({ url: backUrl })
+                Taro.switchTab({ url: decodeURIComponent(backUrl) })
             }
             else {
                 Taro.switchTab({

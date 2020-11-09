@@ -3,6 +3,7 @@ import Taro, { getCurrentInstance } from '@tarojs/taro'
 import { View, Text, Button } from '@tarojs/components'
 
 import storage from '@utils/storage'
+import ChatEvent from '@utils/event'
 import { fetchSessionKey, fetchDecryptData } from '@services/login'
 import NavBar from '@components/navbar/index'
 import './index.scss'
@@ -38,12 +39,13 @@ const Login = () => {
                 encryptedData: e.detail.encryptedData,
                 iv: e.detail.iv
             }).then((result: any) => {
+                ChatEvent.emit('chat')
                 storage.setItem('token', result, 'login')
-                if (backUrl) {
+                if (backUrl && !isTab) {
                     Taro.redirectTo({ url: decodeURIComponent(backUrl) })
                 }
                 else if (isTab) {
-                    Taro.switchTab({ url: backUrl })
+                    Taro.switchTab({ url: decodeURIComponent(backUrl) })
                 }
                 else {
                     Taro.navigateBack({
@@ -57,7 +59,7 @@ const Login = () => {
 
     const handleLoginByPhone = () => {
         Taro.navigateTo({
-            url: `/login/phone/index?backUrl=${backUrl}isTab=${isTab}`
+            url: `/login/phone/index?backUrl=${backUrl}&isTab=${isTab}`
         })
     }
 

@@ -48,7 +48,7 @@ const ChatRoom = () => {
 
     const fetchChatData = () => {
         app.request({
-            url: app.testApiUrl(api.getChatData),
+            url: app.apiUrl(api.getChatData),
             data: {
                 page: param.currentPage,
                 limit: PAGE_LIMIT,
@@ -60,7 +60,9 @@ const ChatRoom = () => {
             } else {
                 setChatData([...result.data, ...chatData])
             }
-            setToView(`toView_${result.data[result.data.length - 1].id}`)
+            if (result.data.length > 0) {
+                setToView(`toView_${result.data[result.data.length - 1].id}`)
+            }
             setPage({
                 ...page,
                 totalCount: result.pagination.totalCount,
@@ -157,7 +159,7 @@ const ChatRoom = () => {
                     item.to_user_id !== toUser.id ?
                         (
                             <View className="msg-item">
-                            {renderTime(item.time)}
+                                {renderTime(item.time)}
                                 <View className="item-content">
                                     <View className="photo">
                                         <Image src={toUser.avatar} />
@@ -170,7 +172,7 @@ const ChatRoom = () => {
                         ) :
                         (
                             <View className="msg-item">
-                            {renderTime(item.time)}
+                                {renderTime(item.time)}
                                 <View className="item-content item-content-reverse">
                                     <View className="photo">
                                         <Image src={user.avatar} />

@@ -4,6 +4,16 @@ import api from '@services/api'
 import app from '@services/request'
 import storage from '@utils/storage'
 
+export const hasLogin = () => {
+    return new Promise((resolve) => {
+        app.request({
+            url: app.apiUrl(api.getUserData)
+        }, { loading: false }).then((result: any) => {
+            resolve(result)
+        })
+    })
+}
+
 export const fetchUserData = (backUrl: string = '') => {
     return new Promise((resolve) => {
         app.request({

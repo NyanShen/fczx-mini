@@ -6,11 +6,12 @@
     &-content {
         .msg-box {
             width: 100%;
+            padding-top: 15px;
             .msg-item {
                 padding: 0 30px 30px;
                 .item-content {
                     display: flex;
-                    align-items: center;
+                    align-items: top;
                     &.item-content-reverse {
                         flex-direction: row-reverse;
                     }
@@ -18,7 +19,7 @@
                         width: 80px;
                         height: 80px;
                         background-color: $bg-color;
-                        border-radius: 50%;
+                        border-radius: $border-radius-10;
                         overflow: hidden;
 
                         Image {
@@ -29,9 +30,12 @@
                     .message {
                         margin: 0 20px;
                         .text {
+                            display: inline-block;
+                            max-width: 480px;
                             padding: 15px 30px;
                             border-radius: $border-radius-10;
                             background-color: $white;
+                            word-break: break-all;
                         }
                         .text-primary {
                             background-color: $primary-color;

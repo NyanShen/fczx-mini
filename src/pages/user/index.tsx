@@ -5,6 +5,7 @@ import { View, Text, Image } from '@tarojs/components'
 import api from '@services/api'
 import app from '@services/request'
 import storage from '@utils/storage'
+import ChatEvent from '@utils/event'
 import NavBar from '@components/navbar/index'
 import './index.scss'
 
@@ -48,6 +49,8 @@ const User = () => {
   const handleLogout = () => {
     storage.clear('login')
     setUser(INIT_USER)
+    ChatEvent.clearTimer()
+    Taro.hideTabBarRedDot({ index: 1 })
   }
 
   return (
