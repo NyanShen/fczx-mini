@@ -154,14 +154,14 @@ const HouseType = () => {
             <View className="bottom-bar">
                 <View className="bar-item-btn">
                     <View className="btn btn-yellow btn-bar ml30">
-                        <View>微聊</View>
+                        <View>在线咨询</View>
                         <View className="btn-subtext">快速在线咨询</View>
                     </View>
                 </View>
-                <View className="bar-item-btn">
-                    <View className="btn btn-primary btn-bar" onClick={handlePhoneCall}>
-                        <View>致电售楼处</View>
-                        <View className="btn-subtext">保护你的真实号码</View>
+                <View className="bar-item-btn" onClick={handlePhoneCall}>
+                    <View className="btn btn-primary btn-bar">
+                        <View>电话咨询</View>
+                        <View className="btn-subtext">致电了解更多信息</View>
                     </View>
                 </View>
             </View>

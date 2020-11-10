@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import Taro, { getCurrentInstance } from '@tarojs/taro'
+import Taro, { getCurrentInstance, useDidShow } from '@tarojs/taro'
 import { View, Text, ScrollView, Input, Image } from "@tarojs/components"
 import classnames from 'classnames'
 
@@ -11,6 +11,7 @@ import { PRICE_TYPE } from '@constants/house'
 import { formatChatListTime } from '@utils/index'
 import { getTotalPage, INIT_PAGE, IPage } from '@utils/page'
 import './index.scss'
+import { fetchUserData } from '@services/login'
 
 
 interface IParam {
@@ -29,9 +30,11 @@ const ChatRoom = () => {
     const PAGE_LIMIT: number = 10
     const router: any = getCurrentInstance().router
     const fromUserId: string = router?.params.fromUserId
-    const user: any = JSON.parse(router?.params.user) || {}
+    const messageType: any = router?.params.messageType
+    const content: any = router?.params.content
     const toUser: any = JSON.parse(router?.params.toUser) || {}
     const { contentHeight } = useNavData()
+    const [user, setUser] = useState<any>({})
     const [param, setParam] = useState<IParam>(INIT_PARAM)
     const [page, setPage] = useState<IPage>(INIT_PAGE)
     const [chatData, setChatData] = useState<any[]>([])
@@ -40,6 +43,18 @@ const ChatRoom = () => {
     const [isPhoto, setIsPhoto] = useState<boolean>(false)
     const [inputData, setInputData] = useState<any>({ value: '', send: false })
     const ref = useRef<string>('')
+
+    useDidShow(() => {
+        fetchUserData().then((result) => {
+            setUser(result)
+        })
+    })
+
+    useEffect(() => {
+        if (content) {
+            sendMessage(messageType, content)
+        }
+    }, [])
 
     useEffect(() => {
         fetchChatData()
@@ -117,27 +132,77 @@ const ChatRoom = () => {
         }).then(() => {
             setIsPhoto(false)
             setInputData({ value: '', send: false })
-            fetchChatData()
+            setParam({
+                currentPage: INIT_PARAM.currentPage
+            })
+        })
+    }
+
+    const toHouseRoom = (type: string, content: any) => {
+        Taro.navigateTo({
+            url: `/house/${type}/index/index?id=${content.id}title=${content.title}`
         })
     }
 
     const renderContentByType = (chatItem: any, isMine: boolean = false) => {
-        const content = {
-            '1': <Text className={classnames('text', isMine && 'text-primary')}>{chatItem.content}</Text>,
-            '2': <Image className="image" src={chatItem.content} mode="widthFix" />,
-            '3': (
-                <View className="content">
-                    <View className="content-image">
-                        <Image src={chatItem.content.image_path} mode="aspectFit" />
-                        <View className="tag">新房</View>
+        let itemContent: any = null
+        switch (chatItem.message_type) {
+            case '1':
+                return <Text className={classnames('text', isMine && 'text-primary')} selectable>{chatItem.content}</Text>
+            case '2':
+                return <Image className="image" src={chatItem.content} mode="widthFix" />
+            case '3':
+                itemContent = JSON.parse(chatItem.content)
+                return (
+                    <View className="content" onClick={() => toHouseRoom('new', itemContent)}>
+                        <View className="content-image">
+                            <Image src={itemContent.image_path} mode="aspectFill" />
+                            <View className="tag">新房</View>
+                        </View>
+                        <View className="content-title">{itemContent.title}</View>
+                        <View className="content-text">{itemContent.areaName}</View>
+                        <View className="content-text">{itemContent.price}{PRICE_TYPE[itemContent.price_type]}</View>
                     </View>
-                    <View className="content-title">{chatItem.content.title}</View>
-                    <View className="content-text">{chatItem.content.price}{PRICE_TYPE[chatItem.content.price_type]}</View>
-                </View>
-            )
+                )
+            case '4':
+                itemContent = JSON.parse(chatItem.content)
+                return (
+                    <View className="content" onClick={() => toHouseRoom('rent', itemContent)}>
+                        <View className="content-image">
+                            <Image src={itemContent.image_path} mode="aspectFill" />
+                            <View className="tag">二手房</View>
+                        </View>
+                        <View className="content-title">{itemContent.title}</View>
+                        <View className="content-text">
+                            <Text>{itemContent.room}室{itemContent.office}厅{itemContent.toilet}卫</Text>
+                            <Text className="area">{itemContent.building_area}㎡</Text>
+                        </View>
+                        <View className="content-price">{itemContent.price}{PRICE_TYPE[itemContent.price_type]}</View>
+                    </View>
+                )
+                case '5':
+                    const RENT_TYPE = {
+                        '1': '整租',
+                        '2': '合租'
+                    }
+                    itemContent = JSON.parse(chatItem.content)
+                    return (
+                        <View className="content" onClick={() => toHouseRoom('rent', itemContent)}>
+                            <View className="content-image">
+                                <Image src={itemContent.image_path} mode="aspectFill" />
+                                <View className="tag">租房</View>
+                            </View>
+                            <View className="content-title">{itemContent.title}</View>
+                            <View className="content-text">
+                                <Text>{itemContent.room}室{itemContent.office}厅{itemContent.toilet}卫</Text>
+                                <Text className="area">{RENT_TYPE[itemContent.rent_type]}</Text>
+                            </View>
+                            <View className="content-price">{itemContent.price}元/月</View>
+                        </View>
+                    )
+            default:
+                return null
         }
-
-        return content[chatItem.message_type]
     }
 
     const renderTime = (time: string) => {
@@ -156,7 +221,7 @@ const ChatRoom = () => {
         return chatData.map((item: any, index: number) => (
             <View key={index} id={`toView_${item.id}`}>
                 {
-                    item.to_user_id !== toUser.id ?
+                    item.from_user_id === fromUserId ?
                         (
                             <View className="msg-item">
                                 {renderTime(item.time)}

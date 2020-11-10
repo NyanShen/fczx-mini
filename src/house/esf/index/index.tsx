@@ -12,6 +12,7 @@ import '@styles/common/house.scss'
 import '@styles/common/house-album.scss'
 import '@styles/common/bottom-bar.scss'
 import './index.scss'
+import { toUrlParam } from '@utils/urlHandler'
 const INIT_ESF_DATA = {
     esfImage: [],
     tags: [],
@@ -42,7 +43,7 @@ const esfHouse = () => {
         params.id = '1000027'
         if (params.id) {
             app.request({
-                url: app.testApiUrl(api.getEsfById),
+                url: app.areaApiUrl(api.getEsfById),
                 data: {
                     id: params.id
                 }
@@ -64,6 +65,31 @@ const esfHouse = () => {
     const toCommunity = () => {
         Taro.navigateTo({
             url: `/house/community/index/index?Id=${esfData.fangHouse.id}`
+        })
+    }
+
+    const toChatRoom = () => {
+        const { title, price, price_type } = esfData.fangHouse
+        const { id, image_path, room, office, toilet, building_area } = esfData
+        const paramString = toUrlParam({
+            messageType: '4',
+            fromUserId: esfData.user_id,
+            toUser: JSON.stringify(esfData.user),
+            content: JSON.stringify({
+                id,
+                title,
+                price,
+                price_type,
+                image_path,
+                room,
+                office,
+                toilet,
+                building_area,
+                areaName: esfData.area.name
+            })
+        })
+        Taro.navigateTo({
+            url: `/chat/room/index${paramString}`
         })
     }
 
@@ -190,7 +216,7 @@ const esfHouse = () => {
                             <Image src=""></Image>
                         </View>
                         <View>
-                            <View>苏家园</View>
+                            <View>{esfData.real_name}</View>
                             <View className="small-desc">置业顾问</View>
                         </View>
                     </View>
@@ -257,11 +283,11 @@ const esfHouse = () => {
                         <Image src=""></Image>
                     </View>
                     <View>
-                        <View>苏家园</View>
+                        <View>{esfData.real_name}</View>
                         <View className="small-desc">置业顾问</View>
                     </View>
                 </View>
-                <View className="bar-item-btn">
+                <View className="bar-item-btn" onClick={toChatRoom}>
                     <Text className="btn btn-yellow btn-bar">在线咨询</Text>
                 </View>
                 <View className="bar-item-btn" onClick={handlePhoneCall}>

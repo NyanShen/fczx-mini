@@ -58,7 +58,7 @@ const House = () => {
         params.id = '1000006'
         if (params.id) {
             app.request({
-                url: app.testApiUrl(api.getHouseById),
+                url: app.areaApiUrl(api.getHouseById),
                 data: {
                     id: params.id
                 }
@@ -89,6 +89,12 @@ const House = () => {
         setAlbumSwiper({
             albumId,
             swiperIndex
+        })
+    }
+
+    const handlePhoneCall = () => {
+        makePhoneCall({
+            phoneNumber: houseData.phone
         })
     }
 
@@ -158,6 +164,27 @@ const House = () => {
 
     const toHome = () => {
         Taro.switchTab({ url: '/pages/index/index' })
+    }
+
+    const toChatRoom = () => {
+        const consultant = houseData.enableFangHouseConsultant[0]
+        const { id, title, price, price_type, image_path } = houseData
+        const paramString = toUrlParam({
+            messageType: '3',
+            fromUserId: consultant.user_id,
+            toUser: JSON.stringify(consultant.user),
+            content: JSON.stringify({
+                id,
+                title,
+                price,
+                price_type,
+                image_path,
+                areaName: houseData.area.name
+            })
+        })
+        Taro.navigateTo({
+            url: `/chat/room/index${paramString}`
+        })
     }
 
     const renderPrice = (price: string, price_type: string) => {
@@ -360,7 +387,7 @@ const House = () => {
                         </View>
                     </View>
                 </View>
-                <View className="house-contact view-content mt20" onClick={() => makePhoneCall({ phoneNumber: houseData.phone })}>
+                <View className="house-contact view-content mt20" onClick={handlePhoneCall}>
                     <View className="iconfont icontelephone-out"></View>
                     <View>
                         <View className="phone-call">{houseData.phone}</View>
@@ -546,11 +573,17 @@ const House = () => {
                     <Text className="iconfont icongroup"></Text>
                     <Text>团购</Text>
                 </View> */}
-                <View className="bar-item-btn" onClick={() => toHouseModule('consultant')}>
-                    <Text className="btn btn-yellow btn-bar">置业顾问</Text>
+                <View className="bar-item-btn" onClick={toChatRoom}>
+                    <View className="btn btn-yellow btn-bar">
+                        <View>在线咨询</View>
+                        <View className="btn-subtext">快速在线咨询</View>
+                    </View>
                 </View>
-                <View className="bar-item-btn">
-                    <Text className="btn btn-primary btn-bar">电话咨询</Text>
+                <View className="bar-item-btn" onClick={handlePhoneCall}>
+                    <View className="btn btn-primary btn-bar">
+                        <View>电话咨询</View>
+                        <View className="btn-subtext">致电了解更多信息</View>
+                    </View>
                 </View>
             </View>
         </View>

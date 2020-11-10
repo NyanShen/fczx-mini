@@ -43,7 +43,6 @@ const Chat = () => {
     const paramString = toUrlParam({
       id: item.id,
       fromUserId: item.from_user_id,
-      user: JSON.stringify(user),
       toUser: JSON.stringify(item.user)
     })
     Taro.navigateTo({

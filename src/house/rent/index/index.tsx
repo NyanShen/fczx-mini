@@ -10,6 +10,7 @@ import { formatTimestamp } from '@utils/index'
 import '@styles/common/bottom-bar.scss'
 import './index.scss'
 import { bMapTransQQMap, getStaticMap } from '@utils/map'
+import { toUrlParam } from '@utils/urlHandler'
 
 interface IAlbum {
     currentIdex: number
@@ -97,6 +98,29 @@ const RentIndex = () => {
             address: rentData.address
         })
 
+    }
+
+    const toChatRoom = () => {
+        const { id, title, price, image_path, room, office, toilet, building_area } = rentData
+        const paramString = toUrlParam({
+            messageType: '5',
+            fromUserId: rentData.user_id,
+            toUser: JSON.stringify({ id: rentData.user_id, nickname: rentData.real_name }),
+            content: JSON.stringify({
+                id,
+                title,
+                price,
+                image_path,
+                room,
+                office,
+                toilet,
+                building_area,
+                areaName: rentData.area.name
+            })
+        })
+        Taro.navigateTo({
+            url: `/chat/room/index${paramString}`
+        })
     }
 
     return (
@@ -204,7 +228,7 @@ const RentIndex = () => {
                                 <Image src=""></Image>
                             </View>
                             <View>
-                                <View>苏家园</View>
+                                <View>{rentData.real_name}</View>
                                 <View className="small-desc">置业顾问</View>
                             </View>
                         </View>
@@ -245,11 +269,11 @@ const RentIndex = () => {
                         <Image src=""></Image>
                     </View>
                     <View>
-                        <View>苏家园</View>
+                        <View>{rentData.real_name}</View>
                         <View className="small-desc">置业顾问</View>
                     </View>
                 </View>
-                <View className="bar-item-btn">
+                <View className="bar-item-btn" onClick={toChatRoom}>
                     <Text className="btn btn-yellow btn-bar">在线咨询</Text>
                 </View>
                 <View className="bar-item-btn" onClick={() => makePhoneCall({ phoneNumber: rentData.mobile })}>
