@@ -211,7 +211,6 @@
                 .item-image {
                     width: 90px;
                     height: 90px;
-                    margin-bottom: 20px;
                     border-radius: 50%;
                     overflow: hidden;
                     background-color: $bg-color;
@@ -221,8 +220,13 @@
                     }
                 }
                 .item-name {
+                    width: 100%;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
                     font-size: $font-basic;
-                    margin-bottom: 20px;
+                    margin: 20px 0;
+                    text-align: center;
                 }
             }
         }

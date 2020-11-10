@@ -30,7 +30,7 @@ const Chat = () => {
 
   const fetchChatDialog = () => {
     app.request({
-      url: app.testApiUrl(api.getChatDialog)
+      url: app.apiUrl(api.getChatDialog)
     }).then((result: any) => {
       setChatDialog(result)
     })
@@ -40,9 +40,14 @@ const Chat = () => {
   }
 
   const toChatRoom = (item: any) => {
+    let fromUserId: string = ''
+    if (user.id == item.from_user_id) {
+      fromUserId = item.to_user_id
+    } else {
+      fromUserId = item.from_user_id
+    }
     const paramString = toUrlParam({
-      id: item.id,
-      fromUserId: item.from_user_id,
+      fromUserId,
       toUser: JSON.stringify(item.user)
     })
     Taro.navigateTo({
@@ -69,6 +74,21 @@ const Chat = () => {
     )
   }
 
+  const renderContent = (item: any) => {
+    switch (item.message_type) {
+      case '1':
+        return item.last_content
+      case '2':
+        return '[图片]'
+      case '3':
+      case '4':
+      case '5':
+        return '[房源]'
+      default:
+        return null
+    }
+  }
+
   const renderDialog = () => {
     if (chatDialog.length > 0) {
       return chatDialog.map((item: any, index: number) => (
@@ -83,10 +103,10 @@ const Chat = () => {
           <View className="item-text">
             <View className="item-text-item">
               <View className="name">{item.user.nickname}</View>
-              <View className="date">{formatTimestamp(item.modified, 'MM-dd')}</View>
+              <View className="date">{item.modified && formatTimestamp(item.modified, 'MM-dd hh:mm')}</View>
             </View>
             <View className="item-text-item">
-              <View className="record">{item.last_content}</View>
+              <View className="record">{renderContent(item)}</View>
             </View>
           </View>
         </View>

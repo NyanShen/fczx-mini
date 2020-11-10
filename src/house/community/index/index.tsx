@@ -50,7 +50,7 @@ const CommunityIndex = () => {
         params.id = '1000006'
         if (params.id) {
             app.request({
-                url: app.testApiUrl(api.getCommunityById),
+                url: app.areaApiUrl(api.getCommunityById),
                 data: {
                     id: params.id
                 }

@@ -107,7 +107,7 @@ const HouseMap = () => {
 
     useEffect(() => {
         app.request({
-            url: app.testApiUrl(api.getHouseAttr)
+            url: app.areaApiUrl(api.getHouseAttr)
         }).then((result: any) => {
             setCondition(result)
         })

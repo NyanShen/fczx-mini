@@ -28,7 +28,7 @@ class ChatEvent {
                         callBack(result, params);
                     })
                 })
-            }, 3000)
+            }, 10000)
         }
     }
 

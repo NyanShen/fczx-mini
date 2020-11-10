@@ -51,7 +51,7 @@ const ChatRoom = () => {
     })
 
     useEffect(() => {
-        if (content) {
+        if (messageType && content) {
             sendMessage(messageType, content)
         }
     }, [])
@@ -140,7 +140,7 @@ const ChatRoom = () => {
 
     const toHouseRoom = (type: string, content: any) => {
         Taro.navigateTo({
-            url: `/house/${type}/index/index?id=${content.id}title=${content.title}`
+            url: `/house/${type}/index/index?id=${content.id}&title=${content.title}`
         })
     }
 

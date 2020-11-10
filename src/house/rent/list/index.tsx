@@ -22,7 +22,7 @@ interface IConditionState {
     currentPage: number
     areaList?: IFilter
     rentPrice?: IFilter
-    room?: IFilter
+    fangRoom?: IFilter
     rentType?: IFilter
     propertyType?: IFilter
     fangBuildingType?: IFilter
@@ -38,12 +38,17 @@ const INIT_CONDITION = {
     currentPage: 1,
     areaList: default_value,
     rentPrice: default_value,
-    room: default_value,
+    fangRoom: default_value,
     rentType: initial_value,
     propertyType: initial_value,
     fangBuildingType: initial_value,
     renovationStatus: initial_value,
     fangDirectionType: initial_value,
+}
+
+const RENT_TYPE = {
+    '1': '整租',
+    '2': '合租'
 }
 
 const RentList = () => {
@@ -73,9 +78,9 @@ const RentList = () => {
             keys: ['rentPrice']
         },
         {
-            type: 'room',
+            type: 'fangRoom',
             name: '户型',
-            keys: ['room']
+            keys: ['fangRoom']
         },
         {
             type: 'more',
@@ -89,7 +94,7 @@ const RentList = () => {
 
     useEffect(() => {
         fetchHouseList(selected.currentPage)
-    }, [selected.currentPage, selected.areaList, selected.rentPrice, selected.room])
+    }, [selected.currentPage, selected.areaList, selected.rentPrice, selected.fangRoom])
 
     const fetchCondition = () => {
         app.request({
@@ -101,19 +106,19 @@ const RentList = () => {
 
     const fetchHouseList = (currentPage: number = 1) => {
         app.request({
-            url: app.testApiUrl(api.getRentList),
+            url: app.areaApiUrl(api.getRentList),
             data: {
                 title: title || '',
                 page: currentPage,
                 limit: PAGE_LIMIT,
                 fang_area_id: filterParam(selected.areaList?.id),
-                rent_price: filterParam(selected.rentPrice?.id),
-                fang_room_type: filterParam(selected.room?.id),
+                price: filterParam(selected.rentPrice?.id),
+                room: filterParam(selected.fangRoom?.id),
                 rent_type: selected.rentType?.id,
-                fang_renovation_status: selected.renovationStatus?.id,
-                fang_direction_type: selected.fangDirectionType?.id,
-                fang_property_type: selected.propertyType?.id,
-                fang_building_type: selected.fangBuildingType?.id
+                fang_renovation_status_id: selected.renovationStatus?.id,
+                fang_direction_type_id: selected.fangDirectionType?.id,
+                fang_property_type_id: selected.propertyType?.id,
+                fang_building_type_id: selected.fangBuildingType?.id
             }
         }, { loading: false }).then((result: any) => {
             setLoading(false)
@@ -319,10 +324,10 @@ const RentList = () => {
                         </View>
                     </View>
                 </View>
-                <View className={classnames('search-container', tab === 'room' && 'actived')}>
+                <View className={classnames('search-container', tab === 'fangRoom' && 'actived')}>
                     <View className="search-content">
                         <View className="search-split">
-                            {renderSplitItem('room')}
+                            {renderSplitItem('fangRoom')}
                         </View>
                     </View>
                 </View>
@@ -371,7 +376,7 @@ const RentList = () => {
                                             <Text className="price-unit">元/月</Text>
                                         </View>
                                         <View className="text-item tags">
-                                            <Text className="tags-item sale-status-2">整租</Text>
+                                            <Text className="tags-item sale-status-2">{RENT_TYPE[item.rent_type]}</Text>
                                             {
                                                 item.tags.map((tag: string, tagIndex: number) => (
                                                     <Text key={tagIndex} className="tags-item">{tag}</Text>

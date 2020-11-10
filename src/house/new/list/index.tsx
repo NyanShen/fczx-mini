@@ -128,7 +128,7 @@ const NewHouse = () => {
 
     const fetchCondition = () => {
         app.request({
-            url: app.testApiUrl(api.getHouseAttr)
+            url: app.areaApiUrl(api.getHouseAttr)
         }).then((result: any) => {
             setCondition({ ...result, saleStatus: SALE_STATUS_ATTR })
         })
@@ -349,6 +349,14 @@ const NewHouse = () => {
 
         return showList.join(',')
     }
+
+    const renderPrice = (price: string, price_type: string) => {
+        if (price === '0') {
+            return <Text className="price">待定</Text>
+        } else {
+            return <Text className="price">{price}<Text className="price-unit">{PRICE_TYPE[price_type]}</Text></Text>
+        }
+    }
     return (
         <View className="newhouse">
             <NavBar title="新房" back={true} />
@@ -464,8 +472,7 @@ const NewHouse = () => {
                                             <Text>{item.address}</Text>
                                         </View>
                                         <View className="mb8">
-                                            <Text className="price">{item.price}</Text>
-                                            <Text className="price-unit">{PRICE_TYPE[item.price_type]}</Text>
+                                            {renderPrice(item.price, item.price_type)}
                                         </View>
                                         <View className="text-item tags">
                                             <Text className={classnames('tags-item', `sale-status-${item.sale_status}`)}>{SALE_STATUS[item.sale_status]}</Text>

@@ -28,7 +28,7 @@ const HouseDetail = () => {
         params.id = '1001'
         if (params.id) {
             app.request({
-                url: app.testApiUrl(api.getHouseById),
+                url: app.areaApiUrl(api.getHouseById),
                 data: {
                     id: params.id
                 }

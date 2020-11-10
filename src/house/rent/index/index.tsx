@@ -23,6 +23,7 @@ const INIT_ALNUM = {
 const INIT_RENT_DATA = {
     area: {},
     tags: [],
+    user: {},
     fangHouse: {},
     rentImage: [],
     fangPropertyType: {},
@@ -51,27 +52,23 @@ const ELEVATOR = {
 }
 
 const RentIndex = () => {
-    const currentRouter: any = getCurrentInstance().router
-    const params: any = currentRouter.params
+    const router: any = getCurrentInstance().router
     const { appHeaderHeight, contentHeight } = useNavData()
     const [open, setOpen] = useState<boolean>(false)
     const [album, setAlbum] = useState<IAlbum>(INIT_ALNUM)
     const [rentData, setRentData] = useState<any>(INIT_RENT_DATA)
 
     useEffect(() => {
-        params.id = '1000027'
-        if (params.id) {
-            app.request({
-                url: app.testApiUrl(api.getRentById),
-                data: {
-                    id: params.id
-                }
-            }).then((result: any) => {
-                const { longitude, latitude } = result.fangHouse
-                const static_map = getStaticMap(latitude, longitude)
-                setRentData({ ...result, ...{ static_map: static_map } })
-            })
-        }
+        app.request({
+            url: app.areaApiUrl(api.getRentById),
+            data: {
+                id: router?.params.id
+            }
+        }).then((result: any) => {
+            const { longitude, latitude } = result.fangHouse
+            const static_map = getStaticMap(latitude, longitude)
+            setRentData({ ...result, ...{ static_map: static_map } })
+        })
     }, [])
 
     const onSwiperChange = (event) => {
@@ -153,7 +150,7 @@ const RentIndex = () => {
                             <View className="iconfont iconaddress" onClick={toLocation}>地址</View>
                         </View>
                         <View className="small-desc mb16">
-                            更新时间：{formatTimestamp(rentData.modified)}
+                            更新时间：{rentData.modified && formatTimestamp(rentData.modified)}
                         </View>
                         <View className="tags">
                             <Text className="tags-item sale-status-2">{RENT_TYPE[rentData.rent_type]}</Text>
@@ -225,11 +222,11 @@ const RentIndex = () => {
                         </View>
                         <View className="rent-info-consultant">
                             <View className="user-photo">
-                                <Image src=""></Image>
+                                <Image src={rentData.user.avatar}></Image>
                             </View>
                             <View>
-                                <View>{rentData.real_name}</View>
-                                <View className="small-desc">置业顾问</View>
+                                <View>{rentData.user.nickname}</View>
+                                <View className="small-desc">经纪人</View>
                             </View>
                         </View>
                         <View className="rent-desc">
@@ -266,11 +263,11 @@ const RentIndex = () => {
             <View className="bottom-bar">
                 <View className="bar-item">
                     <View className="user-photo">
-                        <Image src=""></Image>
+                        <Image src={rentData.user.avatar}></Image>
                     </View>
                     <View>
-                        <View>{rentData.real_name}</View>
-                        <View className="small-desc">置业顾问</View>
+                        <View>{rentData.user.nickname}</View>
+                        <View className="small-desc">经纪人</View>
                     </View>
                 </View>
                 <View className="bar-item-btn" onClick={toChatRoom}>

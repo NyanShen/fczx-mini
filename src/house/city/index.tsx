@@ -19,7 +19,7 @@ const City = () => {
 
     useEffect(() => {
         app.request({
-            url: app.testApiUrl(api.getCityList)
+            url: app.apiUrl(api.getCityList)
         }).then((result: any) => {
             setCityData(result || [])
         })

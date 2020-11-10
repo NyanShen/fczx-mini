@@ -76,7 +76,7 @@ const CommunityList = () => {
 
     const fetchCondition = () => {
         app.request({
-            url: app.testApiUrl(api.getHouseAttr)
+            url: app.areaApiUrl(api.getHouseAttr)
         }).then((result: any) => {
             setCondition(result)
         })
@@ -84,14 +84,14 @@ const CommunityList = () => {
 
     const fetchHouseList = (currentPage: number = 1) => {
         app.request({
-            url: app.testApiUrl(api.getCommunityList),
+            url: app.areaApiUrl(api.getCommunityList),
             data: {
                 title: title || '',
                 page: currentPage,
                 limit: PAGE_LIMIT,
                 fang_area_id: filterParam(selected.areaList?.id),
                 price: filterParam(selected.unitPrice?.id),
-                buildYear: filterParam(selected.buildYear?.id),
+                build_year: filterParam(selected.buildYear?.id),
 
             }
         }, { loading: false }).then((result: any) => {

@@ -24,7 +24,7 @@ interface IConditionState {
     unitPrice?: IFilter
     totalPrice?: IFilter
     priceType?: string
-    room?: IFilter
+    fangRoom?: IFilter
     propertyType?: IFilter
     fangBuildingType?: IFilter
     renovationStatus?: IFilter
@@ -41,7 +41,7 @@ const INIT_CONDITION = {
     areaList: default_value,
     unitPrice: default_value,
     totalPrice: initial_value,
-    room: default_value,
+    fangRoom: default_value,
     propertyType: initial_value,
     fangBuildingType: initial_value,
     renovationStatus: initial_value,
@@ -76,9 +76,9 @@ const esfList = () => {
             keys: ['totalPrice', 'unitPrice']
         },
         {
-            type: 'room',
+            type: 'fangRoom',
             name: '户型',
-            keys: ['room']
+            keys: ['fangRoom']
         },
         {
             type: 'more',
@@ -104,11 +104,11 @@ const esfList = () => {
 
     useEffect(() => {
         fetchHouseList(selected.currentPage)
-    }, [selected.currentPage, selected.areaList, selected.unitPrice, selected.totalPrice, selected.room])
+    }, [selected.currentPage, selected.areaList, selected.unitPrice, selected.totalPrice, selected.fangRoom])
 
     const fetchCondition = () => {
         app.request({
-            url: app.testApiUrl(api.getHouseAttr)
+            url: app.areaApiUrl(api.getHouseAttr)
         }).then((result: any) => {
             setCondition(result)
         })
@@ -116,7 +116,7 @@ const esfList = () => {
 
     const fetchHouseList = (currentPage: number = 1) => {
         app.request({
-            url: app.testApiUrl(api.getEsfList),
+            url: app.areaApiUrl(api.getEsfList),
             data: {
                 title: title || '',
                 page: currentPage,
@@ -124,11 +124,11 @@ const esfList = () => {
                 fang_area_id: filterParam(selected.areaList?.id),
                 price: filterParam(selected.unitPrice?.id || selected.totalPrice?.id),
                 price_type: filterParam(selected.priceType),
-                fang_room_type: filterParam(selected.room?.id),
+                room: filterParam(selected.fangRoom?.id),
                 fang_project_feature: selected.projectFeature?.id,
-                fang_renovation_status: selected.renovationStatus?.id,
-                fang_property_type: selected.propertyType?.id,
-                fang_building_type: selected.fangBuildingType?.id
+                fang_renovation_status_id: selected.renovationStatus?.id,
+                fang_property_type_id: selected.propertyType?.id,
+                fang_building_type_id: selected.fangBuildingType?.id
             }
         }, { loading: false }).then((result: any) => {
             setLoading(false)
@@ -234,7 +234,7 @@ const esfList = () => {
 
     const handleHouseItemClick = (item: any) => {
         Taro.navigateTo({
-            url: `/house/esf/index/index?id=${item.id}&name=${item.title}`
+            url: `/house/esf/index/index?id=${item.id}&title=${item.title}`
         })
     }
 
@@ -363,10 +363,10 @@ const esfList = () => {
                         </View>
                     </View>
                 </View>
-                <View className={classnames('search-container', tab === 'room' && 'actived')}>
+                <View className={classnames('search-container', tab === 'fangRoom' && 'actived')}>
                     <View className="search-content">
                         <View className="search-split">
-                            {renderSplitItem('room')}
+                            {renderSplitItem('fangRoom')}
                         </View>
                     </View>
                 </View>
@@ -395,7 +395,7 @@ const esfList = () => {
                     <View className="house-list-ul">
                         {
                             houseList.map((item: any, index: number) => (
-                                <View key={index} className="house-list-li" onClick={() => handleHouseItemClick({})}>
+                                <View key={index} className="house-list-li" onClick={() => handleHouseItemClick(item)}>
                                     <View className="li-image">
                                         <Image src={item.image_path} mode="aspectFill"></Image>
                                     </View>

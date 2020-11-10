@@ -46,9 +46,13 @@ const Index = () => {
 
   const fetchHouseList = () => {
     app.request({
-      url: app.testApiUrl(api.getHouseList)
+      url: app.areaApiUrl(api.getHouseList),
+      data: {
+        page: 1,
+        limit: 20
+      }
     }).then((result: any) => {
-      console.log(result)
+      console.log(result.data)
     })
   }
 

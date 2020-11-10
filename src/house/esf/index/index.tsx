@@ -17,6 +17,7 @@ const INIT_ESF_DATA = {
     esfImage: [],
     tags: [],
     area: {},
+    user: {},
     fangHouse: {},
     fangRenovationStatus: {},
     fangDirectionType: {},
@@ -32,27 +33,23 @@ const INIT_ALNUM = {
 }
 
 const esfHouse = () => {
-    const currentRouter: any = getCurrentInstance().router
-    const params: any = currentRouter.params
+    const router: any = getCurrentInstance().router
     const { appHeaderHeight, contentHeight } = useNavData()
     const [open, setOpen] = useState<boolean>(false)
     const [album, setAlbum] = useState<IAlbum>(INIT_ALNUM)
     const [esfData, setEsfData] = useState<any>(INIT_ESF_DATA)
 
     useEffect(() => {
-        params.id = '1000027'
-        if (params.id) {
-            app.request({
-                url: app.areaApiUrl(api.getEsfById),
-                data: {
-                    id: params.id
-                }
-            }).then((result: any) => {
-                const { latitude, longitude } = result.fangHouse
-                const static_map = getStaticMap(latitude, longitude)
-                setEsfData({ ...result, ...{ static_map: static_map } })
-            })
-        }
+        app.request({
+            url: app.areaApiUrl(api.getEsfById),
+            data: {
+                id: router?.params.id
+            }
+        }).then((result: any) => {
+            const { latitude, longitude } = result.fangHouse
+            const static_map = getStaticMap(latitude, longitude)
+            setEsfData({ ...result, ...{ static_map: static_map } })
+        })
     }, [])
 
     const onSwiperChange = (event) => {
@@ -213,11 +210,11 @@ const esfHouse = () => {
                     </View>
                     <View className="esf-info-consultant">
                         <View className="user-photo">
-                            <Image src=""></Image>
+                            <Image src={esfData.user.avatar}></Image>
                         </View>
                         <View>
-                            <View>{esfData.real_name}</View>
-                            <View className="small-desc">置业顾问</View>
+                            <View>{esfData.user.nickname}</View>
+                            <View className="small-desc">经纪人</View>
                         </View>
                     </View>
 
@@ -280,16 +277,19 @@ const esfHouse = () => {
             <View className="bottom-bar">
                 <View className="bar-item">
                     <View className="user-photo">
-                        <Image src=""></Image>
+                        <Image src={esfData.user.avatar}></Image>
                     </View>
                     <View>
-                        <View>{esfData.real_name}</View>
-                        <View className="small-desc">置业顾问</View>
+                        <View>{esfData.user.nickname}</View>
+                        <View className="small-desc">经纪人</View>
                     </View>
                 </View>
-                <View className="bar-item-btn" onClick={toChatRoom}>
-                    <Text className="btn btn-yellow btn-bar">在线咨询</Text>
-                </View>
+                {
+                    esfData.source_type == '2' &&
+                    <View className="bar-item-btn" onClick={toChatRoom}>
+                        <Text className="btn btn-yellow btn-bar">在线咨询</Text>
+                    </View>
+                }
                 <View className="bar-item-btn" onClick={handlePhoneCall}>
                     <Text className="btn btn-primary btn-bar">电话咨询</Text>
                 </View>

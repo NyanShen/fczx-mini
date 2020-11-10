@@ -21,7 +21,7 @@ const HouseTypeDetail = () => {
 
     useEffect(() => {
         app.request({
-            url: app.testApiUrl(api.getHouseTypeDetail),
+            url: app.areaApiUrl(api.getHouseTypeDetail),
             data: {
                 id: params.id
             }

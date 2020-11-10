@@ -48,31 +48,27 @@ const INIT_HOUSE_DATA = {
 const imageId = "image_1"
 
 const House = () => {
-    let currentRouter: any = getCurrentInstance().router
-    let params: any = currentRouter.params
+    let router: any = getCurrentInstance().router
     const { contentHeight } = useNavData()
     const [albumSwiper, setAlbumSwiper] = useState<IAlbumSwiper>(INIT_ALBUM_SWIPER)
     const [houseData, setHouseData] = useState<any>(INIT_HOUSE_DATA)
 
     useEffect(() => {
-        params.id = '1000006'
-        if (params.id) {
-            app.request({
-                url: app.areaApiUrl(api.getHouseById),
-                data: {
-                    id: params.id
-                }
-            }).then((result: any) => {
-                const static_map = getStaticMap(result.latitude, result.longitude)
-                setHouseData({ ...result, ...{ static_map: static_map } })
-                const video = result.imagesData.video
-                if (video) {
-                    setAlbumSwiper({ albumId: video.id, swiperIndex: 0 })
-                } else {
-                    setAlbumSwiper({ albumId: imageId, swiperIndex: 0 })
-                }
-            })
-        }
+        app.request({
+            url: app.areaApiUrl(api.getHouseById),
+            data: {
+                id: router?.params.id
+            }
+        }).then((result: any) => {
+            const static_map = getStaticMap(result.latitude, result.longitude)
+            setHouseData({ ...result, ...{ static_map: static_map } })
+            const video = result.imagesData.video
+            if (video) {
+                setAlbumSwiper({ albumId: video.id, swiperIndex: 0 })
+            } else {
+                setAlbumSwiper({ albumId: imageId, swiperIndex: 0 })
+            }
+        })
     }, [])
 
     const onSwiperChange = (event) => {
@@ -162,12 +158,31 @@ const House = () => {
         })
     }
 
+    const toHouseConsultant = () => {
+        const { id, title, price, price_type, image_path } = houseData
+        const paramString = toUrlParam({
+            id,
+            title,
+            messageType: '3',
+            houseMain: JSON.stringify({
+                id,
+                title,
+                price,
+                price_type,
+                image_path,
+                areaName: houseData.area.name
+            })
+        })
+        Taro.navigateTo({
+            url: `/house/new/consultant/index${paramString}`
+        })
+    }
+
     const toHome = () => {
         Taro.switchTab({ url: '/pages/index/index' })
     }
 
-    const toChatRoom = () => {
-        const consultant = houseData.enableFangHouseConsultant[0]
+    const toChatRoom = (consultant: any) => {
         const { id, title, price, price_type, image_path } = houseData
         const paramString = toUrlParam({
             messageType: '3',
@@ -373,7 +388,7 @@ const House = () => {
                                 houseId={houseData.id}
                                 btnText="变价提醒"
                                 iconClass="icondata-view"
-                                backUrl={currentRouter.path}
+                                backUrl={router.path}
                             ></Popup>
                         </View>
                         <View className="subscrib-item">
@@ -382,7 +397,7 @@ const House = () => {
                                 houseId={houseData.id}
                                 btnText="开盘通知"
                                 iconClass="iconnotice"
-                                backUrl={currentRouter.path}
+                                backUrl={router.path}
                             ></Popup>
                         </View>
                     </View>
@@ -410,7 +425,7 @@ const House = () => {
                                     <Popup
                                         houseId={houseData.id}
                                         btnText="预约优惠"
-                                        backUrl={currentRouter.path}
+                                        backUrl={router.path}
                                     ></Popup>
                                 </View>
                             </View>
@@ -522,8 +537,8 @@ const House = () => {
                     <View className="house-item-header">
                         <View className="title">置业顾问</View>
                         {
-                            houseData.length > 3 &&
-                            <View className="more" onClick={() => toHouseModule('consultant')}>
+                            houseData.enableFangHouseConsultant.length > 3 &&
+                            <View className="more" onClick={toHouseConsultant}>
                                 <Text>更多</Text>
                                 <Text className="iconfont iconarrow-right-bold"></Text>
                             </View>
@@ -532,15 +547,15 @@ const House = () => {
                     <View className="house-consultant-content clearfix">
                         {
                             houseData.enableFangHouseConsultant.map((item: any, index: number) => {
-                                if (index < 4) {
+                                if (index < 3) {
                                     return (
                                         <View key={index} className="consultant-item">
                                             <View className="item-image">
-                                                <Image src={item.avatar}></Image>
+                                                <Image src={item.user.avatar}></Image>
                                             </View>
-                                            <View className="item-name">{item.nickname}</View>
+                                            <View className="item-name">{item.user.nickname}</View>
                                             <View className="item-btn">
-                                                <Button className="ovalbtn ovalbtn-brown">
+                                                <Button className="ovalbtn ovalbtn-brown" onClick={() => toChatRoom(item)}>
                                                     <Text className="iconfont iconmessage"></Text>
                                                     <Text>咨询</Text>
                                                 </Button>
@@ -573,7 +588,7 @@ const House = () => {
                     <Text className="iconfont icongroup"></Text>
                     <Text>团购</Text>
                 </View> */}
-                <View className="bar-item-btn" onClick={toChatRoom}>
+                <View className="bar-item-btn" onClick={() => toChatRoom(houseData.enableFangHouseConsultant[0])}>
                     <View className="btn btn-yellow btn-bar">
                         <View>在线咨询</View>
                         <View className="btn-subtext">快速在线咨询</View>
