@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Taro from '@tarojs/taro'
+import Taro, { useReady } from '@tarojs/taro'
 import { View, ScrollView, Text, Input, Map } from '@tarojs/components'
 import classnames from 'classnames'
 import find from 'lodash/find'
@@ -58,6 +58,7 @@ const INIT_MAP_PARAM = {
     zoom: 11
 }
 
+let mapctx: any = null
 const HouseMap = () => {
     const { appHeaderHeight, contentHeight } = useNavData()
     const footerBtnHeight = 60
@@ -71,6 +72,7 @@ const HouseMap = () => {
     const [mapParam, setMapParam] = useState<IMapParam>(INIT_MAP_PARAM)
     const [selected, setSelected] = useState<IConditionState>(INIT_CONDITION)
     const [markers, setMarkers] = useState<any[]>([])
+    
     const tabs = [
         {
             type: 'areaList',
@@ -105,6 +107,10 @@ const HouseMap = () => {
         }
     ]
 
+    useReady(() => {
+     mapctx = Taro.createMapContext('QQMapId')
+    })
+
     useEffect(() => {
         app.request({
             url: app.areaApiUrl(api.getHouseAttr)
@@ -114,6 +120,10 @@ const HouseMap = () => {
     }, [])
 
     useEffect(() => {
+        fetchAreaHouse()
+    }, [mapParam, selected.areaList, selected.unitPrice, selected.totalPrice, selected.room])
+
+    const fetchAreaHouse = () => {
         app.request({
             url: app.areaApiUrl(api.getHouseMap),
             data: {
@@ -137,8 +147,11 @@ const HouseMap = () => {
                 setHouseLabels(result.label_rows)
             }
         })
-    }, [mapParam, selected])
-
+    }
+    /**
+     * 地图方法
+     * @param dataList 
+     */
     const setRegionData = (dataList: any[]) => {
         let totalCount = 0
         let regionLabels: any[] = []
@@ -152,16 +165,17 @@ const HouseMap = () => {
                 iconPath: down_fill,
                 width: 20,
                 height: 30,
-                label: {
+                callout: {
                     content: `${item.name}\n${item.count}个新盘`,
                     color: '#fff',
-                    anchorX: -20,
-                    anchorY: -50,
+                    anchorX: 0,
+                    anchorY: 30,
                     padding: 10,
                     borderRadius: 10,
                     borderColor: '#fff',
                     bgColor: '#11a43c',
-                    textAlign: 'center'
+                    textAlign: 'center',
+                    display: 'ALWAYS'
                 }
             })
         }
@@ -179,15 +193,16 @@ const HouseMap = () => {
                 iconPath: down_fill,
                 width: 20,
                 height: 30,
-                label: {
+                callout: {
                     content: `${item.price}${PRICE_TYPE[item.price_type]} | ${item.title}`,
                     color: '#fff',
-                    anchorX: 10,
-                    anchorY: -52,
+                    anchorX: 0,
+                    anchorY: 20,
                     padding: 10,
                     borderRadius: 10,
                     bgColor: '#11a43c',
-                    textAlign: 'center'
+                    textAlign: 'center',
+                    display: 'ALWAYS'
                 }
             })
         }
@@ -195,11 +210,11 @@ const HouseMap = () => {
     }
 
     const handleRegionChangeEnd = () => {
-        const mapctx = Taro.createMapContext('QQMapId')
         mapctx.getScale({
             success: (scaleRes: any) => {
                 mapctx.getRegion({
                     success: (regionRes: any) => {
+                        console.log("getRegion")
                         const ne = regionRes.northeast
                         const sw = regionRes.southwest
                         const nepoint = qqMapTransBMap(ne.latitude, ne.longitude)
@@ -213,10 +228,30 @@ const HouseMap = () => {
                         })
                     }
                 })
-
             }
         })
     }
+
+    const handleCalloutTap = (e: any) => {
+        const markerId = e.detail.markerId
+        const areaTarget = find(condition.areaList, { id: `${markerId}` })
+        if (areaTarget) {
+            setSelected({
+                ...selected,
+                areaList: areaTarget
+            })
+            
+        } else {
+            Taro.navigateTo({
+                url: `/house/new/index/index?id=${markerId}`
+            })
+        }
+    }
+
+    /**
+     * 查询条件
+     * @param id 
+     */
 
     const filterParam = (id: any) => {
         return id === 'all' ? '' : id
@@ -299,6 +334,7 @@ const HouseMap = () => {
 
     const handleConfirm = () => {
         setTab('')
+        fetchAreaHouse()
     }
 
     const renderShowName = (item: any) => {
@@ -444,9 +480,11 @@ const HouseMap = () => {
                     style={{ width: '100%', height: contentHeight }}
                     latitude={center.latitude}
                     longitude={center.longitude}
-                    scale={INIT_MAP_PARAM.zoom}
+                    scale={mapParam.zoom}
                     markers={markers}
+                    showLocation={true}
                     onEnd={handleRegionChangeEnd}
+                    onCalloutTap={handleCalloutTap}
                 >
                 </Map>
             </View>
