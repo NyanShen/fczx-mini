@@ -1,9 +1,7 @@
 @font-face {
   font-family: "iconfont";
   src: url("./iconfont.eot");
-  src: url("./iconfont.eot?#iefix") format("embedded-opentype"),
-    url("./iconfont.woff2") format("woff2"), url("./iconfont.woff") format("woff"),
-    url("./iconfont.ttf") format("truetype");
+  src: url("./iconfont.eot?#iefix") format("embedded-opentype"), url("./iconfont.woff2") format("woff2"), url("./iconfont.woff") format("woff"), url("./iconfont.ttf") format("truetype");
 }
 
 .iconfont {
@@ -13,6 +11,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.iconmanage:before {
+  content: "\e610";
 }
 
 .iconphoto:before {

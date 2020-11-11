@@ -4,9 +4,9 @@ export default {
   pages: [
     // 'news/detail/index',
     // 'house/community/list/index',
+    'pages/user/index', 
     'pages/index/index',
     'pages/chat/index',
-    'pages/user/index', 
   ],
   subPackages: [
     {
@@ -43,7 +43,9 @@ export default {
 
         'community/index/index',
         'community/list/index',
-        'community/search/index'
+        'community/search/index',
+
+        'manage/index'
       ]
     },
     {

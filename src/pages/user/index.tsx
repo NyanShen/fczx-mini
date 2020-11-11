@@ -53,6 +53,18 @@ const User = () => {
     Taro.hideTabBarRedDot({ index: 1 })
   }
 
+  const toUserModule = () => {
+    if (user.username) {
+      Taro.navigateTo({
+        url: '/house/manage/index'
+      })
+    } else {
+      Taro.navigateTo({
+        url: '/login/index'
+      })
+    }
+  }
+
   return (
     <View className="user">
       <NavBar title="个人中心" home={true} />
@@ -70,9 +82,18 @@ const User = () => {
           </View>
         }
       </View>
+      <View className="user-item" onClick={toUserModule}>
+        <View className="item-icon">
+          <Text className="iconfont iconmanage"></Text>
+        </View>
+        <View className="item-text">房源管理</View>
+        <View className="item-arrow">
+          <Text className="iconfont iconarrow-right-bold"></Text>
+        </View>
+      </View>
       {
         user.username &&
-        <View className="user-item user-logout" onClick={handleLogout}>
+        <View className="user-logout" onClick={handleLogout}>
           <Text>退出登录</Text>
         </View>
       }
