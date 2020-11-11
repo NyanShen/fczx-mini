@@ -465,38 +465,45 @@ const House = () => {
                         </Swiper>
                     </View>
                 </View>
-                <View className="house-item house-news mt20">
-                    <View className="house-item-header">
-                        <View className="title">楼盘动态</View>
-                        <View className="more" onClick={() => toHouseModule('news')}>
-                            <Text>更多</Text>
-                            <Text className="iconfont iconarrow-right-bold"></Text>
+                {
+                    houseData.news.length > 0 &&
+                    <View className="house-item house-news mt20">
+                        <View className="house-item-header">
+                            <View className="title">楼盘动态</View>
+                            <View className="more" onClick={() => toHouseModule('news')}>
+                                <Text>更多</Text>
+                                <Text className="iconfont iconarrow-right-bold"></Text>
+                            </View>
+                        </View>
+                        <View className="house-item-content">
+                            {
+                                houseData.news.map((item: any, index: number) => (
+                                    <View key={index} className="news-item" onClick={() => toHouseNewsDetail(item.id)}>
+                                        <View className="header">
+                                            <Text className="tag">{item.newsCate.name}</Text>
+                                            <Text className="title">{item.title}</Text>
+                                        </View>
+                                        <View className="sub-title">{item.sub_title}</View>
+                                        <View className="publish small-desc">
+                                            <View>{item.author}</View>
+                                            <View className="date">{formatTimestamp(item.modified)}</View>
+                                        </View>
+                                    </View>
+                                ))
+                            }
                         </View>
                     </View>
-                    <View className="house-item-content">
-                        {
-                            houseData.news.map((item: any, index: number) => (
-                                <View key={index} className="news-item" onClick={() => toHouseNewsDetail(item.id)}>
-                                    <View className="header">
-                                        <Text className="tag">{item.newsCate.name}</Text>
-                                        <Text className="title">{item.title}</Text>
-                                    </View>
-                                    <View className="sub-title">{item.sub_title}</View>
-                                    <View className="publish small-desc">
-                                        <View>{item.author}</View>
-                                        <View className="date">{formatTimestamp(item.modified)}</View>
-                                    </View>
-                                </View>
-                            ))
-                        }
+                }
+                {
+                    houseData.fang_sand_pic &&
+                    <View className="house-item house-sand mt20">
+                        <View className="house-item-header">
+                            <View className="title">沙盘图</View>
+                        </View>
+                        {houseData.id && getSandCommonComponent}
                     </View>
-                </View>
-                <View className="house-item house-sand mt20">
-                    <View className="house-item-header">
-                        <View className="title">沙盘图</View>
-                    </View>
-                    {houseData.id && getSandCommonComponent}
-                </View>
+                }
+
                 <View className="house-item house-surround mt20">
                     <View className="house-item-header">
                         <View className="title">周边配套</View>

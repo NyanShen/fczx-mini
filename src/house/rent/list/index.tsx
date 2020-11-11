@@ -278,6 +278,15 @@ const RentList = () => {
 
         return showList.join(',')
     }
+    
+    const renderPrice = (price: string) => {
+        if (price === '0') {
+            return <Text className="price">面议</Text>
+        } else {
+            return <Text className="price">{price}<Text className="price-unit">元/月</Text></Text>
+        }
+    }
+
     return (
         <View className="rent">
             <NavBar title="租房" back={true} />
@@ -372,8 +381,7 @@ const RentList = () => {
                                             <Text className="ml20">{item.community}</Text>
                                         </View>
                                         <View className="text-item mb8">
-                                            <Text className="price">{item.price}</Text>
-                                            <Text className="price-unit">元/月</Text>
+                                            {renderPrice(item.price)}
                                         </View>
                                         <View className="text-item tags">
                                             <Text className="tags-item sale-status-2">{RENT_TYPE[item.rent_type]}</Text>

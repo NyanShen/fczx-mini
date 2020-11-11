@@ -156,6 +156,14 @@ const CommunityIndex = () => {
         )
     }
 
+    const renderPrice = (price: string, price_type: string) => {
+        if (price === '0') {
+            return <Text className="price">待定</Text>
+        } else {
+            return <Text>参考均价<Text className="price">{price}</Text>{PRICE_TYPE[price_type]}</Text>
+        }
+    }
+
     return (
         <View className="community">
             <NavBar title={communityData.title} back={true}></NavBar>
@@ -189,7 +197,7 @@ const CommunityIndex = () => {
                         </View>
                         <View className="community-price mt20">
                             <View className="price-reffer">
-                                参考均价<Text className="price">{communityData.price}</Text>{PRICE_TYPE[communityData.price_type]}
+                                {renderPrice(communityData.price, communityData.price_type)}
                             </View>
                             {/* <View className="price-ratio">
                                 环比上月<Text className="tip-color">0.12%</Text>

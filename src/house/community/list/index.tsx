@@ -22,7 +22,7 @@ interface IFilter {
 interface IConditionState {
     currentPage: number
     areaList?: IFilter
-    unitPrice?: IFilter
+    propertyType?: IFilter
     buildYear?: IFilter
 }
 
@@ -31,7 +31,7 @@ const default_value = { id: 'all', name: '不限' }
 const INIT_CONDITION = {
     currentPage: 1,
     areaList: default_value,
-    unitPrice: default_value,
+    propertyType: default_value,
     buildYear: default_value
 }
 
@@ -56,9 +56,9 @@ const CommunityList = () => {
             keys: ['areaList']
         },
         {
-            type: 'unitPrice',
-            name: '均价',
-            keys: ['unitPrice']
+            type: 'propertyType',
+            name: '建筑类型',
+            keys: ['propertyType']
         },
         {
             type: 'buildYear',
@@ -72,7 +72,7 @@ const CommunityList = () => {
 
     useEffect(() => {
         fetchHouseList(selected.currentPage)
-    }, [selected.currentPage, selected.areaList, selected.unitPrice, selected.buildYear])
+    }, [selected.currentPage, selected.areaList, selected.propertyType, selected.buildYear])
 
     const fetchCondition = () => {
         app.request({
@@ -90,7 +90,7 @@ const CommunityList = () => {
                 page: currentPage,
                 limit: PAGE_LIMIT,
                 fang_area_id: filterParam(selected.areaList?.id),
-                price: filterParam(selected.unitPrice?.id),
+                fang_property_type: filterParam(selected.propertyType?.id),
                 build_year: filterParam(selected.buildYear?.id),
 
             }
@@ -199,6 +199,15 @@ const CommunityList = () => {
 
         return showList.join(',')
     }
+
+    const renderPrice = (price: string, price_type: string) => {
+        if (price === '0') {
+            return <Text className="price">待定</Text>
+        } else {
+            return <Text className="price">{price}<Text className="price-unit">{PRICE_TYPE[price_type]}</Text></Text>
+        }
+    }
+
     return (
         <View className="community">
             <NavBar title="小区" back={true} />
@@ -239,10 +248,10 @@ const CommunityList = () => {
                         </View>
                     </View>
                 </View>
-                <View className={classnames('search-container', tab === 'unitPrice' && 'actived')}>
+                <View className={classnames('search-container', tab === 'propertyType' && 'actived')}>
                     <View className="search-content">
                         <View className="search-split">
-                            {renderSplitItem('unitPrice')}
+                            {renderSplitItem('propertyType')}
                         </View>
                     </View>
                 </View>
@@ -280,8 +289,7 @@ const CommunityList = () => {
                                             <Text className="ml20">{item.address}</Text>
                                         </View>
                                         <View className="text-item mb8">
-                                            <Text className="price">{item.price}</Text>
-                                            <Text className="price-unit">{PRICE_TYPE[item.price_type]}</Text>
+                                            {renderPrice(item.price, item.price_type)}
                                         </View>
                                         <View className="text-item text-item-small">
                                             <Text>二手房({item.house_num})</Text>
