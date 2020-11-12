@@ -4,7 +4,7 @@ export default {
   pages: [
     // 'news/detail/index',
     // 'house/community/list/index',
-    'pages/user/index', 
+    'pages/user/index',
     'pages/index/index',
     'pages/chat/index',
   ],
@@ -36,16 +36,20 @@ export default {
         'esf/index/index',
         'esf/list/index',
         'esf/search/index',
+        'esf/sale/index',
 
         'rent/index/index',
         'rent/list/index',
         'rent/search/index',
+        // 'rent/sale/index',
 
         'community/index/index',
         'community/list/index',
         'community/search/index',
 
-        'manage/index'
+        'manage/index',
+
+        'sale/community/index'
       ]
     },
     {

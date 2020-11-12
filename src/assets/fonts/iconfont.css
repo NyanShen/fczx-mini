@@ -13,6 +13,14 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.iconhomepage:before {
+  content: "\eb96";
+}
+
+.iconsquare:before {
+  content: "\eb9f";
+}
+
 .iconmanage:before {
   content: "\e610";
 }

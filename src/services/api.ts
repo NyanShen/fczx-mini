@@ -7,7 +7,8 @@ export default {
 
     getTestData: '/test/test',
     getCityList: '/index/city-list',
-    
+    getAreaList: '/area/list',
+
     getHouseList: '/house/list',
     getHouseMap: '/house/area-house',
     getHouseSearchHot: '/house/hot-search',
@@ -33,6 +34,7 @@ export default {
 
     getCommunityList: '/community/list',
     getCommunityById: '/community/get',
+    searchCommunity: '/community/find-by-title',
 
     getNewsById: '/news/get',
     getNewsList: '/news/list',

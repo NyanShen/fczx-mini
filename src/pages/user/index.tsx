@@ -53,11 +53,9 @@ const User = () => {
     Taro.hideTabBarRedDot({ index: 1 })
   }
 
-  const toUserModule = () => {
+  const toUserModule = (url: string) => {
     if (user.username) {
-      Taro.navigateTo({
-        url: '/house/manage/index'
-      })
+      Taro.navigateTo({ url })
     } else {
       Taro.navigateTo({
         url: '/login/index'
@@ -82,11 +80,29 @@ const User = () => {
           </View>
         }
       </View>
-      <View className="user-item" onClick={toUserModule}>
+      <View className="user-item" onClick={() => toUserModule('/house/manage/index')}>
         <View className="item-icon">
           <Text className="iconfont iconmanage"></Text>
         </View>
         <View className="item-text">房源管理</View>
+        <View className="item-arrow">
+          <Text className="iconfont iconarrow-right-bold"></Text>
+        </View>
+      </View>
+      <View className="user-item" onClick={() => toUserModule('/house/esf/sale/index')}>
+        <View className="item-icon">
+          <Text className="iconfont iconsquare"></Text>
+        </View>
+        <View className="item-text">我要卖房</View>
+        <View className="item-arrow">
+          <Text className="iconfont iconarrow-right-bold"></Text>
+        </View>
+      </View>
+      <View className="user-item" onClick={() => toUserModule('/house/rent/sale/index')}>
+        <View className="item-icon">
+          <Text className="iconfont iconhomepage"></Text>
+        </View>
+        <View className="item-text">我要出租</View>
         <View className="item-arrow">
           <Text className="iconfont iconarrow-right-bold"></Text>
         </View>

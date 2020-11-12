@@ -1,0 +1,15 @@
+.search-community {
+    .search-icon {
+        .iconfont {
+            padding-left: 20px;
+            font-size: $font-32;
+            color: $desc-color;
+        }
+    }
+    .search-memo {
+        font-size: $font-24;
+        padding: 0 20px 20px 20px;
+        color: $text-color;
+        background-color: $white;
+    }
+}

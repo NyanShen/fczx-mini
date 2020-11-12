@@ -1,0 +1,97 @@
+.sale {
+    height: 100%;
+    background-color: $bg-color;
+    &-content {
+        .sale-item {
+            display: flex;
+            align-items: center;
+            font-size: $font-basic;
+            padding: 20px 30px;
+            background-color: $white;
+
+            &.sale-item-auto {
+                align-items: stretch;
+            }
+
+            .item-image {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                font-size: $font-basic;
+                padding: 10px 0;
+
+                .image-icon {
+                    width: 150px;
+                    height: 150px;
+                    background-color: $bg-color;
+                    overflow: hidden;
+                    Image {
+                        width: 100%;
+                        height: 100%;
+                    }
+                }
+
+                .image-btn {
+                    height: 50px;
+                    line-height: 50px;
+                    padding: 0 20px;
+                    margin-top: 20px;
+                }
+
+                .image-desc {
+                    margin-top: 15px;
+                    font-size: $font-26;
+                    color: $desc-color;
+                }
+            }
+
+            .item-text {
+                width: 120px;
+                margin-right: 10px;
+                color: $text-color;
+            }
+            .item-input {
+                flex: 1;
+                display: flex;
+
+                &.item-input-option {
+                    flex-wrap: wrap;
+                }
+                .input-placeholder {
+                    color: $desc-color;
+                }
+                .input-whole {
+                    width: 100%;
+                    padding-top: 4px;
+                }
+                .input-apart {
+                    display: flex;
+                    align-items: center;
+                    margin-right: 20px;
+                    Input {
+                        flex: 1;
+                        text-align: center;
+                    }
+                }
+                .input-option {
+                    padding: 4px 10px;
+                    margin: 0 10px 10px 0;
+                    border: 2px solid $bg2-color;
+                    border-radius: $border-radius-base;
+                }
+                .unit {
+                    color: $text-color;
+                }
+            }
+            .item-icon {
+                color: $desc-color;
+            }
+        }
+
+        .sale-submit {
+            padding: 30px;
+        }
+    }
+}
