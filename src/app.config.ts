@@ -49,6 +49,7 @@ export default {
 
         'manage/index',
 
+        'sale/photo/index',
         'sale/community/index'
       ]
     },

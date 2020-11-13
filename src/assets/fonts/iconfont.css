@@ -13,6 +13,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.iconaddphoto:before {
+  content: "\e6eb";
+}
+
 .iconhomepage:before {
   content: "\eb96";
 }

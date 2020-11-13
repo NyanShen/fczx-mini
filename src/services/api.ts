@@ -28,6 +28,8 @@ export default {
 
     getEsfList: '/esf/list',
     getEsfById: '/esf/get',
+    esfSale: '/esf/sale',
+    esfUpdate: '/esf/update',
 
     getRentList: '/rent/list',
     getRentById: '/rent/get',

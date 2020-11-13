@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Taro from '@tarojs/taro'
+import Taro, { getCurrentPages } from '@tarojs/taro'
 import { View, ScrollView, Text, Input, RichText } from '@tarojs/components'
 
 import api from '@services/api'
@@ -7,7 +7,6 @@ import app from '@services/request'
 import NavBar from '@components/navbar'
 import useNavData from '@hooks/useNavData'
 import { keywordcolorful } from '@utils/index'
-import { toUrlParam } from '@utils/urlHandler'
 import '@components/search/index.scss'
 import './index.scss'
 
@@ -42,17 +41,17 @@ const SaleCommunitySearch = () => {
     }
 
     const handleItemClick = (item: any) => {
-        const paramString = toUrlParam({
-            community: JSON.stringify({
+        let pages: any = getCurrentPages()
+        let prevPage: any = pages[pages.length - 2]
+        prevPage.setData({
+            community: {
                 id: item.id,
                 title: item.title,
                 fang_area_id: item.fang_area_id,
                 address: item.address
-            }),
+            }
         })
-        Taro.navigateTo({
-            url: `/house/esf/sale/index${paramString}`
-        })
+        Taro.navigateBack({ delta: 1 })
     }
 
     const updateKeyList = (keyValue: string) => {
@@ -70,7 +69,7 @@ const SaleCommunitySearch = () => {
     }
 
     const handleCancel = () => {
-        Taro.navigateBack()
+        Taro.navigateBack({ delta: 1 })
     }
 
     return (

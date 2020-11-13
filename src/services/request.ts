@@ -99,26 +99,23 @@ app.request = (params: any, { loading = true, toast = true }: any = {}) => {
     })
 }
 
-app.uploadFile = (data: any) => {
-    return new Promise((resolve: any) => {
-        for (let i = 0; i <= data.tempFiles.length; i++) {
-            Taro.uploadFile({
-                url: uploadFileUrl,
-                filePath: data.tempFilePaths[i],
-                name: 'file',
-                formData: {
-                    file: data.tempFiles[i]
-                },
-                header: {
-                    'X-Token': storage.getItem('token', 'login')
-                },
-                success: ((result: any) => {
-                    console.log(result)
-                    resolve(JSON.parse(result.data).data)
-                })
+app.uploadFile = (data: any, callback: (string) => void) => {
+    for (let i = 0; i < data.tempFiles.length; i++) {
+        Taro.uploadFile({
+            url: uploadFileUrl,
+            filePath: data.tempFilePaths[i],
+            name: 'file',
+            formData: {
+                file: data.tempFiles[i]
+            },
+            header: {
+                'X-Token': storage.getItem('token', 'login')
+            },
+            success: ((result: any) => {
+                callback(JSON.parse(result.data).data)
             })
-        }
-    })
+        })
+    }
 }
 
 export default app;

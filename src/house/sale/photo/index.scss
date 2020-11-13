@@ -1,0 +1,95 @@
+.sale-photo {
+    .item-list {
+        display: flex;
+        flex-wrap: wrap;
+        padding-left: 30px;
+
+        .item-image {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            background-color: $bg-color;
+            overflow: hidden;
+            margin: 0 30px 30px 0;
+
+            Image {
+                width: 100%;
+                height: 100%;
+            }
+
+            .iconclear {
+                position: absolute;
+                top: 0;
+                right: 0;
+                width: 50px;
+                height: 50px;
+                padding-top: 8px;
+                color: $title-color;
+            }
+
+            .iconaddphoto {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                font-size: 90px;
+                color: $dis-color;
+            }
+        }
+    }
+
+    &-content {
+        .photo-item {
+            .item-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 20px 30px;
+
+                .title {
+                    font-size: $font-32;
+                    color: $title-color;
+                }
+                .memo {
+                    font-size: $font-26;
+                    color: $desc-color;
+                }
+            }
+        }
+
+        .photo-submit {
+            margin: 30px;
+        }
+    }
+
+    &-face {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+        visibility: hidden;
+        &.show {
+            visibility: visible;
+            .face-content {
+                transform: translateY(0);
+                transition: all 0.4s ease;
+            }
+        }
+
+        .face-content {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            min-height: 100px;
+            transform: translateY(150%);
+            transition: all 0.4s ease;
+            background-color: $white;
+            z-index: 99;
+
+            .title {
+                font-size: $font-basic;
+                padding: 30px;
+            }
+        }
+    }
+}

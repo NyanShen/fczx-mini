@@ -4,9 +4,9 @@ import { Textarea, View, Text, Image } from '@tarojs/components'
 
 import api from '@services/api'
 import app from '@services/request'
-import storage from '@utils/storage'
 import NavBar from '@components/navbar'
 import './index.scss'
+import { result } from 'lodash'
 
 interface ITextData {
     count?: number,
@@ -38,7 +38,7 @@ const HouseCommentForm = () => {
         Taro.chooseImage({
             count: 1,
             success: ((res: any) => {
-                app.uploadFile(res).then((result: any) => {
+                app.uploadFile(res, (result: string) => {
                     setImagePath(result)
                 })
             })

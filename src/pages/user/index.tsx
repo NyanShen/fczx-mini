@@ -54,13 +54,14 @@ const User = () => {
   }
 
   const toUserModule = (url: string) => {
-    if (user.username) {
-      Taro.navigateTo({ url })
-    } else {
-      Taro.navigateTo({
-        url: '/login/index'
-      })
-    }
+    Taro.navigateTo({ url })
+    // if (user.username) {
+    //   Taro.navigateTo({ url })
+    // } else {
+    //   Taro.navigateTo({
+    //     url: '/login/index'
+    //   })
+    // }
   }
 
   return (

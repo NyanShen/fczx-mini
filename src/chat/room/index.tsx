@@ -12,6 +12,7 @@ import { formatChatListTime } from '@utils/index'
 import { getTotalPage, INIT_PAGE, IPage } from '@utils/page'
 import './index.scss'
 import { fetchUserData } from '@services/login'
+import { result } from 'lodash'
 
 
 interface IParam {
@@ -113,7 +114,7 @@ const ChatRoom = () => {
             count: 9,
             sourceType: [type],
             success: (res: any) => {
-                app.uploadFile(res).then((result: any) => {
+                app.uploadFile(res, (result: string) => {
                     sendMessage(MESSAGE_TYPE.image, result)
                 })
             }
@@ -180,26 +181,26 @@ const ChatRoom = () => {
                         <View className="content-price">{itemContent.price}{PRICE_TYPE[itemContent.price_type]}</View>
                     </View>
                 )
-                case '5':
-                    const RENT_TYPE = {
-                        '1': '整租',
-                        '2': '合租'
-                    }
-                    itemContent = JSON.parse(chatItem.content)
-                    return (
-                        <View className="content" onClick={() => toHouseRoom('rent', itemContent)}>
-                            <View className="content-image">
-                                <Image src={itemContent.image_path} mode="aspectFill" />
-                                <View className="tag">租房</View>
-                            </View>
-                            <View className="content-title">{itemContent.title}</View>
-                            <View className="content-text">
-                                <Text>{itemContent.room}室{itemContent.office}厅{itemContent.toilet}卫</Text>
-                                <Text className="area">{RENT_TYPE[itemContent.rent_type]}</Text>
-                            </View>
-                            <View className="content-price">{itemContent.price}元/月</View>
+            case '5':
+                const RENT_TYPE = {
+                    '1': '整租',
+                    '2': '合租'
+                }
+                itemContent = JSON.parse(chatItem.content)
+                return (
+                    <View className="content" onClick={() => toHouseRoom('rent', itemContent)}>
+                        <View className="content-image">
+                            <Image src={itemContent.image_path} mode="aspectFill" />
+                            <View className="tag">租房</View>
                         </View>
-                    )
+                        <View className="content-title">{itemContent.title}</View>
+                        <View className="content-text">
+                            <Text>{itemContent.room}室{itemContent.office}厅{itemContent.toilet}卫</Text>
+                            <Text className="area">{RENT_TYPE[itemContent.rent_type]}</Text>
+                        </View>
+                        <View className="content-price">{itemContent.price}元/月</View>
+                    </View>
+                )
             default:
                 return null
         }

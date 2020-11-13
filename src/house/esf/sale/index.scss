@@ -2,6 +2,9 @@
     height: 100%;
     background-color: $bg-color;
     &-content {
+        .required {
+            color: $tip-color;
+        }
         .sale-item {
             display: flex;
             align-items: center;
@@ -14,6 +17,7 @@
             }
 
             .item-image {
+                width: 100%;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
@@ -23,13 +27,24 @@
                 padding: 10px 0;
 
                 .image-icon {
+                    position: relative;
                     width: 150px;
                     height: 150px;
                     background-color: $bg-color;
                     overflow: hidden;
+                    
                     Image {
                         width: 100%;
                         height: 100%;
+                    }
+                    
+                    .iconfont {
+                        position: absolute;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        font-size: 90px;
+                        color: $dis-color;
                     }
                 }
 
@@ -48,7 +63,7 @@
             }
 
             .item-text {
-                width: 120px;
+                width: 128px;
                 margin-right: 10px;
                 color: $text-color;
             }
@@ -80,6 +95,11 @@
                     margin: 0 10px 10px 0;
                     border: 2px solid $bg2-color;
                     border-radius: $border-radius-base;
+                    &.actived {
+                        color: $white;
+                        border-color: $primary-color;
+                        background-color: $primary-color;
+                    }
                 }
                 .unit {
                     color: $text-color;
@@ -87,6 +107,12 @@
             }
             .item-icon {
                 color: $desc-color;
+            }
+
+            .item-desc {
+                font-size: $font-24;
+                color: $desc-color;
+                background-color: $white;
             }
         }
 
