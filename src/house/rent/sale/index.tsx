@@ -15,6 +15,8 @@ import './index.scss'
 
 const INIT_PICKER_VALUE = {
     areaList: {},
+    payType: {},
+    rentType: {},
     elevator: {},
     propertyType: {},
     renovationStatus: {},
@@ -22,10 +24,10 @@ const INIT_PICKER_VALUE = {
 }
 
 const INIT_SELECT_VALUE = {
-    fangProjectFeature: {}
+    fangMatching: {}
 }
 
-const EsfSale = () => {
+const RentSale = () => {
     const [houseAttr, setHouseAttr] = useState<any>({})
     const [inputValue, setInputValue] = useState<any>({})
     const [images, setImages] = useState<IImage[]>([])
@@ -105,7 +107,7 @@ const EsfSale = () => {
         if (current.hasOwnProperty(item.id)) {
             delete current[item.id]
         } else {
-            current[item.id] = 1
+            current[item.id] = item.name
         }
         setSelectValue({
             ...selectValue,
@@ -136,14 +138,15 @@ const EsfSale = () => {
     }
 
     const handleSubmit = () => {
-        console.log(inputValue, pickerValue, selectValue, images)
         app.request({
-            url: app.areaApiUrl(api.esfSale),
+            url: app.areaApiUrl(api.rentAdd),
             method: 'POST',
             data: qs.stringify({
                 ...inputValue,
                 ...selectValue,
-                esfImage: images,
+                rentImage: images,
+                pay_type: pickerValue.payType.id,
+                rent_type: pickerValue.rentType.id,
                 is_elevator: pickerValue.elevator.id,
                 fang_property_type_id: pickerValue.propertyType.id,
                 fang_direction_type_id: pickerValue.fangDirectionType.id,
@@ -206,7 +209,7 @@ const EsfSale = () => {
     }
 
     const renderPicker = (name: string, text: string) => (
-        <View className="sale-item mt20" onClick={() => selectPicker(name)}>
+        <View className="sale-item" onClick={() => selectPicker(name)}>
             <View className="item-text"><Text className="required">*</Text>{text}</View>
             <View className="item-input">
                 {renderValue(pickerValue[name].name)}
@@ -291,14 +294,16 @@ const EsfSale = () => {
                 </View>
 
                 <View className="sale-item">
-                    <View className="item-text"><Text className="required">*</Text>出售总价</View>
+                    <View className="item-text"><Text className="required">*</Text>租金</View>
                     <View className="item-input">
-                        {renderInput('price_total', 10, 'digit')}
+                        {renderInput('price', 10, 'digit')}
                     </View>
                     <View className="item-icon">
-                        <Text className="unit">万</Text>
+                        <Text className="unit">元/月</Text>
                     </View>
                 </View>
+                {renderPicker('payType', '付款方式')}
+                {renderPicker('rentType', '租赁方式')}
 
                 <View className="sale-item">
                     <View className="item-text"><Text className="required">*</Text>楼栋号</View>
@@ -348,17 +353,27 @@ const EsfSale = () => {
                     </View>
                 </View>
 
+                <View className="sale-item">
+                    <View className="item-text">出租要求</View>
+                    <View className="item-input">
+                        {renderInput('special_requirement', 20)}
+                    </View>
+                    <View className="item-desc">
+                        (如男女不限)
+                    </View>
+                </View>
+
                 <View className="sale-item sale-item-auto">
-                    <View className="item-text">项目特色</View>
+                    <View className="item-text">配套设施</View>
                     <View className="item-input item-input-option">
                         {
-                            houseAttr['projectFeature'] &&
-                            houseAttr['projectFeature'].map((item: any, index: number) => (
+                            houseAttr['fangMatching'] &&
+                            houseAttr['fangMatching'].map((item: any, index: number) => (
                                 <View
                                     key={index}
                                     className={classnames('input-option',
-                                        selectValue['fangProjectFeature'][item.id] == 1 && 'actived')}
-                                    onClick={() => handleSelectChange(item, 'fangProjectFeature')}
+                                    selectValue['fangMatching'][item.id] == item.name && 'actived')}
+                                    onClick={() => handleSelectChange(item, 'fangMatching')}
                                 >
                                     {item.name}
                                 </View>
@@ -371,9 +386,6 @@ const EsfSale = () => {
                     {renderTextarea('title', '房源标题', 30, true)}
                 </View>
                 {renderTextarea('description', '房源描述', 500)}
-                {renderTextarea('selling_point', '核心卖点', 500)}
-                {renderTextarea('attitude_point', '业主心态', 500)}
-                {renderTextarea('service_point', '服务介绍', 500)}
 
                 <View className="sale-item mt20">
                     <View className="item-text"><Text className="required">*</Text>联系人</View>
@@ -400,4 +412,4 @@ const EsfSale = () => {
     )
 }
 
-export default EsfSale
+export default RentSale

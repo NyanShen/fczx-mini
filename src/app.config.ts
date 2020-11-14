@@ -41,13 +41,14 @@ export default {
         'rent/index/index',
         'rent/list/index',
         'rent/search/index',
-        // 'rent/sale/index',
+        'rent/sale/index',
 
         'community/index/index',
         'community/list/index',
         'community/search/index',
 
-        'manage/index',
+        'manage/sale/index',
+        'manage/rent/index',
 
         'sale/photo/index',
         'sale/community/index'

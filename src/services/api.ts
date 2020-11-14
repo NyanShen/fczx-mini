@@ -28,11 +28,18 @@ export default {
 
     getEsfList: '/esf/list',
     getEsfById: '/esf/get',
+    getEsfSaleList: '/esf/user-sale-list',
     esfSale: '/esf/sale',
+    esfDelete: '/esf/delete',
     esfUpdate: '/esf/update',
 
     getRentList: '/rent/list',
     getRentById: '/rent/get',
+    getRentSaleList: '/rent/user-rent-list',
+    rentAdd: '/rent/add',
+    rentDelete: '/rent/delete',
+    rentUpdate: '/rent/update',
+
 
     getCommunityList: '/community/list',
     getCommunityById: '/community/get',

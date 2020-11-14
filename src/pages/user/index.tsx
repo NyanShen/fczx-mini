@@ -81,11 +81,20 @@ const User = () => {
           </View>
         }
       </View>
-      <View className="user-item" onClick={() => toUserModule('/house/manage/index')}>
+      <View className="user-item" onClick={() => toUserModule('/house/manage/sale/index')}>
         <View className="item-icon">
           <Text className="iconfont iconmanage"></Text>
         </View>
-        <View className="item-text">房源管理</View>
+        <View className="item-text">管理出售</View>
+        <View className="item-arrow">
+          <Text className="iconfont iconarrow-right-bold"></Text>
+        </View>
+      </View>
+      <View className="user-item" onClick={() => toUserModule('/house/manage/rent/index')}>
+        <View className="item-icon">
+          <Text className="iconfont iconmanage"></Text>
+        </View>
+        <View className="item-text">管理出租</View>
         <View className="item-arrow">
           <Text className="iconfont iconarrow-right-bold"></Text>
         </View>
