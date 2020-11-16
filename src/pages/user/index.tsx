@@ -54,14 +54,13 @@ const User = () => {
   }
 
   const toUserModule = (url: string) => {
-    Taro.navigateTo({ url })
-    // if (user.username) {
-    //   Taro.navigateTo({ url })
-    // } else {
-    //   Taro.navigateTo({
-    //     url: '/login/index'
-    //   })
-    // }
+    if (user.username) {
+      Taro.navigateTo({ url: `/house/manage${url}` })
+    } else {
+      Taro.navigateTo({
+        url: '/login/index'
+      })
+    }
   }
 
   return (
@@ -81,7 +80,7 @@ const User = () => {
           </View>
         }
       </View>
-      <View className="user-item" onClick={() => toUserModule('/house/manage/sale/index')}>
+      <View className="user-item" onClick={() => toUserModule('/esf/index')}>
         <View className="item-icon">
           <Text className="iconfont iconmanage"></Text>
         </View>
@@ -90,7 +89,7 @@ const User = () => {
           <Text className="iconfont iconarrow-right-bold"></Text>
         </View>
       </View>
-      <View className="user-item" onClick={() => toUserModule('/house/manage/rent/index')}>
+      <View className="user-item" onClick={() => toUserModule('/rent/index')}>
         <View className="item-icon">
           <Text className="iconfont iconmanage"></Text>
         </View>
@@ -99,7 +98,7 @@ const User = () => {
           <Text className="iconfont iconarrow-right-bold"></Text>
         </View>
       </View>
-      <View className="user-item" onClick={() => toUserModule('/house/esf/sale/index')}>
+      <View className="user-item" onClick={() => toUserModule('/esf/sale')}>
         <View className="item-icon">
           <Text className="iconfont iconsquare"></Text>
         </View>
@@ -108,7 +107,7 @@ const User = () => {
           <Text className="iconfont iconarrow-right-bold"></Text>
         </View>
       </View>
-      <View className="user-item" onClick={() => toUserModule('/house/rent/sale/index')}>
+      <View className="user-item" onClick={() => toUserModule('/rent/sale')}>
         <View className="item-icon">
           <Text className="iconfont iconhomepage"></Text>
         </View>

@@ -36,19 +36,19 @@ export default {
         'esf/index/index',
         'esf/list/index',
         'esf/search/index',
-        'esf/sale/index',
 
         'rent/index/index',
         'rent/list/index',
         'rent/search/index',
-        'rent/sale/index',
 
         'community/index/index',
         'community/list/index',
         'community/search/index',
 
-        'manage/sale/index',
+        'manage/esf/index',
+        'manage/esf/sale',
         'manage/rent/index',
+        'manage/rent/sale',
 
         'sale/photo/index',
         'sale/community/index'

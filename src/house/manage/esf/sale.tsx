@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import Taro, { getCurrentPages, useDidShow } from '@tarojs/taro'
+import Taro, { getCurrentInstance, getCurrentPages, useDidShow } from '@tarojs/taro'
 import { View, Text, Input, Textarea, Image } from '@tarojs/components'
 import classnames from 'classnames'
 import find from 'lodash/find'
@@ -11,7 +11,7 @@ import NavBar from '@components/navbar'
 import { IImage } from '@house/sale/photo'
 import { fetchUserData } from '@services/login'
 import CustomPicker, { IPicker, INIT_PICKER } from '@components/picker'
-import './index.scss'
+import '../sale.scss'
 
 const INIT_PICKER_VALUE = {
     areaList: {},
@@ -21,16 +21,14 @@ const INIT_PICKER_VALUE = {
     fangDirectionType: {}
 }
 
-const INIT_SELECT_VALUE = {
-    fangProjectFeature: {}
-}
-
 const EsfSale = () => {
+    const router = getCurrentInstance().router
+    const houseId = router?.params.id
     const [houseAttr, setHouseAttr] = useState<any>({})
     const [inputValue, setInputValue] = useState<any>({})
     const [images, setImages] = useState<IImage[]>([])
     const [picker, setPicker] = useState<IPicker>(INIT_PICKER)
-    const [selectValue, setSelectValue] = useState<any>(INIT_SELECT_VALUE)
+    const [selectValue, setSelectValue] = useState<any>({fangProjectFeature: {}})
     const [pickerValue, setPickerValue] = useState<any>(INIT_PICKER_VALUE)
 
     useDidShow(() => {
@@ -60,6 +58,9 @@ const EsfSale = () => {
     })
 
     useEffect(() => {
+        if (houseId) {
+            
+        }
         setUserData()
         app.request({
             url: app.areaApiUrl(api.getHouseAttr)
@@ -73,7 +74,8 @@ const EsfSale = () => {
             setInputValue({
                 ...inputValue,
                 real_name: result.nickname,
-                mobile: result.mobile
+                mobile: result.mobile,
+                sex: result.sex
             })
         })
     }
@@ -136,7 +138,6 @@ const EsfSale = () => {
     }
 
     const handleSubmit = () => {
-        console.log(inputValue, pickerValue, selectValue, images)
         app.request({
             url: app.areaApiUrl(api.esfSale),
             method: 'POST',
@@ -158,6 +159,11 @@ const EsfSale = () => {
                 content: '房源发布成功，请耐心等待后台审核，点击确认返回',
                 showCancel: false,
                 success: () => {
+                    const pages: any = getCurrentPages()
+                    const prevPage: any = pages[pages.length - 2]
+                    prevPage.setData({
+                        isUpdate: true
+                    })
                     Taro.navigateBack({ delta: 1 })
                 }
             })
@@ -384,7 +390,7 @@ const EsfSale = () => {
                 <View className="sale-item">
                     <View className="item-text"><Text className="required">*</Text>联系手机</View>
                     <View className="item-input">
-                        <Text className="input-text">13927486756</Text>
+                        <Text className="input-text">{inputValue.mobile}</Text>
                     </View>
                     <View className="item-desc">
                         (如需切换手机号，请重新登录)

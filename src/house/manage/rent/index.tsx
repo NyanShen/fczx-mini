@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Taro, { useDidShow } from '@tarojs/taro'
+import Taro, { getCurrentPages, useDidShow } from '@tarojs/taro'
 import { ScrollView, View, Text, Image } from '@tarojs/components'
 
 import api from '@services/api'
@@ -24,27 +24,36 @@ const HouseManageRent = () => {
     const [list, setList] = useState<any[]>([])
 
     useDidShow(() => {
-        fetchList()
+        const pages: any = getCurrentPages()
+        const currPageData: any = pages[pages.length - 1].data
+        const isUpdate = currPageData.isUpdate
+        if (isUpdate) {
+            fetchList()
+        }
     })
 
     useEffect(() => {
-        fetchList()
+        fetchList(param.currentPage)
     }, [param])
 
-    const fetchList = () => {
+    const fetchList = (currentPage: number = 1) => {
         app.request({
             url: app.areaApiUrl(api.getRentSaleList),
             data: {
-                page: param.currentPage,
+                page: currentPage,
                 limit: PAGE_LIMIT
             }
         }).then((result: any) => {
-            setList([...list, ...result.data])
             setPage({
                 ...page,
                 totalCount: result.pagination.totalCount,
                 totalPage: getTotalPage(PAGE_LIMIT, result.pagination.totalCount)
             })
+            if (currentPage === 1) {
+                setList(result.data)
+            } else {
+                setList([...list, ...result.data])
+            }
         })
     }
 
@@ -61,7 +70,33 @@ const HouseManageRent = () => {
 
     const toRentSale = (id: string = '') => {
         Taro.navigateTo({
-            url: `/house/rent/sale/index?id=${id}`
+            url: `/house/manage/rent/sale?id=${id}`
+        })
+    }
+
+    const handleDelete = (id: string) => {
+        Taro.showModal({
+            title: '提示',
+            content: '确定删除该条房源记录？',
+            success: (res: any) => {
+                if (res.confirm) {
+                    rentDelete(id)
+                }
+            }
+        })
+    }
+
+    const rentDelete = (id: string) => {
+        app.request({
+            url: app.apiUrl(api.rentDelete),
+            method: 'POST',
+            data: { id }
+        }).then(() => {
+            fetchList()
+            Taro.showToast({
+                icon: 'none',
+                title: '删除成功'
+            })
         })
     }
 
@@ -84,7 +119,7 @@ const HouseManageRent = () => {
                             </View>
                             <View className="item-text">
                                 <View className="right">
-                                    <Text className="price">{item.price_total}<Text className="price-unit">万</Text></Text>
+                                    <Text className="price">{item.price}<Text className="price-unit">元/月</Text></Text>
                                 </View>
                             </View>
                             <View className="item-text item-text-middle">
@@ -100,7 +135,7 @@ const HouseManageRent = () => {
                             <View className="action-item" onClick={() => toRentSale(item.id)}>
                                 <View className="btn btn-plain">修改</View>
                             </View>
-                            <View className="action-item">
+                            <View className="action-item" onClick={() => handleDelete(item.id)}>
                                 <View className="btn btn-plain">删除</View>
                             </View>
                         </View>

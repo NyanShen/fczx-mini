@@ -41,8 +41,8 @@ const SaleCommunitySearch = () => {
     }
 
     const handleItemClick = (item: any) => {
-        let pages: any = getCurrentPages()
-        let prevPage: any = pages[pages.length - 2]
+        const pages: any = getCurrentPages()
+        const prevPage: any = pages[pages.length - 2]
         prevPage.setData({
             community: {
                 id: item.id,
@@ -63,7 +63,7 @@ const SaleCommunitySearch = () => {
             data: {
                 title: keyValue
             }
-        }).then((result: any) => {
+        }, { loading: false }).then((result: any) => {
             setMatcheList(result)
         })
     }
