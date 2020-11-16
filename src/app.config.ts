@@ -45,10 +45,8 @@ export default {
         'community/list/index',
         'community/search/index',
 
-        'manage/esf/index',
-        'manage/esf/sale',
-        'manage/rent/index',
-        'manage/rent/sale',
+        'manage/sale/index',
+        'manage/list/index',
 
         'sale/photo/index',
         'sale/community/index'

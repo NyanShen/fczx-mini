@@ -64,7 +64,7 @@
 
             .item-text {
                 width: 128px;
-                margin-right: 10px;
+                margin-right: 20px;
                 color: $text-color;
             }
             .item-input {
@@ -84,7 +84,6 @@
                 .input-apart {
                     display: flex;
                     align-items: center;
-                    margin-right: 20px;
                     Input {
                         flex: 1;
                         text-align: center;
@@ -100,6 +99,9 @@
                         border-color: $primary-color;
                         background-color: $primary-color;
                     }
+                }
+                .input-radio-label {
+                    margin-right: 30px;
                 }
                 .unit {
                     color: $text-color;

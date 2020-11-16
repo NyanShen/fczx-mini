@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Taro, { getCurrentPages, useDidShow } from '@tarojs/taro'
+import Taro, { getCurrentInstance, getCurrentPages, useDidShow } from '@tarojs/taro'
 import { ScrollView, View, Text, Image } from '@tarojs/components'
 
 import api from '@services/api'
@@ -7,7 +7,7 @@ import app from '@services/request'
 import NavBar from '@components/navbar'
 import useNavData from '@hooks/useNavData'
 import { getTotalPage, INIT_PAGE, IPage } from '@utils/page'
-import '../index.scss'
+import './index.scss'
 
 interface IParam {
     currentPage: number
@@ -15,8 +15,22 @@ interface IParam {
 
 const INIT_PARAM = { currentPage: 1 }
 
-const HouseManageRent = () => {
-    const PAGE_LIMIT = 10
+const url_mapping = {
+    rent: {
+        list: api.getRentSaleList,
+        delete: api.rentDelete
+    },
+    esf: {
+        list: api.getEsfSaleList,
+        delete: api.esfDelete
+    }
+}
+
+const HouseManageSale = () => {
+    const PAGE_LIMIT = 20
+    const router = getCurrentInstance().router
+    const saleType = router?.params.type || 'esf'
+    const urlObject = url_mapping[saleType]
     const { contentHeight } = useNavData()
     const [showEmpty, setShowEmpty] = useState<boolean>(false)
     const [page, setPage] = useState<IPage>(INIT_PAGE)
@@ -38,7 +52,7 @@ const HouseManageRent = () => {
 
     const fetchList = (currentPage: number = 1) => {
         app.request({
-            url: app.areaApiUrl(api.getRentSaleList),
+            url: app.areaApiUrl(urlObject.list),
             data: {
                 page: currentPage,
                 limit: PAGE_LIMIT
@@ -68,9 +82,9 @@ const HouseManageRent = () => {
         }
     }
 
-    const toRentSale = (id: string = '') => {
+    const toHouseSale = (id: string = '') => {
         Taro.navigateTo({
-            url: `/house/manage/rent/sale?id=${id}`
+            url: `/house/manage/sale/index?id=${id}&type=${saleType}`
         })
     }
 
@@ -80,15 +94,15 @@ const HouseManageRent = () => {
             content: '确定删除该条房源记录？',
             success: (res: any) => {
                 if (res.confirm) {
-                    rentDelete(id)
+                    houseDelete(id)
                 }
             }
         })
     }
 
-    const rentDelete = (id: string) => {
+    const houseDelete = (id: string) => {
         app.request({
-            url: app.apiUrl(api.rentDelete),
+            url: app.apiUrl(urlObject.delete),
             method: 'POST',
             data: { id }
         }).then(() => {
@@ -98,6 +112,12 @@ const HouseManageRent = () => {
                 title: '删除成功'
             })
         })
+    }
+
+    const renderSalePrice = (item: any) => {
+        return saleType === 'esf' ?
+            <Text className="price">{item.price_total}<Text className="price-unit">万</Text></Text> :
+            <Text className="price">{item.price}<Text className="price-unit">元/月</Text></Text>
     }
 
     const renderList = () => (
@@ -119,7 +139,7 @@ const HouseManageRent = () => {
                             </View>
                             <View className="item-text">
                                 <View className="right">
-                                    <Text className="price">{item.price}<Text className="price-unit">元/月</Text></Text>
+                                    {renderSalePrice(item)}
                                 </View>
                             </View>
                             <View className="item-text item-text-middle">
@@ -132,7 +152,7 @@ const HouseManageRent = () => {
                             </View>
                         </View>
                         <View className="item-action">
-                            <View className="action-item" onClick={() => toRentSale(item.id)}>
+                            <View className="action-item" onClick={() => toHouseSale(item.id)}>
                                 <View className="btn btn-plain">修改</View>
                             </View>
                             <View className="action-item" onClick={() => handleDelete(item.id)}>
@@ -149,13 +169,13 @@ const HouseManageRent = () => {
         <View className="empty-container empty-container-center">
             <View className="iconfont iconempty"></View>
             <View className="empty-text">您还没有发布房源信息</View>
-            <View className="btn btn-primary empty-btn" onClick={() => toRentSale()}>立即发布</View>
+            <View className="btn btn-primary empty-btn" onClick={() => toHouseSale()}>立即发布</View>
         </View>
     )
 
     return (
         <View className="house-manage">
-            <NavBar title="管理出租" back={true}></NavBar>
+            <NavBar title="管理出售" back={true}></NavBar>
             <View className="house-content">
                 <ScrollView
                     scrollY
@@ -176,4 +196,4 @@ const HouseManageRent = () => {
     )
 }
 
-export default HouseManageRent
+export default HouseManageSale

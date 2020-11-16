@@ -53,9 +53,9 @@ const User = () => {
     Taro.hideTabBarRedDot({ index: 1 })
   }
 
-  const toUserModule = (url: string) => {
+  const toUserModule = (url: string, type: string = 'esf') => {
     if (user.username) {
-      Taro.navigateTo({ url: `/house/manage${url}` })
+      Taro.navigateTo({ url: `/house/manage/${url}/index?type=${type}` })
     } else {
       Taro.navigateTo({
         url: '/login/index'
@@ -80,7 +80,7 @@ const User = () => {
           </View>
         }
       </View>
-      <View className="user-item" onClick={() => toUserModule('/esf/index')}>
+      <View className="user-item" onClick={() => toUserModule('list')}>
         <View className="item-icon">
           <Text className="iconfont iconmanage"></Text>
         </View>
@@ -89,7 +89,7 @@ const User = () => {
           <Text className="iconfont iconarrow-right-bold"></Text>
         </View>
       </View>
-      <View className="user-item" onClick={() => toUserModule('/rent/index')}>
+      <View className="user-item" onClick={() => toUserModule('list', 'rent')}>
         <View className="item-icon">
           <Text className="iconfont iconmanage"></Text>
         </View>
@@ -98,7 +98,7 @@ const User = () => {
           <Text className="iconfont iconarrow-right-bold"></Text>
         </View>
       </View>
-      <View className="user-item" onClick={() => toUserModule('/esf/sale')}>
+      <View className="user-item" onClick={() => toUserModule('sale')}>
         <View className="item-icon">
           <Text className="iconfont iconsquare"></Text>
         </View>
@@ -107,7 +107,7 @@ const User = () => {
           <Text className="iconfont iconarrow-right-bold"></Text>
         </View>
       </View>
-      <View className="user-item" onClick={() => toUserModule('/rent/sale')}>
+      <View className="user-item" onClick={() => toUserModule('sale', 'rent')}>
         <View className="item-icon">
           <Text className="iconfont iconhomepage"></Text>
         </View>

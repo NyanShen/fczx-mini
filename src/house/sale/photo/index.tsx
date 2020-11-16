@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react'
-import Taro, { getCurrentPages } from '@tarojs/taro'
+import Taro, { getCurrentInstance, getCurrentPages, useDidShow } from '@tarojs/taro'
 import { View, Text, Image } from '@tarojs/components'
 import classnames from 'classnames'
 import map from 'lodash/map'
@@ -17,8 +17,16 @@ const IS_FACE = '1'
 const NOT_FACE = '2'
 
 const SalePhoto = () => {
+    const router = getCurrentInstance().router
+    const baseImages = JSON.parse(router?.params.images || '')
     const [show, setShow] = useState<boolean>(false)
     const [images, setImages] = useState<IImage[]>([])
+
+    useDidShow(() => {
+        if (baseImages) {
+            setImages(baseImages)
+        }
+    })
 
     const handleImageUpload = () => {
         Taro.chooseImage({
@@ -67,7 +75,7 @@ const SalePhoto = () => {
     const handleSubmit = () => {
         const pages: any = getCurrentPages()
         const prevPage: any = pages[pages.length - 2]
-        const isFaceValue =  map(images, 'is_face')
+        const isFaceValue = map(images, 'is_face')
         if (!isFaceValue.includes(IS_FACE)) {
             images[0].is_face = IS_FACE
             setImages([...images])

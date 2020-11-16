@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import Taro, { getCurrentInstance, getCurrentPages, useDidShow } from '@tarojs/taro'
-import { View, Text, Input, Textarea, Image } from '@tarojs/components'
+import { View, Text, Input, Textarea, Image, RadioGroup, Label, Radio } from '@tarojs/components'
 import classnames from 'classnames'
 import find from 'lodash/find'
 import qs from 'qs'
@@ -11,24 +11,42 @@ import NavBar from '@components/navbar'
 import { IImage } from '@house/sale/photo'
 import { fetchUserData } from '@services/login'
 import CustomPicker, { IPicker, INIT_PICKER } from '@components/picker'
-import '../sale.scss'
+import './index.scss'
 
 const INIT_PICKER_VALUE = {
-    areaList: {},
     elevator: {},
+    areaList: {},
     propertyType: {},
     renovationStatus: {},
-    fangDirectionType: {}
+    fangDirectionType: {},
+
+    payType: {},
+    rentType: {},
 }
 
-const EsfSale = () => {
+const url_mapping = {
+    rent: {
+        get: api.getRentById,
+        add: api.rentAdd,
+        update: api.rentUpdate,
+    },
+    esf: {
+        get: api.getEsfById,
+        add: api.esfSale,
+        update: api.esfUpdate
+    }
+}
+
+const HouseSale = () => {
     const router = getCurrentInstance().router
     const houseId = router?.params.id
+    const saleType = router?.params.type || 'esf'
+    const urlObject = url_mapping[saleType]
     const [houseAttr, setHouseAttr] = useState<any>({})
     const [inputValue, setInputValue] = useState<any>({})
     const [images, setImages] = useState<IImage[]>([])
     const [picker, setPicker] = useState<IPicker>(INIT_PICKER)
-    const [selectValue, setSelectValue] = useState<any>({fangProjectFeature: {}})
+    const [selectValue, setSelectValue] = useState<any>({ fangProjectFeature: {} })
     const [pickerValue, setPickerValue] = useState<any>(INIT_PICKER_VALUE)
 
     useDidShow(() => {
@@ -58,14 +76,14 @@ const EsfSale = () => {
     })
 
     useEffect(() => {
-        if (houseId) {
-            
-        }
         setUserData()
         app.request({
             url: app.areaApiUrl(api.getHouseAttr)
         }).then((result: any) => {
             setHouseAttr(result)
+            if (houseId) {
+                fetchHouseDetail(houseId, result)
+            }
         })
     }, [])
 
@@ -80,9 +98,93 @@ const EsfSale = () => {
         })
     }
 
-    const toSaleModule = (module: string) => {
+    const fetchHouseDetail = (id: string, houseAttr: any) => {
+        app.request({
+            url: app.areaApiUrl(urlObject.get),
+            data: { id }
+        }).then((result: any) => {
+
+            let basePickerValue = {
+                elevator: { id: result.is_elevator },
+                areaList: result.area,
+                propertyType: result.fangPropertyType,
+                renovationStatus: result.fangRenovationStatus,
+                fangDirectionType: result.fangDirectionType
+            }
+            let baseInputValue = {
+                id: result.id,
+                title: result.title,
+                fang_area_id: result.area.id,
+                fang_house_id: result.fangHouse.id,
+                fang_house_name: result.fangHouse.title,
+                address: result.address,
+                room: result.room,
+                office: result.office,
+                toilet: result.toilet,
+                build_year: result.build_year,
+                building_area: result.building_area,
+                building_no: result.building_no,
+                building_unit: result.building_unit,
+                building_room: result.building_room,
+                height_self: result.height_self,
+                height_total: result.height_total,
+                description: result.description,
+
+                real_name: result.real_name,
+                mobile: result.mobile,
+                sex: result.sex,
+            }
+
+            if (saleType === 'esf') {
+                setImages(result.esfImage)
+                setPickerValue(basePickerValue)
+                setInputValue({
+                    ...baseInputValue,
+                    price_total: result.price_total,
+                    service_point: result.service_point,
+                    selling_point: result.selling_point,
+                    attitude_point: result.attitude_point,
+                })
+                let fangProjectFeature = {}
+                for (const item of result.fang_project_feature) {
+                    fangProjectFeature[item] = 1
+                }
+                setSelectValue({ fangProjectFeature })
+            } else {
+                setImages(result.rentImage)
+                const payTypeTarget = find(houseAttr.payType, { id: result.pay_type })
+                const rentTypeTarget = find(houseAttr.rentType, { id: result.rent_type })
+                setPickerValue({
+                    ...basePickerValue,
+                    payType: payTypeTarget,
+                    rentType: rentTypeTarget,
+                })
+                setInputValue({
+                    ...baseInputValue,
+                    price: result.price,
+                    special_requirement: result.special_requirement
+                })
+                let fangMatching = {}
+                for (const item of result.fangMatching) {
+                    fangMatching[item.id] = item.name
+                }
+                setSelectValue({ fangMatching })
+            }
+
+
+        })
+    }
+
+    const toSalePhoto = () => {
+        const baseImages = JSON.stringify(images)
         Taro.navigateTo({
-            url: `/house/sale/${module}/index`
+            url: `/house/sale/photo/index?type=${saleType}&images=${baseImages}`
+        })
+    }
+
+    const toSaleCommunity = () => {
+        Taro.navigateTo({
+            url: `/house/sale/community/index?type=${saleType}`
         })
     }
 
@@ -102,7 +204,7 @@ const EsfSale = () => {
         })
     }
 
-    const handleSelectChange = (item: any, name) => {
+    const handleSelectChange = (item: any, name: string) => {
         const current = selectValue[name]
         if (current.hasOwnProperty(item.id)) {
             delete current[item.id]
@@ -112,6 +214,13 @@ const EsfSale = () => {
         setSelectValue({
             ...selectValue,
             [name]: current
+        })
+    }
+
+    const handleRadioChange = (item: any, name: string) => {
+        setPickerValue({
+            ...pickerValue,
+            [name]: item
         })
     }
 
@@ -138,18 +247,32 @@ const EsfSale = () => {
     }
 
     const handleSubmit = () => {
-        app.request({
-            url: app.areaApiUrl(api.esfSale),
-            method: 'POST',
-            data: qs.stringify({
-                ...inputValue,
-                ...selectValue,
+        const submit_url = houseId ? urlObject.update : urlObject.add
+        let commonData = {
+            ...inputValue,
+            ...selectValue,
+            is_elevator: pickerValue.elevator.id,
+            fang_property_type_id: pickerValue.propertyType.id,
+            fang_direction_type_id: pickerValue.fangDirectionType.id,
+            fang_renovation_status_id: pickerValue.renovationStatus.id
+        }
+        if (saleType === 'esf') {
+            commonData = {
+                ...commonData,
                 esfImage: images,
-                is_elevator: pickerValue.elevator.id,
-                fang_property_type_id: pickerValue.propertyType.id,
-                fang_direction_type_id: pickerValue.fangDirectionType.id,
-                fang_renovation_status_id: pickerValue.renovationStatus.id
-            }),
+            }
+        } else {
+            commonData = {
+                ...commonData,
+                rentImage: images,
+                pay_type: pickerValue.payType.id,
+                rent_type: pickerValue.rentType.id,
+            }
+        }
+        app.request({
+            url: app.areaApiUrl(submit_url),
+            method: 'POST',
+            data: qs.stringify(commonData),
             header: {
                 'content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
             }
@@ -238,7 +361,7 @@ const EsfSale = () => {
         <View className="sale">
             <NavBar title="发布出售" back={true}></NavBar>
             <View className="sale-content">
-                <View className="sale-item" onClick={() => toSaleModule('photo')}>
+                <View className="sale-item" onClick={toSalePhoto}>
                     <View className="item-image">
                         <View className="image-icon">
                             {
@@ -255,7 +378,7 @@ const EsfSale = () => {
 
                 {renderPicker('propertyType', '业务类型')}
 
-                <View className="sale-item mt20" onClick={() => toSaleModule('community')}>
+                <View className="sale-item mt20" onClick={toSaleCommunity}>
                     <View className="item-text"><Text className="required">*</Text>小区名称</View>
                     <View className="item-input">
                         {renderValue(inputValue.fang_house_name)}
@@ -296,15 +419,32 @@ const EsfSale = () => {
                     </View>
                 </View>
 
-                <View className="sale-item">
-                    <View className="item-text"><Text className="required">*</Text>出售总价</View>
-                    <View className="item-input">
-                        {renderInput('price_total', 10, 'digit')}
+                {
+                    saleType === 'esf' &&
+                    <View className="sale-item">
+                        <View className="item-text"><Text className="required">*</Text>出售总价</View>
+                        <View className="item-input">
+                            {renderInput('price_total', 10, 'digit')}
+                        </View>
+                        <View className="item-icon">
+                            <Text className="unit">万</Text>
+                        </View>
                     </View>
-                    <View className="item-icon">
-                        <Text className="unit">万</Text>
+                }
+                {
+                    saleType === 'rent' &&
+                    <View className="sale-item">
+                        <View className="item-text"><Text className="required">*</Text>租金</View>
+                        <View className="item-input">
+                            {renderInput('price', 10, 'digit')}
+                        </View>
+                        <View className="item-icon">
+                            <Text className="unit">元/月</Text>
+                        </View>
                     </View>
-                </View>
+                }
+                {saleType === 'rent' && renderPicker('payType', '付款方式')}
+                {saleType === 'rent' && renderPicker('rentType', '租赁方式')}
 
                 <View className="sale-item">
                     <View className="item-text"><Text className="required">*</Text>楼栋号</View>
@@ -341,7 +481,31 @@ const EsfSale = () => {
                 </View>
 
                 {renderPicker('fangDirectionType', '朝向')}
-                {renderPicker('elevator', '有无电梯')}
+                <View className="sale-item">
+                    <View className="item-text"><Text className="required">*</Text>有无电梯</View>
+                    <View className="item-input">
+                        <RadioGroup>
+                            {
+                                houseAttr['elevator'] &&
+                                houseAttr['elevator'].map((item: any, index: number) => {
+                                    return (
+                                        <Label
+                                            className='input-radio-label'
+                                            key={index}
+                                            onClick={() => handleRadioChange(item, 'elevator')}
+                                        >
+                                            <Radio
+                                                className='input-radio-radio'
+                                                value={item.id}
+                                                checked={item.id === pickerValue.elevator.id}
+                                            >{item.name}</Radio>
+                                        </Label>
+                                    )
+                                })
+                            }
+                        </RadioGroup>
+                    </View>
+                </View>
                 {renderPicker('renovationStatus', '装修程度')}
 
                 <View className="sale-item">
@@ -354,32 +518,69 @@ const EsfSale = () => {
                     </View>
                 </View>
 
-                <View className="sale-item sale-item-auto">
-                    <View className="item-text">项目特色</View>
-                    <View className="item-input item-input-option">
-                        {
-                            houseAttr['projectFeature'] &&
-                            houseAttr['projectFeature'].map((item: any, index: number) => (
-                                <View
-                                    key={index}
-                                    className={classnames('input-option',
-                                        selectValue['fangProjectFeature'][item.id] == 1 && 'actived')}
-                                    onClick={() => handleSelectChange(item, 'fangProjectFeature')}
-                                >
-                                    {item.name}
-                                </View>
-                            ))
-                        }
+                {
+                    saleType === 'esf' &&
+                    <View className="sale-item sale-item-auto">
+                        <View className="item-text">项目特色</View>
+                        <View className="item-input item-input-option">
+                            {
+                                houseAttr['projectFeature'] &&
+                                houseAttr['projectFeature'].map((item: any, index: number) => (
+                                    <View
+                                        key={index}
+                                        className={classnames('input-option',
+                                            selectValue['fangProjectFeature'][item.id] == 1 && 'actived')}
+                                        onClick={() => handleSelectChange(item, 'fangProjectFeature')}
+                                    >
+                                        {item.name}
+                                    </View>
+                                ))
+                            }
+                        </View>
                     </View>
-                </View>
+                }
+
+                {
+                    saleType === 'rent' &&
+                    <View>
+                        <View className="sale-item">
+                            <View className="item-text">出租要求</View>
+                            <View className="item-input">
+                                {renderInput('special_requirement', 20)}
+                            </View>
+                            <View className="item-desc">
+                                (如男女不限)
+                            </View>
+                        </View>
+
+                        <View className="sale-item sale-item-auto">
+                            <View className="item-text">配套设施</View>
+                            <View className="item-input item-input-option">
+                                {
+                                    houseAttr['fangMatching'] &&
+                                    houseAttr['fangMatching'].map((item: any, index: number) => (
+                                        <View
+                                            key={index}
+                                            className={classnames('input-option',
+                                                selectValue['fangMatching'][item.id] == item.name && 'actived')}
+                                            onClick={() => handleSelectChange(item, 'fangMatching')}
+                                        >
+                                            {item.name}
+                                        </View>
+                                    ))
+                                }
+                            </View>
+                        </View>
+                    </View>
+                }
 
                 <View className="mt20">
                     {renderTextarea('title', '房源标题', 30, true)}
                 </View>
                 {renderTextarea('description', '房源描述', 500)}
-                {renderTextarea('selling_point', '核心卖点', 500)}
-                {renderTextarea('attitude_point', '业主心态', 500)}
-                {renderTextarea('service_point', '服务介绍', 500)}
+                {saleType === 'esf' && renderTextarea('selling_point', '核心卖点', 500)}
+                {saleType === 'esf' && renderTextarea('attitude_point', '业主心态', 500)}
+                {saleType === 'esf' && renderTextarea('service_point', '服务介绍', 500)}
 
                 <View className="sale-item mt20">
                     <View className="item-text"><Text className="required">*</Text>联系人</View>
@@ -406,4 +607,4 @@ const EsfSale = () => {
     )
 }
 
-export default EsfSale
+export default HouseSale
