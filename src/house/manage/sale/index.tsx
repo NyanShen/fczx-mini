@@ -26,13 +26,13 @@ const INIT_PICKER_VALUE = {
 
 const url_mapping = {
     rent: {
-        get: api.getRentById,
         add: api.rentAdd,
+        get: api.getRentById,
         update: api.rentUpdate,
     },
     esf: {
-        get: api.getEsfById,
         add: api.esfSale,
+        get: api.getEsfById,
         update: api.esfUpdate
     }
 }
@@ -46,7 +46,10 @@ const HouseSale = () => {
     const [inputValue, setInputValue] = useState<any>({})
     const [images, setImages] = useState<IImage[]>([])
     const [picker, setPicker] = useState<IPicker>(INIT_PICKER)
-    const [selectValue, setSelectValue] = useState<any>({ fangProjectFeature: {} })
+    const [selectValue, setSelectValue] = useState<any>({
+        fangProjectFeature: {},
+        fangMatching: {}
+    })
     const [pickerValue, setPickerValue] = useState<any>(INIT_PICKER_VALUE)
 
     useDidShow(() => {
@@ -204,12 +207,12 @@ const HouseSale = () => {
         })
     }
 
-    const handleSelectChange = (item: any, name: string) => {
+    const handleSelectChange = (itemId: string, name: string, value: string | number) => {
         const current = selectValue[name]
-        if (current.hasOwnProperty(item.id)) {
-            delete current[item.id]
+        if (current.hasOwnProperty(itemId)) {
+            delete current[itemId]
         } else {
-            current[item.id] = 1
+            current[itemId] = value
         }
         setSelectValue({
             ...selectValue,
@@ -530,7 +533,7 @@ const HouseSale = () => {
                                         key={index}
                                         className={classnames('input-option',
                                             selectValue['fangProjectFeature'][item.id] == 1 && 'actived')}
-                                        onClick={() => handleSelectChange(item, 'fangProjectFeature')}
+                                        onClick={() => handleSelectChange(item.id, 'fangProjectFeature', 1)}
                                     >
                                         {item.name}
                                     </View>
@@ -563,7 +566,7 @@ const HouseSale = () => {
                                             key={index}
                                             className={classnames('input-option',
                                                 selectValue['fangMatching'][item.id] == item.name && 'actived')}
-                                            onClick={() => handleSelectChange(item, 'fangMatching')}
+                                            onClick={() => handleSelectChange(item.id, 'fangMatching', item.name)}
                                         >
                                             {item.name}
                                         </View>
