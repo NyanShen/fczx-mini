@@ -80,9 +80,10 @@ const Chat = () => {
         return item.last_content
       case '2':
         return '[图片]'
-      case '3':
-      case '4':
-      case '5':
+      case '3': //新房
+      case '4': //二手房
+      case '5': //租房
+      case '6': //新房户型
         return '[房源]'
       default:
         return null

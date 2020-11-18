@@ -30,10 +30,11 @@
                 padding: 30px;
                 border-bottom: 1px solid $bg-color;
                 .type-image {
-                    width: 240px;
-                    height: 200px;
+                    width: 250px;
+                    height: 210px;
                     background-color: $bg-color;
                     margin-right: 30px;
+                    overflow: hidden;
                     Image {
                         max-width: 100%;
                         max-height: 100%;

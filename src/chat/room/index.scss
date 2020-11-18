@@ -69,21 +69,25 @@
                                     border-radius: $border-radius-base;
                                 }
                             }
+
                             .content-title {
                                 margin-top: 10px;
                                 font-size: $font-30;
                             }
+
                             .content-text {
                                 margin-top: 10px;
                                 font-size: $font-26;
-                                color: $desc-color;
-                                .area {
-                                    margin-left: 10px;
-                                }
+                                color: $text-color;
                             }
+
                             .content-price {
                                 margin-top: 10px;
                                 color: $tip-color;
+                            }
+                            
+                            .ml20 {
+                                margin-left: 20px;
                             }
                         }
                     }

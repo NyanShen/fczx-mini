@@ -8,11 +8,10 @@ import app from '@services/request'
 import NavBar from '@components/navbar'
 import useNavData from '@hooks/useNavData'
 import { PRICE_TYPE } from '@constants/house'
+import { fetchUserData } from '@services/login'
 import { formatChatListTime } from '@utils/index'
 import { getTotalPage, INIT_PAGE, IPage } from '@utils/page'
 import './index.scss'
-import { fetchUserData } from '@services/login'
-import { result } from 'lodash'
 
 
 interface IParam {
@@ -145,6 +144,14 @@ const ChatRoom = () => {
         })
     }
 
+    const renderPrice = (price: string, price_type: string) => {
+        if (price === '0') {
+            return <View className="content-price">待定</View>
+        } else {
+            return <View className="content-price">{price}{PRICE_TYPE[price_type]}</View>
+        }
+    }
+
     const renderContentByType = (chatItem: any, isMine: boolean = false) => {
         let itemContent: any = null
         switch (chatItem.message_type) {
@@ -162,7 +169,7 @@ const ChatRoom = () => {
                         </View>
                         <View className="content-title">{itemContent.title}</View>
                         <View className="content-text">{itemContent.areaName}</View>
-                        <View className="content-text">{itemContent.price}{PRICE_TYPE[itemContent.price_type]}</View>
+                        {renderPrice(itemContent.price, itemContent.price_type)}
                     </View>
                 )
             case '4':
@@ -176,9 +183,9 @@ const ChatRoom = () => {
                         <View className="content-title">{itemContent.title}</View>
                         <View className="content-text">
                             <Text>{itemContent.room}室{itemContent.office}厅{itemContent.toilet}卫</Text>
-                            <Text className="area">{itemContent.building_area}㎡</Text>
+                            <Text className="ml20">{itemContent.building_area}㎡</Text>
                         </View>
-                        <View className="content-price">{itemContent.price}{PRICE_TYPE[itemContent.price_type]}</View>
+                        {renderPrice(itemContent.price, itemContent.price_type)}
                     </View>
                 )
             case '5':
@@ -196,9 +203,27 @@ const ChatRoom = () => {
                         <View className="content-title">{itemContent.title}</View>
                         <View className="content-text">
                             <Text>{itemContent.room}室{itemContent.office}厅{itemContent.toilet}卫</Text>
-                            <Text className="area">{RENT_TYPE[itemContent.rent_type]}</Text>
+                            <Text className="ml20">{RENT_TYPE[itemContent.rent_type]}</Text>
                         </View>
                         <View className="content-price">{itemContent.price}元/月</View>
+                    </View>
+                )
+            case '6':
+                itemContent = JSON.parse(chatItem.content)
+                return (
+                    <View className="content" onClick={() => toHouseRoom('rent', itemContent)}>
+                        <View className="content-image">
+                            <Image src={itemContent.image_path} mode="aspectFill" />
+                            <View className="tag">新房户型</View>
+                        </View>
+                        <View className="content-title">
+                            <Text>{itemContent.name}</Text>
+                            <Text className="ml20">{itemContent.room}室{itemContent.office}厅{itemContent.toilet}卫</Text>
+                        </View>
+                        <View className="content-text">
+                            <Text>{itemContent.title}</Text>
+                        </View>
+                        {renderPrice(itemContent.price, itemContent.price_type)}
                     </View>
                 )
             default:

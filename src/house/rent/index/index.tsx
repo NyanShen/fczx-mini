@@ -98,7 +98,7 @@ const RentIndex = () => {
     }
 
     const toChatRoom = () => {
-        const { id, title, price, image_path, room, office, toilet, building_area } = rentData
+        const { id, title, price, image_path, room, office, toilet, building_area, rent_type } = rentData
         const paramString = toUrlParam({
             messageType: '5',
             fromUserId: rentData.user_id,
@@ -111,6 +111,7 @@ const RentIndex = () => {
                 room,
                 office,
                 toilet,
+                rent_type,
                 building_area,
                 areaName: rentData.area.name
             })

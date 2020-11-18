@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Taro, {getCurrentInstance} from '@tarojs/taro'
+import Taro, { getCurrentInstance } from '@tarojs/taro'
 import { View, Image, Text, ScrollView, Swiper, SwiperItem } from '@tarojs/components'
 import classnames from 'classnames'
 
@@ -10,6 +10,7 @@ import useNavData from '@hooks/useNavData'
 import { PRICE_TYPE, SALE_STATUS } from '@constants/house'
 import '@house/new/album/index.scss'
 import './detail.scss'
+import { toUrlParam } from '@utils/urlHandler'
 
 const HouseTypeDetail = () => {
     const bottomHeight = 55
@@ -17,7 +18,11 @@ const HouseTypeDetail = () => {
     const params: any = currentRouter.params
     const { appHeaderHeight, contentHeight } = useNavData()
     const [open, setOpen] = useState<boolean>(false)
-    const [houseType, setHouseType] = useState<any>({ tags: [], fangHouse: {} })
+    const [houseType, setHouseType] = useState<any>({
+        tags: [],
+        fangHouse: {},
+        fangHouseConsultant: []
+    })
 
     useEffect(() => {
         app.request({
@@ -29,7 +34,7 @@ const HouseTypeDetail = () => {
             setHouseType(result)
         })
     }, [])
-    
+
     const handlePhoneCall = () => {
         Taro.makePhoneCall({
             phoneNumber: houseType.fangHouse.phone
@@ -37,10 +42,34 @@ const HouseTypeDetail = () => {
     }
 
     const toNewHouse = () => {
-            Taro.navigateTo({
-                url: `/house/new/index/index?id=${params.houseId}`
-            })
+        Taro.navigateTo({
+            url: `/house/new/index/index?id=${params.houseId}`
+        })
     }
+
+    const toChatRoom = (consultant: any) => {
+        const { id, name, price, price_type, image_path, room, office, toilet } = houseType
+        const paramString = toUrlParam({
+            messageType: '6',
+            fromUserId: consultant.user_id,
+            toUser: JSON.stringify(consultant.user),
+            content: JSON.stringify({
+                id,
+                name,
+                room,
+                office,
+                toilet,
+                price,
+                price_type,
+                image_path,
+                title: houseType.fangHouse.title
+            })
+        })
+        Taro.navigateTo({
+            url: `/chat/room/index${paramString}`
+        })
+    }
+
     return (
         <View className="house-type-detail">
             <NavBar title="户型图" back={true}></NavBar>
@@ -114,7 +143,7 @@ const HouseTypeDetail = () => {
                 </ScrollView>
             </View>
             <View className="bottom-bar">
-                <View className="bar-item-btn">
+                <View className="bar-item-btn" onClick={() => toChatRoom(houseType.fangHouseConsultant[0])}>
                     <View className="btn btn-yellow btn-bar ml30">
                         <View>联系置业顾问</View>
                     </View>

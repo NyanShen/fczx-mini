@@ -26,7 +26,7 @@ const INIT_PARAM = {
 const INIT_HOUSE_TYPE = { roomCount: { total: 0, list: [] }, roomList: [] }
 const HouseType = () => {
     const PAGE_LIMIT = 20
-    const fixedHeight = 105
+    const fixedHeight = 50
     let router: any = getCurrentInstance().router
     const houseId = router?.params.id
     const { contentHeight } = useNavData()
@@ -65,12 +65,6 @@ const HouseType = () => {
                     roomList: [...houseType.roomList, ...result.roomList.data]
                 })
             }
-        })
-    }
-
-    const handlePhoneCall = () => {
-        Taro.makePhoneCall({
-            phoneNumber: '1340000'
         })
     }
 
@@ -150,20 +144,6 @@ const HouseType = () => {
                         <Text>没有更多数据了</Text>
                     </View>
                 </ScrollView>
-            </View>
-            <View className="bottom-bar">
-                <View className="bar-item-btn">
-                    <View className="btn btn-yellow btn-bar ml30">
-                        <View>在线咨询</View>
-                        <View className="btn-subtext">快速在线咨询</View>
-                    </View>
-                </View>
-                <View className="bar-item-btn" onClick={handlePhoneCall}>
-                    <View className="btn btn-primary btn-bar">
-                        <View>电话咨询</View>
-                        <View className="btn-subtext">致电了解更多信息</View>
-                    </View>
-                </View>
             </View>
         </View>
     )
