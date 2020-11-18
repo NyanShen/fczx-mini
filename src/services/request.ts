@@ -5,8 +5,12 @@ const getCityAlias = (): string => {
     const city = storage.getItem('city')
     if (city) {
         return city.alias
+    } else {
+        Taro.navigateTo({
+            url: '/house/city/index'
+        })
+        return ''
     }
-    return ''
 }
 
 const agreement: string = 'http://'
@@ -36,6 +40,7 @@ app.randCode = (len: number) => {
 }
 
 app.request = (params: any, { loading = true, toast = true }: any = {}) => {
+
     if (!params.data) {
         params.data = {}
     }

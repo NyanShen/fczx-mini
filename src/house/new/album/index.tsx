@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react'
+import { getCurrentInstance } from '@tarojs/taro'
 import { View, ScrollView, Text, Image, Swiper, SwiperItem } from '@tarojs/components'
 import classnames from 'classnames'
 
@@ -26,6 +27,8 @@ const INIT_ALBUM_SWIPER = {
 
 const AlbumList = () => {
     const fixedHeight = 40
+    const router = getCurrentInstance().router
+    const houseId = router?.params.id
     const { appHeaderHeight, contentHeight } = useNavData()
 
     const [albumData, setAlbumData] = useState<any[]>([])
@@ -35,7 +38,7 @@ const AlbumList = () => {
     useEffect(() => {
         app.request({
             url: app.areaApiUrl(api.getHouseAlbum),
-            data: { fang_house_id: '1000006' }
+            data: { fang_house_id: houseId }
         }).then((result: any) => {
             setCurrentView(`view_${result[0].id}`)
             setAlbumData(result)

@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Taro, { useDidShow } from '@tarojs/taro'
 import { View, Text, Image } from '@tarojs/components'
+import classnames from 'classnames'
 
 import api from '@services/api'
 import app from '@services/request'
@@ -11,50 +12,15 @@ import second_house from '@assets/icons/house.png'
 import rent_house from '@assets/icons/rent_house.png'
 import community from '@assets/icons/community.png'
 import news from '@assets/icons/news.png'
+import { PRICE_TYPE, SALE_STATUS } from '@constants/house'
 import '@styles/common/house.scss'
 import './index.scss'
 
 const Index = () => {
 
   const [city, setCity] = useState<any>({})
-
-  useEffect(() => {
-  }, [])
-
-  useDidShow(() => {
-    const currentCity = storage.getItem('city')
-    if (!currentCity) {
-      Taro.showModal({
-        title: '提示',
-        content: '请先选择一个的城市',
-        showCancel: false,
-        success: function (res) {
-          if (res.confirm) {
-            Taro.navigateTo({
-              url: '/house/city/index'
-            })
-          }
-        }
-      })
-      return
-    }
-    if (currentCity.id !== city.id) {
-      setCity(currentCity)
-      fetchHouseList()
-    }
-  })
-
-  const fetchHouseList = () => {
-    app.request({
-      url: app.areaApiUrl(api.getHouseList),
-      data: {
-        page: 1,
-        limit: 20
-      }
-    }).then((result: any) => {
-      console.log(result.data)
-    })
-  }
+  const [houseList, setHouseList] = useState<any[]>([])
+  const [esfList, setEsfList] = useState<any[]>([])
 
   const menuContent = [{
     children: [
@@ -86,7 +52,55 @@ const Index = () => {
     ]
   }]
 
-  const clickHandler = () => {
+  useDidShow(() => {
+    const currentCity = storage.getItem('city')
+    if (!currentCity) {
+      Taro.showModal({
+        title: '提示',
+        content: '请先选择一个的城市',
+        showCancel: false,
+        success: function (res) {
+          if (res.confirm) {
+            Taro.navigateTo({
+              url: '/house/city/index'
+            })
+          }
+        }
+      })
+      return
+    }
+    if (currentCity.id !== city.id) {
+      setCity(currentCity)
+      fetchEsfList()
+      fetchHouseList()
+    }
+  })
+
+  const fetchHouseList = () => {
+    app.request({
+      url: app.areaApiUrl(api.getHouseList),
+      data: {
+        page: 1,
+        limit: 20
+      }
+    }).then((result: any) => {
+      setHouseList(result.data)
+    })
+  }
+
+  const fetchEsfList = () => {
+    app.request({
+      url: app.areaApiUrl(api.getEsfList),
+      data: {
+        page: 1,
+        limit: 20
+      }
+    }).then((result: any) => {
+      setEsfList(result.data)
+    })
+  }
+
+  const toHouseSearch = () => {
     Taro.navigateTo({
       url: '/house/search/index'
     })
@@ -104,13 +118,33 @@ const Index = () => {
     })
   }
 
+  const toHouseItem = (item: any, name: string) => {
+    Taro.navigateTo({
+      url: `/house/${name}/index/index?id=${item.id}`
+    })
+  }
+
+  const toHouseList = (name: string) => {
+    Taro.navigateTo({
+      url: `/house/${name}/list/index`
+    })
+  }
+
+  const renderPrice = (price: string, price_type: string) => {
+    if (price === '0') {
+      return <Text className="price">待定</Text>
+    } else {
+      return <Text className="price">{price}<Text className="price-unit">{PRICE_TYPE[price_type]}</Text></Text>
+    }
+  }
+
   return (
     <View className="index">
       <NavBar title="房产在线" />
       <View className="index-search">
         <View className="index-search-content clearfix">
           <View className="iconfont iconsearch"></View>
-          <View className="index-search-content-desc" onClick={clickHandler}>输入区县、小区名</View>
+          <View className="index-search-content-desc" onClick={toHouseSearch}>输入区县、小区名</View>
           <View className="index-search-content-text" onClick={toCityList}>
             <Text className="iconfont iconmap"></Text>
             <Text className="city-name">{city.short_name}</Text>
@@ -141,53 +175,89 @@ const Index = () => {
           })
         }
       </View>
-      <View className="house-list view-content">
-        <View className="house-list-ul">
-          <View className="house-list-li">
-            <View className="li-image">
-              <Image src="http://192.168.2.248/assets/images/1400x933_1.jpg" mode="aspectFill"></Image>
-            </View>
-            <View className="li-text">
-              <View className="title mb8">
-                <Text>襄阳吾悦广场</Text>
-              </View>
-              <View className="small-desc mb8">
-                <Text>樊城区-樊城区</Text>
-                <Text className="line-split"></Text>
-                <Text>建面85-0139平米</Text>
-              </View>
-              <View className="mb8">
-                <Text className="price">1200</Text>
-                <Text className="price-unit">元/m²</Text>
-              </View>
-              <View className="tags">
-                <Text className="tags-item sale-status-1">在售</Text>
-              </View>
-            </View>
-          </View>
-          <View className="house-list-li">
-            <View className="li-image">
-              <Image src="http://192.168.2.248/assets/images/1400x933_1.jpg" mode="aspectFill"></Image>
-            </View>
-            <View className="li-text">
-              <View className="title mb8">
-                <Text>襄阳吾悦广场</Text>
-              </View>
-              <View className="small-desc mb8">
-                <Text>樊城区-樊城区</Text>
-                <Text className="line-split"></Text>
-                <Text>建面85-0139平米</Text>
-              </View>
-              <View className="mb8">
-                <Text className="price">1200</Text>
-                <Text className="price-unit">元/m²</Text>
-              </View>
-              <View className="tags">
-                <Text className="tags-item sale-status-1">在售</Text>
-              </View>
-            </View>
-          </View>
+      <View className="house-list">
+        <View className="header-title">
+          为您推荐新房
         </View>
+        {
+          houseList.length > 0 &&
+          <View className="house-list-ul">
+            {
+              houseList.map((item: any) => (
+                <View className="house-list-li" key={item.id} onClick={() => toHouseItem(item, 'new')}>
+                  <View className="li-image">
+                    <Image src={item.image_path} mode="aspectFill"></Image>
+                  </View>
+                  <View className="li-text">
+                    <View className="text-item title mb8">
+                      <Text>{item.title}</Text>
+                    </View>
+                    <View className="text-item small-desc mb8">
+                      <Text>{item.area && item.area.name}</Text>
+                      <Text className="line-split"></Text>
+                      <Text>{item.address}</Text>
+                    </View>
+                    <View className="mb8">
+                      {renderPrice(item.price, item.price_type)}
+                    </View>
+                    <View className="text-item tags">
+                      <Text className={classnames('tags-item', `sale-status-${item.sale_status}`)}>{SALE_STATUS[item.sale_status]}</Text>
+                    </View>
+                  </View>
+                </View>
+              ))
+            }
+            <View className="house-more" onClick={() => toHouseList('new')}>
+              <Text>更多房源</Text>
+            </View>
+          </View>
+        }
+
+      </View>
+      <View className="house-list">
+        <View className="header-title">
+          为您推荐二手房
+        </View>
+        {
+          esfList.length > 0 &&
+          <View className="house-list-ul">
+            {
+              esfList.map((item: any, index: number) => (
+                <View key={index} className="house-list-li" onClick={() => toHouseItem(item, 'esf')}>
+                  <View className="li-image">
+                    <Image src={item.image_path} mode="aspectFill"></Image>
+                  </View>
+                  <View className="li-text">
+                    <View className="text-item row2">
+                      <Text>{item.title}</Text>
+                    </View>
+                    <View className="text-item text-item-small">
+                      <Text>{item.room}室{item.office}厅{item.toilet}卫</Text>
+                      <Text className="line-split"></Text>
+                      <Text>{item.building_area}m²</Text>
+                      <Text className="ml20">{item.community}</Text>
+                    </View>
+                    <View className="text-item mb8">
+                      <Text className="price">{item.price_total}</Text>
+                      <Text className="price-unit">万</Text>
+                      <Text className="small-desc ml20">{item.price_unit}元/m²</Text>
+                    </View>
+                    <View className="text-item tags">
+                      {
+                        item.tags.map((item: string, index: number) => (
+                          <Text key={index} className="tags-item">{item}</Text>
+                        ))
+                      }
+                    </View>
+                  </View>
+                </View>
+              ))
+            }
+            <View className="house-more" onClick={() => toHouseList('esf')}>
+              <Text>更多房源</Text>
+            </View>
+          </View>
+        }
       </View>
     </View>
   )
