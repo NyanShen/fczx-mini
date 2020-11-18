@@ -144,6 +144,12 @@ const ChatRoom = () => {
         })
     }
 
+    const toHouseType = (content: any) => {
+        Taro.navigateTo({
+            url: `/house/new/type/detail?id=${content.id}`
+        })
+    }
+
     const renderPrice = (price: string, price_type: string) => {
         if (price === '0') {
             return <View className="content-price">待定</View>
@@ -211,7 +217,7 @@ const ChatRoom = () => {
             case '6':
                 itemContent = JSON.parse(chatItem.content)
                 return (
-                    <View className="content" onClick={() => toHouseRoom('rent', itemContent)}>
+                    <View className="content" onClick={() => toHouseType(itemContent)}>
                         <View className="content-image">
                             <Image src={itemContent.image_path} mode="aspectFill" />
                             <View className="tag">新房户型</View>
