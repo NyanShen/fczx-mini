@@ -109,6 +109,10 @@ const esfHouse = () => {
 
     }
 
+    const renderHouseDesc = (value: string) => {
+        return value ? value : '暂无信息'
+    }
+
     return (
         <View className="esf">
             <NavBar title={esfData.title} back={true}></NavBar>
@@ -221,19 +225,19 @@ const esfHouse = () => {
                     <View className="esf-info-item">
                         <View className="sub-title">核心卖点</View>
                         <View className="item-content">
-                            {esfData.selling_point}
+                            {renderHouseDesc(esfData.selling_point)}
                         </View>
                     </View>
                     <View className="esf-info-item">
                         <View className="sub-title">业主心态</View>
                         <View className="item-content">
-                            {esfData.attitude_point}
+                            {renderHouseDesc(esfData.attitude_point)}
                         </View>
                     </View>
                     <View className="esf-info-item">
                         <View className="sub-title">服务介绍</View>
                         <View className="item-content">
-                            {esfData.service_point}
+                            {renderHouseDesc(esfData.service_point)}
                         </View>
                     </View>
                 </View>

@@ -11,6 +11,7 @@ import new_house from '@assets/icons/new_house.png'
 import second_house from '@assets/icons/house.png'
 import rent_house from '@assets/icons/rent_house.png'
 import community from '@assets/icons/community.png'
+import house_calc from '@assets/icons/house_calc.png'
 import news from '@assets/icons/news.png'
 import { PRICE_TYPE, SALE_STATUS } from '@constants/house'
 import '@styles/common/house.scss'
@@ -48,6 +49,11 @@ const Index = () => {
         name: '资讯',
         icon: news,
         path: '/news/list/index'
+      },
+      {
+        name: '房贷计算',
+        icon: house_calc,
+        path: '/calculator/index'
       }
     ]
   }]

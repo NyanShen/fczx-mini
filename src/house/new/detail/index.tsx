@@ -21,22 +21,20 @@ const INIT_HOUSE_DATA = {
 }
 
 const HouseDetail = () => {
+    const currentRouter: any = getCurrentInstance().router
+    const params: any = currentRouter.params
     const [houseData, setHouseData] = useState<any>(INIT_HOUSE_DATA)
-    useEffect(() => {
-        let currentRouter: any = getCurrentInstance().router
-        let params: any = currentRouter.params
-        params.id = '1001'
-        if (params.id) {
-            app.request({
-                url: app.areaApiUrl(api.getHouseById),
-                data: {
-                    id: params.id
-                }
-            }).then((result: any) => {
-                setHouseData(result)
 
-            })
-        }
+    useEffect(() => {
+        app.request({
+            url: app.areaApiUrl(api.getHouseById),
+            data: {
+                id: params.id
+            }
+        }).then((result: any) => {
+            setHouseData(result)
+
+        })
     }, [])
 
     const renderDetail = (value: string) => {
@@ -51,28 +49,28 @@ const HouseDetail = () => {
                     <View className="info-title">基本信息</View>
                     <View className="info-item">
                         <Text className="label">物业类型：</Text>
-                        <Text className="text">{houseData._fangPropertyType.join(',')}</Text>
+                        <Text className="text">{houseData._fangPropertyType && houseData._fangPropertyType.join(',')}</Text>
                     </View>
                     <View className="info-item">
                         <Text className="label">装修状况：</Text>
-                        <Text className="text">{houseData._renovationStatus.join(',')}</Text>
+                        <Text className="text">{houseData._renovationStatus && houseData._renovationStatus.join(',')}</Text>
                     </View>
                     <View className="info-item">
                         <Text className="label">建筑类型：</Text>
                         <Text className="text">
-                            {renderDetail(houseData._fangBuildingType.join(','))}
+                            {renderDetail(houseData._fangBuildingType && houseData._fangBuildingType.join(','))}
                         </Text>
                     </View>
                     <View className="info-item">
                         <Text className="label">产权年限：</Text>
                         <Text className="text address">
-                            {renderDetail(houseData._fangBuildingType.property_rights)}
+                            {renderDetail(houseData.fangHouseInfo.property_rights)}
                         </Text>
                     </View>
                     <View className="info-item">
                         <Text className="label">开发企业：</Text>
                         <Text className="text address">
-                            {renderDetail(houseData._fangBuildingType.developer)}
+                            {renderDetail(houseData.fangHouseInfo.developer)}
                         </Text>
                     </View>
                     <View className="info-item">

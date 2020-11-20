@@ -228,10 +228,12 @@ const HouseSale = () => {
     }
 
     const selectPicker = (name: string) => {
+        console.log(pickerValue[name].id)
         setPicker({
             name,
             show: true,
-            list: houseAttr[name]
+            list: houseAttr[name],
+            item: pickerValue[name].id ? pickerValue[name] : INIT_PICKER_VALUE[name]
         })
     }
 
@@ -243,9 +245,8 @@ const HouseSale = () => {
             })
         }
         setPicker({
-            name: '',
+            ...picker,
             show: false,
-            list: []
         })
     }
 
@@ -352,6 +353,7 @@ const HouseSale = () => {
     const customPicker = () => useMemo(() => {
         return (
             <CustomPicker
+                item={picker.item}
                 name={picker.name}
                 show={picker.show}
                 list={picker.list}
