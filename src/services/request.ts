@@ -6,9 +6,6 @@ const getCityAlias = (): string => {
     if (city) {
         return city.alias
     } else {
-        Taro.navigateTo({
-            url: '/house/city/index'
-        })
         return ''
     }
 }

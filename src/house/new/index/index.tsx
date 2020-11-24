@@ -49,7 +49,6 @@ const imageId = "image_1"
 
 const House = () => {
     const router: any = getCurrentInstance().router
-    const isEntry: boolean = router?.params.entry
     const { contentHeight } = useNavData()
     const [albumSwiper, setAlbumSwiper] = useState<IAlbumSwiper>(INIT_ALBUM_SWIPER)
     const [houseData, setHouseData] = useState<any>(INIT_HOUSE_DATA)
@@ -332,7 +331,7 @@ const House = () => {
 
     return (
         <View className="house">
-            <NavBar title={houseData.title} back={!isEntry}  home={isEntry}/>
+            <NavBar title={houseData.title} back={true}/>
             <ScrollView style={{ maxHeight: `${contentHeight - 55}px`, backgroundColor: '#f7f7f7' }} scrollY>
                 <View className="house-album">
                     <Swiper

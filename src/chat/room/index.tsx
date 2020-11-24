@@ -29,10 +29,11 @@ const MESSAGE_TYPE = {
 const ChatRoom = () => {
     const PAGE_LIMIT: number = 20
     const router: any = getCurrentInstance().router
+    const isEntry: boolean = router?.params.entry
     const fromUserId: string = router?.params.fromUserId
     const messageType: any = router?.params.messageType
     const content: any = router?.params.content
-    const toUser: any = JSON.parse(router?.params.toUser) || {}
+    const toUser: any = JSON.parse(router?.params.toUser || '{}') || {}
     const { contentHeight } = useNavData()
     const [user, setUser] = useState<any>({})
     const [param, setParam] = useState<IParam>(INIT_PARAM)
@@ -43,7 +44,6 @@ const ChatRoom = () => {
     const [isPhoto, setIsPhoto] = useState<boolean>(false)
     const [inputData, setInputData] = useState<any>({ value: '', send: false })
     const ref = useRef<string>('')
-    const [unread, setUnread] = useState<string>('')
 
     useDidShow(() => {
         fetchUserData().then((result) => {
@@ -288,7 +288,7 @@ const ChatRoom = () => {
 
     return (
         <View className="chat-room">
-            <NavBar title={toUser.nickname} back={true}></NavBar>
+            <NavBar title={toUser.nickname} back={!isEntry} home={isEntry}></NavBar>
             <View className="chat-room-content">
                 <ScrollView
                     scrollY

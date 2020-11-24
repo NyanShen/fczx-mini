@@ -5,8 +5,8 @@ export default {
     // 'news/detail/index',
     // 'house/community/list/index',
     // 'calculator/index',
-    'pages/chat/index',
     'pages/index/index',
+    'pages/chat/index',
     'pages/user/index',
     'pages/entry/index',
   ],
@@ -74,12 +74,12 @@ export default {
         'room/index'
       ]
     },
-    // {
-    //   root: 'calculator',
-    //   pages: [
-    //     'index'
-    //   ]
-    // }
+    {
+      root: 'calculator',
+      pages: [
+        'index'
+      ]
+    }
   ],
   tabBar: {
     color: 'rgba(68, 68, 68, 1)',
