@@ -11,7 +11,7 @@ class App extends Component {
 
   componentDidMount() {
     ChatEvent.on('chat', (resutl: any[]) => {
-      if (resutl.length > 0) {
+      if (resutl) {
         Taro.showTabBarRedDot({ index: 1 })
       } else {
         Taro.hideTabBarRedDot({ index: 1 })

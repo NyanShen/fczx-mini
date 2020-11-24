@@ -27,7 +27,7 @@ const MESSAGE_TYPE = {
 }
 
 const ChatRoom = () => {
-    const PAGE_LIMIT: number = 10
+    const PAGE_LIMIT: number = 20
     const router: any = getCurrentInstance().router
     const fromUserId: string = router?.params.fromUserId
     const messageType: any = router?.params.messageType
@@ -43,6 +43,7 @@ const ChatRoom = () => {
     const [isPhoto, setIsPhoto] = useState<boolean>(false)
     const [inputData, setInputData] = useState<any>({ value: '', send: false })
     const ref = useRef<string>('')
+    const [unread, setUnread] = useState<string>('')
 
     useDidShow(() => {
         fetchUserData().then((result) => {

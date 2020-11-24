@@ -1,7 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Taro, { useDidShow } from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
-import map from 'lodash/map'
 
 import api from '@services/api'
 import app from '@services/request'
@@ -14,7 +13,7 @@ import './index.scss'
 
 const Chat = () => {
   const [user, setUser] = useState<any>(null)
-  const [unread, setUnread] = useState<string[]>([])
+  const [unread, setUnread] = useState<string>('')
   const [chatDialog, setChatDialog] = useState<any[]>([])
 
   useDidShow(() => {
@@ -28,14 +27,20 @@ const Chat = () => {
     })
   })
 
+  useEffect(() => {
+    if (user && unread) {
+      fetchChatDialog()
+    }
+  }, [unread])
+
   const fetchChatDialog = () => {
     app.request({
       url: app.apiUrl(api.getChatDialog)
-    }).then((result: any) => {
+    }, { loading: false }).then((result: any) => {
       setChatDialog(result)
     })
-    ChatEvent.on('chat', (result: any[]) => {
-      setUnread(map(result, 'to_user_id'))
+    ChatEvent.on('chat', (result: string) => {
+      setUnread(result)
     })
   }
 
@@ -97,7 +102,7 @@ const Chat = () => {
           <View className="item-photo">
             <Image src={item.user.avatar} mode="aspectFill"></Image>
             {
-              unread.includes(item.to_user_id) &&
+              item.status == '1' &&
               <View className="item-dot"></View>
             }
           </View>

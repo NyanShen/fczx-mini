@@ -13,7 +13,7 @@ const getCityAlias = (): string => {
     }
 }
 
-const agreement: string = 'http://'
+const agreement: string = 'https://'
 const topDomain: string = '.fczx.com'
 const uploadFileUrl = `${agreement}api${topDomain}/file/upload`
 const app: any = {};
@@ -22,11 +22,11 @@ app.apiUrl = (uri: string) => {
 }
 
 app.areaApiUrl = (uri: string) => {
-    return `${agreement}${getCityAlias()}.api${topDomain}${uri}`
+    return `${agreement}areaapi${topDomain}${uri}`
 }
 
 app.testApiUrl = (uri: string) => {
-    return `${agreement}192.168.2.248:12306${uri}`
+    return `http://192.168.2.248:12306${uri}`
 }
 
 app.randCode = (len: number) => {
@@ -45,8 +45,9 @@ app.request = (params: any, { loading = true, toast = true }: any = {}) => {
         params.data = {}
     }
 
+    const city = { 'X-City': getCityAlias() }
     const token = { 'X-Token': storage.getItem('token', 'login') }
-    params.header = { ...params.header, ...token }
+    params.header = { ...params.header, ...token, ...city }
 
     const { page, limit } = params.data
     if (typeof page != "undefined" && typeof limit != "undefined") {

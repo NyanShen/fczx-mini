@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Input, View, Text, ScrollView } from '@tarojs/components'
 import classnames from 'classnames'
 
@@ -24,7 +24,7 @@ const INIT_PICKER_VALUE = {
         value: '4.65'
     },
     fundRateWay: {
-        name: '基准利率',
+        name: '基准利率(3.25%)',
         value: '3.25'
     }
 }
@@ -44,15 +44,76 @@ const Calculator = () => {
     const [picker, setPicker] = useState<IPicker>(INIT_PICKER)
     const [pickerValue, setPickerValue] = useState<any>(INIT_PICKER_VALUE)
 
+    useEffect(() => {
+        calculateHousePrice()
+    }, [inputValue.housePrice, pickerValue.loadRatio])
+
     const handleCateChange = (item: ICate) => {
         setCate(item)
     }
 
-    const handleInputChange = (e: any, name: string) => {
-        setInputValue({
-            ...inputValue,
-            [name]: e.detail.value
-        })
+    const handleInputChange = (e: any, key: string) => {
+        const value = e.detail.value
+        const { loadPrice } = inputValue
+        switch (key) {
+            case 'fundPrice':
+                if (parseFloat(value) > parseFloat(loadPrice)) {
+                    setInputValue({
+                        ...inputValue,
+                        fundPrice: loadPrice,
+                        businessPrice: 0
+                    })
+                } else {
+                    setInputValue({
+                        ...inputValue,
+                        fundPrice: value,
+                        businessPrice: loadPrice - value
+                    })
+                }
+                return
+            case 'businessPrice':
+                if (parseFloat(value) > parseFloat(loadPrice)) {
+                    setInputValue({
+                        ...inputValue,
+                        fundPrice: 0,
+                        businessPrice: loadPrice
+                    })
+                } else {
+                    setInputValue({
+                        ...inputValue,
+                        fundPrice: loadPrice - value,
+                        businessPrice: value
+                    })
+                }
+                return
+            default:
+                setInputValue({
+                    ...inputValue,
+                    [key]: e.detail.value
+                })
+        }
+    }
+
+    const handleBlurChange = (e: any, key: string) => {
+        const value = e.detail.value
+        if (!value) {
+            setInputValue({
+                ...inputValue,
+                [key]: 0
+            })
+        }
+    }
+
+    const calculateHousePrice = () => {
+        if (!!inputValue.housePrice && !!pickerValue.loadRatio.value) {
+            const loadPrice = inputValue.housePrice * pickerValue.loadRatio.value
+            setInputValue({
+                ...inputValue,
+                loadPrice: loadPrice.toFixed(2),
+                fundPrice: (loadPrice / 2).toFixed(2),
+                businessPrice: (loadPrice / 2).toFixed(2)
+            })
+        }
     }
 
     const handlePickerConfirm = (item: any) => {
@@ -75,6 +136,10 @@ const Calculator = () => {
             list: pickerObject[name],
             item: pickerValue[name].value ? pickerValue[name] : INIT_PICKER_VALUE[name]
         })
+    }
+
+    const calculate = () => {
+        
     }
 
     const customPicker = () => useMemo(() => {
@@ -107,12 +172,27 @@ const Calculator = () => {
         </View>
     )
 
+    const renderInput = (label: string, key: string, unit: string = '万元') => (
+        <View className="calc-item">
+            <View className="item-label">{label}</View>
+            <View className="item-input">
+                <Input
+                    value={inputValue[key]}
+                    onInput={(e: any) => handleInputChange(e, key)}
+                    onBlur={(e: any) => handleBlurChange(e, key)}
+                    type="digit"
+                />
+            </View>
+            <View className="item-unit">{unit}</View>
+        </View>
+    )
+
     const renderBusinessRatio = () => {
         const { type, value } = pickerValue.businessRateWay
         return type ?
             (
                 <Text>
-                    <Text className="input-placeholder">{value}% + {inputValue.basePoint}% =</Text>
+                    <Text className="input-placeholder">{value}% + {inputValue.basePoint}‱ =</Text>
                     <Text className="input-text">{(parseFloat(value) + inputValue.basePoint * 0.01).toFixed(2)}%</Text>
                 </Text>
             ) :
@@ -135,16 +215,7 @@ const Calculator = () => {
                     }
                 </View>
                 <View className="calculator-content" id="view_content">
-                    <View className="calc-item">
-                        <View className="item-label">房价总额</View>
-                        <View className="item-input">
-                            <Input
-                                value={inputValue.housePrice}
-                                onBlur={(e: any) => handleInputChange(e, 'housePrice')}
-                            />
-                        </View>
-                        <View className="item-unit">万元</View>
-                    </View>
+                    {renderInput('房价总额', 'housePrice')}
                     {renderPicker('loadRatio', '贷款比例')}
                     <View className="calc-item">
                         <View className="item-label">贷款总额</View>
@@ -154,37 +225,20 @@ const Calculator = () => {
                         <View className="item-unit">万元</View>
                     </View>
 
+                    {cate.type == 'group' && renderInput('公积金贷款', 'fundPrice')}
                     {
                         ['fund', 'group'].includes(cate.type) &&
                         <View>
-                            <View className="calc-item">
-                                <View className="item-label">公积金贷款</View>
-                                <View className="item-input">
-                                    <Input
-                                        value={inputValue.housePrice}
-                                        onBlur={(e: any) => handleInputChange(e, 'fundPrice')}
-                                    />
-                                </View>
-                                <View className="item-unit">万元</View>
-                            </View>
                             {renderPicker('fundPeriod', '公积金贷年限')}
 
                             {renderPicker('fundRateWay', '公积金利率')}
                         </View>
                     }
+
+                    {cate.type == 'group' && renderInput('商业贷款', 'businessPrice')}
                     {
                         ['business', 'group'].includes(cate.type) &&
                         <View>
-                            <View className="calc-item">
-                                <View className="item-label">商业贷款</View>
-                                <View className="item-input">
-                                    <Input
-                                        value={inputValue.housePrice}
-                                        onBlur={(e: any) => handleInputChange(e, 'businessPrice')}
-                                    />
-                                </View>
-                                <View className="item-unit">万元</View>
-                            </View>
                             {renderPicker('businessPeriod', '商贷年限')}
                             {renderPicker('businessRateWay', '利率方式')}
                             {
@@ -209,7 +263,7 @@ const Calculator = () => {
                         </View>
                     }
 
-                    <View className="calc-btn">
+                    <View className="calc-btn" onClick={calculate}>
                         <View className="btn btn-primary">开始计算</View>
                     </View>
                 </View>

@@ -206,19 +206,19 @@ const businessRateWay = [
 
 const fundRateWay = [
     {
-        name: '基准利率',
+        name: '基准利率(3.25%)',
         value: '3.25'
     },
     {
-        name: '基准利率1.1倍',
+        name: '基准利率1.1倍(3.58%)',
         value: '3.58'
     },
     {
-        name: '基准利率1.2倍',
+        name: '基准利率1.2倍(3.90%)',
         value: '3.90'
     },
     {
-        name: '基准利率1.3倍',
+        name: '基准利率1.3倍(4.23%)',
         value: '4.23'
     }
 ]
@@ -229,4 +229,10 @@ export const pickerObject = {
     businessPeriod: loadPeriod,
     businessRateWay,
     fundRateWay
+}
+
+export const fundRates = {
+    '1': {
+        
+    }
 }

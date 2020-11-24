@@ -6,7 +6,6 @@ import api from '@services/api'
 import app from '@services/request'
 import NavBar from '@components/navbar'
 import './index.scss'
-import { result } from 'lodash'
 
 interface ITextData {
     count?: number,

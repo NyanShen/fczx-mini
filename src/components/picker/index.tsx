@@ -47,7 +47,6 @@ const CustomPicker = (props: IProps) => {
         const index = e.detail.value[0]
         setCurrent({ ...list[index], index })
         setPickEnd(true)
-        console.log("handleChange", list[index])
     }
 
     const handlePickStart = () => {
@@ -64,7 +63,6 @@ const CustomPicker = (props: IProps) => {
     // handleChange执行玩了在执行
     const handleCancel = () => {
         if (pickEnd) {
-            console.log("cancel", ref.current)
             setCurrent(ref.current)
             onConfirm(null)
         }

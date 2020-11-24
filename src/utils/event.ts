@@ -1,5 +1,6 @@
 import api from '@services/api'
 import app from '@services/request'
+import storage from './storage'
 
 class ChatEvent {
 
@@ -19,21 +20,28 @@ class ChatEvent {
     }
 
     public emit(eventName: string, params: any = {}) {
-        if (this.events[eventName]) {
-            this.timer = setInterval(() => {
-                app.request({
-                    url: app.apiUrl(api.getUnread)
-                }, { loading: false }).then((result: any) => {
-                    this.events[eventName].map((callBack) => {
-                        callBack(result, params);
-                    })
-                })
-            }, 10000)
+        let _this = this
+        if (_this.events[eventName]) {
+            _this.fetchChatUnread(eventName, params)
+            _this.timer = setInterval(() => {
+                _this.fetchChatUnread(eventName, params)
+            }, 5000)
         }
     }
 
     public clearTimer() {
         clearInterval(this.timer)
+    }
+
+    fetchChatUnread(eventName: string, params: any = {}) {
+        app.request({
+            url: app.apiUrl(api.getUnread)
+        }, { loading: false }).then((result: string) => {
+            storage.setItem('chat_unread', result)
+            this.events[eventName].map((callBack) => {
+                callBack(result, params);
+            })
+        })
     }
 
 }

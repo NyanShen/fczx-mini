@@ -4,9 +4,9 @@ export default {
   pages: [
     // 'news/detail/index',
     // 'house/community/list/index',
-    'calculator/index',
-    'pages/index/index',
+    // 'calculator/index',
     'pages/chat/index',
+    'pages/index/index',
     'pages/user/index',
     'pages/entry/index',
   ],
