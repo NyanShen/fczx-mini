@@ -92,7 +92,16 @@ const esfHouse = () => {
 
     const handlePhoneCall = () => {
         makePhoneCall({
-            phoneNumber: esfData.mobile
+            phoneNumber: esfData.mobile.replace(/[^0-9]/ig, ""),
+            fail: (err: any) => {
+                if (err.errMsg == 'makePhoneCall:fail') {
+                    Taro.showModal({
+                        title: '联系电话',
+                        content: esfData.mobile,
+                        showCancel: false
+                    })
+                }
+            }
         })
     }
 

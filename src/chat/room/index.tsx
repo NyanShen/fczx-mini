@@ -34,11 +34,10 @@ const ChatRoom = () => {
     const fromUserId: string = router?.params.fromUserId
     const messageType: any = router?.params.messageType
     const content: any = router?.params.content
-    const INIT_TOUSER: any = JSON.parse(router?.params.toUser || '{}') || {}
+    const toUser: any = JSON.parse(router?.params.toUser || '{}') || {}
     const { contentHeight } = useNavData()
 
     const [user, setUser] = useState<any>({})
-    const [toUser, setToUser] = useState<any>(INIT_TOUSER)
     const [param, setParam] = useState<IParam>(INIT_PARAM)
     const [page, setPage] = useState<IPage>(INIT_PAGE)
     const [chatData, setChatData] = useState<any[]>([])
@@ -59,17 +58,6 @@ const ChatRoom = () => {
         if (messageType && content) {
             sendMessage(messageType, content)
         }
-        if (isEntry) {
-            app.request({
-                url: app.apiUrl(api.getChatUser),
-                method: 'POST',
-                data: {
-                    id: toUserId
-                }
-            }, { loading: false }).then((result: any) => {
-                setToUser(result)
-            })
-        }
     }, [])
 
     useEffect(() => {
@@ -82,7 +70,7 @@ const ChatRoom = () => {
             data: {
                 page: param.currentPage,
                 limit: PAGE_LIMIT,
-                from_user_id: toUserId ? toUserId : fromUserId,
+                from_user_id: fromUserId,
             }
         }, { loading: false }).then((result: any) => {
             const resData = result.data

@@ -1,5 +1,8 @@
 import Taro, { getCurrentInstance, useReady } from "@tarojs/taro"
-import { transferUrlParam } from "@utils/urlHandler"
+
+import api from '@services/api'
+import app from '@services/request'
+import { toUrlParam, transferUrlParam } from "@utils/urlHandler"
 
 const Entry = () => {
     const router = getCurrentInstance().router
@@ -12,9 +15,30 @@ const Entry = () => {
     useReady(() => {
         const scene: string = decodeURIComponent(params)
         const paramObj: any = transferUrlParam(scene)
-        Taro.redirectTo({
-            url: `${urlMapper[paramObj.t]}?id=${paramObj.id}&entry=true`
-        })
+        if (paramObj.t === 'chat') {
+            app.request({
+                url: app.apiUrl(api.getChatUser),
+                method: 'POST',
+                data: {
+                    id: paramObj.id
+                }
+            }, { loading: false }).then((result: any) => {
+                const paramString = toUrlParam({
+                    entry: true,
+                    fromUserId: paramObj.id,
+                    toUser: JSON.stringify(result)
+                })
+                Taro.redirectTo({
+                    url: `${urlMapper[paramObj.t]}${paramString}`
+                })
+            }).catch(() => {
+                setTimeout(() => {
+                    Taro.switchTab({
+                        url: `/pages/index/index`
+                    })
+                }, 2000)
+            })
+        }
     })
 
     return null

@@ -37,7 +37,16 @@ const HouseTypeDetail = () => {
 
     const handlePhoneCall = () => {
         Taro.makePhoneCall({
-            phoneNumber: houseType.fangHouse.phone
+            phoneNumber: houseType.fangHouse.phone.replace(/[^0-9]/ig, ""),
+            fail: (err: any) => {
+                if (err.errMsg == 'makePhoneCall:fail') {
+                    Taro.showModal({
+                        title: '联系电话',
+                        content: houseType.fangHouse.phone,
+                        showCancel: false
+                    })
+                }
+            }
         })
     }
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Taro, { useDidShow } from '@tarojs/taro'
+import Taro, { useDidShow, useShareAppMessage, useShareTimeline } from '@tarojs/taro'
 import { View, Text, Image } from '@tarojs/components'
 import classnames from 'classnames'
 
@@ -57,6 +57,20 @@ const Index = () => {
       }
     ]
   }]
+
+  useShareTimeline(() => {
+    return {
+      title: '房产在线',
+      path: '/pages/index/index'
+    }
+  })
+
+  useShareAppMessage(() => {
+    return {
+      title: '房产在线',
+      path: '/pages/index/index'
+    }
+  })
 
   useDidShow(() => {
     const currentCity = storage.getItem('city')

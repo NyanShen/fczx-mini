@@ -90,7 +90,16 @@ const House = () => {
 
     const handlePhoneCall = () => {
         makePhoneCall({
-            phoneNumber: houseData.phone
+            phoneNumber: houseData.phone.replace(/[^0-9]/ig, ""),
+            fail: (err: any) => {
+                if (err.errMsg == 'makePhoneCall:fail') {
+                    Taro.showModal({
+                        title: '联系电话',
+                        content: houseData.phone,
+                        showCancel: false
+                    })
+                }
+            }
         })
     }
 

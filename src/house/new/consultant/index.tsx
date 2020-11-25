@@ -33,7 +33,18 @@ const HouseConsultant = () => {
     }
 
     const handlePhoneCall = (mobile: string) => {
-        Taro.makePhoneCall({ phoneNumber: mobile })
+        Taro.makePhoneCall({
+            phoneNumber: mobile.replace(/[^0-9]/ig, ""),
+            fail: (err: any) => {
+                if (err.errMsg == 'makePhoneCall:fail') {
+                    Taro.showModal({
+                        title: '联系电话',
+                        content: mobile,
+                        showCancel: false
+                    })
+                }
+            }
+        })
     }
 
     const toChatRoom = (item: any) => {

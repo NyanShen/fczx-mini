@@ -73,6 +73,13 @@ const HouseComment = () => {
                 Taro.navigateTo({ url: targetUrl })
             })
     }
+
+    const handleViewImage = (imagePath: string) => {
+        Taro.previewImage({
+            urls: [imagePath],
+            current: imagePath
+        })
+    }
     return (
         <View className="comment">
             <NavBar title={`${houseTitle}-全部评论`} back={true}></NavBar>
@@ -99,7 +106,11 @@ const HouseComment = () => {
                                     {
                                         item.image_path &&
                                         <View className="context-image">
-                                            <Image src={item.image_path} mode="aspectFill" />
+                                            <Image
+                                                src={item.image_path}
+                                                mode="aspectFill"
+                                                onClick={() => handleViewImage(item.image_path)}
+                                            />
                                         </View>
                                     }
                                     <View className="context-footer">

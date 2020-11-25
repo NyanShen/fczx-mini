@@ -11,13 +11,13 @@ import './index.scss'
 const Login = () => {
     const navData = {
         title: '',
-        back: true,
+        home: true,
         color: '#000000',
         backgroundColor: '#ffffff'
     }
     const currentRouter: any = getCurrentInstance().router
-    const isTab: string = currentRouter.params?.isTab
-    const backUrl: string = currentRouter.params?.backUrl
+    const isTab: string = currentRouter.params?.isTab || ''
+    const backUrl: string = currentRouter.params?.backUrl || ''
     const [loginCode, setLoginCode] = useState<string>('')
 
     Taro.setNavigationBarColor({

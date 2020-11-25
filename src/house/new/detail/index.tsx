@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { getCurrentInstance, makePhoneCall } from '@tarojs/taro'
+import Taro, { getCurrentInstance } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
 
 import api from '@services/api'
@@ -39,6 +39,21 @@ const HouseDetail = () => {
 
     const renderDetail = (value: string) => {
         return value ? value : '待更新'
+    }
+
+    const handlePhoneCall = () => {
+        Taro.makePhoneCall({
+            phoneNumber: houseData.phone.replace(/[^0-9]/ig, ""),
+            fail: (err: any) => {
+                if (err.errMsg == 'makePhoneCall:fail') {
+                    Taro.showModal({
+                        title: '联系电话',
+                        content: houseData.phone,
+                        showCancel: false
+                    })
+                }
+            }
+        })
     }
 
     return (
@@ -90,7 +105,7 @@ const HouseDetail = () => {
                     </View>
                     <View className="info-item">
                         <Text className="label">咨询电话：</Text>
-                        <Text className="text contact" onClick={() => makePhoneCall({ phoneNumber: houseData.phone })}>{houseData.phone}</Text>
+                        <Text className="text contact" onClick={handlePhoneCall}>{houseData.phone}</Text>
                     </View>
                     <View className="info-item">
                         <Text className="label">最新开盘：</Text>

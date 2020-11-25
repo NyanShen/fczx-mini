@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Taro, { getCurrentInstance, makePhoneCall } from '@tarojs/taro'
+import Taro, { getCurrentInstance } from '@tarojs/taro'
 import { View, ScrollView, Text, Image, Swiper, SwiperItem } from '@tarojs/components'
 
 import api from '@services/api'
@@ -118,6 +118,21 @@ const RentIndex = () => {
         })
         Taro.navigateTo({
             url: `/chat/room/index${paramString}`
+        })
+    }
+
+    const handlePhoneCall = () => {
+        Taro.makePhoneCall({
+            phoneNumber: rentData.mobile.replace(/[^0-9]/ig, ""),
+            fail: (err: any) => {
+                if (err.errMsg == 'makePhoneCall:fail') {
+                    Taro.showModal({
+                        title: '联系电话',
+                        content: rentData.mobile,
+                        showCancel: false
+                    })
+                }
+            }
         })
     }
 
@@ -274,7 +289,7 @@ const RentIndex = () => {
                 <View className="bar-item-btn" onClick={toChatRoom}>
                     <Text className="btn btn-yellow btn-bar">在线咨询</Text>
                 </View>
-                <View className="bar-item-btn" onClick={() => makePhoneCall({ phoneNumber: rentData.mobile })}>
+                <View className="bar-item-btn" onClick={handlePhoneCall}>
                     <Text className="btn btn-primary btn-bar">电话咨询</Text>
                 </View>
             </View>

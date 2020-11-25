@@ -36,6 +36,14 @@ class ChatEvent {
         clearInterval(this.timer)
     }
 
+    public emitStatus(eventName: string, params: any = {}) {
+        if (this.events[eventName]) {
+            this.events[eventName].map((callBack) => {
+                callBack(params);
+            })
+        }
+    }
+
     fetchChatUnread(eventName: string, params: any = {}) {
         app.request({
             url: app.apiUrl(api.getUnread)

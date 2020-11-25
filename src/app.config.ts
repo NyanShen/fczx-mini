@@ -82,9 +82,10 @@ export default {
     }
   ],
   tabBar: {
-    color: '#33333',
+    color: '#333333',
     selectedColor: '#11a43c',
-    backgroundColor: 'white',
+    backgroundColor: '#ffffff',
+    borderStyle: "black",
     list: [
       {
         iconPath: './assets/icons/home.png',

@@ -20,7 +20,7 @@ const Chat = () => {
     hasLogin().then((result: any) => {
       if (result) {
         setUser(result)
-        fetchChatDialog()
+        fetchChatDialog(result)
       } else {
         setUser(null)
       }
@@ -29,19 +29,31 @@ const Chat = () => {
 
   useEffect(() => {
     if (user && unread) {
-      fetchChatDialog()
+      fetchChatDialog(user)
     }
   }, [unread])
 
-  const fetchChatDialog = () => {
+  const fetchChatDialog = (user: any) => {
     app.request({
       url: app.apiUrl(api.getChatDialog)
     }, { loading: false }).then((result: any) => {
       setChatDialog(result)
+      getUnreadStatus(result, user)
     })
     ChatEvent.on('chat', (result: string) => {
       setUnread(result)
     })
+  }
+
+  const getUnreadStatus = (result: any[], user: any) => {
+    let status = false
+    for (const item of result) {
+      if (item.status == '1' && item.to_user_id == user.id) {
+        status = true
+        break
+      }
+    }
+    ChatEvent.emitStatus('chat_status', { status })
   }
 
   const toChatRoom = (item: any) => {
@@ -71,7 +83,7 @@ const Chat = () => {
     return (
       <View className="chat-login">
         <View className="title">您还没有登录</View>
-        <View className="memo">登陆后查看会话，聊天更顺畅</View>
+        <View className="memo">登录后查看会话，聊天更顺畅</View>
         <View className="btn btn-primary" onClick={toLogin}>
           立即登录
         </View>
@@ -102,7 +114,7 @@ const Chat = () => {
           <View className="item-photo">
             <Image src={item.user.avatar} mode="aspectFill"></Image>
             {
-              item.status == '1' &&
+              item.status == '1' && item.to_user_id == user.id &&
               <View className="item-dot"></View>
             }
           </View>
@@ -133,7 +145,6 @@ const Chat = () => {
         {
           user ? renderDialog() : renderLogin()
         }
-
       </View>
     </View>
   )

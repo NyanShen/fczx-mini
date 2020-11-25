@@ -5,10 +5,10 @@ import classnames from 'classnames'
 
 import api from '@services/api'
 import app from '@services/request'
+import storage from '@utils/storage'
 import NavBar from '@components/navbar/index'
 import { PHONE_PATTERN } from '@constants/pattern'
 import './index.scss'
-import storage from '@utils/storage'
 
 interface ILoginPhone {
     mobile: string
@@ -31,9 +31,9 @@ const INIT_VERIFY_STATUS: IVerifyStatus = {
 }
 
 const LoginPhone = () => {
-    const currentRouter: any = getCurrentInstance().router
-    const isTab: string = currentRouter.params?.isTab
-    const backUrl: string = currentRouter.params?.backUrl
+    const router: any = getCurrentInstance().router
+    const isTab: string = router.params?.isTab
+    const backUrl: string = router.params?.backUrl
     const authorizationCode = app.randCode(16);
     const [loginPhone, setLoginPhone] = useState<ILoginPhone>(INIT_LOGIN_PHONE)
     const [verifyStatus, setVerifyStatus] = useState<IVerifyStatus>(INIT_VERIFY_STATUS)
