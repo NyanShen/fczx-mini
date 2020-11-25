@@ -13,7 +13,6 @@ import { formatChatListTime } from '@utils/index'
 import { getTotalPage, INIT_PAGE, IPage } from '@utils/page'
 import './index.scss'
 
-
 interface IParam {
     currentPage: number
 }
@@ -29,18 +28,23 @@ const MESSAGE_TYPE = {
 const ChatRoom = () => {
     const PAGE_LIMIT: number = 20
     const router: any = getCurrentInstance().router
+    const toUserId: string = router?.params.id
     const isEntry: boolean = router?.params.entry
+
     const fromUserId: string = router?.params.fromUserId
     const messageType: any = router?.params.messageType
     const content: any = router?.params.content
-    const toUser: any = JSON.parse(router?.params.toUser || '{}') || {}
+    const INIT_TOUSER: any = JSON.parse(router?.params.toUser || '{}') || {}
     const { contentHeight } = useNavData()
+
     const [user, setUser] = useState<any>({})
+    const [toUser, setToUser] = useState<any>(INIT_TOUSER)
     const [param, setParam] = useState<IParam>(INIT_PARAM)
     const [page, setPage] = useState<IPage>(INIT_PAGE)
     const [chatData, setChatData] = useState<any[]>([])
     const [bottom, setBottom] = useState<number>(0)
     const [toView, setToView] = useState<string>('')
+    const [images, setImages] = useState<string[]>([])
     const [isPhoto, setIsPhoto] = useState<boolean>(false)
     const [inputData, setInputData] = useState<any>({ value: '', send: false })
     const ref = useRef<string>('')
@@ -55,12 +59,22 @@ const ChatRoom = () => {
         if (messageType && content) {
             sendMessage(messageType, content)
         }
+        if (isEntry) {
+            app.request({
+                url: app.apiUrl(api.getChatUser),
+                method: 'POST',
+                data: {
+                    id: toUserId
+                }
+            }, { loading: false }).then((result: any) => {
+                setToUser(result)
+            })
+        }
     }, [])
 
     useEffect(() => {
         fetchChatData()
     }, [param])
-
 
     const fetchChatData = () => {
         app.request({
@@ -68,22 +82,43 @@ const ChatRoom = () => {
             data: {
                 page: param.currentPage,
                 limit: PAGE_LIMIT,
-                from_user_id: fromUserId,
+                from_user_id: toUserId ? toUserId : fromUserId,
             }
         }, { loading: false }).then((result: any) => {
+            const resData = result.data
             if (param.currentPage === INIT_PARAM.currentPage) {
-                setChatData(result.data)
+                setChatData(resData)
+                imageFilter(resData)
             } else {
-                setChatData([...result.data, ...chatData])
+                const dataList = [...resData, ...chatData]
+                setChatData(dataList)
+                imageFilter(dataList)
             }
-            if (result.data.length > 0) {
-                setToView(`toView_${result.data[result.data.length - 1].id}`)
+            if (resData.length > 0) {
+                setToView(`toView_${resData[resData.length - 1].id}`)
             }
             setPage({
                 ...page,
                 totalCount: result.pagination.totalCount,
                 totalPage: getTotalPage(PAGE_LIMIT, result.pagination.totalCount)
             })
+        })
+    }
+
+    const imageFilter = (dataList) => {
+        var images: string[] = []
+        for (const item of dataList) {
+            if (item.message_type == '2') {
+                images.push(item.content)
+            }
+        }
+        setImages(images)
+    }
+
+    const handleViewImage = (content: string) => {
+        Taro.previewImage({
+            urls: images,
+            current: content
         })
     }
 
@@ -165,7 +200,12 @@ const ChatRoom = () => {
             case '1':
                 return <Text className={classnames('text', isMine && 'text-primary')} selectable>{chatItem.content}</Text>
             case '2':
-                return <Image className="image" src={chatItem.content} mode="widthFix" />
+                return <Image
+                    className="image"
+                    src={chatItem.content}
+                    mode="widthFix"
+                    onClick={() => handleViewImage(chatItem.content)}
+                />
             case '3':
                 itemContent = JSON.parse(chatItem.content)
                 return (

@@ -1,4 +1,5 @@
 import api from '@services/api'
+import { hasLogin } from '@services/login'
 import app from '@services/request'
 import storage from './storage'
 
@@ -21,12 +22,14 @@ class ChatEvent {
 
     public emit(eventName: string, params: any = {}) {
         let _this = this
-        if (_this.events[eventName]) {
-            _this.fetchChatUnread(eventName, params)
-            _this.timer = setInterval(() => {
+        hasLogin().then((result) => {
+            if (result && _this.events[eventName]) {
                 _this.fetchChatUnread(eventName, params)
-            }, 5000)
-        }
+                _this.timer = setInterval(() => {
+                    _this.fetchChatUnread(eventName, params)
+                }, 5000)
+            }
+        })
     }
 
     public clearTimer() {

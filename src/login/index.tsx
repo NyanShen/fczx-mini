@@ -39,7 +39,6 @@ const Login = () => {
                 encryptedData: e.detail.encryptedData,
                 iv: e.detail.iv
             }).then((result: any) => {
-                ChatEvent.emit('chat')
                 storage.setItem('token', result, 'login')
                 if (backUrl && !isTab) {
                     Taro.redirectTo({ url: decodeURIComponent(backUrl) })
@@ -52,6 +51,7 @@ const Login = () => {
                         delta: 1
                     })
                 }
+                ChatEvent.emit('chat')
             })
         }
 

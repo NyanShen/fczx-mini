@@ -4,24 +4,19 @@ import { View } from '@tarojs/components'
 
 import ChatEvent from '@utils/event'
 import './app.scss'
-import { hasLogin } from '@services/login'
 
 
 class App extends Component {
 
   componentDidMount() {
-    ChatEvent.on('chat', (resutl: any[]) => {
-      if (resutl) {
+    ChatEvent.on('chat', (result: string) => {
+      if (result) {
         Taro.showTabBarRedDot({ index: 1 })
       } else {
         Taro.hideTabBarRedDot({ index: 1 })
       }
     })
-    hasLogin().then((res: any) => {
-      if (res) {
-        ChatEvent.emit('chat')
-      }
-    })
+    ChatEvent.emit('chat')
   }
 
   render() {

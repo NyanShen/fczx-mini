@@ -53,5 +53,6 @@ export default {
     getChatRead: '/chat/read',
     postChatSend: '/chat/send',
     getUnread: '/chat/get-to-read',
-    getChatData: '/chat/chat-data'
+    getChatData: '/chat/chat-data',
+    getChatUser: '/chat/scan-chat'
 }
