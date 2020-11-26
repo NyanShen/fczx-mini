@@ -82,7 +82,7 @@ const esfHouse = () => {
 
     const toCommunity = () => {
         Taro.navigateTo({
-            url: `/house/community/index/index?Id=${esfData.fangHouse.id}`
+            url: `/house/community/index/index?id=${esfData.fangHouse.id}`
         })
     }
 

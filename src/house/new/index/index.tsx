@@ -50,6 +50,7 @@ const imageId = "image_1"
 const House = () => {
     const router: any = getCurrentInstance().router
     const params: any = router?.params
+    const urlPath = `${router.path}?id=${params.id}`
     const { contentHeight } = useNavData()
     const [albumSwiper, setAlbumSwiper] = useState<IAlbumSwiper>(INIT_ALBUM_SWIPER)
     const [houseData, setHouseData] = useState<any>(INIT_HOUSE_DATA)
@@ -419,7 +420,7 @@ const House = () => {
                                 houseId={houseData.id}
                                 btnText="变价提醒"
                                 iconClass="icondata-view"
-                                backUrl={router.path}
+                                backUrl={urlPath}
                             ></Popup>
                         </View>
                         <View className="subscrib-item">
@@ -428,7 +429,7 @@ const House = () => {
                                 houseId={houseData.id}
                                 btnText="开盘通知"
                                 iconClass="iconnotice"
-                                backUrl={router.path}
+                                backUrl={urlPath}
                             ></Popup>
                         </View>
                     </View>
@@ -456,7 +457,7 @@ const House = () => {
                                     <Popup
                                         houseId={houseData.id}
                                         btnText="预约优惠"
-                                        backUrl={router.path}
+                                        backUrl={urlPath}
                                     ></Popup>
                                 </View>
                             </View>

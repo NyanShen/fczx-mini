@@ -66,24 +66,21 @@ const CommunityIndex = () => {
         }
     })
     useEffect(() => {
-        params.id = '1000006'
-        if (params.id) {
-            app.request({
-                url: app.areaApiUrl(api.getCommunityById),
-                data: {
-                    id: params.id
-                }
-            }).then((result: any) => {
-                const static_map = getStaticMap(result.latitude, result.longitude)
-                setCommunityData({ ...result, static_map: static_map })
-                const video = result.imagesData.video
-                if (video) {
-                    setAlbumSwiper({ albumId: video.id, swiperIndex: 0 })
-                } else {
-                    setAlbumSwiper({ albumId: imageId, swiperIndex: 0 })
-                }
-            })
-        }
+        app.request({
+            url: app.areaApiUrl(api.getCommunityById),
+            data: {
+                id: params.id
+            }
+        }).then((result: any) => {
+            const static_map = getStaticMap(result.latitude, result.longitude)
+            setCommunityData({ ...result, static_map: static_map })
+            const video = result.imagesData.video
+            if (video) {
+                setAlbumSwiper({ albumId: video.id, swiperIndex: 0 })
+            } else {
+                setAlbumSwiper({ albumId: imageId, swiperIndex: 0 })
+            }
+        })
     }, [])
 
     const onSwiperChange = (event) => {

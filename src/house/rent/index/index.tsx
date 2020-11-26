@@ -101,7 +101,7 @@ const RentIndex = () => {
 
     const toCommunity = () => {
         Taro.navigateTo({
-            url: '/house/community/index/index'
+            url: `/house/community/index/index?id=${rentData.fangHouse.id}`
         })
     }
 
