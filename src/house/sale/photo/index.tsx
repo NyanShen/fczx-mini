@@ -50,8 +50,9 @@ const SalePhoto = () => {
         })
     }
 
-    const handleImageRemove = (index: number) => {
-        setImages([...images.splice(index, 1)])
+    const handleImageDelete = (image_path: string) => {
+        const result = images.filter((item: IImage) => item.image_path !== image_path)
+        setImages(result)
     }
 
     const handleFaceImage = (index: number) => {
@@ -73,6 +74,13 @@ const SalePhoto = () => {
     }
 
     const handleSubmit = () => {
+        if (images.length < 1) {
+            Taro.showToast({
+                title: '请上传房源图片',
+                icon: 'none'
+            })
+            return
+        }
         const pages: any = getCurrentPages()
         const prevPage: any = pages[pages.length - 2]
         const isFaceValue = map(images, 'is_face')
@@ -115,7 +123,7 @@ const SalePhoto = () => {
                                         mode="aspectFill"
                                         onClick={() => handlePreviewImage(item.image_path)}
                                     />
-                                    <View className="iconfont iconclear" onClick={() => handleImageRemove(index)}></View>
+                                    <View className="iconfont iconclear" onClick={() => handleImageDelete(item.image_path)}></View>
                                 </View>
                             ))
                         }

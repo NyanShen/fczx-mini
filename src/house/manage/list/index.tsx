@@ -28,8 +28,8 @@ const url_mapping = {
 
 const HouseManageSale = () => {
     const PAGE_LIMIT = 20
-    const router = getCurrentInstance().router
-    const saleType = router?.params.type || 'esf'
+    const params: any = getCurrentInstance().router?.params
+    const saleType = params.type || 'esf'
     const urlObject = url_mapping[saleType]
     const { contentHeight } = useNavData()
     const [showEmpty, setShowEmpty] = useState<boolean>(false)
