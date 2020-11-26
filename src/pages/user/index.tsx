@@ -16,7 +16,7 @@ interface IUser {
 }
 
 const INIT_USER: IUser = {
-  avatarUrl: 'http://192.168.2.248/assets/mini/user_photo.png',
+  avatarUrl: 'https://static.fczx.com/www/assets/mini/user_photo.png',
   username: ''
 }
 

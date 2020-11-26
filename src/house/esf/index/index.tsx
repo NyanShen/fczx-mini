@@ -240,18 +240,28 @@ const esfHouse = () => {
                     </View>
 
                     <View className="header">
-                        <Text className="title">房源描述</Text>
+                        <Text className="title">经纪人</Text>
                     </View>
-                    <View className="esf-info-consultant">
-                        <View className="user-photo">
-                            <Image src={esfData.user.avatar}></Image>
-                        </View>
-                        <View>
-                            <View>{esfData.user.nickname}</View>
-                            <View className="small-desc">经纪人</View>
+                    <View className="esf-info-item">
+                        <View className="esf-info-consultant">
+                            <View className="user-photo">
+                                <Image src={esfData.user.avatar}></Image>
+                            </View>
+                            <View>
+                                <View>{esfData.user.nickname}</View>
+                                <View className="small-desc">经纪人</View>
+                            </View>
                         </View>
                     </View>
 
+                    <View className="header">
+                        <Text className="title">房源描述</Text>
+                    </View>
+                    <View className="esf-info-item">
+                        <View className="item-content">
+                            {renderHouseDesc(esfData.description)}
+                        </View>
+                    </View>
                     <View className="esf-info-item">
                         <View className="sub-title">核心卖点</View>
                         <View className="item-content">

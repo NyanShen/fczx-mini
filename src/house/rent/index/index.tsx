@@ -123,7 +123,7 @@ const RentIndex = () => {
         const paramString = toUrlParam({
             messageType: '5',
             fromUserId: rentData.user_id,
-            toUser: JSON.stringify({ id: rentData.user_id, nickname: rentData.real_name }),
+            toUser: JSON.stringify(rentData.user),
             content: JSON.stringify({
                 id,
                 title,
@@ -255,7 +255,7 @@ const RentIndex = () => {
                 <View className="rent-item">
                     <View className="rent-item-info">
                         <View className="header">
-                            <Text className="title">房源描述</Text>
+                            <Text className="title">经纪人</Text>
                         </View>
                         <View className="rent-info-consultant">
                             <View className="user-photo">
@@ -265,6 +265,9 @@ const RentIndex = () => {
                                 <View>{rentData.user.nickname}</View>
                                 <View className="small-desc">经纪人</View>
                             </View>
+                        </View>
+                        <View className="header">
+                            <Text className="title">房源描述</Text>
                         </View>
                         <View className="rent-desc">
                             {rentData.description ? rentData.description : '暂无描述'}

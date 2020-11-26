@@ -12,6 +12,7 @@ import { fetchUserData } from '@services/login'
 import { formatChatListTime } from '@utils/index'
 import { getTotalPage, INIT_PAGE, IPage } from '@utils/page'
 import './index.scss'
+import { toUrlParam } from '@utils/urlHandler'
 
 interface IParam {
     currentPage: number
@@ -27,13 +28,13 @@ const MESSAGE_TYPE = {
 
 const ChatRoom = () => {
     const PAGE_LIMIT: number = 20
-    const router: any = getCurrentInstance().router
-    const isEntry: boolean = router?.params.entry
+    const params: any = getCurrentInstance().router?.params
+    const isEntry: boolean = params.entry
 
-    const fromUserId: string = router?.params.fromUserId
-    const messageType: any = router?.params.messageType
-    const content: any = router?.params.content
-    const toUser: any = JSON.parse(router?.params.toUser || '{}') || {}
+    const fromUserId: string = params.fromUserId
+    const messageType: any = params.messageType
+    const content: any = params.content
+    const toUser: any = JSON.parse(params.toUser || '{}') || {}
     const { contentHeight } = useNavData()
 
     const [user, setUser] = useState<any>({})
@@ -48,7 +49,14 @@ const ChatRoom = () => {
     const ref = useRef<string>('')
 
     useDidShow(() => {
-        fetchUserData().then((result) => {
+        const paramString = toUrlParam({
+            messageType,
+            fromUserId,
+            toUser: params.toUser,
+            content: params.content
+        })
+        const backUrl = `/chat/room/index${paramString}`
+        fetchUserData(backUrl).then((result) => {
             setUser(result)
         })
     })

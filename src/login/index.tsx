@@ -55,7 +55,6 @@ const Login = () => {
                 ChatEvent.emit('chat')
             })
         }
-
     }
 
     const handleLoginByPhone = () => {
@@ -80,7 +79,7 @@ const Login = () => {
                     <Text>微信登录</Text>
                 </Button>
                 <View className="btn btn-plain" onClick={handleLoginByPhone}>
-                    <Text>手机快捷登录</Text>
+                    <Text>账号登录</Text>
                 </View>
             </View>
         </View>

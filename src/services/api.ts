@@ -1,5 +1,6 @@
 export default {
     getUserVerifyCode: '/user/login-code',
+    loginByPassword: '/user/login-by-password',
     loginByVerifyCode: '/user/login-by-code',
     getSessionKeyByCode: '/applet/get-session',
     decryptData: '/applet/decrypt-data',

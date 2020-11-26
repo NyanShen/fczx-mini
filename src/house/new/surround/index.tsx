@@ -29,7 +29,7 @@ const houseSurround = () => {
         longitude: longitude,
         width: 30,
         height: 30,
-        iconPath: 'http://192.168.2.248/assets/mini/location.png',
+        iconPath: 'https://static.fczx.com/www/assets/mini/location.png',
         callout: {
             content: title,
             color: '#fff',
@@ -57,7 +57,7 @@ const houseSurround = () => {
                             longitude: item.location.lng,
                             width: 24,
                             height: 36,
-                            iconPath: `http://192.168.2.248/assets/mini/${tab.type}.png`,
+                            iconPath: `https://static.fczx.com/www/assets/mini/${tab.type}.png`,
                             callout: {
                                 content: `${item.title}\n${item.address}`,
                                 color: '#333',

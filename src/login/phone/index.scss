@@ -1,9 +1,17 @@
 .login-phone {
     &-header {
-        margin: 20% 0 80px 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        margin: 20% 60px 80px 60px;
         text-align: center;
-        font-size: 42px;
-        color: $primary-color;
+        font-size: 34px;
+        color: #666;
+
+        .actived {
+            font-size: 40px;
+            color: #333;
+        }
     }
 
     &-form {
