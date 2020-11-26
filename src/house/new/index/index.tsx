@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import Taro, { getCurrentInstance, makePhoneCall } from '@tarojs/taro'
+import Taro, { getCurrentInstance, makePhoneCall, useShareAppMessage, useShareTimeline } from '@tarojs/taro'
 import { View, ScrollView, Swiper, SwiperItem, Image, Text, Button } from '@tarojs/components'
 import classnames from 'classnames'
 
@@ -49,15 +49,37 @@ const imageId = "image_1"
 
 const House = () => {
     const router: any = getCurrentInstance().router
+    const params: any = router?.params
     const { contentHeight } = useNavData()
     const [albumSwiper, setAlbumSwiper] = useState<IAlbumSwiper>(INIT_ALBUM_SWIPER)
     const [houseData, setHouseData] = useState<any>(INIT_HOUSE_DATA)
+
+    const navbarData = {
+        title: houseData.title,
+        back: !params.share,
+        home: params.share
+    }
+
+    useShareTimeline(() => {
+        return {
+            title: houseData.title,
+            path: `/house/new/index/index?id=${params.id}&share=true`
+        }
+    })
+
+    useShareAppMessage(() => {
+        return {
+            title: houseData.title,
+            imageUrl: houseData.image_path,
+            path: `/house/new/index/index?id=${params.id}&share=true`
+        }
+    })
 
     useEffect(() => {
         app.request({
             url: app.areaApiUrl(api.getHouseById),
             data: {
-                id: router?.params.id
+                id: params.id
             }
         }).then((result: any) => {
             const static_map = getStaticMap(result.latitude, result.longitude)
@@ -340,7 +362,7 @@ const House = () => {
 
     return (
         <View className="house">
-            <NavBar title={houseData.title} back={true}/>
+            <NavBar {...navbarData} />
             <ScrollView style={{ maxHeight: `${contentHeight - 55}px`, backgroundColor: '#f7f7f7' }} scrollY>
                 <View className="house-album">
                     <Swiper

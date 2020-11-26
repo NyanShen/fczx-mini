@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Taro, { getCurrentInstance } from '@tarojs/taro'
+import Taro, { getCurrentInstance, useShareAppMessage, useShareTimeline } from '@tarojs/taro'
 import { View, Image, Text, ScrollView, Swiper, SwiperItem } from '@tarojs/components'
 import classnames from 'classnames'
 
@@ -14,14 +14,34 @@ import { toUrlParam } from '@utils/urlHandler'
 
 const HouseTypeDetail = () => {
     const bottomHeight = 55
-    const currentRouter: any = getCurrentInstance().router
-    const params: any = currentRouter.params
+    const params: any = getCurrentInstance().router?.params
     const { appHeaderHeight, contentHeight } = useNavData()
     const [open, setOpen] = useState<boolean>(false)
     const [houseType, setHouseType] = useState<any>({
         tags: [],
         fangHouse: {},
         fangHouseConsultant: []
+    })
+
+    const navbarData = {
+        title: '户型图',
+        back: !params.share,
+        home: params.share
+    }
+
+    useShareTimeline(() => {
+        return {
+            title: `${houseType.fangHouse.title} ${houseType.name}`,
+            path: `/house/new/type/detail?id=${params.id}&houseId=${params.houseId}&share=true`
+        }
+    })
+
+    useShareAppMessage(() => {
+        return {
+            title: `${houseType.fangHouse.title} ${houseType.name}`,
+            imageUrl: houseType.image_path,
+            path: `/house/new/type/detail?id=${params.id}&houseId=${params.houseId}&share=true`
+        }
     })
 
     useEffect(() => {
@@ -81,7 +101,7 @@ const HouseTypeDetail = () => {
 
     return (
         <View className="house-type-detail">
-            <NavBar title="户型图" back={true}></NavBar>
+            <NavBar {...navbarData}></NavBar>
             <View className="detail-wrapper">
                 <ScrollView
                     scrollY

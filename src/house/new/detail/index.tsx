@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Taro, { getCurrentInstance } from '@tarojs/taro'
+import Taro, { getCurrentInstance, useShareAppMessage, useShareTimeline } from '@tarojs/taro'
 import { View, Text } from '@tarojs/components'
 
 import api from '@services/api'
@@ -21,10 +21,29 @@ const INIT_HOUSE_DATA = {
 }
 
 const HouseDetail = () => {
-    const currentRouter: any = getCurrentInstance().router
-    const params: any = currentRouter.params
+    const params: any = getCurrentInstance().router?.params
     const [houseData, setHouseData] = useState<any>(INIT_HOUSE_DATA)
 
+    const navbarData = {
+        title: `${houseData.title}详情`,
+        back: !params.share,
+        home: params.share
+    }
+    
+    useShareTimeline(() => {
+        return {
+            title: houseData.title,
+            path: `/house/new/detail/index?id=${houseData.id}&share=true`
+        }
+    })
+
+    useShareAppMessage(() => {
+        return {
+            title: houseData.title,
+            path: `/house/new/detail/index?id=${houseData.id}&share=true`
+        }
+    })
+    
     useEffect(() => {
         app.request({
             url: app.areaApiUrl(api.getHouseById),
@@ -58,7 +77,7 @@ const HouseDetail = () => {
 
     return (
         <View className="house-detail">
-            <NavBar title={houseData.title + '详情'} back={true} />
+            <NavBar {...navbarData} />
             <View className="house-detail-wrap">
                 <View className="info">
                     <View className="info-title">基本信息</View>

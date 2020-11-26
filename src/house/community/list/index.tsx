@@ -149,7 +149,7 @@ const CommunityList = () => {
 
     const handleHouseItemClick = (item: any) => {
         Taro.navigateTo({
-            url: `/house/community/index/index?id=${item.id}&name=${item.title}`
+            url: `/house/community/index/index?id=${item.id}`
         })
     }
 

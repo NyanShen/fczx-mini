@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Taro, { getCurrentInstance } from '@tarojs/taro'
+import Taro, { getCurrentInstance, useShareAppMessage, useShareTimeline } from '@tarojs/taro'
 import { View, ScrollView, Text, Swiper, SwiperItem, Image } from '@tarojs/components'
 import classnames from 'classnames'
 
@@ -41,11 +41,30 @@ const imageId = "image_1"
 const CommunityIndex = () => {
 
     const { contentHeight } = useNavData()
-    let currentRouter: any = getCurrentInstance().router
-    let params: any = currentRouter?.params
+    let params: any = getCurrentInstance().router?.params
     const [communityData, setCommunityData] = useState<any>(INIT_HOUSE_DATA)
     const [albumSwiper, setAlbumSwiper] = useState<IAlbumSwiper>(INIT_ALBUM_SWIPER)
+    
+    const navbarData = {
+        title: communityData.title,
+        back: !params.share,
+        home: params.share
+    }
 
+    useShareTimeline(() => {
+        return {
+            title: communityData.title,
+            path: `/house/community/index/index?id=${communityData.id}&share=true`
+        }
+    })
+
+    useShareAppMessage(() => {
+        return {
+            title: communityData.title,
+            imageUrl: communityData.image_path,
+            path: `/house/community/index/index?id=${communityData.id}&share=true`
+        }
+    })
     useEffect(() => {
         params.id = '1000006'
         if (params.id) {
@@ -166,7 +185,7 @@ const CommunityIndex = () => {
 
     return (
         <View className="community">
-            <NavBar title={communityData.title} back={true}></NavBar>
+            <NavBar {...navbarData}></NavBar>
             <ScrollView style={{ maxHeight: contentHeight }} scrollY>
                 <View className="house-album">
                     <Swiper

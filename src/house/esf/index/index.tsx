@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Taro, { getCurrentInstance, makePhoneCall } from '@tarojs/taro'
+import Taro, { getCurrentInstance, makePhoneCall, useShareAppMessage, useShareTimeline } from '@tarojs/taro'
 import { ScrollView, View, Text, Image, Swiper, SwiperItem } from '@tarojs/components'
 
 import api from '@services/api'
@@ -33,17 +33,38 @@ const INIT_ALNUM = {
 }
 
 const esfHouse = () => {
-    const router: any = getCurrentInstance().router
+    const params: any = getCurrentInstance().router?.params
     const { appHeaderHeight, contentHeight } = useNavData()
     const [open, setOpen] = useState<boolean>(false)
     const [album, setAlbum] = useState<IAlbum>(INIT_ALNUM)
     const [esfData, setEsfData] = useState<any>(INIT_ESF_DATA)
 
+    const navbarData = {
+        title: esfData.title,
+        back: !params.share,
+        home: params.share
+    }
+
+    useShareTimeline(() => {
+        return {
+            title: esfData.title,
+            path: `/house/esf/index/index?id=${params.id}&share=true`
+        }
+    })
+
+    useShareAppMessage(() => {
+        return {
+            title: esfData.title,
+            imageUrl: esfData.image_path,
+            path: `/house/esf/index/index?id=${params.id}&share=true`
+        }
+    })
+
     useEffect(() => {
         app.request({
             url: app.areaApiUrl(api.getEsfById),
             data: {
-                id: router?.params.id
+                id: params.id
             }
         }).then((result: any) => {
             const { latitude, longitude } = result.fangHouse
@@ -124,7 +145,7 @@ const esfHouse = () => {
 
     return (
         <View className="esf">
-            <NavBar title={esfData.title} back={true}></NavBar>
+            <NavBar {...navbarData}></NavBar>
             <ScrollView style={{ maxHeight: contentHeight - 55 }} scrollY>
                 <View className="house-album">
                     <Swiper

@@ -16,6 +16,7 @@ import news from '@assets/icons/news.png'
 import { PRICE_TYPE, SALE_STATUS } from '@constants/house'
 import '@styles/common/house.scss'
 import './index.scss'
+import { PROJECT_NAME } from '@constants/global'
 
 const Index = () => {
 
@@ -60,14 +61,14 @@ const Index = () => {
 
   useShareTimeline(() => {
     return {
-      title: '房产在线',
+      title: PROJECT_NAME,
       path: '/pages/index/index'
     }
   })
 
   useShareAppMessage(() => {
     return {
-      title: '房产在线',
+      title: PROJECT_NAME,
       path: '/pages/index/index'
     }
   })
@@ -160,7 +161,7 @@ const Index = () => {
 
   return (
     <View className="index">
-      <NavBar title="房产在线" />
+      <NavBar title={PROJECT_NAME} />
       <View className="index-search">
         <View className="index-search-content clearfix">
           <View className="iconfont iconsearch"></View>

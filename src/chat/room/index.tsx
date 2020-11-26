@@ -28,7 +28,6 @@ const MESSAGE_TYPE = {
 const ChatRoom = () => {
     const PAGE_LIMIT: number = 20
     const router: any = getCurrentInstance().router
-    const toUserId: string = router?.params.id
     const isEntry: boolean = router?.params.entry
 
     const fromUserId: string = router?.params.fromUserId

@@ -27,12 +27,17 @@ const INIT_HOUSE_TYPE = { roomCount: { total: 0, list: [] }, roomList: [] }
 const HouseType = () => {
     const PAGE_LIMIT = 20
     const fixedHeight = 50
-    let router: any = getCurrentInstance().router
-    const houseId = router?.params.id
+    const params: any = getCurrentInstance().router?.params
+    const houseId = params.id
     const { contentHeight } = useNavData()
     const [page, setPage] = useState<IPage>(INIT_PAGE)
     const [param, setParam] = useState<IParam>(INIT_PARAM)
     const [houseType, setHouseType] = useState<any>(INIT_HOUSE_TYPE)
+
+    const navbarData = {
+        title: '全部户型',
+        back: true
+    }
 
     useEffect(() => {
         fetchRoomList()
@@ -92,7 +97,7 @@ const HouseType = () => {
     }
     return (
         <View className="house-type">
-            <NavBar title="全部户型" back={true}></NavBar>
+            <NavBar {...navbarData}></NavBar>
             <View className="fixed">
                 <ScrollView className="type-tabs" scrollX>
                     <View className={classnames('tab-item', !param.room && 'actived')} onClick={() => switchRoom('')}>

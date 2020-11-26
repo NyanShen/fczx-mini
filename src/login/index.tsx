@@ -7,6 +7,7 @@ import ChatEvent from '@utils/event'
 import { fetchSessionKey, fetchDecryptData } from '@services/login'
 import NavBar from '@components/navbar/index'
 import './index.scss'
+import { PROJECT_NAME } from '@constants/global'
 
 const Login = () => {
     const navData = {
@@ -67,7 +68,7 @@ const Login = () => {
         <View className="login">
             <NavBar {...navData} />
             <View className="login-header">
-                <Text className="title">房产在线</Text>
+                <Text className="title">{PROJECT_NAME}</Text>
                 <Text className="small">Fczx.com</Text>
             </View>
             <View className="login-content">

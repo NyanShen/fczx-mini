@@ -234,7 +234,7 @@ const esfList = () => {
 
     const handleHouseItemClick = (item: any) => {
         Taro.navigateTo({
-            url: `/house/esf/index/index?id=${item.id}&title=${item.title}`
+            url: `/house/esf/index/index?id=${item.id}`
         })
     }
 

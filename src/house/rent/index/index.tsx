@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Taro, { getCurrentInstance } from '@tarojs/taro'
+import Taro, { getCurrentInstance, useShareAppMessage, useShareTimeline } from '@tarojs/taro'
 import { View, ScrollView, Text, Image, Swiper, SwiperItem } from '@tarojs/components'
 
 import api from '@services/api'
@@ -52,17 +52,38 @@ const ELEVATOR = {
 }
 
 const RentIndex = () => {
-    const router: any = getCurrentInstance().router
+    const params: any = getCurrentInstance().router?.params
     const { appHeaderHeight, contentHeight } = useNavData()
     const [open, setOpen] = useState<boolean>(false)
     const [album, setAlbum] = useState<IAlbum>(INIT_ALNUM)
     const [rentData, setRentData] = useState<any>(INIT_RENT_DATA)
 
+    const navbarData = {
+        title: '租房',
+        back: !params.share,
+        home: params.share
+    }
+
+    useShareTimeline(() => {
+        return {
+            title: rentData.title,
+            path: `/house/rent/index/index?id=${rentData.id}&share=true`
+        }
+    })
+
+    useShareAppMessage(() => {
+        return {
+            title: rentData.title,
+            imageUrl: rentData.image_path,
+            path: `/house/rent/index/index?id=${rentData.id}&share=true`
+        }
+    })
+
     useEffect(() => {
         app.request({
             url: app.areaApiUrl(api.getRentById),
             data: {
-                id: router?.params.id
+                id: params.id
             }
         }).then((result: any) => {
             const { longitude, latitude } = result.fangHouse
@@ -138,7 +159,7 @@ const RentIndex = () => {
 
     return (
         <View className="rent">
-            <NavBar title="租房" back={true}></NavBar>
+            <NavBar {...navbarData}></NavBar>
             <ScrollView style={{ maxHeight: contentHeight - 55 }} scrollY>
                 <View className="house-album">
                     <Swiper
