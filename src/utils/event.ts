@@ -1,7 +1,6 @@
 import api from '@services/api'
 import { hasLogin } from '@services/login'
 import app from '@services/request'
-import storage from './storage'
 
 class ChatEvent {
 
@@ -48,7 +47,6 @@ class ChatEvent {
         app.request({
             url: app.apiUrl(api.getUnread)
         }, { loading: false }).then((result: string) => {
-            storage.setItem('chat_unread', result)
             this.events[eventName].map((callBack) => {
                 callBack(result, params);
             })

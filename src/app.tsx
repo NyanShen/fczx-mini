@@ -9,22 +9,32 @@ import './app.scss'
 class App extends Component {
 
   componentDidMount() {
-    ChatEvent.on('chat_status', (result: any) => {
-      this.handleTabBarRedDot(result.status)
-    })
+
+    ChatEvent.emit('chat')
 
     ChatEvent.on('chat', (result: string) => {
       this.handleTabBarRedDot(result)
     })
 
-    ChatEvent.emit('chat')
+    ChatEvent.on('chat_status', (result: any) => {
+      this.handleTabBarRedDot(result.status)
+    })
+
   }
 
   handleTabBarRedDot = (result: boolean | string) => {
     if (result) {
-      Taro.showTabBarRedDot({ index: 1 })
+      Taro.showTabBarRedDot({
+        index: 1,
+        success() { },
+        fail() { },
+      })
     } else {
-      Taro.hideTabBarRedDot({ index: 1 })
+      Taro.hideTabBarRedDot({
+        index: 1,
+        success() { },
+        fail() { },
+      })
     }
   }
 

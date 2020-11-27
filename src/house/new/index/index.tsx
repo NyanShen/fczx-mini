@@ -351,6 +351,45 @@ const House = () => {
         )
     }
 
+    const renderConsultant = () => {
+        const { enableFangHouseConsultant } = houseData
+        return enableFangHouseConsultant.length > 0 &&
+            <View className="house-item house-consultant mt20">
+                <View className="house-item-header">
+                    <View className="title">置业顾问</View>
+                    {
+                        enableFangHouseConsultant.length > 3 &&
+                        <View className="more" onClick={toHouseConsultant}>
+                            <Text>更多</Text>
+                            <Text className="iconfont iconarrow-right-bold"></Text>
+                        </View>
+                    }
+                </View>
+                <View className="house-consultant-content clearfix">
+                    {
+                        enableFangHouseConsultant.map((item: any, index: number) => {
+                            if (index < 3) {
+                                return (
+                                    <View key={index} className="consultant-item">
+                                        <View className="item-image">
+                                            <Image src={item.user.avatar}></Image>
+                                        </View>
+                                        <View className="item-name">{item.user.nickname}</View>
+                                        <View className="item-btn">
+                                            <Button className="ovalbtn ovalbtn-brown" onClick={() => toChatRoom(item)}>
+                                                <Text className="iconfont iconmessage"></Text>
+                                                <Text>咨询</Text>
+                                            </Button>
+                                        </View>
+                                    </View>
+                                )
+                            }
+                        })
+                    }
+                </View>
+            </View>
+    }
+
     const getSandCommonComponent = useMemo(() => (
         <SandCommon
             houseId={houseData.id}
@@ -471,38 +510,42 @@ const House = () => {
                     </View>
                 }
 
-                <View className="house-item house-type mt20">
-                    <View className="house-item-header">
-                        <View className="title">主力户型({houseData.fangHouseRoom.length + 1})</View>
-                        <View className="more" onClick={() => toHouseModule('type')}>
-                            <Text>更多</Text>
-                            <Text className="iconfont iconarrow-right-bold"></Text>
+                {
+                    houseData.fangHouseRoom.length > 0 &&
+                    <View className="house-item house-type mt20">
+                        <View className="house-item-header">
+                            <View className="title">主力户型({houseData.fangHouseRoom.length})</View>
+                            <View className="more" onClick={() => toHouseModule('type')}>
+                                <Text>更多</Text>
+                                <Text className="iconfont iconarrow-right-bold"></Text>
+                            </View>
+                        </View>
+                        <View className="house-type-content">
+                            <Swiper displayMultipleItems={2.5}>
+                                {
+                                    houseData.fangHouseRoom.map((item: any, index: any) => (
+                                        <SwiperItem key={index}>
+                                            <View className="swiper-item" onClick={() => toHouseTypeDetail(item)}>
+                                                <View className="item-image">
+                                                    <Image src={item.image_path} mode="aspectFill"></Image>
+                                                </View>
+                                                <View className="item-text tags">
+                                                    <Text>{item.room}室{item.office}厅{item.toilet}卫</Text>
+                                                    <Text className={classnames('tags-item', `sale-status-${item.sale_status}`)}>{SALE_STATUS[item.sale_status]}</Text>
+                                                </View>
+                                                <View className="item-text">
+                                                    <Text>{item.building_area}m²</Text>
+                                                    {renderPrice(item.price, item.price_type)}
+                                                </View>
+                                            </View>
+                                        </SwiperItem>
+                                    ))
+                                }
+                            </Swiper>
                         </View>
                     </View>
-                    <View className="house-type-content">
-                        <Swiper displayMultipleItems={2.5}>
-                            {
-                                houseData.fangHouseRoom.map((item: any, index: any) => (
-                                    <SwiperItem key={index}>
-                                        <View className="swiper-item" onClick={() => toHouseTypeDetail(item)}>
-                                            <View className="item-image">
-                                                <Image src={item.image_path} mode="aspectFill"></Image>
-                                            </View>
-                                            <View className="item-text tags">
-                                                <Text>{item.room}室{item.office}厅{item.toilet}卫</Text>
-                                                <Text className={classnames('tags-item', `sale-status-${item.sale_status}`)}>{SALE_STATUS[item.sale_status]}</Text>
-                                            </View>
-                                            <View className="item-text">
-                                                <Text>{item.building_area}m²</Text>
-                                                {renderPrice(item.price, item.price_type)}
-                                            </View>
-                                        </View>
-                                    </SwiperItem>
-                                ))
-                            }
-                        </Swiper>
-                    </View>
-                </View>
+                }
+
                 {
                     houseData.news.length > 0 &&
                     <View className="house-item house-news mt20">
@@ -578,40 +621,8 @@ const House = () => {
                 </View>
                 {renderComment(houseData.fangHouseComment)}
                 {renderAsk(houseData.ask)}
-                <View className="house-item house-consultant mt20">
-                    <View className="house-item-header">
-                        <View className="title">置业顾问</View>
-                        {
-                            houseData.enableFangHouseConsultant.length > 3 &&
-                            <View className="more" onClick={toHouseConsultant}>
-                                <Text>更多</Text>
-                                <Text className="iconfont iconarrow-right-bold"></Text>
-                            </View>
-                        }
-                    </View>
-                    <View className="house-consultant-content clearfix">
-                        {
-                            houseData.enableFangHouseConsultant.map((item: any, index: number) => {
-                                if (index < 3) {
-                                    return (
-                                        <View key={index} className="consultant-item">
-                                            <View className="item-image">
-                                                <Image src={item.user.avatar}></Image>
-                                            </View>
-                                            <View className="item-name">{item.user.nickname}</View>
-                                            <View className="item-btn">
-                                                <Button className="ovalbtn ovalbtn-brown" onClick={() => toChatRoom(item)}>
-                                                    <Text className="iconfont iconmessage"></Text>
-                                                    <Text>咨询</Text>
-                                                </Button>
-                                            </View>
-                                        </View>
-                                    )
-                                }
-                            })
-                        }
-                    </View>
-                </View>
+                {renderConsultant()}
+
                 <View className="house-item house-statement mt20">
                     <View className="house-item-header">
                         <View className="title">免责声明</View>
@@ -633,12 +644,16 @@ const House = () => {
                     <Text className="iconfont icongroup"></Text>
                     <Text>团购</Text>
                 </View> */}
-                <View className="bar-item-btn" onClick={() => toChatRoom(houseData.enableFangHouseConsultant[0])}>
-                    <View className="btn btn-yellow btn-bar">
-                        <View>在线咨询</View>
-                        <View className="btn-subtext">快速在线咨询</View>
+                {
+                    houseData.enableFangHouseConsultant.length > 0 &&
+                    <View className="bar-item-btn" onClick={() => toChatRoom(houseData.enableFangHouseConsultant[0])}>
+                        <View className="btn btn-yellow btn-bar">
+                            <View>在线咨询</View>
+                            <View className="btn-subtext">快速在线咨询</View>
+                        </View>
                     </View>
-                </View>
+                }
+
                 <View className="bar-item-btn" onClick={handlePhoneCall}>
                     <View className="btn btn-primary btn-bar">
                         <View>电话咨询</View>
