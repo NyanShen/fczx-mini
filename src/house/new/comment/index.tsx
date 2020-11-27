@@ -98,7 +98,7 @@ const HouseComment = () => {
                         commentList.map((item: any, index: number) => (
                             <View key={index} className="comment-item">
                                 <View className="user-photo">
-                                    <Image src={item.user.avatar} />
+                                    <Image src={item.user.avatar} mode="aspectFill"/>
                                 </View>
                                 <View className="context">
                                     <View className="context-name">{item.user.nickname}</View>
