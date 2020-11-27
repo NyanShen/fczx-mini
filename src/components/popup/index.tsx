@@ -85,6 +85,9 @@ const Popup = (props: IPopupProps) => {
                             </View>
                             <View className="popup-form">
                                 <View className="form-item">
+                                    <Input className="form-item-input" type="text" id="nickname" value={user.realname} disabled />
+                                </View>
+                                <View className="form-item">
                                     <Input className="form-item-input" type="number" id="mobile" value={user.mobile} disabled />
                                 </View>
                                 <View className="form-item form-btn" onClick={handleConfirm}>

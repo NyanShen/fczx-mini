@@ -420,6 +420,8 @@ const House = () => {
                                 houseId={houseData.id}
                                 btnText="变价提醒"
                                 iconClass="icondata-view"
+                                subTitle={houseData.title}
+                                description="此楼盘有价格变化，我们会及时通知您"
                                 backUrl={urlPath}
                             ></Popup>
                         </View>
@@ -429,6 +431,8 @@ const House = () => {
                                 houseId={houseData.id}
                                 btnText="开盘通知"
                                 iconClass="iconnotice"
+                                subTitle={houseData.title}
+                                description="此楼盘有开盘活动，我们会及时通知您"
                                 backUrl={urlPath}
                             ></Popup>
                         </View>
@@ -458,6 +462,8 @@ const House = () => {
                                         houseId={houseData.id}
                                         btnText="预约优惠"
                                         backUrl={urlPath}
+                                        subTitle={houseData.title}
+                                        description={houseData.enableFangHouseDiscount.title}
                                     ></Popup>
                                 </View>
                             </View>
