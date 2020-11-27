@@ -521,7 +521,7 @@ const House = () => {
                             </View>
                         </View>
                         <View className="house-type-content">
-                            <Swiper displayMultipleItems={2.5}>
+                            <Swiper displayMultipleItems={2.5} style={{height: 160}}>
                                 {
                                     houseData.fangHouseRoom.map((item: any, index: any) => (
                                         <SwiperItem key={index}>

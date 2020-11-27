@@ -32,6 +32,11 @@ const INIT_ALNUM = {
     currentIdex: 0
 }
 
+const SOURCE_TYPE = {
+    '1': '个人',
+    '2': '经纪人'
+}
+
 const esfHouse = () => {
     const params: any = getCurrentInstance().router?.params
     const { appHeaderHeight, contentHeight } = useNavData()
@@ -240,21 +245,6 @@ const esfHouse = () => {
                     </View>
 
                     <View className="header">
-                        <Text className="title">经纪人</Text>
-                    </View>
-                    <View className="esf-info-item">
-                        <View className="esf-info-consultant">
-                            <View className="user-photo">
-                                <Image src={esfData.user.avatar}></Image>
-                            </View>
-                            <View>
-                                <View>{esfData.user.nickname}</View>
-                                <View className="small-desc">经纪人</View>
-                            </View>
-                        </View>
-                    </View>
-
-                    <View className="header">
                         <Text className="title">房源描述</Text>
                     </View>
                     <View className="esf-info-item">
@@ -325,7 +315,7 @@ const esfHouse = () => {
                     </View>
                     <View>
                         <View>{esfData.user.nickname}</View>
-                        <View className="small-desc">经纪人</View>
+                        <View className="small-desc">{SOURCE_TYPE[esfData.source_type]}</View>
                     </View>
                 </View>
                 {

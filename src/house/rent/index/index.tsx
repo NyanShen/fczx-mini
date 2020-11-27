@@ -6,11 +6,11 @@ import api from '@services/api'
 import app from '@services/request'
 import NavBar from '@components/navbar'
 import useNavData from '@hooks/useNavData'
+import { toUrlParam } from '@utils/urlHandler'
 import { formatTimestamp } from '@utils/index'
+import { bMapTransQQMap, getStaticMap } from '@utils/map'
 import '@styles/common/bottom-bar.scss'
 import './index.scss'
-import { bMapTransQQMap, getStaticMap } from '@utils/map'
-import { toUrlParam } from '@utils/urlHandler'
 
 interface IAlbum {
     currentIdex: number
@@ -49,6 +49,11 @@ const PAY_TYPE = {
 const ELEVATOR = {
     '1': '有',
     '2': '无'
+}
+
+const SOURCE_TYPE = {
+    '1': '个人',
+    '2': '经纪人'
 }
 
 const RentIndex = () => {
@@ -255,18 +260,6 @@ const RentIndex = () => {
                 <View className="rent-item">
                     <View className="rent-item-info">
                         <View className="header">
-                            <Text className="title">经纪人</Text>
-                        </View>
-                        <View className="rent-info-consultant">
-                            <View className="user-photo">
-                                <Image src={rentData.user.avatar}></Image>
-                            </View>
-                            <View>
-                                <View>{rentData.user.nickname}</View>
-                                <View className="small-desc">经纪人</View>
-                            </View>
-                        </View>
-                        <View className="header">
                             <Text className="title">房源描述</Text>
                         </View>
                         <View className="rent-desc">
@@ -307,12 +300,15 @@ const RentIndex = () => {
                     </View>
                     <View>
                         <View>{rentData.user.nickname}</View>
-                        <View className="small-desc">经纪人</View>
+                        <View className="small-desc">{SOURCE_TYPE[rentData.source_type]}</View>
                     </View>
                 </View>
-                <View className="bar-item-btn" onClick={toChatRoom}>
-                    <Text className="btn btn-yellow btn-bar">在线咨询</Text>
-                </View>
+                {
+                    rentData.source_type == '2' &&
+                    <View className="bar-item-btn" onClick={toChatRoom}>
+                        <Text className="btn btn-yellow btn-bar">在线咨询</Text>
+                    </View>
+                }
                 <View className="bar-item-btn" onClick={handlePhoneCall}>
                     <Text className="btn btn-primary btn-bar">电话咨询</Text>
                 </View>
