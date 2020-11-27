@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import Taro, { getCurrentInstance, useShareAppMessage, useShareTimeline } from '@tarojs/taro'
+import Taro, { getCurrentInstance, useReady, useShareAppMessage, useShareTimeline } from '@tarojs/taro'
 import {
     View,
     Text,
@@ -9,7 +9,6 @@ import classnames from 'classnames'
 
 import api from '@services/api'
 import app from '@services/request'
-import NavBar from '@components/navbar'
 import SandCommon from '@house/new/sand/common'
 import '@styles/common/house.scss'
 import './index.scss'
@@ -23,11 +22,9 @@ const HouseSand = () => {
     const [current, setCurrent] = useState<any>(currentBuilding)
     const [roomData, setRoomData] = useState<any[]>([])
 
-    const navbarData = {
-        title: `${params.title}沙盘图`,
-        back: !params.share,
-        home: params.share
-    }
+    useReady(() => {
+        Taro.setNavigationBarTitle({ title: `${params.title}沙盘图` })
+    })
 
     useShareTimeline(() => {
         return {
@@ -79,7 +76,6 @@ const HouseSand = () => {
 
     return (
         <View className="sand">
-            <NavBar {...navbarData}></NavBar>
             <View className="sand-wrapper">
                 {getSandCommonComponent}
                 <View className="sand-content">

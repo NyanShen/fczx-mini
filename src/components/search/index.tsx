@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import Taro from '@tarojs/taro'
+import Taro, { useReady } from '@tarojs/taro'
 import classnames from 'classnames'
 import map from 'lodash/map'
 import includes from 'lodash/includes'
@@ -9,7 +9,6 @@ import app from '@services/request'
 import { keywordcolorful } from '@utils/index'
 import storage from '@utils/storage'
 import useNavData from '@hooks/useNavData'
-import NavBar from '@components/navbar/index'
 import './index.scss'
 
 export interface ISearchOption {
@@ -37,6 +36,12 @@ const Search = (props: ISearchProps) => {
   const [option, setOption] = useState<ISearchOption>(INIT_OPTION)
   const [showOption, setShowOption] = useState<boolean>(false)
 
+  useReady(() =>{
+    Taro.setNavigationBarTitle({
+      title: props.searchTitle
+    })
+  })
+
   useEffect(() => {
     if (props.hotListUrl) {
       app.request({
@@ -46,18 +51,6 @@ const Search = (props: ISearchProps) => {
       })
     }
   }, [])
-
-  const navData = {
-    title: props.searchTitle,
-    back: true,
-    color: '#000000',
-    backgroundColor: '#ffffff'
-  }
-
-  Taro.setNavigationBarColor({
-    frontColor: navData.color,
-    backgroundColor: navData.backgroundColor
-  })
 
   const handleItemClick = (item: any) => {
     let ids = map(searchHistories, 'id')
@@ -164,7 +157,6 @@ const Search = (props: ISearchProps) => {
 
   return (
     <View className="search">
-      <NavBar {...navData} />
       <View className="search-wrapper clearfix">
         <View className="search-content">
           <View className="search-label" onClick={() => setShowOption(!showOption)}>

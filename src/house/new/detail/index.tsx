@@ -4,7 +4,6 @@ import { View, Text } from '@tarojs/components'
 
 import api from '@services/api'
 import app from '@services/request'
-import NavBar from '@components/navbar/index'
 import { formatTimestamp } from '@utils/index'
 import { SALE_STATUS } from '@constants/house'
 import './index.scss'
@@ -23,12 +22,6 @@ const INIT_HOUSE_DATA = {
 const HouseDetail = () => {
     const params: any = getCurrentInstance().router?.params
     const [houseData, setHouseData] = useState<any>(INIT_HOUSE_DATA)
-
-    const navbarData = {
-        title: `${houseData.title}详情`,
-        back: !params.share,
-        home: params.share
-    }
     
     useShareTimeline(() => {
         return {
@@ -52,7 +45,7 @@ const HouseDetail = () => {
             }
         }).then((result: any) => {
             setHouseData(result)
-
+            Taro.setNavigationBarTitle({title: `${result.title}详情`})
         })
     }, [])
 
@@ -77,7 +70,6 @@ const HouseDetail = () => {
 
     return (
         <View className="house-detail">
-            <NavBar {...navbarData} />
             <View className="house-detail-wrap">
                 <View className="info">
                     <View className="info-title">基本信息</View>

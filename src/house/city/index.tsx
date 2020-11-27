@@ -5,7 +5,6 @@ import { View, ScrollView } from '@tarojs/components'
 import api from '@services/api'
 import app from '@services/request'
 import storage from '@utils/storage'
-import NavBar from '@components/navbar'
 import useNavData from '@hooks/useNavData'
 import './index.scss'
 
@@ -52,7 +51,6 @@ const City = () => {
 
     return (
         <View className="city">
-            <NavBar title="切换城市" back={true}></NavBar>
             {/* <View className="fixd city-search">
                 <View className="search-content">
                     <Text className="iconfont iconsearch"></Text>
@@ -80,7 +78,7 @@ const City = () => {
                     }
                 </View>
             </ScrollView>
-            <View className="city-order" style={{ top: appHeaderHeight, height: contentHeight }}>
+            <View className="city-order" style={{ top: 0, height: contentHeight }}>
                 <View className="city-order-list">
                     <View
                         className="order-item"

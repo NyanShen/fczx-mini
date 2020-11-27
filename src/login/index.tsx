@@ -4,27 +4,16 @@ import { View, Text, Button } from '@tarojs/components'
 
 import storage from '@utils/storage'
 import ChatEvent from '@utils/event'
-import { fetchSessionKey, fetchDecryptData } from '@services/login'
-import NavBar from '@components/navbar/index'
-import './index.scss'
 import { PROJECT_NAME } from '@constants/global'
+import { fetchSessionKey, fetchDecryptData } from '@services/login'
+import './index.scss'
 
 const Login = () => {
-    const navData = {
-        title: '',
-        home: true,
-        color: '#000000',
-        backgroundColor: '#ffffff'
-    }
+    
     const currentRouter: any = getCurrentInstance().router
     const isTab: string = currentRouter.params?.isTab || ''
     const backUrl: string = currentRouter.params?.backUrl || ''
     const [loginCode, setLoginCode] = useState<string>('')
-
-    Taro.setNavigationBarColor({
-        frontColor: navData.color,
-        backgroundColor: navData.backgroundColor
-    })
 
     const handleLogin = () => {
         fetchSessionKey().then((result: any) => {
@@ -65,7 +54,6 @@ const Login = () => {
 
     return (
         <View className="login">
-            <NavBar {...navData} />
             <View className="login-header">
                 <Text className="title">{PROJECT_NAME}</Text>
                 <Text className="small">Fczx.com</Text>

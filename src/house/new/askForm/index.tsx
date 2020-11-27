@@ -4,7 +4,6 @@ import { Textarea, View } from '@tarojs/components'
 
 import api from '@services/api'
 import app from '@services/request'
-import NavBar from '@components/navbar'
 import './index.scss'
 
 interface ITextData {
@@ -54,7 +53,6 @@ const HouseAskForm = () => {
 
     return (
         <View className="ask-form">
-            <NavBar title="提问" back={true}></NavBar>
             <View className="ask-wrapper">
                 <View className="ask-title">
                     写下对楼盘【{houseTitle}】的疑问

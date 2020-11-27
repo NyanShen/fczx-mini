@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import Taro, { getCurrentInstance } from '@tarojs/taro'
+import Taro, { getCurrentInstance, useReady } from '@tarojs/taro'
 import { ScrollView, View, Image, Text } from '@tarojs/components'
 import classnames from 'classnames'
 
 import api from '@services/api'
 import app from '@services/request'
-import NavBar from '@components/navbar'
 import useNavData from '@hooks/useNavData'
 import { PRICE_TYPE, SALE_STATUS } from '@constants/house'
 import { IPage, INIT_PAGE, getTotalPage } from '@utils/page'
@@ -34,10 +33,9 @@ const HouseType = () => {
     const [param, setParam] = useState<IParam>(INIT_PARAM)
     const [houseType, setHouseType] = useState<any>(INIT_HOUSE_TYPE)
 
-    const navbarData = {
-        title: '全部户型',
-        back: true
-    }
+    useReady(() => {
+        Taro.setNavigationBarTitle({ title: '全部户型' })
+    })
 
     useEffect(() => {
         fetchRoomList()
@@ -97,7 +95,6 @@ const HouseType = () => {
     }
     return (
         <View className="house-type">
-            <NavBar {...navbarData}></NavBar>
             <View className="fixed">
                 <ScrollView className="type-tabs" scrollX>
                     <View className={classnames('tab-item', !param.room && 'actived')} onClick={() => switchRoom('')}>

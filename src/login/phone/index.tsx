@@ -6,7 +6,6 @@ import classnames from 'classnames'
 import api from '@services/api'
 import app from '@services/request'
 import storage from '@utils/storage'
-import NavBar from '@components/navbar/index'
 import { PHONE_PATTERN } from '@constants/pattern'
 import './index.scss'
 
@@ -52,11 +51,6 @@ const LoginPhone = () => {
     const [loginData, setLoginData] = useState<ILoginData>(INIT_LOGIN_PHONE)
     const [verifyStatus, setVerifyStatus] = useState<IVerifyStatus>(INIT_VERIFY_STATUS)
     const phoneRegExp = new RegExp(PHONE_PATTERN)
-
-    const navData = {
-        title: '登录',
-        back: true
-    }
 
     const handleInput = (e: any, name: string) => {
         const value = e.detail.value;
@@ -145,7 +139,6 @@ const LoginPhone = () => {
 
     return (
         <View className="login-phone">
-            <NavBar {...navData} />
             <View className="login-phone-header">
                 {
                     loginTabs.map((item: any, index: number) => (

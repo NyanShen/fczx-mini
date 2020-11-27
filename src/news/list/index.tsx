@@ -5,7 +5,6 @@ import classnames from 'classnames'
 
 import api from '@services/api'
 import app from '@services/request'
-import NavBar from '@components/navbar'
 import useNavData from '@hooks/useNavData'
 import { formatTimestamp } from '@utils/index'
 import { getTotalPage, INIT_PAGE, IPage } from '@utils/page'
@@ -82,7 +81,6 @@ const NewsList = () => {
 
     return (
         <View className="news">
-            <NavBar title="资讯" back={true}></NavBar>
             <View className="news-cate">
                 <ScrollView scrollX>
                     {

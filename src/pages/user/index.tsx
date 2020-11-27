@@ -6,7 +6,6 @@ import api from '@services/api'
 import app from '@services/request'
 import storage from '@utils/storage'
 import ChatEvent from '@utils/event'
-import NavBar from '@components/navbar/index'
 import './index.scss'
 
 interface IUser {
@@ -65,7 +64,6 @@ const User = () => {
 
   return (
     <View className="user">
-      <NavBar title="个人中心" home={true} />
       <View className="user-item user-header" onClick={gotoLogin}>
         <View className="login-photo">
           <Image className="login-photo-image" src={user.avatarUrl} />

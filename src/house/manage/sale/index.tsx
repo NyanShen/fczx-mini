@@ -7,7 +7,6 @@ import qs from 'qs'
 
 import api from '@services/api'
 import app from '@services/request'
-import NavBar from '@components/navbar'
 import { IImage } from '@house/sale/photo'
 import { fetchUserData } from '@services/login'
 import CustomPicker, { IPicker, INIT_PICKER } from '@components/picker'
@@ -364,7 +363,6 @@ const HouseSale = () => {
 
     return (
         <View className="sale">
-            <NavBar title="发布出售" back={true}></NavBar>
             <View className="sale-content">
                 <View className="sale-item" onClick={toSalePhoto}>
                     <View className="item-image">

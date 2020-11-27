@@ -4,7 +4,6 @@ import { ScrollView, View, Text, Image } from '@tarojs/components'
 
 import api from '@services/api'
 import app from '@services/request'
-import NavBar from '@components/navbar'
 import useNavData from '@hooks/useNavData'
 import { getTotalPage, INIT_PAGE, IPage } from '@utils/page'
 import './index.scss'
@@ -175,7 +174,6 @@ const HouseManageSale = () => {
 
     return (
         <View className="house-manage">
-            <NavBar title="管理出售" back={true}></NavBar>
             <View className="house-content">
                 <ScrollView
                     scrollY

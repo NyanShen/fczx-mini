@@ -4,7 +4,6 @@ import { View, ScrollView, Text, Image, Swiper, SwiperItem } from '@tarojs/compo
 
 import api from '@services/api'
 import app from '@services/request'
-import NavBar from '@components/navbar'
 import useNavData from '@hooks/useNavData'
 import { toUrlParam } from '@utils/urlHandler'
 import { formatTimestamp } from '@utils/index'
@@ -58,16 +57,10 @@ const SOURCE_TYPE = {
 
 const RentIndex = () => {
     const params: any = getCurrentInstance().router?.params
-    const { appHeaderHeight, contentHeight } = useNavData()
+    const { contentHeight } = useNavData()
     const [open, setOpen] = useState<boolean>(false)
     const [album, setAlbum] = useState<IAlbum>(INIT_ALNUM)
     const [rentData, setRentData] = useState<any>(INIT_RENT_DATA)
-
-    const navbarData = {
-        title: '租房',
-        back: !params.share,
-        home: params.share
-    }
 
     useShareTimeline(() => {
         return {
@@ -164,7 +157,6 @@ const RentIndex = () => {
 
     return (
         <View className="rent">
-            <NavBar {...navbarData}></NavBar>
             <ScrollView style={{ maxHeight: contentHeight - 55 }} scrollY>
                 <View className="house-album">
                     <Swiper
@@ -315,7 +307,7 @@ const RentIndex = () => {
             </View>
             {
                 open &&
-                <View className="album-swiper" style={{ top: appHeaderHeight }}>
+                <View className="album-swiper" style={{ top: 0 }}>
                     <View className="album-swiper-header">
                         <View className="album-count">
                             <Text>{album.currentIdex + 1}/{rentData.rentImage.length}</Text>

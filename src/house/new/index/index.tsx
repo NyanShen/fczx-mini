@@ -9,7 +9,6 @@ import { toUrlParam } from '@utils/urlHandler'
 import { formatTimestamp } from '@utils/index'
 import { fetchUserData } from '@services/login'
 import useNavData from '@hooks/useNavData'
-import NavBar from '@components/navbar/index'
 import Popup from '@components/popup/index'
 import SandCommon from '@house/new/sand/common'
 import { getStaticMap } from '@utils/map'
@@ -55,12 +54,6 @@ const House = () => {
     const [albumSwiper, setAlbumSwiper] = useState<IAlbumSwiper>(INIT_ALBUM_SWIPER)
     const [houseData, setHouseData] = useState<any>(INIT_HOUSE_DATA)
 
-    const navbarData = {
-        title: houseData.title,
-        back: !params.share,
-        home: params.share
-    }
-
     useShareTimeline(() => {
         return {
             title: houseData.title,
@@ -91,6 +84,7 @@ const House = () => {
             } else {
                 setAlbumSwiper({ albumId: imageId, swiperIndex: 0 })
             }
+            Taro.setNavigationBarTitle({ title: result.title })
         })
     }, [])
 
@@ -402,7 +396,6 @@ const House = () => {
 
     return (
         <View className="house">
-            <NavBar {...navbarData} />
             <ScrollView style={{ maxHeight: `${contentHeight - 55}px`, backgroundColor: '#f7f7f7' }} scrollY>
                 <View className="house-album">
                     <Swiper
@@ -521,7 +514,7 @@ const House = () => {
                             </View>
                         </View>
                         <View className="house-type-content">
-                            <Swiper displayMultipleItems={2.5} style={{height: 160}}>
+                            <Swiper displayMultipleItems={2.5} style={{ height: 160 }}>
                                 {
                                     houseData.fangHouseRoom.map((item: any, index: any) => (
                                         <SwiperItem key={index}>

@@ -2,7 +2,6 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { Input, View, Text, ScrollView } from '@tarojs/components'
 import classnames from 'classnames'
 
-import NavBar from '@components/navbar'
 import useNavData from '@hooks/useNavData'
 import CustomPicker, { INIT_PICKER, IPicker } from '@components/picker'
 import { calculatorCate, ICate, pickerObject } from './constant'
@@ -201,7 +200,6 @@ const Calculator = () => {
 
     return (
         <View className="calculator">
-            <NavBar title="房贷计算器" back={true}></NavBar>
             <ScrollView scrollY style={{ maxHeight: contentHeight }}>
                 <View className="calculator-cate">
                     {

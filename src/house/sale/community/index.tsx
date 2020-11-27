@@ -4,19 +4,12 @@ import { View, ScrollView, Text, Input, RichText } from '@tarojs/components'
 
 import api from '@services/api'
 import app from '@services/request'
-import NavBar from '@components/navbar'
 import useNavData from '@hooks/useNavData'
 import { keywordcolorful } from '@utils/index'
 import '@components/search/index.scss'
 import './index.scss'
 
 const SaleCommunitySearch = () => {
-    const navData = {
-        title: '搜索小区',
-        back: true,
-        color: '#000000',
-        backgroundColor: '#ffffff'
-    }
     const { contentHeight } = useNavData()
     const [matcheList, setMatcheList] = useState([])
     const [searchValue, setSearchValue] = useState("")
@@ -74,7 +67,6 @@ const SaleCommunitySearch = () => {
 
     return (
         <View className="search search-community">
-            <NavBar {...navData}></NavBar>
             <View className="search-wrapper clearfix">
                 <View className="search-content">
                     <View className="search-icon">

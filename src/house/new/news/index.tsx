@@ -4,7 +4,6 @@ import { ScrollView, View, Text } from '@tarojs/components'
 
 import api from '@services/api'
 import app from '@services/request'
-import NavBar from '@components/navbar'
 import useNavData from '@hooks/useNavData'
 import { formatTimestamp } from '@utils/index'
 import { getTotalPage, INIT_PAGE, IPage } from '@utils/page'
@@ -57,7 +56,6 @@ const HouseNewsList = () => {
     }
     return (
         <View className="house-news">
-            <NavBar title="楼盘动态" back={true}></NavBar>
             <View className="news-content">
                 <ScrollView
                     scrollY

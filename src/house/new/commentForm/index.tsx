@@ -4,7 +4,6 @@ import { Textarea, View, Text, Image } from '@tarojs/components'
 
 import api from '@services/api'
 import app from '@services/request'
-import NavBar from '@components/navbar'
 import './index.scss'
 
 interface ITextData {
@@ -60,7 +59,6 @@ const HouseCommentForm = () => {
 
     return (
         <View className="comment-form">
-            <NavBar title="点评" back={true}></NavBar>
             <View className="comment-wrapper">
                 <View className="comment-title">
                     写下对楼盘【{houseTitle}】的点评

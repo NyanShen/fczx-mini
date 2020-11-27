@@ -110,9 +110,8 @@ export default {
   window: {
     backgroundTextStyle: 'light',
     navigationBarBackgroundColor: '#11a43c',
-    navigationBarTitleText: '房产在线',
+    navigationBarTitleText: '',
     navigationBarTextStyle: 'white',
-    navigationStyle: 'custom'
   },
   permission: {
     "scope.userLocation": {

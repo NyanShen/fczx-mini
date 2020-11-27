@@ -5,7 +5,6 @@ import { View, Text, ScrollView } from '@tarojs/components'
 import api from '@services/api'
 import app from '@services/request'
 import { fetchUserData } from '@services/login'
-import NavBar from '@components/navbar'
 import useNavData from '@hooks/useNavData'
 import { formatTimestamp } from '@utils/index'
 import { toUrlParam } from '@utils/urlHandler'
@@ -74,7 +73,6 @@ const HouseAsk = () => {
     }
     return (
         <View className="ask">
-            <NavBar title="大家都在问" back={true}></NavBar>
             <View className="ask-header">
                 <View className="title view-content">
                     关于【{houseTitle}】的

@@ -4,7 +4,6 @@ import { ScrollView, View, Text, Image, Swiper, SwiperItem } from '@tarojs/compo
 
 import api from '@services/api'
 import app from '@services/request'
-import NavBar from '@components/navbar'
 import useNavData from '@hooks/useNavData'
 import { PRICE_TYPE } from '@constants/house'
 import { bMapTransQQMap, getStaticMap } from '@utils/map'
@@ -39,16 +38,10 @@ const SOURCE_TYPE = {
 
 const esfHouse = () => {
     const params: any = getCurrentInstance().router?.params
-    const { appHeaderHeight, contentHeight } = useNavData()
+    const { contentHeight } = useNavData()
     const [open, setOpen] = useState<boolean>(false)
     const [album, setAlbum] = useState<IAlbum>(INIT_ALNUM)
     const [esfData, setEsfData] = useState<any>(INIT_ESF_DATA)
-
-    const navbarData = {
-        title: esfData.title,
-        back: !params.share,
-        home: params.share
-    }
 
     useShareTimeline(() => {
         return {
@@ -75,6 +68,7 @@ const esfHouse = () => {
             const { latitude, longitude } = result.fangHouse
             const static_map = getStaticMap(latitude, longitude)
             setEsfData({ ...result, ...{ static_map: static_map } })
+            Taro.setNavigationBarTitle({ title: result.title})
         })
     }, [])
 
@@ -150,7 +144,6 @@ const esfHouse = () => {
 
     return (
         <View className="esf">
-            <NavBar {...navbarData}></NavBar>
             <ScrollView style={{ maxHeight: contentHeight - 55 }} scrollY>
                 <View className="house-album">
                     <Swiper
@@ -330,7 +323,7 @@ const esfHouse = () => {
             </View>
             {
                 open &&
-                <View className="album-swiper" style={{ top: appHeaderHeight }}>
+                <View className="album-swiper" style={{ top: 0 }}>
                     <View className="album-swiper-header">
                         <View className="album-count">
                             <Text>{album.currentIdex + 1}/{esfData.esfImage.length}</Text>

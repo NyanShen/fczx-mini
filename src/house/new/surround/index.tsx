@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { getCurrentInstance } from '@tarojs/taro'
+import { getCurrentInstance, useReady } from '@tarojs/taro'
 import { View, Text, Map } from "@tarojs/components"
 import classnames from 'classnames'
 import QQMapWX from 'qqmap-wx-jssdk'
 
-import NavBar from '@components/navbar/index'
 import useNavData from '@hooks/useNavData'
 import { bMapTransQQMap, QQ_MAP_KEY } from '@utils/map'
 import { SURROUND_TABS, ISurroundTab } from '@constants/house'
@@ -12,11 +11,11 @@ import './index.scss'
 
 const houseSurround = () => {
 
-    const router: any = getCurrentInstance().router
-    const currentTab = JSON.parse(router?.params.tab)
-    const title = router?.params.title
-    const b_latitude = router?.params.latitude
-    const b_longitude = router?.params.longitude
+    const params: any = getCurrentInstance().router?.params
+    const currentTab = JSON.parse(params.tab)
+    const title = params.title
+    const b_latitude = params.latitude
+    const b_longitude = params.longitude
     const { latitude, longitude } = bMapTransQQMap(b_latitude, b_longitude)
     const { contentHeight } = useNavData()
     const [tab, setTab] = useState<ISurroundTab>(currentTab)
@@ -43,6 +42,10 @@ const houseSurround = () => {
             textAlign: 'center'
         }
     }
+
+    useReady(() => {
+        Taro.setNavigationBarTitle({title: title || '周边及配套'})
+    })
 
     useEffect(() => {
         if (tab.name) {
@@ -82,7 +85,6 @@ const houseSurround = () => {
 
     return (
         <View className="surround">
-            <NavBar title={title || '周边及配套'} back={true} />
             <View className="surround-wrapper" style={{ height: contentHeight }}>
                 <Map
                     id="surroundMap"

@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react'
-import { getCurrentInstance } from '@tarojs/taro'
+import Taro, { getCurrentInstance } from '@tarojs/taro'
 import { View, Text, RichText } from '@tarojs/components'
 
 import api from '@services/api'
 import app from '@services/request'
-import NavBar from '@components/navbar'
 import { formatTimestamp } from '@utils/index'
 import './index.scss'
 
@@ -20,12 +19,12 @@ const NewsDetail = () => {
             }
         }).then((result: any) => {
             setNewsData(result)
+            Taro.setNavigationBarTitle({ title: result.title })
         })
     }, [])
 
     return (
         <View className="news-detail">
-            <NavBar title={newsData.title} back={true}></NavBar>
             <View className="news-detail-content view-content">
                 <View className="header">
                     <Text className="title">{newsData.title}</Text>

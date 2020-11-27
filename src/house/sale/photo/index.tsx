@@ -5,7 +5,6 @@ import classnames from 'classnames'
 import map from 'lodash/map'
 
 import app from '@services/request'
-import NavBar from '@components/navbar'
 import './index.scss'
 
 export interface IImage {
@@ -107,7 +106,6 @@ const SalePhoto = () => {
     }, [images])
     return (
         <View className="sale-photo">
-            <NavBar title="上传图片" back={true}></NavBar>
             <View className="sale-photo-content">
                 <View className="photo-item">
                     <View className="item-header">

@@ -8,7 +8,6 @@ import remove from 'lodash/remove'
 import api from '@services/api'
 import app from '@services/request'
 import storage from '@utils/storage'
-import NavBar from '@components/navbar'
 import useNavData from '@hooks/useNavData'
 import { bMapTransQQMap, qqMapTransBMap } from '@utils/map'
 import { PRICE_TYPE } from '@constants/house'
@@ -60,7 +59,7 @@ const INIT_MAP_PARAM = {
 
 let mapctx: any = null
 const HouseMap = () => {
-    const { appHeaderHeight, contentHeight } = useNavData()
+    const { contentHeight } = useNavData()
     const footerBtnHeight = 60
     const scrollHeight = contentHeight * 0.5 - footerBtnHeight
     const scrollMoreHeight = contentHeight * 0.6 - footerBtnHeight
@@ -401,8 +400,7 @@ const HouseMap = () => {
 
     return (
         <View className="house-map">
-            <NavBar title="新房-地图找房" back={true}></NavBar>
-            <View className="fixed" style={{ top: appHeaderHeight }}>
+            <View className="fixed" style={{ top: 0 }}>
                 <View className="search-tab">
                     {
                         tabs.map((item: any, index: number) => {

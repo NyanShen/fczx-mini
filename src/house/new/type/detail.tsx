@@ -5,7 +5,6 @@ import classnames from 'classnames'
 
 import api from '@services/api'
 import app from '@services/request'
-import NavBar from '@components/navbar'
 import useNavData from '@hooks/useNavData'
 import { PRICE_TYPE, SALE_STATUS } from '@constants/house'
 import '@house/new/album/index.scss'
@@ -15,19 +14,13 @@ import { toUrlParam } from '@utils/urlHandler'
 const HouseTypeDetail = () => {
     const bottomHeight = 55
     const params: any = getCurrentInstance().router?.params
-    const { appHeaderHeight, contentHeight } = useNavData()
+    const { contentHeight } = useNavData()
     const [open, setOpen] = useState<boolean>(false)
     const [houseType, setHouseType] = useState<any>({
         tags: [],
         fangHouse: {},
         fangHouseConsultant: []
     })
-
-    const navbarData = {
-        title: '户型图',
-        back: !params.share,
-        home: params.share
-    }
 
     useShareTimeline(() => {
         return {
@@ -101,7 +94,6 @@ const HouseTypeDetail = () => {
 
     return (
         <View className="house-type-detail">
-            <NavBar {...navbarData}></NavBar>
             <View className="detail-wrapper">
                 <ScrollView
                     scrollY
@@ -185,7 +177,7 @@ const HouseTypeDetail = () => {
             </View>
             {
                 open &&
-                <View className="album-swiper" style={{ top: appHeaderHeight }}>
+                <View className="album-swiper" style={{ top: 0 }}>
                     <View className="album-swiper-header">
                         <View className="album-count">
                             <Text>1/1</Text>

@@ -1,11 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
-import Taro, { getCurrentInstance, useDidShow } from '@tarojs/taro'
+import Taro, { getCurrentInstance, useDidShow, useReady } from '@tarojs/taro'
 import { View, Text, ScrollView, Input, Image } from "@tarojs/components"
 import classnames from 'classnames'
 
 import api from '@services/api'
 import app from '@services/request'
-import NavBar from '@components/navbar'
 import useNavData from '@hooks/useNavData'
 import { PRICE_TYPE } from '@constants/house'
 import { fetchUserData } from '@services/login'
@@ -29,7 +28,6 @@ const MESSAGE_TYPE = {
 const ChatRoom = () => {
     const PAGE_LIMIT: number = 20
     const params: any = getCurrentInstance().router?.params
-    const isEntry: boolean = params.entry
 
     const fromUserId: string = params.fromUserId
     const messageType: any = params.messageType
@@ -47,6 +45,10 @@ const ChatRoom = () => {
     const [isPhoto, setIsPhoto] = useState<boolean>(false)
     const [inputData, setInputData] = useState<any>({ value: '', send: false })
     const ref = useRef<string>('')
+
+    useReady(() => {
+        Taro.setNavigationBarTitle({title: toUser.nickname})
+    })
 
     useDidShow(() => {
         const paramString = toUrlParam({
@@ -323,7 +325,7 @@ const ChatRoom = () => {
 
     return (
         <View className="chat-room">
-            <NavBar title={toUser.nickname} back={!isEntry} home={isEntry}></NavBar>
+            
             <View className="chat-room-content">
                 <ScrollView
                     scrollY

@@ -5,7 +5,6 @@ import { View, Image } from '@tarojs/components'
 import api from '@services/api'
 import app from '@services/request'
 import ChatEvent from '@utils/event'
-import NavBar from '@components/navbar/index'
 import { toUrlParam } from '@utils/urlHandler'
 import { formatTimestamp } from '@utils/index'
 import { hasLogin } from '@services/login'
@@ -140,7 +139,6 @@ const Chat = () => {
 
   return (
     <View className="chat">
-      <NavBar title="会话列表" home={true} />
       <View className="chat-content">
         {
           user ? renderDialog() : renderLogin()

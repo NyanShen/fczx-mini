@@ -6,7 +6,6 @@ import classnames from 'classnames'
 import api from '@services/api'
 import app from '@services/request'
 import storage from '@utils/storage'
-import NavBar from '@components/navbar/index'
 import new_house from '@assets/icons/new_house.png'
 import second_house from '@assets/icons/house.png'
 import rent_house from '@assets/icons/rent_house.png'
@@ -161,7 +160,6 @@ const Index = () => {
 
   return (
     <View className="index">
-      <NavBar title={PROJECT_NAME} />
       <View className="index-search">
         <View className="index-search-content clearfix">
           <View className="iconfont iconsearch"></View>

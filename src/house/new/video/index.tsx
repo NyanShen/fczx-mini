@@ -1,17 +1,18 @@
 import React from 'react'
-import {getCurrentInstance} from '@tarojs/taro'
+import Taro, { getCurrentInstance, useReady } from '@tarojs/taro'
 import { View, Video } from '@tarojs/components'
 
-import NavBar from '@components/navbar'
 import './index.scss'
 
 const HouseVideo = () => {
     let currentRouter: any = getCurrentInstance().router
     let params: any = currentRouter.params
     const video = JSON.parse(params.video)
+    useReady(() => {
+        Taro.setNavigationBarTitle({ title: '楼盘视频' })
+    })
     return (
         <View className="house-video">
-            <NavBar title="楼盘视频" back={true}></NavBar>
             <View className="video-wrapper">
                 <View className="video-content">
                     <Video

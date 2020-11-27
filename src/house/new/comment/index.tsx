@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react'
-import Taro, { getCurrentInstance } from '@tarojs/taro'
+import Taro, { getCurrentInstance, useReady } from '@tarojs/taro'
 import { View, Image, Text, ScrollView } from '@tarojs/components'
 
 import api from '@services/api'
 import app from '@services/request'
 import { fetchUserData } from '@services/login'
-import NavBar from '@components/navbar'
 import useNavData from '@hooks/useNavData'
 import { formatTimestamp } from '@utils/index'
 import { toUrlParam } from '@utils/urlHandler'
@@ -29,6 +28,10 @@ const HouseComment = () => {
     const [param, setParam] = useState<IParam>(INIT_PARAM)
     const [page, setPage] = useState<IPage>(INIT_PAGE)
     const [commentList, setCommentList] = useState<any[]>([])
+
+    useReady(() => {
+        Taro.setNavigationBarTitle({title: `${houseTitle}-全部评论`})
+    })
 
     useEffect(() => {
         fetchHouseComment()
@@ -82,7 +85,6 @@ const HouseComment = () => {
     }
     return (
         <View className="comment">
-            <NavBar title={`${houseTitle}-全部评论`} back={true}></NavBar>
             <View className="comment-header">
                 <View className="title view-content">全部评论({page.totalCount})</View>
             </View>

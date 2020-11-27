@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import Taro, { getCurrentInstance, useShareAppMessage, useShareTimeline } from '@tarojs/taro'
-import { View, ScrollView, Text, Swiper, SwiperItem, Image } from '@tarojs/components'
+import { View, Text, Swiper, SwiperItem, Image } from '@tarojs/components'
 import classnames from 'classnames'
 
 import api from '@services/api'
 import app from '@services/request'
-import NavBar from '@components/navbar'
-import useNavData from '@hooks/useNavData'
 import { toUrlParam } from '@utils/urlHandler'
 import { fetchUserData } from '@services/login'
 import { PRICE_TYPE, SURROUND_TABS, ISurroundTab, INIT_SURROUND_TAB } from '@constants/house'
@@ -40,16 +38,9 @@ const imageId = "image_1"
 
 const CommunityIndex = () => {
 
-    const { contentHeight } = useNavData()
     let params: any = getCurrentInstance().router?.params
     const [communityData, setCommunityData] = useState<any>(INIT_HOUSE_DATA)
     const [albumSwiper, setAlbumSwiper] = useState<IAlbumSwiper>(INIT_ALBUM_SWIPER)
-    
-    const navbarData = {
-        title: communityData.title,
-        back: !params.share,
-        home: params.share
-    }
 
     useShareTimeline(() => {
         return {
@@ -80,6 +71,9 @@ const CommunityIndex = () => {
             } else {
                 setAlbumSwiper({ albumId: imageId, swiperIndex: 0 })
             }
+            Taro.setNavigationBarTitle({
+                title: result.title
+            })
         })
     }, [])
 
@@ -182,133 +176,130 @@ const CommunityIndex = () => {
 
     return (
         <View className="community">
-            <NavBar {...navbarData}></NavBar>
-            <ScrollView style={{ maxHeight: contentHeight }} scrollY>
-                <View className="house-album">
-                    <Swiper
-                        style={{ height: '225px' }}
-                        current={albumSwiper.swiperIndex}
-                        onChange={onSwiperChange}
-                    >
-                        {communityData.imagesData.video && renderVideo(communityData.imagesData.video)}
-                        <SwiperItem itemId={imageId} onClick={() => toHouseModule('album')}>
-                            <Image src={communityData.image_path}></Image>
-                        </SwiperItem>
-                    </Swiper>
-                    <View className="album-count">共{communityData.imagesData.imageCount}张</View>
-                    <View className="album-text">
-                        {communityData.imagesData.video && renderVideoTab(communityData.imagesData.video)}
-                        <Text
-                            className={classnames('album-text-item', imageId == albumSwiper.albumId && 'album-text-actived')}
-                            onClick={() => switchAlbum(imageId, 1)}
-                        >图片</Text>
-                    </View>
+            <View className="house-album">
+                <Swiper
+                    style={{ height: '225px' }}
+                    current={albumSwiper.swiperIndex}
+                    onChange={onSwiperChange}
+                >
+                    {communityData.imagesData.video && renderVideo(communityData.imagesData.video)}
+                    <SwiperItem itemId={imageId} onClick={() => toHouseModule('album')}>
+                        <Image src={communityData.image_path}></Image>
+                    </SwiperItem>
+                </Swiper>
+                <View className="album-count">共{communityData.imagesData.imageCount}张</View>
+                <View className="album-text">
+                    {communityData.imagesData.video && renderVideoTab(communityData.imagesData.video)}
+                    <Text
+                        className={classnames('album-text-item', imageId == albumSwiper.albumId && 'album-text-actived')}
+                        onClick={() => switchAlbum(imageId, 1)}
+                    >图片</Text>
                 </View>
-                <View className="community-content view-content">
-                    <View className="community-item">
-                        <View className="title">{communityData.title}</View>
-                        <View className="address" onClick={() => toHouseSurround(INIT_SURROUND_TAB)}>
-                            <View className="name">{communityData.area.name}-{communityData.address}</View>
-                            <View className="iconfont iconaddress">地址</View>
+            </View>
+            <View className="community-content view-content">
+                <View className="community-item">
+                    <View className="title">{communityData.title}</View>
+                    <View className="address" onClick={() => toHouseSurround(INIT_SURROUND_TAB)}>
+                        <View className="name">{communityData.area.name}-{communityData.address}</View>
+                        <View className="iconfont iconaddress">地址</View>
+                    </View>
+                    <View className="community-price mt20">
+                        <View className="price-reffer">
+                            {renderPrice(communityData.price, communityData.price_type)}
                         </View>
-                        <View className="community-price mt20">
-                            <View className="price-reffer">
-                                {renderPrice(communityData.price, communityData.price_type)}
-                            </View>
-                            {/* <View className="price-ratio">
+                        {/* <View className="price-ratio">
                                 环比上月<Text className="tip-color">0.12%</Text>
                             </View> */}
-                        </View>
-                        <View className="community-house mt20">
-                            <View className="community-house-item" onClick={() => toList('esf')}>
-                                <View className="count">
-                                    <Text>{communityData.house_num}</Text>
-                                    <Text className="unit">套</Text>
-                                </View>
-                                <View className="link">
-                                    <Text>二手房源</Text>
-                                    <Text className="iconfont iconarrow-right-bold"></Text>
-                                </View>
-                            </View>
-                            <View className="split-line"></View>
-                            <View className="community-house-item" onClick={() => toList('rent')}>
-                                <View className="count">
-                                    <Text>{communityData.rent_num}</Text>
-                                    <Text className="unit">套</Text>
-                                </View>
-                                <View className="link">
-                                    <Text>在租房源</Text>
-                                    <Text className="iconfont iconarrow-right-bold"></Text>
-                                </View>
-                            </View>
-                        </View>
                     </View>
-                    <View className="community-item">
-                        <View className="header">
-                            <Text>小区概括</Text>
-                        </View>
-                        <View className="community-info">
-                            <View className="community-info-item">
-                                <Text className="label">建筑年代</Text>
-                                <Text className="value">{valueFilter(communityData.build_year)}</Text>
+                    <View className="community-house mt20">
+                        <View className="community-house-item" onClick={() => toList('esf')}>
+                            <View className="count">
+                                <Text>{communityData.house_num}</Text>
+                                <Text className="unit">套</Text>
                             </View>
-                            <View className="community-info-item">
-                                <Text className="label">产权年限</Text>
-                                <Text className="value">{valueFilter(communityData.fangHouseInfo.property_rights)}</Text>
-                            </View>
-                            <View className="community-info-item">
-                                <Text className="label">物业费</Text>
-                                <Text className="value">{valueFilter(communityData.fangHouseInfo.property_fee, '元/㎡/月')}</Text>
-                            </View>
-                            <View className="community-info-item">
-                                <Text className="label">房屋总数</Text>
-                                <Text className="value">{valueFilter(communityData.fangHouseInfo.plan_households, '户')}</Text>
-                            </View>
-                            <View className="community-info-item">
-                                <Text className="label">楼栋总数</Text>
-                                <Text className="value">{valueFilter(communityData.fangHouseInfo.building_number, '栋')}</Text>
-                            </View>
-                            <View className="community-info-item">
-                                <Text className="label">停车位</Text>
-                                <Text className="value">{valueFilter(communityData.fangHouseInfo.parking_number)}</Text>
+                            <View className="link">
+                                <Text>二手房源</Text>
+                                <Text className="iconfont iconarrow-right-bold"></Text>
                             </View>
                         </View>
-                    </View>
-                    <View className="community-item">
-                        <View className="header">
-                            <Text>小区位置及周边</Text>
-                        </View>
-                        <View className="surround-wrapper">
-                            <View className="map">
-                                <Image className="map-image" src={communityData.static_map} mode="center"></Image>
-                                <View className="map-label">
-                                    <View className="text">{communityData.title}</View>
-                                    <View className="iconfont iconmap"></View>
-                                </View>
+                        <View className="split-line"></View>
+                        <View className="community-house-item" onClick={() => toList('rent')}>
+                            <View className="count">
+                                <Text>{communityData.rent_num}</Text>
+                                <Text className="unit">套</Text>
                             </View>
-                            <View className="surround-tabs">
-                                {
-                                    SURROUND_TABS.map((item: any, index: number) => (
-                                        <View
-                                            key={index}
-                                            className={classnames('tabs-item')}
-                                            onClick={() => toHouseSurround(item)}
-                                        >
-                                            <Text className={classnames('iconfont', item.icon)}></Text>
-                                            <Text className="text">{item.name}</Text>
-                                        </View>
-                                    ))
-                                }
+                            <View className="link">
+                                <Text>在租房源</Text>
+                                <Text className="iconfont iconarrow-right-bold"></Text>
                             </View>
                         </View>
-                    </View>
-                    <View className="community-item">
-                        <Text className="small-desc">
-                            免责声明：本网站不保证所有小区信息完全真实可靠，最终以政府部门登记备案为准，请谨慎核查。
-                        </Text>
                     </View>
                 </View>
-            </ScrollView>
+                <View className="community-item">
+                    <View className="header">
+                        <Text>小区概括</Text>
+                    </View>
+                    <View className="community-info">
+                        <View className="community-info-item">
+                            <Text className="label">建筑年代</Text>
+                            <Text className="value">{valueFilter(communityData.build_year)}</Text>
+                        </View>
+                        <View className="community-info-item">
+                            <Text className="label">产权年限</Text>
+                            <Text className="value">{valueFilter(communityData.fangHouseInfo.property_rights)}</Text>
+                        </View>
+                        <View className="community-info-item">
+                            <Text className="label">物业费</Text>
+                            <Text className="value">{valueFilter(communityData.fangHouseInfo.property_fee, '元/㎡/月')}</Text>
+                        </View>
+                        <View className="community-info-item">
+                            <Text className="label">房屋总数</Text>
+                            <Text className="value">{valueFilter(communityData.fangHouseInfo.plan_households, '户')}</Text>
+                        </View>
+                        <View className="community-info-item">
+                            <Text className="label">楼栋总数</Text>
+                            <Text className="value">{valueFilter(communityData.fangHouseInfo.building_number, '栋')}</Text>
+                        </View>
+                        <View className="community-info-item">
+                            <Text className="label">停车位</Text>
+                            <Text className="value">{valueFilter(communityData.fangHouseInfo.parking_number)}</Text>
+                        </View>
+                    </View>
+                </View>
+                <View className="community-item">
+                    <View className="header">
+                        <Text>小区位置及周边</Text>
+                    </View>
+                    <View className="surround-wrapper">
+                        <View className="map">
+                            <Image className="map-image" src={communityData.static_map} mode="center"></Image>
+                            <View className="map-label">
+                                <View className="text">{communityData.title}</View>
+                                <View className="iconfont iconmap"></View>
+                            </View>
+                        </View>
+                        <View className="surround-tabs">
+                            {
+                                SURROUND_TABS.map((item: any, index: number) => (
+                                    <View
+                                        key={index}
+                                        className={classnames('tabs-item')}
+                                        onClick={() => toHouseSurround(item)}
+                                    >
+                                        <Text className={classnames('iconfont', item.icon)}></Text>
+                                        <Text className="text">{item.name}</Text>
+                                    </View>
+                                ))
+                            }
+                        </View>
+                    </View>
+                </View>
+                <View className="community-item">
+                    <Text className="small-desc">
+                        免责声明：本网站不保证所有小区信息完全真实可靠，最终以政府部门登记备案为准，请谨慎核查。
+                        </Text>
+                </View>
+            </View>
         </View>
     )
 }

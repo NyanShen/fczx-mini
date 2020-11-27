@@ -5,7 +5,6 @@ import classnames from 'classnames'
 
 import api from '@services/api'
 import app from '@services/request'
-import NavBar from '@components/navbar'
 import useNavData from '@hooks/useNavData'
 import './index.scss'
 
@@ -29,7 +28,7 @@ const AlbumList = () => {
     const fixedHeight = 40
     const router = getCurrentInstance().router
     const houseId = router?.params.id
-    const { appHeaderHeight, contentHeight } = useNavData()
+    const { contentHeight } = useNavData()
 
     const [albumData, setAlbumData] = useState<any[]>([])
     const [currentView, setCurrentView] = useState<string>('')
@@ -121,7 +120,6 @@ const AlbumList = () => {
 
     return (
         <View className="album">
-            <NavBar title="楼盘相册" back={true} />
             <View className="fixed">
                 <ScrollView className="album-tabs" scrollX>
                     {
@@ -170,7 +168,7 @@ const AlbumList = () => {
 
             {
                 albumSwiper.open &&
-                <View className="album-swiper" style={{ top: appHeaderHeight }}>
+                <View className="album-swiper" style={{ top: 0 }}>
                     <View className="album-swiper-header">
                         <View className="album-count">
                             <Text>{albumSwiper.imageIndex + 1}/{albumSwiper.imageLength}</Text>

@@ -7,7 +7,6 @@ import remove from 'lodash/remove'
 
 import api from '@services/api'
 import app from '@services/request'
-import NavBar from '@components/navbar/index'
 import useNavData from '@hooks/useNavData'
 import { IPage, INIT_PAGE, getTotalPage } from '@utils/page'
 import { PRICE_TYPE, SALE_STATUS } from '@constants/house'
@@ -69,7 +68,7 @@ const SALE_STATUS_ATTR = [
 ]
 
 const NewHouse = () => {
-    const { appHeaderHeight, contentHeight } = useNavData()
+    const { contentHeight } = useNavData()
     const PAGE_LIMIT = 10
     const footerBtnHeight = 60
     const scrollHeight = contentHeight * 0.5 - footerBtnHeight
@@ -359,8 +358,7 @@ const NewHouse = () => {
     }
     return (
         <View className="newhouse">
-            <NavBar title="新房" back={true} />
-            <View className="fixed" style={{ top: appHeaderHeight }}>
+            <View className="fixed" style={{ top: 0 }}>
                 <View className="newhouse-header view-content">
                     <View className="newhouse-search" onClick={handleSearchClick}>
                         <Text className="iconfont iconsearch"></Text>
