@@ -29,6 +29,7 @@ export default {
 
     getEsfList: '/esf/list',
     getEsfById: '/esf/get',
+    getEsfSelfById: '/esf/get-self', //修改出售获取房源
     getEsfSaleList: '/esf/user-sale-list',
     esfSale: '/esf/sale',
     esfDelete: '/esf/delete',
@@ -36,6 +37,7 @@ export default {
 
     getRentList: '/rent/list',
     getRentById: '/rent/get',
+    getRentSelfById: '/rent/get-self',
     getRentSaleList: '/rent/user-rent-list',
     rentAdd: '/rent/add',
     rentDelete: '/rent/delete',

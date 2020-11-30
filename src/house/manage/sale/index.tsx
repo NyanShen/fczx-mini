@@ -26,12 +26,12 @@ const INIT_PICKER_VALUE = {
 const url_mapping = {
     rent: {
         add: api.rentAdd,
-        get: api.getRentById,
+        get: api.getRentSelfById,
         update: api.rentUpdate,
     },
     esf: {
         add: api.esfSale,
-        get: api.getEsfById,
+        get: api.getEsfSelfById,
         update: api.esfUpdate
     }
 }

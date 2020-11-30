@@ -632,11 +632,23 @@ const House = () => {
                     <Text className="iconfont iconhome"></Text>
                     <Text>首页</Text>
                 </View>
-                {/* <View className="line-split"></View>
-                <View className="bar-item">
-                    <Text className="iconfont icongroup"></Text>
-                    <Text>团购</Text>
-                </View> */}
+
+                <View className="line-split"></View>
+                {
+                    houseData.enableFangHouseGroup &&
+                    <View className="bar-item">
+                        <Popup
+                            type="4"
+                            houseId={houseData.id}
+                            btnText={houseData.enableFangHouseGroup.title}
+                            iconClass="icongroup"
+                            subTitle={houseData.title}
+                            description="购房顾问专属服务：楼盘推荐、免费咨询，全程陪看"
+                            backUrl={urlPath}
+                        ></Popup>
+                    </View>
+                }
+
                 {
                     houseData.enableFangHouseConsultant.length > 0 &&
                     <View className="bar-item-btn" onClick={() => toChatRoom(houseData.enableFangHouseConsultant[0])}>
