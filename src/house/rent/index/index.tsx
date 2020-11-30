@@ -6,8 +6,8 @@ import api from '@services/api'
 import app from '@services/request'
 import useNavData from '@hooks/useNavData'
 import { toUrlParam } from '@utils/urlHandler'
-import { formatTimestamp } from '@utils/index'
 import { bMapTransQQMap, getStaticMap } from '@utils/map'
+import { formatPhoneCall, formatTimestamp } from '@utils/index'
 import '@styles/common/bottom-bar.scss'
 import './index.scss'
 
@@ -142,7 +142,7 @@ const RentIndex = () => {
 
     const handlePhoneCall = () => {
         Taro.makePhoneCall({
-            phoneNumber: rentData.mobile.replace(/[^0-9]/ig, ""),
+            phoneNumber: formatPhoneCall( rentData.mobile),
             fail: (err: any) => {
                 if (err.errMsg == 'makePhoneCall:fail') {
                     Taro.showModal({

@@ -6,10 +6,11 @@ import classnames from 'classnames'
 import api from '@services/api'
 import app from '@services/request'
 import useNavData from '@hooks/useNavData'
+import { toUrlParam } from '@utils/urlHandler'
+import { formatPhoneCall } from '@utils/index'
 import { PRICE_TYPE, SALE_STATUS } from '@constants/house'
 import '@house/new/album/index.scss'
 import './detail.scss'
-import { toUrlParam } from '@utils/urlHandler'
 
 const HouseTypeDetail = () => {
     const bottomHeight = 55
@@ -50,7 +51,7 @@ const HouseTypeDetail = () => {
 
     const handlePhoneCall = () => {
         Taro.makePhoneCall({
-            phoneNumber: houseType.fangHouse.phone.replace(/[^0-9]/ig, ""),
+            phoneNumber: formatPhoneCall(houseType.fangHouse.phone),
             fail: (err: any) => {
                 if (err.errMsg == 'makePhoneCall:fail') {
                     Taro.showModal({

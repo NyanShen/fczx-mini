@@ -6,7 +6,7 @@ import classnames from 'classnames'
 import api from '@services/api'
 import app from '@services/request'
 import { toUrlParam } from '@utils/urlHandler'
-import { formatTimestamp } from '@utils/index'
+import { formatTimestamp, formatPhoneCall } from '@utils/index'
 import { fetchUserData } from '@services/login'
 import useNavData from '@hooks/useNavData'
 import Popup from '@components/popup/index'
@@ -107,7 +107,7 @@ const House = () => {
 
     const handlePhoneCall = () => {
         makePhoneCall({
-            phoneNumber: houseData.phone.replace(/[^0-9]/ig, ""),
+            phoneNumber: formatPhoneCall(houseData.phone),
             fail: (err: any) => {
                 if (err.errMsg == 'makePhoneCall:fail') {
                     Taro.showModal({

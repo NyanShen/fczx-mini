@@ -1,3 +1,7 @@
+export const formatPhoneCall = (number: string) => {
+    return number.replace(/[转]/ig, ',').replace(/[^0-9|,]/ig, "")
+}
+
 export const keywordcolorful = (str, key) => {
     let reg = new RegExp(`(${key})`, 'g')
     let newstr = str.replace(reg, '<span style="color: #11a43c">$1</span>')

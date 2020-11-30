@@ -6,12 +6,13 @@ import api from '@services/api'
 import app from '@services/request'
 import useNavData from '@hooks/useNavData'
 import { PRICE_TYPE } from '@constants/house'
+import { toUrlParam } from '@utils/urlHandler'
+import { formatPhoneCall } from '@utils/index'
 import { bMapTransQQMap, getStaticMap } from '@utils/map'
 import '@styles/common/house.scss'
 import '@styles/common/house-album.scss'
 import '@styles/common/bottom-bar.scss'
 import './index.scss'
-import { toUrlParam } from '@utils/urlHandler'
 const INIT_ESF_DATA = {
     esfImage: [],
     tags: [],
@@ -112,7 +113,7 @@ const esfHouse = () => {
 
     const handlePhoneCall = () => {
         makePhoneCall({
-            phoneNumber: esfData.mobile.replace(/[^0-9]/ig, ""),
+            phoneNumber: formatPhoneCall(esfData.mobile),
             fail: (err: any) => {
                 if (err.errMsg == 'makePhoneCall:fail') {
                     Taro.showModal({

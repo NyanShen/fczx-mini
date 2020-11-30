@@ -5,6 +5,7 @@ import { View, Image, Text } from '@tarojs/components'
 import api from '@services/api'
 import app from '@services/request'
 import { toUrlParam } from '@utils/urlHandler'
+import { formatPhoneCall } from '@utils/index'
 import './index.scss'
 
 const HouseConsultant = () => {
@@ -31,7 +32,7 @@ const HouseConsultant = () => {
 
     const handlePhoneCall = (mobile: string) => {
         Taro.makePhoneCall({
-            phoneNumber: mobile.replace(/[^0-9]/ig, ""),
+            phoneNumber: formatPhoneCall(mobile),
             fail: (err: any) => {
                 if (err.errMsg == 'makePhoneCall:fail') {
                     Taro.showModal({

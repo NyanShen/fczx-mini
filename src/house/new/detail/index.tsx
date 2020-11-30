@@ -4,8 +4,8 @@ import { View, Text } from '@tarojs/components'
 
 import api from '@services/api'
 import app from '@services/request'
-import { formatTimestamp } from '@utils/index'
 import { SALE_STATUS } from '@constants/house'
+import { formatTimestamp, formatPhoneCall } from '@utils/index'
 import './index.scss'
 
 const INIT_HOUSE_DATA = {
@@ -55,7 +55,7 @@ const HouseDetail = () => {
 
     const handlePhoneCall = () => {
         Taro.makePhoneCall({
-            phoneNumber: houseData.phone.replace(/[^0-9]/ig, ""),
+            phoneNumber: formatPhoneCall(houseData.phone),
             fail: (err: any) => {
                 if (err.errMsg == 'makePhoneCall:fail') {
                     Taro.showModal({
