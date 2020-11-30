@@ -13,11 +13,14 @@ import SandCommon from '@house/new/sand/common'
 import '@styles/common/house.scss'
 import './index.scss'
 
+let currentBuilding: any = {}
 const INIT_SAND_BUILDING = []
 
 const HouseSand = () => {
     let params: any = getCurrentInstance().router?.params
-    const currentBuilding = JSON.parse(params.currentBuilding)
+    if (params.currentBuilding) {
+        currentBuilding = JSON.parse(params.currentBuilding)
+    }
     const [sandBuilding, setSandBuilding] = useState<any>(INIT_SAND_BUILDING)
     const [current, setCurrent] = useState<any>(currentBuilding)
     const [roomData, setRoomData] = useState<any[]>([])
@@ -41,7 +44,9 @@ const HouseSand = () => {
     })
 
     useEffect(() => {
-        fetchRoom()
+        if (current.id) {
+            fetchRoom()
+        }
     }, [current.id])
 
 
@@ -56,6 +61,13 @@ const HouseSand = () => {
         })
     }
 
+    const handleSandBuildingChange = (sandBuilding: any[]) => {
+        setSandBuilding(sandBuilding)
+        if (!params.currentBuilding) {
+            setCurrent(sandBuilding[0])
+        }
+    }
+
     const handleRoomCheck = (item: any) => {
         Taro.navigateTo({
             url: `/house/new/type/detail?id=${item.id}&houseId=${params.id}`
@@ -66,10 +78,10 @@ const HouseSand = () => {
         return (
             <SandCommon
                 houseId={params.id}
-                outerHeight={300}
+                outerHeight={350}
                 currentBuilding={current}
                 setCurrentBuilding={(currentBuilding) => setCurrent(currentBuilding)}
-                updateSandBuilding={(sandBuilding) => setSandBuilding(sandBuilding)}
+                updateSandBuilding={handleSandBuildingChange}
             />
         )
     }, [current])

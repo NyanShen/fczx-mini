@@ -385,7 +385,7 @@ const House = () => {
     const getSandCommonComponent = useMemo(() => (
         <SandCommon
             houseId={houseData.id}
-            outerHeight={200}
+            outerHeight={230}
             currentBuilding={{}}
             setCurrentBuilding={toHouseSand}
             updateSandBuilding={() => { }}
@@ -568,6 +568,10 @@ const House = () => {
                     <View className="house-item house-sand mt20">
                         <View className="house-item-header">
                             <View className="title">沙盘图</View>
+                            <View className="more" onClick={() => toHouseModule('sand')}>
+                            <Text>查看</Text>
+                            <Text className="iconfont iconarrow-right-bold"></Text>
+                        </View>
                         </View>
                         {houseData.id && getSandCommonComponent}
                     </View>
