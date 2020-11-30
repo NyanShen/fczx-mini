@@ -385,7 +385,7 @@ const House = () => {
     const getSandCommonComponent = useMemo(() => (
         <SandCommon
             houseId={houseData.id}
-            outerHeight={230}
+            outerHeight={220}
             currentBuilding={{}}
             setCurrentBuilding={toHouseSand}
             updateSandBuilding={() => { }}

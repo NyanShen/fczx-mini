@@ -1,24 +1,8 @@
 .user {
     height: 100vh;
     background-color: $bg-color;
-    &-item {
-        display: flex;
-        align-items: center;
-        margin: 20px;
-        padding: 20px 30px;
-        background-color: $white;
-        .item-arrow {
-            .iconfont {
-                font-size: $font-basic;
-                color: $desc-color;
-            }
-        }
-        .item-text {
-            flex: 1;
-            font-size: $font-basic;
-            margin: 0 20px;
-        }
-    }
+    padding-top: 20px;
+    box-sizing: border-box;
     &-header {
         display: flex;
         padding: 40px 30px;
@@ -50,6 +34,34 @@
 
         .iconfont {
             color: $desc-color;
+        }
+    }
+    &-group {
+        margin-bottom: 20px;
+        .user-item {
+            display: flex;
+            align-items: center;
+            margin: 0 20px;
+            padding: 20px 30px;
+            background-color: $white;
+            .item-arrow {
+                .iconfont {
+                    font-size: $font-basic;
+                    color: $desc-color;
+                }
+            }
+            .item-text {
+                flex: 1;
+                font-size: $font-basic;
+                margin: 0 20px;
+            }
+        }
+
+        .user-item-btn {
+            position: static;
+            text-align: left;
+            line-height: 1;
+            border-radius: 0;
         }
     }
     &-logout {

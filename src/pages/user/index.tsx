@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Taro, { useDidShow } from '@tarojs/taro'
-import { View, Text, Image } from '@tarojs/components'
+import { View, Text, Image, Button } from '@tarojs/components'
 
 import api from '@services/api'
 import app from '@services/request'
@@ -64,55 +64,71 @@ const User = () => {
 
   return (
     <View className="user">
-      <View className="user-item user-header" onClick={gotoLogin}>
-        <View className="login-photo">
-          <Image className="login-photo-image" src={user.avatarUrl} />
+      <View className="user-group">
+        <View className="user-item user-header" onClick={gotoLogin}>
+          <View className="login-photo">
+            <Image className="login-photo-image" src={user.avatarUrl} />
+          </View>
+          <View className="login-text">
+            <Text className="login-name">{user.username ? user.nickname || user.username : '登录/注册'}</Text>
+          </View>
+          {
+            !user.username &&
+            <View className="login-nav">
+              <Text className="iconfont iconarrow-right-bold"></Text>
+            </View>
+          }
         </View>
-        <View className="login-text">
-          <Text className="login-name">{user.username ? user.nickname || user.username : '登录/注册'}</Text>
-        </View>
-        {
-          !user.username &&
-          <View className="login-nav">
+      </View>
+
+      <View className="user-group">
+        <View className="user-item" onClick={() => toUserModule('list')}>
+          <View className="item-icon">
+            <Text className="iconfont iconmanage"></Text>
+          </View>
+          <View className="item-text">管理出售</View>
+          <View className="item-arrow">
             <Text className="iconfont iconarrow-right-bold"></Text>
           </View>
-        }
+        </View>
+        <View className="user-item" onClick={() => toUserModule('list', 'rent')}>
+          <View className="item-icon">
+            <Text className="iconfont iconmanage"></Text>
+          </View>
+          <View className="item-text">管理出租</View>
+          <View className="item-arrow">
+            <Text className="iconfont iconarrow-right-bold"></Text>
+          </View>
+        </View>
+        <View className="user-item" onClick={() => toUserModule('sale')}>
+          <View className="item-icon">
+            <Text className="iconfont iconsquare"></Text>
+          </View>
+          <View className="item-text">我要卖房</View>
+          <View className="item-arrow">
+            <Text className="iconfont iconarrow-right-bold"></Text>
+          </View>
+        </View>
+        <View className="user-item" onClick={() => toUserModule('sale', 'rent')}>
+          <View className="item-icon">
+            <Text className="iconfont iconhomepage"></Text>
+          </View>
+          <View className="item-text">我要出租</View>
+          <View className="item-arrow">
+            <Text className="iconfont iconarrow-right-bold"></Text>
+          </View>
+        </View>
       </View>
-      <View className="user-item" onClick={() => toUserModule('list')}>
-        <View className="item-icon">
-          <Text className="iconfont iconmanage"></Text>
-        </View>
-        <View className="item-text">管理出售</View>
-        <View className="item-arrow">
-          <Text className="iconfont iconarrow-right-bold"></Text>
-        </View>
-      </View>
-      <View className="user-item" onClick={() => toUserModule('list', 'rent')}>
-        <View className="item-icon">
-          <Text className="iconfont iconmanage"></Text>
-        </View>
-        <View className="item-text">管理出租</View>
-        <View className="item-arrow">
-          <Text className="iconfont iconarrow-right-bold"></Text>
-        </View>
-      </View>
-      <View className="user-item" onClick={() => toUserModule('sale')}>
-        <View className="item-icon">
-          <Text className="iconfont iconsquare"></Text>
-        </View>
-        <View className="item-text">我要卖房</View>
-        <View className="item-arrow">
-          <Text className="iconfont iconarrow-right-bold"></Text>
-        </View>
-      </View>
-      <View className="user-item" onClick={() => toUserModule('sale', 'rent')}>
-        <View className="item-icon">
-          <Text className="iconfont iconhomepage"></Text>
-        </View>
-        <View className="item-text">我要出租</View>
-        <View className="item-arrow">
-          <Text className="iconfont iconarrow-right-bold"></Text>
-        </View>
+      <View className="user-group">
+        <Button className="user-item user-item-btn" open-type="contact">
+          <View className="item-icon">
+            <Text className="iconfont iconservice"></Text>
+          </View>
+          <View className="item-text">在线客服</View>
+          <View className="item-arrow">
+            <Text className="iconfont iconarrow-right-bold"></Text>
+          </View>
+        </Button>
       </View>
       {
         user.username &&
