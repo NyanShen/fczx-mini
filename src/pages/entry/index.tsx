@@ -1,43 +1,57 @@
 import Taro, { getCurrentInstance, useReady } from "@tarojs/taro"
 
+
+import { useCallback } from "react"
+
 import api from '@services/api'
 import app from '@services/request'
 import { toUrlParam, transferUrlParam } from "@utils/urlHandler"
 
 const Entry = () => {
-    const router = getCurrentInstance().router
-    const params = router?.params.scene || ''
+    const router: any = getCurrentInstance().router
+    const scene: any = router?.params.scene || ''
+    const currentPath = `${router.path}?scene=${scene}`
 
     const urlMapper = {
         'chat': '/chat/room/index'
     }
 
-    useReady(() => {
-        const scene: string = decodeURIComponent(params)
-        const paramObj: any = transferUrlParam(scene)
-        if (paramObj.t === 'chat') {
-            app.request({
-                url: app.apiUrl(api.getChatUser),
-                method: 'POST',
-                data: {
-                    id: paramObj.id
-                }
-            }, { loading: false }).then((result: any) => {
-                const paramString = toUrlParam({
-                    entry: true,
-                    fromUserId: paramObj.id,
-                    toUser: JSON.stringify(result)
-                })
+    const fetChatData = useCallback((paramObj) => {
+        app.request({
+            url: app.apiUrl(api.getChatUser),
+            method: 'POST',
+            data: {
+                id: paramObj.id
+            }
+        }, { loading: false }).then((result: any) => {
+            const paramString = toUrlParam({
+                fromUserId: paramObj.id,
+                toUser: JSON.stringify(result)
+            })
+            Taro.redirectTo({
+                url: `${urlMapper[paramObj.t]}${paramString}`
+            })
+        }).catch((err: any) => {
+            if (err.status === 401) {
                 Taro.redirectTo({
-                    url: `${urlMapper[paramObj.t]}${paramString}`
+                    url: `/login/index?backUrl=${encodeURIComponent(currentPath)}`
                 })
-            }).catch(() => {
+            } else {
                 setTimeout(() => {
                     Taro.switchTab({
                         url: `/pages/index/index`
                     })
                 }, 2000)
-            })
+            }
+
+        })
+    }, [])
+
+    useReady(() => {
+        const parseScene: string = decodeURIComponent(scene)
+        const paramObj: any = transferUrlParam(parseScene)
+        if (paramObj.t === 'chat') {
+            fetChatData(paramObj)
         }
     })
 

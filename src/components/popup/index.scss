@@ -63,19 +63,34 @@
 
             .popup-form {
                 .form-item {
+                    display: flex;
                     position: relative;
                     height: 80px;
                     line-height: 80px;
+                    font-size: $font-basic;
                     margin-bottom: 30px;
                     background-color: $bg-color;
                     &-input {
+                        flex: 1;
                         height: 100%;
                         padding-left: 30px;
                         color: $text-color;
                     }
+
+                    .btn-code {
+                        padding-right: 20px;
+                        color: $desc-color;
+        
+                        &.actived {
+                            color: $primary-color;
+                        }
+                    }
                 }
 
                 .form-btn {
+                    display: block;
+                    height: 80px;
+                    line-height: 80px;
                     text-align: center;
                     border-radius: 5px;
                     color: $white;

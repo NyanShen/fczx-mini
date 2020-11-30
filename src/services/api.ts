@@ -5,6 +5,7 @@ export default {
     getSessionKeyByCode: '/applet/get-session',
     decryptData: '/applet/decrypt-data',
     getUserData: '/user/get',
+    getCommonVerifyCode: '/common/send-code',
 
     getTestData: '/test/test',
     getCityList: '/index/city-list',

@@ -47,10 +47,8 @@ const INIT_HOUSE_DATA = {
 const imageId = "image_1"
 
 const House = () => {
-    const router: any = getCurrentInstance().router
-    const params: any = router?.params
-    const urlPath = `${router.path}?id=${params.id}`
     const { contentHeight } = useNavData()
+    const params: any = getCurrentInstance().router?.params
     const [albumSwiper, setAlbumSwiper] = useState<IAlbumSwiper>(INIT_ALBUM_SWIPER)
     const [houseData, setHouseData] = useState<any>(INIT_HOUSE_DATA)
 
@@ -454,7 +452,6 @@ const House = () => {
                                 iconClass="icondata-view"
                                 subTitle={houseData.title}
                                 description="此楼盘有价格变化，我们会及时通知您"
-                                backUrl={urlPath}
                             ></Popup>
                         </View>
                         <View className="subscrib-item">
@@ -465,7 +462,6 @@ const House = () => {
                                 iconClass="iconnotice"
                                 subTitle={houseData.title}
                                 description="此楼盘有开盘活动，我们会及时通知您"
-                                backUrl={urlPath}
                             ></Popup>
                         </View>
                     </View>
@@ -493,7 +489,6 @@ const House = () => {
                                     <Popup
                                         houseId={houseData.id}
                                         btnText="预约优惠"
-                                        backUrl={urlPath}
                                         subTitle={houseData.title}
                                         description={houseData.enableFangHouseDiscount.title}
                                     ></Popup>
@@ -644,7 +639,6 @@ const House = () => {
                             iconClass="icongroup"
                             subTitle={houseData.title}
                             description="购房顾问专属服务：楼盘推荐、免费咨询，全程陪看"
-                            backUrl={urlPath}
                         ></Popup>
                     </View>
                 }

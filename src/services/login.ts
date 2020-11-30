@@ -22,7 +22,7 @@ export const fetchUserData = (backUrl: string = '') => {
             if (result) {
                 resolve(result)
             } else {
-                Taro.navigateTo({
+                Taro.redirectTo({
                     url: `/login/index?backUrl=${encodeURIComponent(backUrl)}`
                 })
             }
