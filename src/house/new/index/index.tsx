@@ -660,7 +660,7 @@ const House = () => {
                 <View className="bar-item-btn" onClick={handlePhoneCall}>
                     <View className="btn btn-primary btn-bar">
                         <View>电话咨询</View>
-                        <View className="btn-subtext">致电了解更多信息</View>
+                        <View className="btn-subtext">致电了解更多</View>
                     </View>
                 </View>
             </View>

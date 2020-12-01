@@ -5,9 +5,9 @@ export default {
     // 'news/detail/index',
     // 'house/community/list/index',
     // 'calculator/index',
+    'pages/chat/index',
     'pages/index/index',
     'pages/user/index',
-    'pages/chat/index',
     'pages/entry/index',
   ],
   subPackages: [

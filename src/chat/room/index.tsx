@@ -18,20 +18,27 @@ interface IParam {
 }
 
 const INIT_PARAM = { currentPage: 1 }
-
 const MESSAGE_TYPE = {
     text: '1',
     image: '2',
     image_text: '3'
 }
+const EXPRESSIONS = [
+    '你好，房子还有吗？',
+    '首付大概要多少',
+    '位置在哪？可以发我下位置吗？',
+    '什么时候方便看房子？',
+    '房子的价格还可以谈么',
+]
+const PAGE_LIMIT: number = 20
+const INIT_ACTION = { expression: false, photo: false }
+const INIT_INPUT_DATA = { value: '', send: false }
 
 const ChatRoom = () => {
-    const PAGE_LIMIT: number = 20
     const params: any = getCurrentInstance().router?.params
-
     const fromUserId: string = params.fromUserId
-    const messageType: any = params.messageType
-    const content: any = params.content
+    const messageType: string = params.messageType
+    const content: string = params.content
     const toUser: any = JSON.parse(params.toUser || '{}') || {}
     const { contentHeight } = useNavData()
 
@@ -42,12 +49,12 @@ const ChatRoom = () => {
     const [bottom, setBottom] = useState<number>(0)
     const [toView, setToView] = useState<string>('')
     const [images, setImages] = useState<string[]>([])
-    const [isPhoto, setIsPhoto] = useState<boolean>(false)
-    const [inputData, setInputData] = useState<any>({ value: '', send: false })
-    const ref = useRef<string>('')
+    const [action, setAction] = useState<any>(INIT_ACTION)
+    const [inputData, setInputData] = useState<any>(INIT_INPUT_DATA)
+    const ref = useRef<string>('') // 判断显示时间点
 
     useReady(() => {
-        Taro.setNavigationBarTitle({title: toUser.nickname})
+        Taro.setNavigationBarTitle({ title: toUser.nickname })
     })
 
     useDidShow(() => {
@@ -128,7 +135,7 @@ const ChatRoom = () => {
     }
 
     const handleInputFocus = (e: any) => {
-        setIsPhoto(false)
+        setAction(INIT_ACTION)
         setBottom(e.detail.height)
         setToView(`toView_${chatData[chatData.length - 1].id}`)
     }
@@ -147,10 +154,18 @@ const ChatRoom = () => {
             sourceType: [type],
             success: (res: any) => {
                 app.uploadFile(res, (result: string) => {
-                    sendMessage(MESSAGE_TYPE.image, result)
+                    sendActionMessage(MESSAGE_TYPE.image, result)
                 })
             }
         })
+    }
+
+    const handlePhoneCall = () => {
+        Taro.makePhoneCall({ phoneNumber: toUser.mobile })
+    }
+
+    const handleCopyWechat = () => {
+        Taro.setClipboardData({ data: toUser.wx })
     }
 
     const sendMessage = (type: string, content: any) => {
@@ -162,12 +177,27 @@ const ChatRoom = () => {
                 message_type: type,
                 content
             }
-        }).then(() => {
-            setIsPhoto(false)
-            setInputData({ value: '', send: false })
+        }, { loading: false }).then(() => {
             setParam({
                 currentPage: INIT_PARAM.currentPage
             })
+        })
+    }
+
+    const sendActionMessage = (type: string, content: string) => {
+        sendMessage(type, content)
+        setAction(INIT_ACTION)
+    }
+
+    const sendInputMessage = (content: string) => {
+        sendMessage(MESSAGE_TYPE.text, content)
+        setInputData(INIT_INPUT_DATA)
+    }
+
+    const toggleAction = (name: string) => {
+        setAction({
+            ...action,
+            [name]: !action[name]
         })
     }
 
@@ -284,7 +314,6 @@ const ChatRoom = () => {
                 </View>
             )
         }
-
     }
 
     const renderChatList = () => {
@@ -325,21 +354,33 @@ const ChatRoom = () => {
 
     return (
         <View className="chat-room">
-            
             <View className="chat-room-content">
                 <ScrollView
                     scrollY
                     className="msg-box"
-                    style={{ maxHeight: contentHeight - 52 }}
+                    style={{ maxHeight: contentHeight - 94 }}
                     upperThreshold={40}
                     onScrollToUpper={handleScrollToUpper}
-                    onClick={() => setIsPhoto(false)}
+                    onClick={() => setAction(INIT_ACTION)}
                     scrollIntoView={toView}
                     scrollWithAnimation={false}
                 >
                     {renderChatList()}
                 </ScrollView>
                 <View className="send-box" style={{ bottom }}>
+                    <View className="send-action">
+                        <View
+                            className={classnames('action-item', action.expression && 'actived')}
+                            onClick={() => toggleAction('expression')}>
+                            <Text>常用语</Text>
+                        </View>
+                        <View className="action-item" onClick={handlePhoneCall}>
+                            <Text>电话咨询</Text>
+                        </View>
+                        <View className="action-item" onClick={handleCopyWechat}>
+                            <Text>复制微信号</Text>
+                        </View>
+                    </View>
                     <View className="send-content">
                         <Input
                             adjustPosition={false}
@@ -352,17 +393,20 @@ const ChatRoom = () => {
                             inputData.send ?
                                 <View
                                     className="btn btn-primary"
-                                    onClick={() => sendMessage(MESSAGE_TYPE.text, inputData.value)}
+                                    onClick={() => sendInputMessage(inputData.value)}
                                 >
                                     <Text className="text">发送</Text>
                                 </View> :
-                                <View className="icon-btn" onClick={() => setIsPhoto(true)}>
+                                <View
+                                    className={classnames('icon-btn', action.photo && 'actived')}
+                                    onClick={() => toggleAction('photo')}
+                                >
                                     <Text className="iconfont iconadd"></Text>
                                 </View>
                         }
                     </View>
                     {
-                        isPhoto &&
+                        action.photo &&
                         <View className="photo-content">
                             <View className="photo-item photo-album" onClick={() => handlePhotoClick('album')}>
                                 <View className="iconfont iconphoto"></View>
@@ -372,6 +416,22 @@ const ChatRoom = () => {
                                 <View className="iconfont iconphotograph"></View>
                                 <View className="text">拍照</View>
                             </View>
+                        </View>
+                    }
+                    {
+                        action.expression &&
+                        <View className="expressions">
+                            {
+                                EXPRESSIONS.map((item: string, index: number) => (
+                                    <View
+                                        key={index}
+                                        className="expressions-item"
+                                        onClick={() => sendActionMessage(MESSAGE_TYPE.text, item)}
+                                    >
+                                        <Text>{item}</Text>
+                                    </View>
+                                ))
+                            }
                         </View>
                     }
                 </View>

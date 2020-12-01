@@ -58,10 +58,13 @@
         }
 
         .user-item-btn {
-            position: static;
             text-align: left;
             line-height: 1;
             border-radius: 0;
+            border: none;
+            &::after {
+                border: none;
+            }
         }
     }
     &-logout {
