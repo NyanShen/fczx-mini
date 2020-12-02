@@ -35,11 +35,11 @@ const CustomPicker = (props: IProps) => {
             const index = findIndex(list, { name: item.name })
             if (index !== -1) {
                 setCurrent({ ...item, index })
+                ref.current = { ...item, index }
             } else {
                 setCurrent(item)
+                ref.current = item
             }
-           
-            ref.current = item
         }, 0);
     }, [item])
 
@@ -69,7 +69,7 @@ const CustomPicker = (props: IProps) => {
     }
     return (
         <View className={classnames('picker', show && 'show')}>
-            <View className="mask show" onClick={() => onConfirm(null)}></View>
+            <View className="mask show" onClick={handleCancel}></View>
             <View className="picker-content">
                 <View className="dialog-header">
                     <View className="dialog-button cancel" onClick={() => handleCancel()}>取消</View>
