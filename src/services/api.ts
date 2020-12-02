@@ -1,11 +1,13 @@
 export default {
     getUserVerifyCode: '/user/login-code',
+    getRegisterCode: '/user/register-code',
+    getCommonVerifyCode: '/common/send-code',
     loginByPassword: '/user/login-by-password',
     loginByVerifyCode: '/user/login-by-code',
+    registerAccount: '/user/register',
     getSessionKeyByCode: '/applet/get-session',
     decryptData: '/applet/decrypt-data',
     getUserData: '/user/get',
-    getCommonVerifyCode: '/common/send-code',
 
     getTestData: '/test/test',
     getCityList: '/index/city-list',

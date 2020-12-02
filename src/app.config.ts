@@ -5,9 +5,9 @@ export default {
     // 'news/detail/index',
     // 'house/community/list/index',
     // 'calculator/index',
+    'pages/user/index',
     'pages/index/index',
     'pages/chat/index',
-    'pages/user/index',
     'pages/entry/index',
   ],
   subPackages: [
@@ -58,7 +58,8 @@ export default {
       root: 'login',
       pages: [
         'index',
-        'phone/index'
+        'phone/index',
+        'register/index',
       ]
     },
     {

@@ -1,19 +1,10 @@
-.login-phone {
+.register {
     &-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-around;
         margin: 20% 60px 80px 60px;
         text-align: center;
-        font-size: 34px;
-        color: $text-color;
-
-        .actived {
-            font-size: 40px;
-            color: $title-color;
-        }
+        font-size: 40px;
+        color: $primary-color;
     }
-
     &-form {
         width: 90%;
         margin: 0 auto;
@@ -25,8 +16,10 @@
             border-bottom: $border;
 
             .label-control {
+                width: 120px;
                 margin-right: 30px;
                 color: $title-color;
+                text-align-last: justify;
             }
 
             .input-control {
@@ -43,11 +36,13 @@
                 }
             }
         }
-
-        .register {
+        .link {
             margin-top: 30px;
+            font-size: $font-basic;
             text-align: right;
-            color: $text-color;
+            .link-btn {
+                color: $primary-color;
+            }
         }
 
         .btn {

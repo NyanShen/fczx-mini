@@ -16,16 +16,16 @@ interface ILoginData {
     password?: string
 }
 
-interface IVerifyStatus {
-    verifyText: string
-    actived: boolean
-}
-
 const INIT_LOGIN_PHONE: ILoginData = {
     mobile: '',
     account: '',
     verifyCode: '',
     password: ''
+}
+
+interface IVerifyStatus {
+    verifyText: string
+    actived: boolean
 }
 
 const INIT_VERIFY_STATUS: IVerifyStatus = {
@@ -137,6 +137,12 @@ const LoginPhone = () => {
         })
     }
 
+    const toRegister = () => {
+        Taro.navigateTo({
+            url: '/login/register/index'
+        })
+    }
+
     return (
         <View className="login-phone">
             <View className="login-phone-header">
@@ -206,8 +212,14 @@ const LoginPhone = () => {
                         </View>
                     </View>
                 }
+                <View className="register" onClick={toRegister}>
+                    <View className="register-text">
+                        立即注册
+                    </View>
+                </View>
                 <View onClick={handleSubmit} className="btn btn-primary">立即登录</View>
             </View>
+
         </View>
     )
 }
