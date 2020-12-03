@@ -1,5 +1,4 @@
 import React from 'react'
-import Taro from '@tarojs/taro'
 import { View, Image } from "@tarojs/components"
 
 import official_img from '@assets/icons/official.jpg'
@@ -10,43 +9,11 @@ const step_2 = 'https://static.fczx.com/www/assets/mini/step_2.png'
 const step_3 = 'https://static.fczx.com/www/assets/mini/step_3.png'
 
 const Official = () => {
-    const handleImage = () => {
-        Taro.showActionSheet({
-            itemList: ['发送给朋友', '保存到手机', '收藏'],
-            success: (res: any) => {
-                switch (res.tapIndex) {
-                    case 0:
-                        sendToFriend()
-                        break;
-                    case 1:
-                        saveToAlbum()
-                        break
-                    case 2:
-                        collect()
-                        break
-                    default:
-                }
-            }
-        })
-    }
-
-    const sendToFriend = () => {
-
-    }
-
-    const saveToAlbum = () => {
-        Taro.saveImageToPhotosAlbum({
-            filePath: official_img
-        })
-    }
-
-    const collect = () => {
-
-    }
+    
     return (
         <View className="official">
-            <View className="official-code" onLongPress={handleImage}>
-                <Image src={official_img} mode="aspectFill" />
+            <View className="official-code">
+                <Image src={official_img} mode="aspectFill" showMenuByLongpress={true}/>
             </View>
             <View className="official-steps">
                 <View className="steps-title">

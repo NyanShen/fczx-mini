@@ -137,10 +137,16 @@ const Chat = () => {
     }
   }
 
+  // const handleLoadOfficialFail = (e) => {
+  //   Taro.showModal({
+  //     title: JSON.stringify(e.detail)
+  //   })
+  // }
+
   return (
     <View className="chat">
       <View className="chat-content">
-        <OfficialAccount />
+        {/* <OfficialAccount onError={handleLoadOfficialFail}></OfficialAccount> */}
         {
           user ? renderDialog() : renderLogin()
         }
