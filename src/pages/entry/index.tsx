@@ -1,20 +1,27 @@
+import React, { useCallback, useState } from "react"
 import Taro, { getCurrentInstance, useReady } from "@tarojs/taro"
-
-
-import { useCallback } from "react"
+import { Button, View } from "@tarojs/components"
 
 import api from '@services/api'
 import app from '@services/request'
 import { toUrlParam, transferUrlParam } from "@utils/urlHandler"
+import Confirm from "@components/confirm"
 
 const Entry = () => {
     const router: any = getCurrentInstance().router
     const scene: any = router?.params.scene || ''
+    const [pageParam, setPageParam] = useState<any>()
     const currentPath = `${router.path}?scene=${scene}`
 
     const urlMapper = {
         'chat': '/chat/room/index'
     }
+
+    const toPageIndex = useCallback(() => {
+        Taro.switchTab({
+            url: `/pages/index/index`
+        })
+    }, [])
 
     const fetChatData = useCallback((paramObj) => {
         app.request({
@@ -38,9 +45,7 @@ const Entry = () => {
                 })
             } else {
                 setTimeout(() => {
-                    Taro.switchTab({
-                        url: `/pages/index/index`
-                    })
+                    toPageIndex()
                 }, 2000)
             }
 
@@ -50,12 +55,31 @@ const Entry = () => {
     useReady(() => {
         const parseScene: string = decodeURIComponent(scene)
         const paramObj: any = transferUrlParam(parseScene)
-        if (paramObj.t === 'chat') {
-            fetChatData(paramObj)
+        switch (paramObj.t) {
+            case 'chat':
+                fetChatData(paramObj)
+                break
+            case 'service':
+                const serviceBtn = <Button className="action-item" openType="contact">允许</Button>
+                const pageModule = (
+                    <Confirm
+                        title='即将进入“小程序在线客服”'
+                        specialBtn={serviceBtn}
+                        onCancel={toPageIndex}
+                        cancelText='取消'
+                    ></Confirm>
+                )
+                setPageParam(pageModule)
+            default:
+                return null
         }
     })
 
-    return null
+    return (
+        <View className="entry">
+            {pageParam}
+        </View>
+    )
 }
 
 export default Entry
