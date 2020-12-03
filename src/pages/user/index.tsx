@@ -62,6 +62,12 @@ const User = () => {
     }
   }
 
+  const toOfficialAccount = () => {
+    Taro.navigateTo({
+      url: '/user/official/index'
+    })
+  }
+
   return (
     <View className="user">
       <View className="user-group">
@@ -129,6 +135,15 @@ const User = () => {
             <Text className="iconfont iconarrow-right-bold"></Text>
           </View>
         </Button>
+        <View className="user-item" onClick={toOfficialAccount}>
+          <View className="item-icon">
+            <Text className="iconfont iconcode"></Text>
+          </View>
+          <View className="item-text">关注公众号</View>
+          <View className="item-arrow">
+            <Text className="iconfont iconarrow-right-bold"></Text>
+          </View>
+        </View>
       </View>
       {
         user.username &&

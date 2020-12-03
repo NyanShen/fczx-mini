@@ -76,6 +76,12 @@ export default {
       ]
     },
     {
+      root: 'user',
+      pages: [
+        'official/index'
+      ]
+    },
+    {
       root: 'calculator',
       pages: [
         'index'

@@ -48,7 +48,6 @@ const Entry = () => {
                     toPageIndex()
                 }, 2000)
             }
-
         })
     }, [])
 
@@ -60,7 +59,7 @@ const Entry = () => {
                 fetChatData(paramObj)
                 break
             case 'service':
-                const serviceBtn = <Button className="action-item" openType="contact">允许</Button>
+                const serviceBtn = <Button className="action-item" openType="contact" onClick={toPageIndex}>允许</Button>
                 const pageModule = (
                     <Confirm
                         title='即将进入“小程序在线客服”'

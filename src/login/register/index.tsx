@@ -47,7 +47,7 @@ const Register = () => {
                 mobile: registerData.mobile
             }
         }).then((result: any) => {
-            if (!result.data) {
+            if (!result) {
                 Taro.showModal({
                     title: '提示',
                     content: '您输入的手机号已注册，请直接登录',
@@ -82,15 +82,13 @@ const Register = () => {
             method: 'POST',
             url: app.apiUrl(api.registerAccount),
             data: {
-                mobile: registerData.mobile,
                 source: '1',
+                mobile: registerData.mobile,
                 password: registerData.password,
                 randCode: registerData.randCode
             }
         }).then(() => {
-            Taro.switchTab({
-                url: '/pages/index/index'
-            })
+            Taro.navigateBack({ delta: 1 })
         })
     }
 

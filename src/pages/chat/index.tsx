@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Taro, { useDidShow } from '@tarojs/taro'
-import { View, Image } from '@tarojs/components'
+import { View, Image, OfficialAccount } from '@tarojs/components'
 
 import api from '@services/api'
 import app from '@services/request'
@@ -140,6 +140,7 @@ const Chat = () => {
   return (
     <View className="chat">
       <View className="chat-content">
+        <OfficialAccount />
         {
           user ? renderDialog() : renderLogin()
         }
