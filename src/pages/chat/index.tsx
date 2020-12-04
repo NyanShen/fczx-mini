@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Taro, { useDidShow } from '@tarojs/taro'
-import { View, Image, OfficialAccount } from '@tarojs/components'
+import { View, Image } from '@tarojs/components'
 
 import api from '@services/api'
 import app from '@services/request'
@@ -137,16 +137,9 @@ const Chat = () => {
     }
   }
 
-  // const handleLoadOfficialFail = (e) => {
-  //   Taro.showModal({
-  //     title: JSON.stringify(e.detail)
-  //   })
-  // }
-
   return (
     <View className="chat">
       <View className="chat-content">
-        {/* <OfficialAccount onError={handleLoadOfficialFail}></OfficialAccount> */}
         {
           user ? renderDialog() : renderLogin()
         }

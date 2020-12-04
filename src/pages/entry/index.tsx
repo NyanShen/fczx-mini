@@ -4,8 +4,9 @@ import { Button, View } from "@tarojs/components"
 
 import api from '@services/api'
 import app from '@services/request'
-import { toUrlParam, transferUrlParam } from "@utils/urlHandler"
 import Confirm from "@components/confirm"
+import { toUrlParam, transferUrlParam } from "@utils/urlHandler"
+import { formatPhoneCall } from "@utils/index"
 
 const Entry = () => {
     const router: any = getCurrentInstance().router
@@ -69,8 +70,19 @@ const Entry = () => {
                     ></Confirm>
                 )
                 setPageParam(pageModule)
+            case 'call':
+                Taro.makePhoneCall({
+                    phoneNumber: formatPhoneCall(paramObj.phone),
+                    success: () => {
+                        toPageIndex()
+                    },
+                    fail: () => {
+                        toPageIndex()
+                    }
+                })
+                break
             default:
-                return null
+                toPageIndex()
         }
     })
 
