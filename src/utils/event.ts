@@ -19,14 +19,14 @@ class ChatEvent {
         }
     }
 
-    public emit(eventName: string, params: any = {}) {
+    public emit(eventName: string, params: any = {}, timer: number = 5000) {
         let _this = this
         hasLogin().then((result) => {
             if (result && _this.events[eventName]) {
                 _this.fetchChatUnread(eventName, params)
                 _this.timer = setInterval(() => {
                     _this.fetchChatUnread(eventName, params)
-                }, 5000)
+                }, timer)
             }
         })
     }
@@ -44,11 +44,12 @@ class ChatEvent {
     }
 
     fetchChatUnread(eventName: string, params: any = {}) {
+        let _this = this
         app.request({
             url: app.apiUrl(api.getUnread)
-        }, { loading: false }).then((result: string) => {
-            this.events[eventName].map((callBack) => {
-                callBack(result, params);
+        }, { loading: false }).then((result: any) => {
+            _this.events[eventName].map((callBack) => {
+                callBack(result.message, params);
             })
         })
     }

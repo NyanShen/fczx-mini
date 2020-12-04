@@ -227,7 +227,6 @@ const HouseSale = () => {
     }
 
     const selectPicker = (name: string) => {
-        console.log(pickerValue[name].id)
         setPicker({
             name,
             show: true,

@@ -88,6 +88,7 @@ app.request = (params: any, { loading = true, toast = true }: any = {}) => {
                 }
             },
             fail: function (err: any) {
+                console.log(err)
                 let msg = err.errMsg
                 if (msg == 'request:fail timeout') {
                     msg = '服务器请求超时，请稍后再试'

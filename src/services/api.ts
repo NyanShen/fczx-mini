@@ -8,6 +8,7 @@ export default {
     getSessionKeyByCode: '/applet/get-session',
     decryptData: '/applet/decrypt-data',
     getUserData: '/user/get',
+    updateUser: '/user/update',
 
     getTestData: '/test/test',
     getCityList: '/index/city-list',

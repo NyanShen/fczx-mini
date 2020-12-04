@@ -5,8 +5,8 @@ export default {
     // 'news/detail/index',
     // 'house/community/list/index',
     // 'calculator/index',
-    'pages/index/index',
     'pages/user/index',
+    'pages/index/index',
     'pages/chat/index',
     'pages/entry/index',
   ],
@@ -78,7 +78,8 @@ export default {
     {
       root: 'user',
       pages: [
-        'official/index'
+        'official/index',
+        'profile/index',
       ]
     },
     {

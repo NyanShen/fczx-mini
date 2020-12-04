@@ -7,8 +7,12 @@ import app from '@services/request'
 import storage from '@utils/storage'
 import ChatEvent from '@utils/event'
 import './index.scss'
+import { toUrlParam } from '@utils/urlHandler'
 
 interface IUser {
+  id?: string
+  sex?: string
+  mobile?: string
   avatarUrl: string
   nickname?: string
   username: string
@@ -25,9 +29,12 @@ const User = () => {
   useDidShow(() => {
     app.request({
       url: app.apiUrl(api.getUserData)
-    }).then((result: any) => {
+    }, { loading: false }).then((result: any) => {
       if (result) {
         setUser({
+          id: result.id,
+          sex: result.sex,
+          mobile: result.mobile,
           avatarUrl: result.avatar,
           username: result.username,
           nickname: result.nickname
@@ -38,6 +45,9 @@ const User = () => {
 
   const gotoLogin = () => {
     if (user.username) {
+      Taro.navigateTo({
+        url: `/user/profile/index${toUrlParam(user)}`
+      })
       return
     }
     Taro.navigateTo({
@@ -78,12 +88,9 @@ const User = () => {
           <View className="login-text">
             <Text className="login-name">{user.username ? user.nickname || user.username : '登录/注册'}</Text>
           </View>
-          {
-            !user.username &&
-            <View className="login-nav">
-              <Text className="iconfont iconarrow-right-bold"></Text>
-            </View>
-          }
+          <View className="login-nav">
+            <Text className="iconfont iconarrow-right-bold"></Text>
+          </View>
         </View>
       </View>
 
