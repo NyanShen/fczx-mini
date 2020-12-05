@@ -70,6 +70,9 @@ const esfHouse = () => {
             const static_map = getStaticMap(latitude, longitude)
             setEsfData({ ...result, ...{ static_map: static_map } })
             Taro.setNavigationBarTitle({ title: result.title})
+            if (params.c) {
+                handlePhoneCall(result.mobile)
+            }
         })
     }, [])
 
@@ -111,14 +114,14 @@ const esfHouse = () => {
         })
     }
 
-    const handlePhoneCall = () => {
+    const handlePhoneCall = (phone: string) => {
         makePhoneCall({
-            phoneNumber: formatPhoneCall(esfData.mobile),
+            phoneNumber: formatPhoneCall(phone),
             fail: (err: any) => {
                 if (err.errMsg == 'makePhoneCall:fail') {
                     Taro.showModal({
                         title: '联系电话',
-                        content: esfData.mobile,
+                        content: phone,
                         showCancel: false
                     })
                 }
@@ -318,7 +321,7 @@ const esfHouse = () => {
                         <Text className="btn btn-yellow btn-bar">在线咨询</Text>
                     </View>
                 }
-                <View className="bar-item-btn" onClick={handlePhoneCall}>
+                <View className="bar-item-btn" onClick={() => handlePhoneCall(esfData.mobile)}>
                     <Text className="btn btn-primary btn-bar">电话咨询</Text>
                 </View>
             </View>

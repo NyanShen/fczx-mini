@@ -6,7 +6,6 @@ import api from '@services/api'
 import app from '@services/request'
 import Confirm from "@components/confirm"
 import { toUrlParam, transferUrlParam } from "@utils/urlHandler"
-import { formatPhoneCall } from "@utils/index"
 
 const Entry = () => {
     const router: any = getCurrentInstance().router
@@ -15,7 +14,10 @@ const Entry = () => {
     const currentPath = `${router.path}?scene=${scene}`
 
     const urlMapper = {
-        'chat': '/chat/room/index'
+        'chat': '/chat/room/index',
+        'house': '/house/new/index/index',
+        'esf': '/house/esf/index/index',
+        'rent': '/house/rent/index/index',
     }
 
     const toPageIndex = useCallback(() => {
@@ -70,15 +72,16 @@ const Entry = () => {
                     ></Confirm>
                 )
                 setPageParam(pageModule)
-            case 'call':
-                Taro.makePhoneCall({
-                    phoneNumber: formatPhoneCall(paramObj.phone),
-                    success: () => {
-                        toPageIndex()
-                    },
-                    fail: () => {
-                        toPageIndex()
-                    }
+                break
+            case 'house':
+            case 'esf':
+            case 'rent':
+                const paramString = toUrlParam({
+                    id: paramObj.id,
+                    c: paramObj.c || ''
+                })
+                Taro.redirectTo({
+                    url: `${urlMapper[paramObj.t]}${paramString}`
                 })
                 break
             default:

@@ -83,6 +83,9 @@ const House = () => {
                 setAlbumSwiper({ albumId: imageId, swiperIndex: 0 })
             }
             Taro.setNavigationBarTitle({ title: result.title })
+            if (params.c) {
+                handlePhoneCall(result.phone)
+            }
         })
     }, [])
 
@@ -103,14 +106,14 @@ const House = () => {
         })
     }
 
-    const handlePhoneCall = () => {
+    const handlePhoneCall = (phone: string) => {
         makePhoneCall({
-            phoneNumber: formatPhoneCall(houseData.phone),
+            phoneNumber: formatPhoneCall(phone),
             fail: (err: any) => {
                 if (err.errMsg == 'makePhoneCall:fail') {
                     Taro.showModal({
                         title: '联系电话',
-                        content: houseData.phone,
+                        content: phone,
                         showCancel: false
                     })
                 }
@@ -226,6 +229,13 @@ const House = () => {
         })
     }
 
+    const handleViewImage = (imagePath: string) => {
+        Taro.previewImage({
+            urls: [imagePath],
+            current: imagePath
+        })
+    }
+
     const renderPrice = (price: string, price_type: string) => {
         if (price === '0') {
             return <Text className="price">待定</Text>
@@ -285,6 +295,16 @@ const House = () => {
                                     <View className="comment-text">
                                         <View className="name">{item.user.nickname}</View>
                                         <View className="text">{item.content}</View>
+                                        {
+                                            item.image_path &&
+                                            <View className="comment-image">
+                                                <Image
+                                                    src={item.image_path}
+                                                    mode="aspectFill"
+                                                    onClick={() => handleViewImage(item.image_path)}
+                                                />
+                                            </View>
+                                        }
                                         <View className="small-desc">{formatTimestamp(item.modified)}</View>
                                     </View>
                                 </View>
@@ -406,7 +426,9 @@ const House = () => {
                             <Image src={houseData.image_path}></Image>
                         </SwiperItem>
                     </Swiper>
-                    <View className="album-count">共{houseData.imagesData.imageCount}张</View>
+                    <View className="album-count" onClick={() => toHouseModule('album')}>
+                        共{houseData.imagesData.imageCount}张
+                        </View>
                     <View className="album-text">
                         {houseData.imagesData.video && renderVideoTab(houseData.imagesData.video)}
                         <Text
@@ -430,7 +452,7 @@ const House = () => {
                     </View>
                     <View className="info-item">
                         <Text className="label">开盘</Text>
-                        <Text className="text">{houseData.open_time && formatTimestamp(houseData.open_time, 'yy-MM-dd')}</Text>
+                        <Text className="text">{houseData.open_time ? formatTimestamp(houseData.open_time, 'yy-MM-dd') : '待更新'}</Text>
                     </View>
                     <View className="info-item">
                         <Text className="label">地址</Text>
@@ -466,7 +488,7 @@ const House = () => {
                         </View>
                     </View>
                 </View>
-                <View className="house-contact view-content mt20" onClick={handlePhoneCall}>
+                <View className="house-contact view-content mt20" onClick={() => handlePhoneCall(houseData.phone)}>
                     <View className="iconfont icontelephone-out"></View>
                     <View>
                         <View className="phone-call">{houseData.phone}</View>
@@ -508,29 +530,25 @@ const House = () => {
                                 <Text className="iconfont iconarrow-right-bold"></Text>
                             </View>
                         </View>
-                        <View className="house-type-content">
-                            <Swiper displayMultipleItems={2.5} style={{ height: 160 }}>
-                                {
-                                    houseData.fangHouseRoom.map((item: any, index: any) => (
-                                        <SwiperItem key={index}>
-                                            <View className="swiper-item" onClick={() => toHouseTypeDetail(item)}>
-                                                <View className="item-image">
-                                                    <Image src={item.image_path} mode="aspectFill"></Image>
-                                                </View>
-                                                <View className="item-text tags">
-                                                    <Text>{item.room}室{item.office}厅{item.toilet}卫</Text>
-                                                    <Text className={classnames('tags-item', `sale-status-${item.sale_status}`)}>{SALE_STATUS[item.sale_status]}</Text>
-                                                </View>
-                                                <View className="item-text">
-                                                    <Text>{item.building_area}m²</Text>
-                                                    {renderPrice(item.price, item.price_type)}
-                                                </View>
-                                            </View>
-                                        </SwiperItem>
-                                    ))
-                                }
-                            </Swiper>
-                        </View>
+                        <ScrollView className="house-type-content" scrollX>
+                            {
+                                houseData.fangHouseRoom.map((item: any, index: any) => (
+                                    <View key={index} className="swiper-item" onClick={() => toHouseTypeDetail(item)}>
+                                        <View className="item-image">
+                                            <Image src={item.image_path} mode="aspectFill"></Image>
+                                        </View>
+                                        <View className="item-text tags">
+                                            <Text>{item.room}室{item.office}厅{item.toilet}卫</Text>
+                                            <Text className={classnames('tags-item', `sale-status-${item.sale_status}`)}>{SALE_STATUS[item.sale_status]}</Text>
+                                        </View>
+                                        <View className="item-text">
+                                            <Text>{item.building_area}m²</Text>
+                                            {renderPrice(item.price, item.price_type)}
+                                        </View>
+                                    </View>
+                                ))
+                            }
+                        </ScrollView>
                     </View>
                 }
 
@@ -569,9 +587,9 @@ const House = () => {
                         <View className="house-item-header">
                             <View className="title">沙盘图</View>
                             <View className="more" onClick={() => toHouseModule('sand')}>
-                            <Text>查看</Text>
-                            <Text className="iconfont iconarrow-right-bold"></Text>
-                        </View>
+                                <Text>查看</Text>
+                                <Text className="iconfont iconarrow-right-bold"></Text>
+                            </View>
                         </View>
                         {houseData.id && getSandCommonComponent}
                     </View>
@@ -657,7 +675,7 @@ const House = () => {
                     </View>
                 }
 
-                <View className="bar-item-btn" onClick={handlePhoneCall}>
+                <View className="bar-item-btn" onClick={() => handlePhoneCall(houseData.phone)}>
                     <View className="btn btn-primary btn-bar">
                         <View>电话咨询</View>
                         <View className="btn-subtext">致电了解更多</View>

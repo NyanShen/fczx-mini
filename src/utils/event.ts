@@ -19,6 +19,14 @@ class ChatEvent {
         }
     }
 
+    public emitStatus(eventName: string, params: any = {}) {
+        if (this.events[eventName]) {
+            this.events[eventName].map((callBack) => {
+                callBack(params);
+            })
+        }
+    }
+
     public emit(eventName: string, params: any = {}, timer: number = 5000) {
         let _this = this
         hasLogin().then((result) => {
@@ -33,14 +41,6 @@ class ChatEvent {
 
     public clearTimer() {
         clearInterval(this.timer)
-    }
-
-    public emitStatus(eventName: string, params: any = {}) {
-        if (this.events[eventName]) {
-            this.events[eventName].map((callBack) => {
-                callBack(params);
-            })
-        }
     }
 
     fetchChatUnread(eventName: string, params: any = {}) {

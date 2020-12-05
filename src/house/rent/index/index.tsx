@@ -87,6 +87,10 @@ const RentIndex = () => {
             const { longitude, latitude } = result.fangHouse
             const static_map = getStaticMap(latitude, longitude)
             setRentData({ ...result, ...{ static_map: static_map } })
+
+            if (params.c) {
+                handlePhoneCall(result.mobile)
+            }
         })
     }, [])
 
@@ -140,14 +144,14 @@ const RentIndex = () => {
         })
     }
 
-    const handlePhoneCall = () => {
+    const handlePhoneCall = (phone: string) => {
         Taro.makePhoneCall({
-            phoneNumber: formatPhoneCall( rentData.mobile),
+            phoneNumber: formatPhoneCall(phone),
             fail: (err: any) => {
                 if (err.errMsg == 'makePhoneCall:fail') {
                     Taro.showModal({
                         title: '联系电话',
-                        content: rentData.mobile,
+                        content: phone,
                         showCancel: false
                     })
                 }
@@ -301,7 +305,7 @@ const RentIndex = () => {
                         <Text className="btn btn-yellow btn-bar">在线咨询</Text>
                     </View>
                 }
-                <View className="bar-item-btn" onClick={handlePhoneCall}>
+                <View className="bar-item-btn" onClick={() => handlePhoneCall(rentData.mobile)}>
                     <Text className="btn btn-primary btn-bar">电话咨询</Text>
                 </View>
             </View>

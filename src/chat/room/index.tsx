@@ -6,12 +6,12 @@ import classnames from 'classnames'
 import api from '@services/api'
 import app from '@services/request'
 import useNavData from '@hooks/useNavData'
+import { toUrlParam } from '@utils/urlHandler'
 import { PRICE_TYPE } from '@constants/house'
 import { fetchUserData } from '@services/login'
 import { formatChatListTime } from '@utils/index'
 import { getTotalPage, INIT_PAGE, IPage } from '@utils/page'
 import './index.scss'
-import { toUrlParam } from '@utils/urlHandler'
 
 interface IParam {
     currentPage: number
@@ -377,9 +377,12 @@ const ChatRoom = () => {
                         <View className="action-item" onClick={handlePhoneCall}>
                             <Text>电话咨询</Text>
                         </View>
-                        <View className="action-item" onClick={handleCopyWechat}>
-                            <Text>复制微信号</Text>
-                        </View>
+                        {
+                            toUser.wx &&
+                            <View className="action-item" onClick={handleCopyWechat}>
+                                <Text>复制微信号</Text>
+                            </View>
+                        }
                     </View>
                     <View className="send-content">
                         <Input
