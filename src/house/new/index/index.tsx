@@ -539,7 +539,6 @@ const House = () => {
                                 houseId={houseData.id}
                                 btnText="变价提醒"
                                 iconClass="icondata-view"
-                                subTitle={houseData.title}
                                 description="此楼盘有价格变化，我们会及时通知您"
                             ></Popup>
                         </View>
@@ -549,7 +548,6 @@ const House = () => {
                                 houseId={houseData.id}
                                 btnText="开盘通知"
                                 iconClass="iconnotice"
-                                subTitle={houseData.title}
                                 description="此楼盘有开盘活动，我们会及时通知您"
                             ></Popup>
                         </View>
@@ -567,27 +565,48 @@ const House = () => {
                     </View>
                 </View>
                 {
-                    houseData.is_discount == '1' &&
+                    (houseData.is_discount == '1' || houseData.is_group == '1') &&
                     <View className="house-item house-activity mt20">
                         <View className="house-item-header">
                             <View className="title">优惠</View>
                         </View>
-                        <View className="activity-item">
-                            <View className="item-text">
-                                <View>获取优惠</View>
-                                <View className="desc">{houseData.fangHouseDiscount.title}</View>
-                            </View>
-                            <View className="item-action">
-                                <View className="ovalbtn ovalbtn-pink">
-                                    <Popup
-                                        houseId={houseData.id}
-                                        btnText="预约优惠"
-                                        subTitle={houseData.title}
-                                        description={houseData.fangHouseDiscount.title}
-                                    ></Popup>
+                        {
+                            houseData.is_discount == '1' &&
+                            <View className="activity-item">
+                                <View className="item-text">
+                                    <View>获取优惠</View>
+                                    <View className="desc">{houseData.fangHouseDiscount.title}</View>
+                                </View>
+                                <View className="item-action">
+                                    <View className="ovalbtn ovalbtn-pink">
+                                        <Popup
+                                            houseId={houseData.id}
+                                            btnText="预约优惠"
+                                            title={houseData.fangHouseDiscount.title}
+                                        ></Popup>
+                                    </View>
                                 </View>
                             </View>
-                        </View>
+                        }
+                        {
+                            houseData.is_group == '1' &&
+                            <View className="activity-item activity-item-primary">
+                                <View className="item-text">
+                                    <View>看房团</View>
+                                    <View className="desc">{houseData.fangHouseGroup.title}</View>
+                                </View>
+                                <View className="item-action">
+                                    <View className="ovalbtn ovalbtn-primary">
+                                        <Popup
+                                            houseId={houseData.id}
+                                            btnText="立即参与"
+                                            title={houseData.fangHouseGroup.title}
+                                            description="√免费专车 √一对一来回接送 √随时看房"
+                                        ></Popup>
+                                    </View>
+                                </View>
+                            </View>
+                        }
                     </View>
                 }
 
@@ -724,10 +743,10 @@ const House = () => {
                         <Popup
                             type="4"
                             houseId={houseData.id}
-                            btnText={houseData.fangHouseGroup.title}
+                            btnText="团购"
                             iconClass="icongroup"
-                            subTitle={houseData.title}
-                            description="购房顾问专属服务：楼盘推荐、免费咨询，全程陪看"
+                            title={houseData.fangHouseGroup.title}
+                            description="√免费专车 √一对一来回接送 √随时看房"
                         ></Popup>
                     </View>
                 }

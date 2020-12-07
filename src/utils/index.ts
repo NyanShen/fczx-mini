@@ -8,7 +8,7 @@ export const keywordcolorful = (str, key) => {
     return newstr
 }
 // yy-MM-dd hh:mm:ss
-export const formatTimestamp = (timestamp: string, fmt = 'yy-MM-dd') => {
+export const formatTimestamp = (timestamp: string, fmt = 'yy-MM-dd hh:mm') => {
     const date = new Date(Number(timestamp) * 1000)
     const o = {
         "M+": date.getMonth() + 1, // 月份

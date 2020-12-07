@@ -214,7 +214,7 @@ const Index = () => {
                     <View className="text-item small-desc mb8">
                       <Text>{item.area && item.area.name}</Text>
                       <Text className="line-split"></Text>
-                      <Text>{item.address}</Text>
+                      <Text>{item.comment_num}条评论</Text>
                     </View>
                     <View className="mb8">
                       {renderPrice(item.price, item.price_type)}

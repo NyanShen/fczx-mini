@@ -34,7 +34,10 @@
                 margin-bottom: 20px;
 
                 .popup-title {
-                    font-size: 40px;
+                    width: 90%;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    font-size: 38px;
                     font-weight: bold;
                     color: $primary-color;
                 }

@@ -117,6 +117,10 @@ page {
     color: $pink;
     background-color: $white;
   }
+  &-primary {
+    color: $primary-color;
+    background-color: $white;
+  }
   &-brown {
     color: rgb(131, 80, 55);
   }

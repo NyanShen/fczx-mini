@@ -95,6 +95,11 @@
             background-color: $bg-pink;
             border-radius: $border-radius-10;
 
+            &.activity-item-primary {
+                color: $primary-color;
+                background-color: $primary-bg-color;
+            }
+
             .desc {
                 font-size: $font-24;
                 margin-top: 10px;
