@@ -13,6 +13,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.iconshare:before {
+  content: "\e603";
+}
+
 .iconzan_hv:before {
   content: "\e61a";
 }
@@ -119,10 +123,6 @@
 
 .icondata-view:before {
   content: "\e66c";
-}
-
-.icontelephone-out:before {
-  content: "\e680";
 }
 
 .iconnotice:before {

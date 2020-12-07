@@ -1,40 +1,86 @@
 .house {
     &-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
         padding: 30px;
-        background-image: linear-gradient(to right, #d9e7fc, #dff5db);
+        background-color: $white;
 
-        .name {
-            max-width: 400px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            margin-right: 20px;
-            font-weight: bold;
-            color: #333;
+        .header-left {
+            flex: 1;
+            .title {
+                .name {
+                    font-size: $font-36;
+                    font-weight: bold;
+                    margin-right: 30px;
+                    color: #333;
+                }
+                .status {
+                    font-size: $font-26;
+                    padding: 0 4px;
+                }
+            }
+            .address {
+                margin-top: 16px;
+                .iconaddress {
+                    margin-left: 30px;
+                    color: $search-actived;
+                }
+            }
         }
 
-        .tags {
-            margin-top: 16px;
+        .header-right {
+            .share {
+                line-height: 1;
+                background-color: $white;
+                &::after {
+                    border: none;
+                }
+                .iconshare {
+                    font-size: $font-40;
+                }
+
+                .text {
+                    font-size: $font-26;
+                }
+            }
         }
     }
 
     &-contact {
-        display: flex;
         padding: 30px;
-        .icontelephone-out {
-            font-size: 86px;
-            margin-right: 20px;
-            color: #11a43c;
-        }
 
-        .phone-call {
-            font-size: 36px;
-            margin-bottom: 10px;
-            color: #11a43c;
-        }
-        .phone-desc {
-            font-size: 24px;
-            color: #999;
+        .contact-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 30px;
+            background-image: linear-gradient(to right, #d9e7fc, #dff5db);
+
+            .contact-icon {
+                display: flex;
+                width: 90px;
+                height: 90px;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+                background-color: $white;
+
+                .iconcall {
+                    font-size: 40px;
+                    color: #11a43c;
+                }
+            }
+
+            .phone-call {
+                font-size: 36px;
+                margin-bottom: 10px;
+                color: #11a43c;
+            }
+            .phone-desc {
+                font-size: 24px;
+                color: #999;
+            }
         }
     }
 
@@ -218,10 +264,18 @@
     }
 
     &-consultant {
-        &-content {
+        .house-consultant-content {
+            .consultant-desc {
+                font-size: $font-basic;
+                padding: 30px 30px 0 30px;
+                color: $desc-color;
+            }
+        }
+        .consultant-scroll {
             white-space: nowrap;
             padding: 30px 0 30px 30px;
             background-color: $white;
+
             .consultant-item {
                 display: inline-block;
                 width: 28.2%;
@@ -230,7 +284,6 @@
                 border-radius: $border-radius-10;
                 color: rgb(131, 80, 55);
                 background-color: rgb(246, 230, 215);
-
                 .consultant-context {
                     display: flex;
                     flex-direction: column;
@@ -296,7 +349,7 @@
     font-size: $font-basic;
     &-item {
         display: flex;
-        padding-top: 30px;
+        padding-top: 20px;
         line-height: 40px;
 
         .label {
@@ -308,14 +361,6 @@
         }
         .text {
             color: $title-color;
-        }
-        .address {
-            color: #8099af;
-        }
-        .iconaddress {
-            display: block;
-            width: 200px;
-            color: $search-actived;
         }
     }
 }

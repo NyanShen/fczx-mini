@@ -26,6 +26,10 @@
             .item-text {
                 flex: 1;
                 font-size: $font-32;
+                .title {
+                    font-weight: bold;
+                    color: $title-color;
+                }
                 .date {
                     margin-left: 16px;
                 }

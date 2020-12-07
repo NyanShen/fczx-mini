@@ -5,27 +5,21 @@
         .header {
             margin-bottom: 16px;
             line-height: 50px;
+            font-size: $font-26;
             .tag {
-                font-size: $font-26;
-                padding: 8px 16px;
                 margin-right: 16px;
-                border: 2px solid $primary-color;
-                color: $primary-color;
-            }
-            .title {
-                font-size: $font-32;
+                padding: 0 8px;
+                border-bottom-right-radius: $border-radius-10;
+                border-top-left-radius: $border-radius-10;
+                background-color: $pink;
+                color: $white;
             }
         }
-        .sub-title {
-            font-size: $font-basic;
+        .title {
+            font-size: $font-32;
+            font-weight: bold;
             margin-bottom: 16px;
-            color: $text-color;
-        }
-        .publish {
-            display: flex;
-            .date {
-                margin-left: 16px;
-            }
+            color: $title-color;
         }
     }
 }

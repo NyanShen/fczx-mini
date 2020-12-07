@@ -68,13 +68,9 @@ const HouseNewsList = () => {
                             <View key={index} className="news-item" onClick={() => toHouseNewsDetail(item.id)}>
                                 <View className="header">
                                     <Text className="tag">{item.newsCate.name}</Text>
-                                    <Text className="title">{item.title}</Text>
+                                    <Text className="publish small-desc">{formatTimestamp(item.modified)}</Text>
                                 </View>
-                                <View className="sub-title">{item.sub_title}</View>
-                                <View className="publish small-desc">
-                                    <View>{item.author}</View>
-                                    <View className="date">{formatTimestamp(item.modified)}</View>
-                                </View>
+                                <View className="title">{item.title}</View>
                             </View>
                         ))
                     }

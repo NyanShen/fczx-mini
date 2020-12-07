@@ -37,6 +37,9 @@ const INIT_HOUSE_DATA = {
     tags: [],
     ask: [],
     news: [],
+    fangHouseInfo: {},
+    fangHouseGroup: {},
+    fangHouseDiscount: {},
     _renovationStatus: [],
     fangHouseRoom: [],
     imagesData: {},
@@ -252,6 +255,10 @@ const House = () => {
         })
     }
 
+    const renderDetail = (value: string) => {
+        return value ? value : '待更新'
+    }
+
     const renderPrice = (price: string, price_type: string) => {
         if (price === '0') {
             return <Text className="price">待定</Text>
@@ -279,12 +286,6 @@ const House = () => {
                 onClick={() => switchAlbum(video.id, 0)}
             >视频</Text>
         )
-    }
-
-    const renderTags = (tags: string[]) => {
-        return tags.length > 0 && tags.map((item: any, index: number) => (
-            <Text key={index} className="tags-item">{item}</Text>
-        ))
     }
 
     const renderComment = (comment: any[]) => {
@@ -407,26 +408,29 @@ const House = () => {
                         <Text className="iconfont iconarrow-right-bold"></Text>
                     </View>
                 </View>
-                <ScrollView className="house-consultant-content clearfix" scrollX>
-                    {
-                        enableFangHouseConsultant.map((item: any, index: number) => (
-                            <View key={index} className="consultant-item">
-                                <View className="consultant-context">
-                                    <View className="item-image">
-                                        <Image src={item.user.avatar}></Image>
-                                    </View>
-                                    <View className="item-name">{item.user.nickname}</View>
-                                    <View className="item-btn">
-                                        <Button className="ovalbtn ovalbtn-brown" onClick={() => toChatRoom(item)}>
-                                            <Text className="iconfont iconmessage"></Text>
-                                            <Text>咨询</Text>
-                                        </Button>
+                <View className="house-consultant-content">
+                    <View className="consultant-desc view-content">为你提供以下服务：政策解读 楼盘导览 户型解析</View>
+                    <ScrollView className="consultant-scroll" scrollX>
+                        {
+                            enableFangHouseConsultant.map((item: any, index: number) => (
+                                <View key={index} className="consultant-item">
+                                    <View className="consultant-context">
+                                        <View className="item-image">
+                                            <Image src={item.user.avatar}></Image>
+                                        </View>
+                                        <View className="item-name">{item.user.nickname}</View>
+                                        <View className="item-btn">
+                                            <Button className="ovalbtn ovalbtn-brown" onClick={() => toChatRoom(item)}>
+                                                <Text className="iconfont iconmessage"></Text>
+                                                <Text>咨询</Text>
+                                            </Button>
+                                        </View>
                                     </View>
                                 </View>
-                            </View>
-                        ))
-                    }
-                </ScrollView>
+                            ))
+                        }
+                    </ScrollView>
+                </View>
             </View>
     }
 
@@ -466,31 +470,66 @@ const House = () => {
                     </View>
                 </View>
                 <View className="house-header">
-                    <View className="name">{houseData.title}</View>
-                    <View className="tags">
-                        <Text className={classnames('tags-item', `sale-status-${houseData.sale_status}`)}>{SALE_STATUS[houseData.sale_status]}</Text>
-                        {renderTags(houseData._renovationStatus)}
-                        {renderTags(houseData.tags)}
+                    <View className="header-left">
+                        <View className="title">
+                            <Text className="name">{houseData.title}</Text>
+                            <Text className={classnames('status', `sale-status-${houseData.sale_status}`)}>
+                                {SALE_STATUS[houseData.sale_status]}
+                            </Text>
+                        </View>
+                        <View className="address">
+                            <Text className="text">{houseData.address}</Text>
+                            <Text className="iconfont iconaddress" onClick={() => toHouseSurround()}>地图</Text>
+                        </View>
+                    </View>
+                    <View className="header-right">
+                        <Button className="share" openType="share">
+                            <View className="iconfont iconshare"></View>
+                            <View className="text">分享</View>
+                        </Button>
+                    </View>
+                </View>
+                <View className="house-item mt20">
+                    <View className="house-item-header">
+                        <View className="title">基本信息</View>
+                        <View className="more" onClick={() => toHouseModule('detail')}>
+                            <Text>更多</Text>
+                            <Text className="iconfont iconarrow-right-bold"></Text>
+                        </View>
                     </View>
                 </View>
                 <View className="info view-content">
                     <View className="info-item">
-                        <Text className="label">售价</Text>
+                        <Text className="label">参考售价</Text>
                         {renderPrice(houseData.price, houseData.price_type)}
                     </View>
                     <View className="info-item">
-                        <Text className="label">开盘</Text>
-                        <Text className="text">{houseData.open_time ? formatTimestamp(houseData.open_time, 'yy-MM-dd') : '待更新'}</Text>
+                        <Text className="label">销售状态</Text>
+                        <Text className="text">{SALE_STATUS[houseData.sale_status]}</Text>
                     </View>
                     <View className="info-item">
-                        <Text className="label">地址</Text>
-                        <Text className="text address">{houseData.address}</Text>
-                        <Text className="iconfont iconaddress" onClick={() => toHouseSurround()}>地图</Text>
+                        <Text className="label">开盘时间</Text>
+                        <Text className="text">
+                            {
+                                !houseData.open_time || houseData.open_time === '0' ? '待更新' : formatTimestamp(houseData.open_time, 'yy-MM-dd')
+                            }
+                        </Text>
+                    </View>
+                    <View className="info-item">
+                        <Text className="label">装修状况</Text>
+                        <Text className="text">{houseData._renovationStatus && houseData._renovationStatus.join(',')}</Text>
+                    </View>
+                    <View className="info-item">
+                        <Text className="label">楼层状况</Text>
+                        <Text className="text">{renderDetail(houseData.fangHouseInfo.storey_height)}</Text>
+                    </View>
+                    <View className="info-item">
+                        <Text className="label">售楼地址</Text>
+                        <Text className="text">{renderDetail(houseData.fangHouseInfo.sale_address)}</Text>
                     </View>
                     <View className="btn btn-blue mt20" onClick={() => toHouseModule('detail')}>
                         <Text className="btn-name">查看更多楼盘详情</Text>
                     </View>
-
                 </View>
                 <View className="house-custom">
                     <View className="subscrib">
@@ -516,15 +555,19 @@ const House = () => {
                         </View>
                     </View>
                 </View>
-                <View className="house-contact view-content mt20" onClick={() => handlePhoneCall(houseData.phone)}>
-                    <View className="iconfont icontelephone-out"></View>
-                    <View>
-                        <View className="phone-call">{houseData.phone}</View>
-                        <View className="phone-desc">致电售楼处了解项目更多信息</View>
+                <View className="house-contact view-content">
+                    <View className="contact-content" onClick={() => handlePhoneCall(houseData.phone)}>
+                        <View className="contact-phone">
+                            <View className="phone-call">{houseData.phone}</View>
+                            <View className="phone-desc">致电售楼处了解项目更多信息</View>
+                        </View>
+                        <View className="contact-icon">
+                            <Text className="iconfont iconcall"></Text>
+                        </View>
                     </View>
                 </View>
                 {
-                    houseData.enableFangHouseDiscount &&
+                    houseData.is_discount == '1' &&
                     <View className="house-item house-activity mt20">
                         <View className="house-item-header">
                             <View className="title">优惠</View>
@@ -532,7 +575,7 @@ const House = () => {
                         <View className="activity-item">
                             <View className="item-text">
                                 <View>获取优惠</View>
-                                <View className="desc">{houseData.enableFangHouseDiscount.title}</View>
+                                <View className="desc">{houseData.fangHouseDiscount.title}</View>
                             </View>
                             <View className="item-action">
                                 <View className="ovalbtn ovalbtn-pink">
@@ -540,7 +583,7 @@ const House = () => {
                                         houseId={houseData.id}
                                         btnText="预约优惠"
                                         subTitle={houseData.title}
-                                        description={houseData.enableFangHouseDiscount.title}
+                                        description={houseData.fangHouseDiscount.title}
                                     ></Popup>
                                 </View>
                             </View>
@@ -596,13 +639,9 @@ const House = () => {
                                     <View key={index} className="news-item" onClick={() => toHouseNewsDetail(item.id)}>
                                         <View className="header">
                                             <Text className="tag">{item.newsCate.name}</Text>
-                                            <Text className="title">{item.title}</Text>
+                                            <Text className="publish small-desc">{formatTimestamp(item.modified)}</Text>
                                         </View>
-                                        <View className="sub-title">{item.sub_title}</View>
-                                        <View className="publish small-desc">
-                                            <View>{item.author}</View>
-                                            <View className="date">{formatTimestamp(item.modified)}</View>
-                                        </View>
+                                        <View className="title">{item.title}</View>
                                     </View>
                                 ))
                             }
@@ -680,12 +719,12 @@ const House = () => {
 
                 <View className="line-split"></View>
                 {
-                    houseData.enableFangHouseGroup &&
+                    houseData.is_group == '1' &&
                     <View className="bar-item">
                         <Popup
                             type="4"
                             houseId={houseData.id}
-                            btnText={houseData.enableFangHouseGroup.title}
+                            btnText={houseData.fangHouseGroup.title}
                             iconClass="icongroup"
                             subTitle={houseData.title}
                             description="购房顾问专属服务：楼盘推荐、免费咨询，全程陪看"
