@@ -219,39 +219,43 @@
 
     &-consultant {
         &-content {
+            white-space: nowrap;
             padding: 30px 0 30px 30px;
             background-color: $white;
             .consultant-item {
-                float: left;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                width: 29%;
+                display: inline-block;
+                width: 28.2%;
                 padding: 30px 0;
                 margin-right: 30px;
                 border-radius: $border-radius-10;
                 color: rgb(131, 80, 55);
                 background-color: rgb(246, 230, 215);
 
-                .item-image {
-                    width: 90px;
-                    height: 90px;
-                    border-radius: 50%;
-                    overflow: hidden;
-                    background-color: $bg-color;
-                    Image {
-                        max-width: 100%;
-                        max-height: 100%;
+                .consultant-context {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+
+                    .item-image {
+                        width: 90px;
+                        height: 90px;
+                        border-radius: 50%;
+                        overflow: hidden;
+                        background-color: $bg-color;
+                        Image {
+                            max-width: 100%;
+                            max-height: 100%;
+                        }
                     }
-                }
-                .item-name {
-                    width: 100%;
-                    white-space: nowrap;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    font-size: $font-basic;
-                    margin: 20px 0;
-                    text-align: center;
+                    .item-name {
+                        width: 100%;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        font-size: $font-basic;
+                        margin: 20px 0;
+                        text-align: center;
+                    }
                 }
             }
         }

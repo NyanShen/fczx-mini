@@ -401,37 +401,32 @@ const House = () => {
         return enableFangHouseConsultant.length > 0 &&
             <View className="house-item house-consultant mt20">
                 <View className="house-item-header">
-                    <View className="title">置业顾问</View>
-                    {
-                        enableFangHouseConsultant.length > 3 &&
-                        <View className="more" onClick={toHouseConsultant}>
-                            <Text>更多</Text>
-                            <Text className="iconfont iconarrow-right-bold"></Text>
-                        </View>
-                    }
+                    <View className="title">置业顾问({enableFangHouseConsultant.length})</View>
+                    <View className="more" onClick={toHouseConsultant}>
+                        <Text>更多</Text>
+                        <Text className="iconfont iconarrow-right-bold"></Text>
+                    </View>
                 </View>
-                <View className="house-consultant-content clearfix">
+                <ScrollView className="house-consultant-content clearfix" scrollX>
                     {
-                        enableFangHouseConsultant.map((item: any, index: number) => {
-                            if (index < 3) {
-                                return (
-                                    <View key={index} className="consultant-item">
-                                        <View className="item-image">
-                                            <Image src={item.user.avatar}></Image>
-                                        </View>
-                                        <View className="item-name">{item.user.nickname}</View>
-                                        <View className="item-btn">
-                                            <Button className="ovalbtn ovalbtn-brown" onClick={() => toChatRoom(item)}>
-                                                <Text className="iconfont iconmessage"></Text>
-                                                <Text>咨询</Text>
-                                            </Button>
-                                        </View>
+                        enableFangHouseConsultant.map((item: any, index: number) => (
+                            <View key={index} className="consultant-item">
+                                <View className="consultant-context">
+                                    <View className="item-image">
+                                        <Image src={item.user.avatar}></Image>
                                     </View>
-                                )
-                            }
-                        })
+                                    <View className="item-name">{item.user.nickname}</View>
+                                    <View className="item-btn">
+                                        <Button className="ovalbtn ovalbtn-brown" onClick={() => toChatRoom(item)}>
+                                            <Text className="iconfont iconmessage"></Text>
+                                            <Text>咨询</Text>
+                                        </Button>
+                                    </View>
+                                </View>
+                            </View>
+                        ))
                     }
-                </View>
+                </ScrollView>
             </View>
     }
 
