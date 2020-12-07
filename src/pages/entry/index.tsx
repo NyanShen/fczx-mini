@@ -18,6 +18,7 @@ const Entry = () => {
         'house': '/house/new/index/index',
         'esf': '/house/esf/index/index',
         'rent': '/house/rent/index/index',
+        'news': '/news/detail/index',
     }
 
     const toPageIndex = useCallback(() => {
@@ -82,6 +83,12 @@ const Entry = () => {
                 })
                 Taro.redirectTo({
                     url: `${urlMapper[paramObj.t]}${paramString}`
+                })
+                break
+            case 'news':
+                console.log('news', `${urlMapper[paramObj.t]}&id=${paramObj.id}`)
+                Taro.redirectTo({
+                    url: `${urlMapper[paramObj.t]}?id=${paramObj.id}`
                 })
                 break
             default:

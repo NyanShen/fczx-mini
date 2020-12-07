@@ -13,6 +13,14 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.iconzan_hv:before {
+  content: "\e61a";
+}
+
+.iconzan:before {
+  content: "\e60b";
+}
+
 .iconcode:before {
   content: "\e60d";
 }

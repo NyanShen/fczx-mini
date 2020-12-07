@@ -24,13 +24,14 @@ const HouseComment = () => {
     const houseId = router?.params.id
     const houseTitle = router?.params.title
     const { contentHeight } = useNavData()
-    const [showEmpty, setShowEmpty] = useState<boolean>(false)
-    const [param, setParam] = useState<IParam>(INIT_PARAM)
     const [page, setPage] = useState<IPage>(INIT_PAGE)
+    const [param, setParam] = useState<IParam>(INIT_PARAM)
+    const [showEmpty, setShowEmpty] = useState<boolean>(false)
     const [commentList, setCommentList] = useState<any[]>([])
+    const [likeComment, setLikeComment] = useState<string[]>([])
 
     useReady(() => {
-        Taro.setNavigationBarTitle({title: `${houseTitle}-全部评论`})
+        Taro.setNavigationBarTitle({ title: `${houseTitle}-全部评论` })
     })
 
     useEffect(() => {
@@ -83,6 +84,22 @@ const HouseComment = () => {
             current: imagePath
         })
     }
+
+    const handleCommentZan = (item: any) => {
+        if (likeComment.includes(item.id)) {
+            return
+        }
+        app.request({
+            url: app.areaApiUrl(api.likeHouseComment),
+            method: 'POST',
+            data: {
+                id: item.id
+            }
+        }, { loading: false }).then(() => {
+            setLikeComment([...likeComment, item.id])
+        })
+    }
+
     return (
         <View className="comment">
             <View className="comment-header">
@@ -100,14 +117,14 @@ const HouseComment = () => {
                         commentList.map((item: any, index: number) => (
                             <View key={index} className="comment-item">
                                 <View className="user-photo">
-                                    <Image src={item.user.avatar} mode="aspectFill"/>
+                                    <Image src={item.user.avatar}></Image>
                                 </View>
-                                <View className="context">
-                                    <View className="context-name">{item.user.nickname}</View>
-                                    <View className="context-content">{item.content}</View>
+                                <View className="comment-text">
+                                    <View className="name">{item.user.nickname}</View>
+                                    <View className="text">{item.content}</View>
                                     {
                                         item.image_path &&
-                                        <View className="context-image">
+                                        <View className="comment-image">
                                             <Image
                                                 src={item.image_path}
                                                 mode="aspectFill"
@@ -115,8 +132,23 @@ const HouseComment = () => {
                                             />
                                         </View>
                                     }
-                                    <View className="context-footer">
-                                        <View className="date">{formatTimestamp(item.modified, 'yy-MM-dd')}</View>
+                                    <View className="comment-bottom">
+                                        <View className="time">{formatTimestamp(item.modified)}</View>
+                                        <View className="action">
+                                            <View className="action-item" onClick={() => handleCommentZan(item)}>
+                                                {
+                                                    likeComment.includes(item.id) ?
+                                                        <View className="actived">
+                                                            <Text className="iconfont iconzan_hv"></Text>
+                                                            <Text className="count">({Number(item.like_num) + 1})</Text>
+                                                        </View> :
+                                                        <View className="none">
+                                                            <Text className="iconfont iconzan"></Text>
+                                                            <Text className="count">({item.like_num})</Text>
+                                                        </View>
+                                                }
+                                            </View>
+                                        </View>
                                     </View>
                                 </View>
                             </View>

@@ -7,8 +7,8 @@ export const keywordcolorful = (str, key) => {
     let newstr = str.replace(reg, '<span style="color: #11a43c">$1</span>')
     return newstr
 }
-
-export const formatTimestamp = (timestamp: string, fmt = 'yy-MM-dd hh:mm:ss') => {
+// yy-MM-dd hh:mm:ss
+export const formatTimestamp = (timestamp: string, fmt = 'yy-MM-dd') => {
     const date = new Date(Number(timestamp) * 1000)
     const o = {
         "M+": date.getMonth() + 1, // 月份

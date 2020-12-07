@@ -51,6 +51,7 @@ const House = () => {
     const params: any = getCurrentInstance().router?.params
     const [albumSwiper, setAlbumSwiper] = useState<IAlbumSwiper>(INIT_ALBUM_SWIPER)
     const [houseData, setHouseData] = useState<any>(INIT_HOUSE_DATA)
+    const [likeComment, setLikeComment] = useState<string[]>([])
 
     useShareTimeline(() => {
         return {
@@ -236,6 +237,21 @@ const House = () => {
         })
     }
 
+    const handleCommentZan = (item: any) => {
+        if (likeComment.includes(item.id)) {
+            return
+        }
+        app.request({
+            url: app.areaApiUrl(api.likeHouseComment),
+            method: 'POST',
+            data: {
+                id: item.id
+            }
+        }, { loading: false }).then(() => {
+            setLikeComment([...likeComment, item.id])
+        })
+    }
+
     const renderPrice = (price: string, price_type: string) => {
         if (price === '0') {
             return <Text className="price">待定</Text>
@@ -305,7 +321,24 @@ const House = () => {
                                                 />
                                             </View>
                                         }
-                                        <View className="small-desc">{formatTimestamp(item.modified)}</View>
+                                        <View className="comment-bottom">
+                                            <View className="time">{formatTimestamp(item.modified)}</View>
+                                            <View className="action">
+                                                <View className="action-item" onClick={() => handleCommentZan(item)}>
+                                                    {
+                                                        likeComment.includes(item.id) ?
+                                                            <View className="actived">
+                                                                <Text className="iconfont iconzan_hv"></Text>
+                                                                <Text className="count">({Number(item.like_num) + 1})</Text>
+                                                            </View> :
+                                                            <View className="none">
+                                                                <Text className="iconfont iconzan"></Text>
+                                                                <Text className="count">({item.like_num})</Text>
+                                                            </View>
+                                                    }
+                                                </View>
+                                            </View>
+                                        </View>
                                     </View>
                                 </View>
                             )) :

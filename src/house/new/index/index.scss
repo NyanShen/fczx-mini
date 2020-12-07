@@ -149,7 +149,7 @@
             .comment-text {
                 flex: 1;
                 margin-left: 20px;
-                color: $text-color;
+                color: $title-color;
 
                 .name {
                     color: $desc-color;
@@ -165,12 +165,22 @@
                     width: 180px;
                     height: 150px;
                     overflow: hidden;
-                    background-color: $bg-color;
                     margin: 16px 0;
 
                     Image {
                         width: 100%;
                         height: 100%;
+                        border-radius: $border-radius-base;
+                        background-color: $bg-color;
+                    }
+                }
+                .comment-bottom {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    color: $desc-color;
+                    .actived {
+                        color: $pink;
                     }
                 }
             }
@@ -183,7 +193,7 @@
                 display: flex;
                 font-size: $font-basic;
                 margin-bottom: 20px;
-                color: $text-color;
+                color: $title-color;
 
                 .iconfont {
                     font-size: $font-36;

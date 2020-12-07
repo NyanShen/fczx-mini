@@ -25,6 +25,7 @@ export default {
     getHouseAsk: '/house/ask-list',
     postHouseAsk: '/house/ask',
     getHouseComment: '/house/comment-list',
+    likeHouseComment: '/house/like-comment',
     postHouseComment: '/house/comment',
     getHouseTypeList: '/house/room-list',
     getHouseTypeDetail: '/house/room-detail',
