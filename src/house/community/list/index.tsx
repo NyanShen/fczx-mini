@@ -274,25 +274,27 @@ const CommunityList = () => {
                     <View className="house-list-ul">
                         {
                             houseList.map((item: any, index: number) => (
-                                <View key={index} className="house-list-li" onClick={() => handleHouseItemClick(item)}>
-                                    <View className="li-image">
-                                        <Image src={item.image_path}></Image>
-                                    </View>
-                                    <View className="li-text">
-                                        <View className="text-item row2">
-                                            <Text>{item.title}</Text>
+                                <View key={index} className="house-list-li">
+                                    <View className="house-content" onClick={() => handleHouseItemClick(item)}>
+                                        <View className="house-image">
+                                            <Image src={item.image_path}></Image>
                                         </View>
-                                        <View className="text-item text-item-small">
-                                            <Text>{item.area.name}</Text>
-                                            <Text className="ml20">{item.address}</Text>
-                                        </View>
-                                        <View className="text-item mb8">
-                                            {renderPrice(item.price, item.price_type)}
-                                        </View>
-                                        <View className="text-item text-item-small">
-                                            <Text>二手房({item.house_num})</Text>
-                                            <Text className="ml20">租房({item.rent_num})</Text>
-                                            <Text className="ml20">{item.build_year}年</Text>
+                                        <View className="house-text">
+                                            <View className="text-item row2">
+                                                <Text>{item.title}</Text>
+                                            </View>
+                                            <View className="text-item text-item-small">
+                                                <Text>{item.area.name}</Text>
+                                                <Text className="ml20">{item.address}</Text>
+                                            </View>
+                                            <View className="text-item mb8">
+                                                {renderPrice(item.price, item.price_type)}
+                                            </View>
+                                            <View className="text-item text-item-small">
+                                                <Text>二手房({item.house_num})</Text>
+                                                <Text className="ml20">租房({item.rent_num})</Text>
+                                                <Text className="ml20">{item.build_year}年</Text>
+                                            </View>
                                         </View>
                                     </View>
                                 </View>

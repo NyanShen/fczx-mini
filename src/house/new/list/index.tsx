@@ -81,6 +81,7 @@ const NewHouse = () => {
     const [showEmpty, setShowEmpty] = useState<boolean>(false)
     const [condition, setCondition] = useState<any>()
     const [houseList, setHouseList] = useState<any>([])
+    const [activity, setActivity] = useState<string[]>([])
     const router = getCurrentInstance().router
     const title = router?.params.title
     const tabs = [
@@ -287,6 +288,15 @@ const NewHouse = () => {
         })
     }
 
+    const handleActivity = (houseId: string) => {
+        if (activity.includes(houseId)) {
+            activity.splice(activity.findIndex((item: string) => item === houseId), 1)
+            setActivity([...activity])
+        } else {
+            setActivity([...activity, houseId])
+        }
+    }
+
     const renderSplitItem = (key: string) => {
         return (
             <ScrollView className="split-list flex-item" scrollY style={{ height: scrollHeight }}>
@@ -456,25 +466,57 @@ const NewHouse = () => {
                     <View className="house-list-ul">
                         {
                             houseList.length > 0 && houseList.map((item: any) => (
-                                <View className="house-list-li" key={item.id} onClick={() => handleHouseItemClick(item)}>
-                                    <View className="li-image">
-                                        <Image src={item.image_path} mode="aspectFill"></Image>
+                                <View key={item.id} className="house-list-li">
+                                    <View className="house-content" onClick={() => handleHouseItemClick(item)}>
+                                        <View className="house-image">
+                                            <Image src={item.image_path} mode="aspectFill"></Image>
+                                        </View>
+                                        <View className="house-text">
+                                            <View className="text-item title mb8">
+                                                <Text className={classnames('sale-status', `sale-status-${item.sale_status}`)}>{SALE_STATUS[item.sale_status]}</Text>
+                                                <Text>{item.title}</Text>
+                                            </View>
+                                            <View className="text-item small-desc mb8">
+                                                <Text>{item.area && item.area.name}</Text>
+                                                <Text className="line-split"></Text>
+                                                <Text>{item.comment_num}条评论</Text>
+                                            </View>
+                                            <View className="mb12">
+                                                {renderPrice(item.price, item.price_type)}
+                                            </View>
+                                            <View className="text-item tags">
+                                                {
+                                                    item.tags && item.tags.map((tag: string, index: number) => (
+                                                        <Text key={index} className="tags-item">{tag}</Text>
+                                                    ))
+                                                }
+                                            </View>
+                                        </View>
                                     </View>
-                                    <View className="li-text">
-                                        <View className="text-item title mb8">
-                                            <Text>{item.title}</Text>
+                                    <View className="house-activity" onClick={() => handleActivity(item.id)}>
+                                        <View className="activity-content">
+                                            {
+                                                item.is_discount == '1' &&
+                                                <View className="activity-item">
+                                                    <Text className="iconfont iconcoupon"></Text>
+                                                    <Text className="text">{item.fangHouseDiscount.title}</Text>
+                                                </View>
+                                            }
+                                            {
+                                                item.is_group == '1' && activity.includes(item.id) &&
+                                                <View className="activity-item">
+                                                    <Text className="iconfont iconstars"></Text>
+                                                    <Text className="text">{item.fangHouseGroup.title}</Text>
+                                                </View>
+                                            }
                                         </View>
-                                        <View className="text-item small-desc mb8">
-                                            <Text>{item.area && item.area.name}</Text>
-                                            <Text className="line-split"></Text>
-                                            <Text>{item.address}</Text>
-                                        </View>
-                                        <View className="mb8">
-                                            {renderPrice(item.price, item.price_type)}
-                                        </View>
-                                        <View className="text-item tags">
-                                            <Text className={classnames('tags-item', `sale-status-${item.sale_status}`)}>{SALE_STATUS[item.sale_status]}</Text>
-                                        </View>
+                                        {
+                                            item.is_discount == '1' &&
+                                            item.is_group == '1' &&
+                                            <View className="activity-icon">
+                                                <Text className={classnames('iconfont', activity.includes(item.id) ? 'iconarrow-up-bold' : 'iconarrow-down-bold')}></Text>
+                                            </View>
+                                        }
                                     </View>
                                 </View>
                             ))

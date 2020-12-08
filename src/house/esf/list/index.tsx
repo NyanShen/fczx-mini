@@ -26,6 +26,7 @@ interface IConditionState {
     fangRoom?: IFilter
     propertyType?: IFilter
     fangBuildingType?: IFilter
+    fangDirectionType?: IFilter
     renovationStatus?: IFilter
     projectFeature?: IFilter
 
@@ -43,6 +44,7 @@ const INIT_CONDITION = {
     fangRoom: default_value,
     propertyType: initial_value,
     fangBuildingType: initial_value,
+    fangDirectionType: initial_value,
     renovationStatus: initial_value,
     projectFeature: initial_value
 }
@@ -82,7 +84,7 @@ const esfList = () => {
         {
             type: 'more',
             name: '更多',
-            keys: ['propertyType', 'fangBuildingType', 'renovationStatus', 'projectFeature']
+            keys: ['propertyType', 'fangBuildingType', 'fangDirectionType', 'renovationStatus', 'projectFeature']
         }]
     const priceTabs = [
         {
@@ -127,7 +129,8 @@ const esfList = () => {
                 fang_project_feature: selected.projectFeature?.id,
                 fang_renovation_status_id: selected.renovationStatus?.id,
                 fang_property_type_id: selected.propertyType?.id,
-                fang_building_type_id: selected.fangBuildingType?.id
+                fang_building_type_id: selected.fangBuildingType?.id,
+                fang_direction_type_id: selected.fangDirectionType?.id
             }
         }, { loading: false }).then((result: any) => {
             setLoading(false)
@@ -222,7 +225,9 @@ const esfList = () => {
             ...selected,
             propertyType: initial_value,
             renovationStatus: initial_value,
-            projectFeature: initial_value
+            projectFeature: initial_value,
+            fangBuildingType: initial_value,
+            fangDirectionType: initial_value,
         })
     }
 
@@ -373,6 +378,8 @@ const esfList = () => {
                         {renderMultiItem('propertyType', '建筑类型')}
                         {renderMultiItem('renovationStatus', '装修状况')}
                         {renderMultiItem('projectFeature', '项目特色')}
+                        {renderMultiItem('fangBuildingType', '楼层类型')}
+                        {renderMultiItem('fangDirectionType', '朝向')}
                     </ScrollView>
                     <View className="search-footer">
                         <View className="btn reset-btn" onClick={handleReset}>重置</View>
@@ -393,31 +400,33 @@ const esfList = () => {
                     <View className="house-list-ul">
                         {
                             houseList.map((item: any, index: number) => (
-                                <View key={index} className="house-list-li" onClick={() => handleHouseItemClick(item)}>
-                                    <View className="li-image">
-                                        <Image src={item.image_path} mode="aspectFill"></Image>
-                                    </View>
-                                    <View className="li-text">
-                                        <View className="text-item row2">
-                                            <Text>{item.title}</Text>
+                                <View key={index} className="house-list-li">
+                                    <View className="house-content" onClick={() => handleHouseItemClick(item)}>
+                                        <View className="house-image">
+                                            <Image src={item.image_path} mode="aspectFill"></Image>
                                         </View>
-                                        <View className="text-item text-item-small">
-                                            <Text>{item.room}室{item.office}厅{item.toilet}卫</Text>
-                                            <Text className="line-split"></Text>
-                                            <Text>{item.building_area}m²</Text>
-                                            <Text className="ml20">{item.community}</Text>
-                                        </View>
-                                        <View className="text-item mb8">
-                                            <Text className="price">{item.price_total}</Text>
-                                            <Text className="price-unit">万</Text>
-                                            <Text className="small-desc ml20">{item.price_unit}元/m²</Text>
-                                        </View>
-                                        <View className="text-item tags">
-                                            {
-                                                item.tags.map((item: string, index: number) => (
-                                                    <Text key={index} className="tags-item">{item}</Text>
-                                                ))
-                                            }
+                                        <View className="house-text">
+                                            <View className="text-item title row2">
+                                                <Text>{item.title}</Text>
+                                            </View>
+                                            <View className="text-item text-item-small">
+                                                <Text>{item.room}室{item.office}厅{item.toilet}卫</Text>
+                                                <Text className="line-split"></Text>
+                                                <Text>{item.building_area}m²</Text>
+                                                <Text className="ml20">{item.community}</Text>
+                                            </View>
+                                            <View className="text-item mb12">
+                                                <Text className="price">{item.price_total}</Text>
+                                                <Text className="price-unit">万</Text>
+                                                <Text className="small-desc ml20">{item.price_unit}元/m²</Text>
+                                            </View>
+                                            <View className="text-item tags">
+                                                {
+                                                    item.tags.map((item: string, index: number) => (
+                                                        <Text key={index} className="tags-item">{item}</Text>
+                                                    ))
+                                                }
+                                            </View>
                                         </View>
                                     </View>
                                 </View>

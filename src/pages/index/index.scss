@@ -1,3 +1,30 @@
+.index {
+    .index-header {
+        display: flex;
+        align-items: flex-end;
+        justify-content: flex-start;
+        padding: 30px 30px 20px 0;
+        .header-item {
+            padding-left: 30px;
+            color: $desc-color;
+            font-weight: bold;
+            &:first-child {
+                font-size: $font-40;
+                color: $title-color;
+            }
+        }
+    } 
+    .house-more {
+        height: 80px;
+        line-height: 80px;
+        text-align: center;
+        margin: 0 30px;
+        background-color: $bg-color;
+        color: $tip-color;
+        
+    }
+}
+
 .index-search {
     &-content {
         display: flex;

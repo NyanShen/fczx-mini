@@ -277,7 +277,7 @@ const RentList = () => {
 
         return showList.join(',')
     }
-    
+
     const renderPrice = (price: string) => {
         if (price === '0') {
             return <Text className="price">面议</Text>
@@ -364,30 +364,32 @@ const RentList = () => {
                     <View className="house-list-ul">
                         {
                             houseList.map((item: any, index: number) => (
-                                <View key={index} className="house-list-li" onClick={() => handleHouseItemClick(item)}>
-                                    <View className="li-image">
-                                        <Image src={item.image_path} mode="aspectFill"></Image>
-                                    </View>
-                                    <View className="li-text">
-                                        <View className="text-item row2">
-                                            <Text>{item.title}</Text>
+                                <View key={index} className="house-list-li">
+                                    <View className="house-content" onClick={() => handleHouseItemClick(item)}>
+                                        <View className="house-image">
+                                            <Image src={item.image_path} mode="aspectFill"></Image>
                                         </View>
-                                        <View className="text-item text-item-small">
-                                            <Text>{item.room}室{item.office}厅{item.toilet}卫</Text>
-                                            <Text className="line-split"></Text>
-                                            <Text>{item.building_area}m²</Text>
-                                            <Text className="ml20">{item.community}</Text>
-                                        </View>
-                                        <View className="text-item mb8">
-                                            {renderPrice(item.price)}
-                                        </View>
-                                        <View className="text-item tags">
-                                            <Text className="tags-item sale-status-2">{RENT_TYPE[item.rent_type]}</Text>
-                                            {
-                                                item.tags.map((tag: string, tagIndex: number) => (
-                                                    <Text key={tagIndex} className="tags-item">{tag}</Text>
-                                                ))
-                                            }
+                                        <View className="house-text">
+                                            <View className="text-item row2">
+                                                <Text>{item.title}</Text>
+                                            </View>
+                                            <View className="text-item text-item-small">
+                                                <Text>{item.room}室{item.office}厅{item.toilet}卫</Text>
+                                                <Text className="line-split"></Text>
+                                                <Text>{item.building_area}m²</Text>
+                                                <Text className="ml20">{item.community}</Text>
+                                            </View>
+                                            <View className="text-item mb12">
+                                                {renderPrice(item.price)}
+                                            </View>
+                                            <View className="text-item tags">
+                                                <Text className="tags-item sale-status-2">{RENT_TYPE[item.rent_type]}</Text>
+                                                {
+                                                    item.tags.map((tag: string, tagIndex: number) => (
+                                                        <Text key={tagIndex} className="tags-item">{tag}</Text>
+                                                    ))
+                                                }
+                                            </View>
                                         </View>
                                     </View>
                                 </View>

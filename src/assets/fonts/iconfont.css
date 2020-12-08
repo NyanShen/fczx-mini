@@ -13,6 +13,14 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.iconcoupon:before {
+  content: "\e62f";
+}
+
+.iconstars:before {
+  content: "\e8c4";
+}
+
 .iconshare:before {
   content: "\e603";
 }
@@ -111,6 +119,10 @@
 
 .iconwen:before {
   content: "\e8cd";
+}
+
+.iconarrow-up-bold:before {
+  content: "\e688";
 }
 
 .iconarrow-down-bold:before {
