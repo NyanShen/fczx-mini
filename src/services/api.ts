@@ -13,6 +13,7 @@ export default {
     getTestData: '/test/test',
     getCityList: '/index/city-list',
     getAreaList: '/area/list',
+    getHomeApplet: '/applet/home',
 
     getHouseList: '/house/list',
     getHouseMap: '/house/area-house',

@@ -15,7 +15,7 @@
             flex: 1;
             position: relative;
             height: 100%;
-            background-color: $border-color;
+            background-color: $bge-color;
             border-radius: 10px;
 
             .search-label {
@@ -120,7 +120,7 @@
                 font-size: 26px;
                 margin: 10px;
                 padding: 8px 16px;
-                background-color: #eee;
+                background-color: $bge-color;
                 border-radius: 4px;
                 color: #666;
             }

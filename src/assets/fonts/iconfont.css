@@ -13,6 +13,14 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.iconwechat:before {
+  content: "\e618";
+}
+
+.iconjoin:before {
+  content: "\e748";
+}
+
 .iconcoupon:before {
   content: "\e62f";
 }

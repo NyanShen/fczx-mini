@@ -1,19 +1,91 @@
 .index {
     .index-header {
+        position: relative;
+        margin-bottom: 30px;
+        min-height: 100px;
+
+        .index-search {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            &-content {
+                display: flex;
+                height: 70px;
+                line-height: 70px;
+                margin: 30px 40px;
+                padding: 0 20px;
+                border-radius: 5px;
+                background-color: rgba($color: $bg2-color, $alpha: .9);
+
+                &-desc {
+                    flex: auto;
+                    text-align: left;
+                    padding-left: 20px;
+                    font-size: $font-basic;
+                    color: #999;
+                }
+                &-text {
+                    .iconfont {
+                        color: $search-actived;
+                    }
+                    .city-name {
+                        padding-left: 8px;
+                        font-size: $font-32;
+                        font-weight: bold;
+                    }
+                }
+            }
+        }
+        .swiper {
+            height: 310px;
+            .swiper-item {
+                Image {
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+        }
+    }
+
+    .index-menu {
+        &-content {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        &-item {
+            width: 25%;
+            text-align: center;
+            margin-bottom: 30px;
+            .index-menu-icon {
+                Image {
+                    width: 90px;
+                    height: 90px;
+                }
+            }
+            .index-menu-name {
+                font-size: $font-basic;
+            }
+        }
+    }
+
+    .index-title {
         display: flex;
         align-items: flex-end;
         justify-content: flex-start;
-        padding: 30px 30px 20px 0;
-        .header-item {
+        .title-item {
             padding-left: 30px;
             color: $desc-color;
+            font-size: $font-basic;
             font-weight: bold;
             &:first-child {
-                font-size: $font-40;
+                font-size: 42px;
+                padding-right: 20px;
                 color: $title-color;
             }
         }
-    } 
+    }
     .house-more {
         height: 80px;
         line-height: 80px;
@@ -21,57 +93,43 @@
         margin: 0 30px;
         background-color: $bg-color;
         color: $tip-color;
-        
     }
-}
 
-.index-search {
-    &-content {
-        display: flex;
-        height: 70px;
-        line-height: 70px;
-        margin: 30px 40px;
-        padding: 0 20px;
-        border-radius: 5px;
-        background-color: $bg2-color;
+    .index-price {
+        .price-content {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            text-align: center;
+            border: $border;
+            border-radius: $border-radius-10;
+            margin: 30px;
+            padding: 30px;
 
-        &-desc {
-            flex: auto;
-            text-align: left;
-            padding-left: 20px;
-            color: #999;
-        }
-        &-text {
-            .iconfont {
-                color: $search-actived;
+            .price-item {
+                .price {
+                    font-size: $font-40;
+                    font-weight: bold;
+                    color: $title-color;
+                }
+                .unit {
+                    font-size: $font-basic;
+                    padding-left: 16px;
+                    color: $text-color;
+                }
+                .desc {
+                    font-size: $font-basic;
+                    color: $desc-color;
+                }
             }
-            .city-name {
-                padding-left: 8px;
-                font-size: $font-32;
-                font-weight: bold;
-            }
-        }
-    }
-}
 
-.index-menu {
-    &-content {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-    }
-    &-item {
-        width: 25%;
-        text-align: center;
-        margin-bottom: 30px;
-        .index-menu-icon {
-            Image {
-                width: 90px;
-                height: 90px;
+            .line-split {
+                display: inline-block;
+                width: 2px;
+                height: 80px;
+                margin: 0 10px;
+                background-color: #f2f2f2;
             }
-        }
-        .index-menu-name {
-            font-size: $font-basic;
         }
     }
 }

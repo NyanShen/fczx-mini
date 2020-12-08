@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Taro, { useDidShow, useShareAppMessage, useShareTimeline } from '@tarojs/taro'
-import { View, Text, Image } from '@tarojs/components'
+import { View, Text, Image, Swiper, SwiperItem } from '@tarojs/components'
 import classnames from 'classnames'
 
 import api from '@services/api'
@@ -16,18 +16,19 @@ import { PROJECT_NAME } from '@constants/global'
 import { PRICE_TYPE, SALE_STATUS } from '@constants/house'
 import '@styles/common/house.scss'
 import './index.scss'
-
+const esfPath = '/house/esf/list/index'
+const housePath = '/house/new/list/index'
 const menuContent = [{
   children: [
     {
       name: '新盘',
       icon: new_house,
-      path: '/house/new/list/index'
+      path: housePath
     },
     {
       name: '二手房',
       icon: second_house,
-      path: '/house/esf/list/index'
+      path: esfPath
     },
     {
       name: '租房',
@@ -58,7 +59,7 @@ const house_menus = [
   },
   {
     name: '精选楼盘',
-    path: '/house/new/list/index'
+    path: housePath
   },
   {
     name: '看房团',
@@ -70,7 +71,7 @@ const house_menus = [
   },
   {
     name: '更多',
-    path: '/house/new/list/index'
+    path: housePath
   }
 ]
 
@@ -88,18 +89,16 @@ const esf_menus = [
   },
   {
     name: '更多',
-    path: '/house/esf/list/index'
+    path: esfPath
   }
 ]
 
-
 const Index = () => {
-
   const [city, setCity] = useState<any>({})
   const [houseList, setHouseList] = useState<any[]>([])
   const [esfList, setEsfList] = useState<any[]>([])
   const [activity, setActivity] = useState<string[]>([])
-
+  const [homeData, setHomeData] = useState<any>({})
 
   useShareTimeline(() => {
     return {
@@ -136,8 +135,17 @@ const Index = () => {
       setCity(currentCity)
       fetchHouseList()
       fetchEsfList()
+      fetchHomeData()
     }
   })
+
+  const fetchHomeData = () => {
+    app.request({
+      url: app.areaApiUrl(api.getHomeApplet),
+    }).then((result: any) => {
+      setHomeData(result)
+    })
+  }
 
   const fetchHouseList = () => {
     app.request({
@@ -207,16 +215,39 @@ const Index = () => {
 
   return (
     <View className="index">
-      <View className="index-search">
-        <View className="index-search-content clearfix">
-          <View className="iconfont iconsearch"></View>
-          <View className="index-search-content-desc" onClick={toHouseSearch}>输入区县、小区名</View>
-          <View className="index-search-content-text" onClick={toCityList}>
-            <Text className="iconfont iconmap"></Text>
-            <Text className="city-name">{city.short_name}</Text>
+      <View className="index-header">
+        {
+          homeData['ad-rotation-top'] &&
+          homeData['ad-rotation-top'].length > 0 &&
+          <Swiper
+            className="swiper"
+            circular
+            autoplay
+            indicatorDots
+            indicatorActiveColor="#ffffff"
+          >
+            {
+              homeData['ad-rotation-top'].map((item: any, index: number) => (
+                <SwiperItem key={index} className="swiper-item">
+                  <Image src={item.image_path} mode="aspectFill"></Image>
+                </SwiperItem>
+              ))
+            }
+          </Swiper>
+        }
+
+        <View className="index-search">
+          <View className="index-search-content clearfix">
+            <View className="iconfont iconsearch"></View>
+            <View className="index-search-content-desc" onClick={toHouseSearch}>输入楼盘、小区名</View>
+            <View className="index-search-content-text" onClick={toCityList}>
+              <Text className="iconfont iconmap"></Text>
+              <Text className="city-name">{city.short_name}</Text>
+            </View>
           </View>
         </View>
       </View>
+
       <View className="index-menu">
         {
           menuContent.map((item: any, index: number) => {
@@ -241,13 +272,35 @@ const Index = () => {
           })
         }
       </View>
+      <View className="index-price">
+        <View className="index-title">
+          <View className="title-item">{city.short_name}房价</View>
+        </View>
+        <View className="price-content">
+          <View className="price-item">
+            <View>
+              <Text className="price">{homeData.housePrice}</Text>
+              <Text className="unit">元/㎡</Text>
+            </View>
+            <View className="desc">新房均价</View>
+          </View>
+          <View className="line-split"></View>
+          <View className="price-item">
+            <View>
+              <Text className="price">{homeData.esfPrice}</Text>
+              <Text className="unit">元/㎡</Text>
+            </View>
+            <View className="desc">二手房均价</View>
+          </View>
+        </View>
+      </View>
       <View className="house-list">
-        <View className="index-header">
+        <View className="index-title">
           {
             house_menus.map((item: any, index: number) => (
               <View
                 key={index}
-                className="header-item"
+                className="title-item"
                 onClick={() => handleMenuClick(item.path)}
               >{item.name}</View>
             ))
@@ -306,7 +359,7 @@ const Index = () => {
                       item.is_discount == '1' &&
                       item.is_group == '1' &&
                       <View className="activity-icon">
-                        <Text className={classnames('iconfont', activity.includes(item.id) ? 'iconarrow-up-bold':'iconarrow-down-bold')}></Text>
+                        <Text className={classnames('iconfont', activity.includes(item.id) ? 'iconarrow-up-bold' : 'iconarrow-down-bold')}></Text>
                       </View>
                     }
                   </View>
@@ -315,18 +368,18 @@ const Index = () => {
             }
           </View>
         }
-        <View className="house-more">
+        <View className="house-more" onClick={() => handleMenuClick(housePath)}>
           更多房源
         </View>
       </View>
 
-      <View className="house-list">
-        <View className="index-header">
+      <View className="house-list mt20">
+        <View className="index-title">
           {
             esf_menus.map((item: any, index: number) => (
               <View
                 key={index}
-                className="header-item"
+                className="title-item"
                 onClick={() => handleMenuClick(item.path)}
               >{item.name}</View>
             ))
@@ -371,7 +424,7 @@ const Index = () => {
             }
           </View>
         }
-        <View className="house-more">
+        <View className="house-more" onClick={() => handleMenuClick(esfPath)}>
           更多房源
         </View>
       </View>

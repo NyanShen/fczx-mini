@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Taro, { useDidShow } from '@tarojs/taro'
+import Taro, { makePhoneCall, useDidShow } from '@tarojs/taro'
 import { View, Text, Image, Button } from '@tarojs/components'
 
 import api from '@services/api'
@@ -22,6 +22,7 @@ const INIT_USER: IUser = {
   avatarUrl: 'https://static.fczx.com/www/assets/mini/user_photo.png',
   username: ''
 }
+const JOIN_PHONE = '18671072505'
 
 const User = () => {
   const [user, setUser] = useState<IUser>(INIT_USER)
@@ -142,6 +143,15 @@ const User = () => {
             <Text className="iconfont iconarrow-right-bold"></Text>
           </View>
         </Button>
+        <View className="user-item" onClick={() => makePhoneCall({ phoneNumber: JOIN_PHONE })}>
+          <View className="item-icon">
+            <Text className="iconfont iconjoin"></Text>
+          </View>
+          <View className="item-text">商务合作</View>
+          <View className="item-arrow">
+            <Text className="iconfont iconarrow-right-bold"></Text>
+          </View>
+        </View>
         <View className="user-item" onClick={toOfficialAccount}>
           <View className="item-icon">
             <Text className="iconfont iconcode"></Text>
@@ -151,6 +161,15 @@ const User = () => {
             <Text className="iconfont iconarrow-right-bold"></Text>
           </View>
         </View>
+        <Button className="user-item user-item-btn" open-type="getUserInfo">
+          <View className="item-icon">                          
+            <Text className="iconfont iconwechat"></Text>
+          </View>
+          <View className="item-text">同步微信</View>
+          <View className="item-arrow">
+            <Text className="iconfont iconarrow-right-bold"></Text>
+          </View>
+        </Button>
       </View>
       {
         user.username &&
