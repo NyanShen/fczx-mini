@@ -59,11 +59,11 @@ const house_menus = [
   },
   {
     name: '精选楼盘',
-    path: housePath
+    path: `${housePath}?is_recommend=1`
   },
   {
     name: '看房团',
-    path: ''
+    path: `${housePath}?is_group=1`
   },
   {
     name: '地图找房',

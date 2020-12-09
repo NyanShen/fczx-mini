@@ -32,10 +32,10 @@ interface IConditionState {
 
 }
 
-const initial_value = { id: '', name: '' }
-const default_value = { id: 'all', name: '不限' }
+const initial_value: IFilter = { id: '', name: '' }
+const default_value: IFilter = { id: 'all', name: '不限' }
 
-const INIT_CONDITION = {
+const INIT_CONDITION: IConditionState = {
     currentPage: 1,
     priceType: '',
     areaList: default_value,
@@ -48,6 +48,40 @@ const INIT_CONDITION = {
     renovationStatus: initial_value,
     projectFeature: initial_value
 }
+const tabs: any[] = [
+    {
+        type: 'areaList',
+        name: '区域',
+        keys: ['areaList']
+    },
+    {
+        type: 'price',
+        name: '价格',
+        keys: ['totalPrice', 'unitPrice']
+    },
+    {
+        type: 'fangRoom',
+        name: '户型',
+        keys: ['fangRoom']
+    },
+    {
+        type: 'more',
+        name: '更多',
+        keys: ['propertyType', 'fangBuildingType', 'fangDirectionType', 'renovationStatus']
+    }
+]
+const priceTabs: IFilter[] = [
+    {
+        id: '1',
+        name: '按单价',
+        value: "unitPrice"
+    },
+    {
+        id: '2',
+        name: '按总价',
+        value: "totalPrice"
+    }
+]
 
 const esfList = () => {
     const { contentHeight } = useNavData()
@@ -65,39 +99,6 @@ const esfList = () => {
     const [houseList, setHouseList] = useState<any>([])
     const router = getCurrentInstance().router
     const title = router?.params.title
-    const tabs = [
-        {
-            type: 'areaList',
-            name: '区域',
-            keys: ['areaList']
-        },
-        {
-            type: 'price',
-            name: '价格',
-            keys: ['totalPrice', 'unitPrice']
-        },
-        {
-            type: 'fangRoom',
-            name: '户型',
-            keys: ['fangRoom']
-        },
-        {
-            type: 'more',
-            name: '更多',
-            keys: ['propertyType', 'fangBuildingType', 'fangDirectionType', 'renovationStatus', 'projectFeature']
-        }]
-    const priceTabs = [
-        {
-            id: '1',
-            name: '按单价',
-            value: "unitPrice"
-        },
-        {
-            id: '2',
-            name: '按总价',
-            value: "totalPrice"
-        }
-    ]
 
     useEffect(() => {
         fetchCondition()
@@ -105,7 +106,7 @@ const esfList = () => {
 
     useEffect(() => {
         fetchHouseList(selected.currentPage)
-    }, [selected.currentPage, selected.areaList, selected.unitPrice, selected.totalPrice, selected.fangRoom])
+    }, [selected.currentPage, selected.areaList, selected.unitPrice, selected.totalPrice, selected.fangRoom, selected.projectFeature])
 
     const fetchCondition = () => {
         app.request({
@@ -220,12 +221,31 @@ const esfList = () => {
         }
     }
 
+    const handleToggleClick = (key: string, item: any) => {
+        let selectedValue = selected[key]
+        if (selectedValue instanceof Object) {
+            if (selectedValue.id === item.id) {
+                setSelected({
+                    ...selected,
+                    [key]: initial_value,
+                    currentPage: INIT_CONDITION.currentPage
+                })
+            } else {
+                setSelected({
+                    ...selected,
+                    [key]: item,
+                    currentPage: INIT_CONDITION.currentPage
+                })
+            }
+        }
+    }
+
     const handleReset = () => {
         setSelected({
             ...selected,
             propertyType: initial_value,
             renovationStatus: initial_value,
-            projectFeature: initial_value,
+            // projectFeature: initial_value,
             fangBuildingType: initial_value,
             fangDirectionType: initial_value,
         })
@@ -377,7 +397,7 @@ const esfList = () => {
                     <ScrollView className="search-content search-content-scroll" scrollY style={{ maxHeight: scrollMoreHeight }}>
                         {renderMultiItem('propertyType', '建筑类型')}
                         {renderMultiItem('renovationStatus', '装修状况')}
-                        {renderMultiItem('projectFeature', '项目特色')}
+                        {/* {renderMultiItem('projectFeature', '项目特色')} */}
                         {renderMultiItem('fangBuildingType', '楼层类型')}
                         {renderMultiItem('fangDirectionType', '朝向')}
                     </ScrollView>
@@ -386,6 +406,7 @@ const esfList = () => {
                         <View className="btn confirm-btn" onClick={handleConfirm}>确定</View>
                     </View>
                 </View>
+
             </View>
             <View className={classnames('mask', tab && 'show')} onClick={() => setTab('')}></View>
 
@@ -393,10 +414,24 @@ const esfList = () => {
                 <ScrollView
                     className="house-list"
                     scrollY
-                    style={{ maxHeight: contentHeight - 90 }}
+                    style={{ maxHeight: contentHeight - 108 }}
                     lowerThreshold={30}
                     onScrollToLower={handleScrollToLower}
                 >
+                    <ScrollView className="search-tag" scrollX>
+                        {
+                            condition &&
+                            condition['projectFeature'].map((item: any, index: number) => (
+                                <View
+                                    key={index}
+                                    className={classnames("search-tag-item", selected.projectFeature?.id === item.id && 'actived')}
+                                    onClick={() => handleToggleClick('projectFeature', item)}
+                                >
+                                    <Text className="tag-name">{item.name}</Text>
+                                </View>
+                            ))
+                        }
+                    </ScrollView>
                     <View className="house-list-ul">
                         {
                             houseList.map((item: any, index: number) => (

@@ -6,11 +6,11 @@ import classnames from 'classnames'
 import api from '@services/api'
 import app from '@services/request'
 import useNavData from '@hooks/useNavData'
+import { PRICE_TYPE } from '@constants/house'
 import { IPage, INIT_PAGE, getTotalPage } from '@utils/page'
 import '@styles/common/house.scss'
 import '@styles/common/search-tab.scss'
 import './index.scss'
-import { PRICE_TYPE } from '@constants/house'
 
 interface IFilter {
     id: string
@@ -25,14 +25,32 @@ interface IConditionState {
     buildYear?: IFilter
 }
 
-const default_value = { id: 'all', name: '不限' }
+const default_value: IFilter = { id: 'all', name: '不限' }
 
-const INIT_CONDITION = {
+const INIT_CONDITION: IConditionState = {
     currentPage: 1,
     areaList: default_value,
     propertyType: default_value,
     buildYear: default_value
 }
+
+const tabs: any[] = [
+    {
+        type: 'areaList',
+        name: '区域',
+        keys: ['areaList']
+    },
+    {
+        type: 'propertyType',
+        name: '建筑类型',
+        keys: ['propertyType']
+    },
+    {
+        type: 'buildYear',
+        name: '房龄',
+        keys: ['buildYear']
+    }
+]
 
 const CommunityList = () => {
     const { contentHeight } = useNavData()
@@ -48,22 +66,6 @@ const CommunityList = () => {
     const [houseList, setHouseList] = useState<any>([])
     const router = getCurrentInstance().router
     const title = router?.params.title
-    const tabs = [
-        {
-            type: 'areaList',
-            name: '区域',
-            keys: ['areaList']
-        },
-        {
-            type: 'propertyType',
-            name: '建筑类型',
-            keys: ['propertyType']
-        },
-        {
-            type: 'buildYear',
-            name: '房龄',
-            keys: ['buildYear']
-        }]
 
     useEffect(() => {
         fetchCondition()

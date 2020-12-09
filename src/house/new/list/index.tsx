@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Taro, { getCurrentInstance } from '@tarojs/taro'
 import { View, Text, ScrollView, Image } from '@tarojs/components'
 import classnames from 'classnames'
@@ -32,13 +32,14 @@ interface IConditionState {
     saleStatus?: IFilter
     renovationStatus?: IFilter
     projectFeature?: IFilter
+    __discount?: IFilter
 
 }
 
-const initial_value = { id: '', name: '' }
-const default_value = { id: 'all', name: '不限' }
+const initial_value: IFilter = { id: '', name: '' }
+const default_value: IFilter = { id: 'all', name: '不限' }
 
-const INIT_CONDITION = {
+const INIT_CONDITION: IConditionState = {
     currentPage: 1,
     priceType: '',
     areaList: default_value,
@@ -49,10 +50,11 @@ const INIT_CONDITION = {
     fangBuildingType: initial_value,
     saleStatus: initial_value,
     renovationStatus: initial_value,
-    projectFeature: initial_value
+    projectFeature: initial_value,
+    __discount: initial_value
 }
 
-const SALE_STATUS_ATTR = [
+const SALE_STATUS_ATTR: IFilter[] = [
     {
         id: '1',
         name: '在售'
@@ -64,6 +66,41 @@ const SALE_STATUS_ATTR = [
     {
         id: '3',
         name: '售罄'
+    }
+]
+const tabs: any[] = [
+    {
+        type: 'areaList',
+        name: '区域',
+        keys: ['areaList']
+    },
+    {
+        type: 'price',
+        name: '价格',
+        keys: ['totalPrice', 'unitPrice']
+    },
+    {
+        type: 'room',
+        name: '户型',
+        keys: ['room']
+    },
+    {
+        type: 'more',
+        name: '更多',
+        keys: ['propertyType', 'fangBuildingType', 'renovationStatus']
+    }
+]
+
+const priceTabs: IFilter[] = [
+    {
+        id: '1',
+        name: '按单价',
+        value: "unitPrice"
+    },
+    {
+        id: '2',
+        name: '按总价',
+        value: "totalPrice"
     }
 ]
 
@@ -82,41 +119,11 @@ const NewHouse = () => {
     const [condition, setCondition] = useState<any>()
     const [houseList, setHouseList] = useState<any>([])
     const [activity, setActivity] = useState<string[]>([])
-    const router = getCurrentInstance().router
-    const title = router?.params.title
-    const tabs = [
-        {
-            type: 'areaList',
-            name: '区域',
-            keys: ['areaList']
-        },
-        {
-            type: 'price',
-            name: '价格',
-            keys: ['totalPrice', 'unitPrice']
-        },
-        {
-            type: 'room',
-            name: '户型',
-            keys: ['room']
-        },
-        {
-            type: 'more',
-            name: '更多',
-            keys: ['propertyType', 'fangBuildingType', 'renovationStatus', 'projectFeature']
-        }]
-    const priceTabs = [
-        {
-            id: '1',
-            name: '按单价',
-            value: "unitPrice"
-        },
-        {
-            id: '2',
-            name: '按总价',
-            value: "totalPrice"
-        }
-    ]
+    const params: any = getCurrentInstance().router?.params
+    const title = params.title
+    const is_group = params.is_group || ''
+    const is_recommend = params.is_recommend || ''
+    const refParams = useRef<any>({ is_group, is_recommend })
 
     useEffect(() => {
         fetchCondition()
@@ -124,7 +131,15 @@ const NewHouse = () => {
 
     useEffect(() => {
         fetchHouseList(selected.currentPage)
-    }, [selected.currentPage, selected.areaList, selected.unitPrice, selected.totalPrice, selected.room])
+    }, [
+        selected.currentPage,
+        selected.areaList,
+        selected.unitPrice,
+        selected.totalPrice,
+        selected.room,
+        selected.projectFeature,
+        selected.__discount
+    ])
 
     const fetchCondition = () => {
         app.request({
@@ -149,7 +164,9 @@ const NewHouse = () => {
                 fang_project_feature: selected.projectFeature?.id,
                 fang_renovation_status: selected.renovationStatus?.id,
                 fang_property_type: selected.propertyType?.id,
-                fang_building_type: selected.fangBuildingType?.id
+                fang_building_type: selected.fangBuildingType?.id,
+                __discount: selected.__discount?.id,
+                ...refParams.current
             }
         }, { loading: false }).then((result: any) => {
             setLoading(false)
@@ -169,6 +186,7 @@ const NewHouse = () => {
             } else {
                 setHouseList([...houseList, ...result.data])
             }
+            refParams.current = {}
         })
     }
     const handleScrollToLower = () => {
@@ -255,13 +273,32 @@ const NewHouse = () => {
         }
     }
 
+    const handleToggleClick = (key: string, item: any) => {
+        let selectedValue = selected[key]
+        if (selectedValue instanceof Object) {
+            if (selectedValue.id === item.id) {
+                setSelected({
+                    ...selected,
+                    [key]: initial_value,
+                    currentPage: INIT_CONDITION.currentPage
+                })
+            } else {
+                setSelected({
+                    ...selected,
+                    [key]: item,
+                    currentPage: INIT_CONDITION.currentPage
+                })
+            }
+        }
+    }
+
     const handleReset = () => {
         setSelected({
             ...selected,
             propertyType: initial_value,
             renovationStatus: initial_value,
             saleStatus: initial_value,
-            projectFeature: initial_value
+            // projectFeature: initial_value
         })
     }
 
@@ -445,7 +482,7 @@ const NewHouse = () => {
                         {renderMultiItem('propertyType', '建筑类型')}
                         {renderMultiItem('renovationStatus', '装修状况')}
                         {renderMultiItem('saleStatus', '销售状态')}
-                        {renderMultiItem('projectFeature', '项目特色')}
+                        {/* {renderMultiItem('projectFeature', '项目特色')} */}
                     </ScrollView>
                     <View className="search-footer">
                         <View className="btn reset-btn" onClick={handleReset}>重置</View>
@@ -454,19 +491,39 @@ const NewHouse = () => {
                 </View>
             </View>
             <View className={classnames('mask', tab && 'show')} onClick={() => setTab('')}></View>
-
             <View className="newhouse-content">
                 <ScrollView
                     className="house-list"
                     scrollY
-                    style={{ maxHeight: contentHeight - 90 }}
+                    style={{ maxHeight: contentHeight - 108 }}
                     lowerThreshold={30}
                     onScrollToLower={handleScrollToLower}
                 >
+                    <ScrollView className="search-tag" scrollX>
+                        <View
+                            className={classnames("search-tag-item", selected.__discount?.id === '1' && 'actived')}
+                            onClick={() => handleMultiClick('__discount', { id: '1' })}
+                        >
+                            <Text className="iconfont iconcoupon"></Text>
+                            <Text className="tag-name">优惠楼盘</Text>
+                        </View>
+                        {
+                            condition &&
+                            condition['projectFeature'].map((item: any, index: number) => (
+                                <View
+                                    key={index}
+                                    className={classnames("search-tag-item", selected.projectFeature?.id === item.id && 'actived')}
+                                    onClick={() => handleToggleClick('projectFeature', item)}
+                                >
+                                    <Text className="tag-name">{item.name}</Text>
+                                </View>
+                            ))
+                        }
+                    </ScrollView>
                     <View className="house-list-ul">
                         {
-                            houseList.length > 0 && houseList.map((item: any) => (
-                                <View key={item.id} className="house-list-li">
+                            houseList.length > 0 && houseList.map((item: any, index: number) => (
+                                <View key={index} className="house-list-li">
                                     <View className="house-content" onClick={() => handleHouseItemClick(item)}>
                                         <View className="house-image">
                                             <Image src={item.image_path} mode="aspectFill"></Image>

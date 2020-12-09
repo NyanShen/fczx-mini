@@ -1,28 +1,29 @@
-.esf-header {
-    display: flex;
-    height: 70px;
-    line-height: 70px;
-    padding-top: 20px;
-    font-size: $font-basic;
-    background-color: $white;
-    z-index: 100;
+.esf {
+    &-header {
+        display: flex;
+        height: 70px;
+        line-height: 70px;
+        padding-top: 20px;
+        font-size: $font-basic;
+        background-color: $white;
+        z-index: 100;
 
-    .esf-search {
-        flex: 1;
-        border-radius: 5px;
-        padding: 0 20px;
-        background-color: $bg-color;
+        .esf-search {
+            flex: 1;
+            border-radius: 5px;
+            padding: 0 20px;
+            background-color: $bg-color;
 
-        .esf-search-text {
-            padding-left: 20px;
-            &.placeholder {
-                color: $desc-color;
+            .esf-search-text {
+                padding-left: 20px;
+                &.placeholder {
+                    color: $desc-color;
+                }
             }
         }
     }
-    
-}
 
-.esf-content {
-    padding-top: 181px;
+    &-content {
+        padding-top: 181px;
+    }
 }

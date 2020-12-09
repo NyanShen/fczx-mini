@@ -30,10 +30,10 @@ interface IConditionState {
 
 }
 
-const initial_value = { id: '', name: '' }
-const default_value = { id: 'all', name: '不限' }
+const initial_value: IFilter = { id: '', name: '' }
+const default_value: IFilter = { id: 'all', name: '不限' }
 
-const INIT_CONDITION = {
+const INIT_CONDITION: IConditionState = {
     currentPage: 1,
     areaList: default_value,
     rentPrice: default_value,
@@ -45,10 +45,32 @@ const INIT_CONDITION = {
     fangDirectionType: initial_value,
 }
 
-const RENT_TYPE = {
+const RENT_TYPE: any = {
     '1': '整租',
     '2': '合租'
 }
+
+const tabs: any[] = [
+    {
+        type: 'areaList',
+        name: '区域',
+        keys: ['areaList']
+    },
+    {
+        type: 'rentPrice',
+        name: '租金',
+        keys: ['rentPrice']
+    },
+    {
+        type: 'fangRoom',
+        name: '户型',
+        keys: ['fangRoom']
+    },
+    {
+        type: 'more',
+        name: '筛选',
+        keys: ['rentType', 'propertyType', 'fangBuildingType', 'renovationStatus', 'fangDirectionType']
+    }]
 
 const RentList = () => {
     const { contentHeight } = useNavData()
@@ -65,27 +87,6 @@ const RentList = () => {
     const [houseList, setHouseList] = useState<any>([])
     const router = getCurrentInstance().router
     const title = router?.params.title
-    const tabs = [
-        {
-            type: 'areaList',
-            name: '区域',
-            keys: ['areaList']
-        },
-        {
-            type: 'rentPrice',
-            name: '租金',
-            keys: ['rentPrice']
-        },
-        {
-            type: 'fangRoom',
-            name: '户型',
-            keys: ['fangRoom']
-        },
-        {
-            type: 'more',
-            name: '筛选',
-            keys: ['rentType', 'propertyType', 'fangBuildingType', 'renovationStatus', 'fangDirectionType']
-        }]
 
     useEffect(() => {
         fetchCondition()
@@ -357,7 +358,7 @@ const RentList = () => {
                 <ScrollView
                     className="house-list"
                     scrollY
-                    style={{ maxHeight: contentHeight - 90 }}
+                    style={{ maxHeight: contentHeight - 108 }}
                     lowerThreshold={30}
                     onScrollToLower={handleScrollToLower}
                 >

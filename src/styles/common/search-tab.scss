@@ -150,3 +150,29 @@
 .search-multi-container {
     max-height: 60vh;
 }
+
+.search-tag {
+    width: 100%;
+    white-space: nowrap;
+    background-color: $white;
+    font-size: $font-basic;
+    padding: 30px;
+
+    &-item {
+        display: inline-block;
+        border: 1px solid $bge-color;
+        background-color: $bge-color;
+        padding: 10px 20px;
+        border-radius: $border-radius-base;
+        margin-right: 30px;
+        &.actived {
+            color: $primary-color;
+            border-color: $primary-color;
+            background-color: $white;
+        }
+        .iconcoupon {
+            padding-right: 10px;
+            color: $primary-color;
+        }
+    }
+}
