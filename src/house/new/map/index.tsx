@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Taro, { useReady } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
 import { View, ScrollView, Text, Map } from '@tarojs/components'
 import classnames from 'classnames'
 import find from 'lodash/find'
@@ -29,12 +29,18 @@ interface IConditionState {
     propertyType?: IFilter
     fangBuildingType?: IFilter
     renovationStatus?: IFilter
+    zoom: number
+    swlng?: number | string
+    swlat?: number | string
+    nelng?: number | string
+    nelat?: number | string
 }
 
 const initial_value: IFilter = { id: '', name: '' }
 const default_value: IFilter = { id: 'all', name: '不限' }
 
 const INIT_CONDITION: IConditionState = {
+    zoom: 11,
     priceType: '',
     areaList: default_value,
     unitPrice: default_value,
@@ -43,6 +49,10 @@ const INIT_CONDITION: IConditionState = {
     propertyType: initial_value,
     fangBuildingType: initial_value,
     renovationStatus: initial_value,
+    swlng: '',
+    swlat: '',
+    nelat: '',
+    nelng: '',
 }
 
 const tabs: any[] = [
@@ -80,36 +90,20 @@ const priceTabs: IFilter[] = [
     }
 ]
 
-interface IMapParam {
-    zoom: number
-    swlng?: number
-    swlat?: number
-    nelng?: number
-    nelat?: number
-}
 
-const INIT_MAP_PARAM = {
-    zoom: 11
-}
-
-let mapctx: any = null
 const HouseMap = () => {
     const { contentHeight } = useNavData()
     const footerBtnHeight = 60
     const scrollHeight = contentHeight * 0.5 - footerBtnHeight
     const scrollMoreHeight = contentHeight * 0.6 - footerBtnHeight
     const city = storage.getItem('city')
-    const center = bMapTransQQMap(city.latitude, city.longitude)
+    const centerLocation = bMapTransQQMap(city.latitude, city.longitude)
     const [tab, setTab] = useState<string>('')
+    const [center, setCenter] = useState<any>(centerLocation)
     const [condition, setCondition] = useState<any>()
     const [priceType, setPriceType] = useState<string>('unitPrice')
-    const [mapParam, setMapParam] = useState<IMapParam>(INIT_MAP_PARAM)
     const [selected, setSelected] = useState<IConditionState>(INIT_CONDITION)
     const [markers, setMarkers] = useState<any[]>([])
-
-    useReady(() => {
-        mapctx = Taro.createMapContext('QQMapId')
-    })
 
     useEffect(() => {
         app.request({
@@ -121,17 +115,27 @@ const HouseMap = () => {
 
     useEffect(() => {
         fetchAreaHouse()
-    }, [mapParam, selected.areaList, selected.unitPrice, selected.totalPrice, selected.room])
+    }, [
+        selected.zoom,
+        selected.swlat,
+        selected.swlng,
+        selected.nelat,
+        selected.nelng,
+        selected.areaList,
+        selected.unitPrice,
+        selected.totalPrice,
+        selected.room
+    ])
 
     const fetchAreaHouse = () => {
         app.request({
             url: app.areaApiUrl(api.getHouseMap),
             data: {
-                zoom: mapParam.zoom,
-                nelat: mapParam.nelat || '',
-                nelng: mapParam.nelng || '',
-                swlat: mapParam.swlat || '',
-                swlng: mapParam.swlng || '',
+                zoom: selected.zoom,
+                nelat: selected.nelat,
+                nelng: selected.nelng,
+                swlat: selected.swlat,
+                swlng: selected.swlng,
                 price: filterParam(selected.unitPrice?.id || selected.totalPrice?.id),
                 price_type: filterParam(selected.priceType),
                 fang_area_id: filterParam(selected.areaList?.id),
@@ -141,7 +145,7 @@ const HouseMap = () => {
                 fang_renovation_status: selected.renovationStatus?.id
             }
         }).then((result: any) => {
-            if (mapParam.zoom < 12) {
+            if (selected.zoom < 12) {
                 setRegionData(result.gather_regions)
             } else {
                 setHouseLabels(result.label_rows)
@@ -209,26 +213,41 @@ const HouseMap = () => {
         setMarkers(houseLabels)
     }
 
-    const handleRegionChangeEnd = () => {
-        mapctx.getScale({
-            success: (scaleRes: any) => {
-                mapctx.getRegion({
-                    success: (regionRes: any) => {
-                        const ne = regionRes.northeast
-                        const sw = regionRes.southwest
-                        const nepoint = qqMapTransBMap(ne.latitude, ne.longitude)
-                        const swpoint = qqMapTransBMap(sw.latitude, sw.longitude)
-                        setMapParam({
-                            zoom: scaleRes.scale,
-                            swlat: swpoint.latitude,
-                            swlng: swpoint.longitude,
-                            nelat: nepoint.latitude,
-                            nelng: nepoint.longitude,
-                        })
-                    }
+    const handleRegionChangeEnd = (e: any) => {
+        let causeType = e.detail.causedBy
+        let zoom = e.detail.scale
+        let ne = e.detail.region.northeast
+        let sw = e.detail.region.southwest
+        let nepoint = qqMapTransBMap(ne.latitude, ne.longitude)
+        let swpoint = qqMapTransBMap(sw.latitude, sw.longitude)
+        if (causeType === 'update') {
+            if (selected.zoom === 11) {
+                setSelected({
+                    ...selected,
+                    swlat: '',
+                    swlng: '',
+                    nelat: '',
+                    nelng: '',
                 })
+                return
             }
-        })
+            setSelected({
+                ...selected,
+                swlat: swpoint.latitude,
+                swlng: swpoint.longitude,
+                nelat: nepoint.latitude,
+                nelng: nepoint.longitude,
+            })
+        } else {
+            setSelected({
+                ...selected,
+                zoom,
+                swlat: swpoint.latitude,
+                swlng: swpoint.longitude,
+                nelat: nepoint.latitude,
+                nelng: nepoint.longitude,
+            })
+        }
     }
 
     const handleCalloutTap = (e: any) => {
@@ -237,8 +256,10 @@ const HouseMap = () => {
         if (areaTarget) {
             setSelected({
                 ...selected,
+                zoom: 13,
                 areaList: areaTarget
             })
+            setCenter(bMapTransQQMap(areaTarget.latitude, areaTarget.longitude))
         } else {
             Taro.navigateTo({
                 url: `/house/new/index/index?id=${markerId}`
@@ -265,26 +286,46 @@ const HouseMap = () => {
 
     const handleSingleClick = (key: string, item: any) => {
         setTab('')
+        switch (key) {
+            case 'unitPrice':
+                setSelected({
+                    ...selected,
+                    totalPrice: initial_value,
+                    priceType: '1',
+                    [key]: item
+                })
+                break
+            case 'totalPrice':
+                setSelected({
+                    ...selected,
+                    unitPrice: initial_value,
+                    priceType: '2',
+                    [key]: item
+                })
+                break
+            case 'areaList':
+                if (item.latitude) {
+                    setSelected({
+                        ...selected,
+                        [key]: item,
+                        zoom: 13
+                    })
+                    setCenter(bMapTransQQMap(item.latitude, item.longitude))
+                } else {
+                    setSelected({
+                        ...selected,
+                        [key]: item,
+                        zoom: INIT_CONDITION.zoom
+                    })
+                    setCenter(bMapTransQQMap(centerLocation.latitude, centerLocation.longitude))
+                }
 
-        if (key === 'unitPrice') {
-            setSelected({
-                ...selected,
-                totalPrice: initial_value,
-                priceType: '1',
-                [key]: item
-            })
-        } else if (key === 'totalPrice') {
-            setSelected({
-                ...selected,
-                unitPrice: initial_value,
-                priceType: '2',
-                [key]: item
-            })
-        } else {
-            setSelected({
-                ...selected,
-                [key]: item
-            })
+                break
+            default:
+                setSelected({
+                    ...selected,
+                    [key]: item
+                })
         }
     }
 
@@ -477,9 +518,8 @@ const HouseMap = () => {
                     style={{ width: '100%', height: contentHeight }}
                     latitude={center.latitude}
                     longitude={center.longitude}
-                    scale={mapParam.zoom}
+                    scale={selected.zoom}
                     markers={markers}
-                    showLocation={true}
                     onEnd={handleRegionChangeEnd}
                     onCalloutTap={handleCalloutTap}
                 >
