@@ -86,7 +86,6 @@ const Entry = () => {
                 })
                 break
             case 'news':
-                console.log('news', `${urlMapper[paramObj.t]}&id=${paramObj.id}`)
                 Taro.redirectTo({
                     url: `${urlMapper[paramObj.t]}?id=${paramObj.id}`
                 })

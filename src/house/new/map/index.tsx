@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Taro, { useReady } from '@tarojs/taro'
-import { View, ScrollView, Text, Input, Map } from '@tarojs/components'
+import { View, ScrollView, Text, Map } from '@tarojs/components'
 import classnames from 'classnames'
 import find from 'lodash/find'
 import remove from 'lodash/remove'
@@ -31,10 +31,10 @@ interface IConditionState {
     renovationStatus?: IFilter
 }
 
-const initial_value = { id: '', name: '' }
-const default_value = { id: 'all', name: '不限' }
+const initial_value: IFilter = { id: '', name: '' }
+const default_value: IFilter = { id: 'all', name: '不限' }
 
-const INIT_CONDITION = {
+const INIT_CONDITION: IConditionState = {
     priceType: '',
     areaList: default_value,
     unitPrice: default_value,
@@ -44,6 +44,41 @@ const INIT_CONDITION = {
     fangBuildingType: initial_value,
     renovationStatus: initial_value,
 }
+
+const tabs: any[] = [
+    {
+        type: 'areaList',
+        name: '区域',
+        keys: ['areaList']
+    },
+    {
+        type: 'price',
+        name: '价格',
+        keys: ['totalPrice', 'unitPrice']
+    },
+    {
+        type: 'room',
+        name: '户型',
+        keys: ['room']
+    },
+    {
+        type: 'more',
+        name: '更多',
+        keys: ['propertyType', 'fangBuildingType', 'renovationStatus']
+    }
+]
+const priceTabs: IFilter[] = [
+    {
+        id: '1',
+        name: '按单价',
+        value: "unitPrice"
+    },
+    {
+        id: '2',
+        name: '按总价',
+        value: "totalPrice"
+    }
+]
 
 interface IMapParam {
     zoom: number
@@ -71,43 +106,9 @@ const HouseMap = () => {
     const [mapParam, setMapParam] = useState<IMapParam>(INIT_MAP_PARAM)
     const [selected, setSelected] = useState<IConditionState>(INIT_CONDITION)
     const [markers, setMarkers] = useState<any[]>([])
-    
-    const tabs = [
-        {
-            type: 'areaList',
-            name: '区域',
-            keys: ['areaList']
-        },
-        {
-            type: 'price',
-            name: '价格',
-            keys: ['totalPrice', 'unitPrice']
-        },
-        {
-            type: 'room',
-            name: '户型',
-            keys: ['room']
-        },
-        {
-            type: 'more',
-            name: '更多',
-            keys: ['propertyType', 'fangBuildingType', 'renovationStatus']
-        }]
-    const priceTabs = [
-        {
-            id: '1',
-            name: '按单价',
-            value: "unitPrice"
-        },
-        {
-            id: '2',
-            name: '按总价',
-            value: "totalPrice"
-        }
-    ]
 
     useReady(() => {
-     mapctx = Taro.createMapContext('QQMapId')
+        mapctx = Taro.createMapContext('QQMapId')
     })
 
     useEffect(() => {
@@ -213,7 +214,6 @@ const HouseMap = () => {
             success: (scaleRes: any) => {
                 mapctx.getRegion({
                     success: (regionRes: any) => {
-                        console.log("getRegion")
                         const ne = regionRes.northeast
                         const sw = regionRes.southwest
                         const nepoint = qqMapTransBMap(ne.latitude, ne.longitude)
@@ -239,7 +239,6 @@ const HouseMap = () => {
                 ...selected,
                 areaList: areaTarget
             })
-            
         } else {
             Taro.navigateTo({
                 url: `/house/new/index/index?id=${markerId}`
@@ -446,11 +445,11 @@ const HouseMap = () => {
                             {renderSplitItem(priceType)}
                         </View>
                     </View>
-                    <View className="search-footer">
+                    {/* <View className="search-footer">
                         <Input className="search-input" placeholder="最低价" />-
                         <Input className="search-input" placeholder="最高价" />
                         <View className="btn confirm-btn single-btn">确定</View>
-                    </View>
+                    </View> */}
                 </View>
                 <View className={classnames('search-container', tab === 'room' && 'actived')}>
                     <View className="search-content">

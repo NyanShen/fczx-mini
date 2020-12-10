@@ -374,10 +374,14 @@ const ChatRoom = () => {
                             onClick={() => toggleAction('expression')}>
                             <Text>常用语</Text>
                         </View>
-                        <View className="action-item" onClick={handlePhoneCall}>
-                            <Text>电话咨询</Text>
-                        </View>
                         {
+                            toUser.is_show_more &&
+                            <View className="action-item" onClick={handlePhoneCall}>
+                                <Text>电话咨询</Text>
+                            </View>
+                        }
+                        {
+                            toUser.is_show_more &&
                             toUser.wx &&
                             <View className="action-item" onClick={handleCopyWechat}>
                                 <Text>复制微信号</Text>
