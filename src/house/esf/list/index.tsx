@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Taro, { getCurrentInstance } from '@tarojs/taro'
+import Taro, { getCurrentInstance, useShareAppMessage, useShareTimeline } from '@tarojs/taro'
 import { View, Text, ScrollView, Image } from '@tarojs/components'
 import classnames from 'classnames'
 
@@ -10,6 +10,7 @@ import { IPage, INIT_PAGE, getTotalPage } from '@utils/page'
 import '@styles/common/house.scss'
 import '@styles/common/search-tab.scss'
 import './index.scss'
+import { PROJECT_NAME } from '@constants/global'
 
 interface IFilter {
     id: string
@@ -100,13 +101,34 @@ const esfList = () => {
     const router = getCurrentInstance().router
     const title = router?.params.title
 
+    useShareTimeline(() => {
+        return {
+            title: `${PROJECT_NAME}-二手房`,
+            path: `/house/esf/list/index`
+        }
+    })
+
+    useShareAppMessage(() => {
+        return {
+            title: `${PROJECT_NAME}-二手房`,
+            path: `/house/esf/list/index`
+        }
+    })
+
     useEffect(() => {
         fetchCondition()
     }, [])
 
     useEffect(() => {
         fetchHouseList(selected.currentPage)
-    }, [selected.currentPage, selected.areaList, selected.unitPrice, selected.totalPrice, selected.fangRoom, selected.projectFeature])
+    }, [
+        selected.currentPage,
+        selected.areaList,
+        selected.unitPrice,
+        selected.totalPrice,
+        selected.fangRoom,
+        selected.projectFeature
+    ])
 
     const fetchCondition = () => {
         app.request({

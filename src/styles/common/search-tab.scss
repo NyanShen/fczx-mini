@@ -157,12 +157,16 @@
     background-color: $white;
     font-size: $font-basic;
     padding: 30px;
-
+    ::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+        color: transparent;
+    }
     &-item {
         display: inline-block;
-        border: 1px solid $bge-color;
+        border: 2px solid $bge-color;
         background-color: $bge-color;
-        padding: 10px 20px;
+        padding: 6px 20px;
         border-radius: $border-radius-base;
         margin-right: 30px;
         &.actived {

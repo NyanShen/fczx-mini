@@ -1,4 +1,9 @@
 .news {
+    ::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+        color: transparent;
+    }
     &-cate {
         width: 100%;
         height: 80px;

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Taro from '@tarojs/taro'
+import Taro, { useShareAppMessage, useShareTimeline } from '@tarojs/taro'
 import { ScrollView, View, Image, Text } from '@tarojs/components'
 import classnames from 'classnames'
 
@@ -7,6 +7,7 @@ import api from '@services/api'
 import app from '@services/request'
 import useNavData from '@hooks/useNavData'
 import { formatTimestamp } from '@utils/index'
+import { PROJECT_NAME } from '@constants/global'
 import { getTotalPage, INIT_PAGE, IPage } from '@utils/page'
 import './index.scss'
 
@@ -25,6 +26,20 @@ const NewsList = () => {
     const [param, setParam] = useState<IParam>(INIT_PARAM)
     const [news, setNews] = useState<any[]>([])
     const [newsCate, setNewsCate] = useState<any[]>([])
+
+    useShareTimeline(() => {
+        return {
+            title: `${PROJECT_NAME}-咨询`,
+            path: `/news/list/index`
+        }
+    })
+
+    useShareAppMessage(() => {
+        return {
+            title: `${PROJECT_NAME}-咨询`,
+            path: `/news/list/index`
+        }
+    })
 
     useEffect(() => {
         app.request({

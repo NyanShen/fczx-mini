@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Taro, { getCurrentInstance } from '@tarojs/taro'
+import Taro, { getCurrentInstance, useShareAppMessage, useShareTimeline } from '@tarojs/taro'
 import { View, Text, RichText } from '@tarojs/components'
 
 import api from '@services/api'
@@ -8,14 +8,27 @@ import { formatTimestamp } from '@utils/index'
 import './index.scss'
 
 const NewsDetail = () => {
-    const router = getCurrentInstance().router
+    const params: any = getCurrentInstance().router?.params
     const [newsData, setNewsData] = useState<any>({ newsInfo: {} })
 
+    useShareTimeline(() => {
+        return {
+            title: newsData.title,
+            path: `/news/detail/index?id=${params.id}`
+        }
+    })
+
+    useShareAppMessage(() => {
+        return {
+            title: newsData.title,
+            path: `/news/detail/index?id=${params.id}`
+        }
+    })
     useEffect(() => {
         app.request({
             url: app.areaApiUrl(api.getNewsById),
             data: {
-                id: router?.params.id
+                id: params.id
             }
         }).then((result: any) => {
             setNewsData(result)

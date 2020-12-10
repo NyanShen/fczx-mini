@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Taro, { getCurrentInstance } from '@tarojs/taro'
+import Taro, { getCurrentInstance, useShareAppMessage, useShareTimeline } from '@tarojs/taro'
 import { View, Text, ScrollView, Image } from '@tarojs/components'
 import classnames from 'classnames'
 
@@ -7,6 +7,7 @@ import api from '@services/api'
 import app from '@services/request'
 import useNavData from '@hooks/useNavData'
 import { PRICE_TYPE } from '@constants/house'
+import { PROJECT_NAME } from '@constants/global'
 import { IPage, INIT_PAGE, getTotalPage } from '@utils/page'
 import '@styles/common/house.scss'
 import '@styles/common/search-tab.scss'
@@ -66,6 +67,20 @@ const CommunityList = () => {
     const [houseList, setHouseList] = useState<any>([])
     const router = getCurrentInstance().router
     const title = router?.params.title
+
+    useShareTimeline(() => {
+        return {
+            title: `${PROJECT_NAME}-小区`,
+            path: `/house/community/list/index`
+        }
+    })
+
+    useShareAppMessage(() => {
+        return {
+            title: `${PROJECT_NAME}-小区`,
+            path: `/house/community/list/index`
+        }
+    })
 
     useEffect(() => {
         fetchCondition()

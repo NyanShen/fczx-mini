@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
+import { useShareAppMessage, useShareTimeline } from '@tarojs/taro'
 import { Input, View, Text, ScrollView } from '@tarojs/components'
 import classnames from 'classnames'
 
@@ -21,6 +22,7 @@ import {
     INIT_INPUT_VALUE,
     RESULT_CATES
 } from './constant'
+import { PROJECT_NAME } from '@constants/global'
 import './index.scss'
 const INIT_RESULT_SHOW = { show: false, intoView: null }
 
@@ -33,6 +35,20 @@ const Calculator = () => {
     const [picker, setPicker] = useState<IPicker>(INIT_PICKER)
     const [pickerValue, setPickerValue] = useState<any>(INIT_PICKER_VALUE)
     const [result, setResult] = useState<any>({})
+
+    useShareTimeline(() => {
+        return {
+            title: `${PROJECT_NAME}-房贷计算器`,
+            path: `/calculator/index`
+        }
+    })
+
+    useShareAppMessage(() => {
+        return {
+            title: `${PROJECT_NAME}-房贷计算器`,
+            path: `/calculator/index`
+        }
+    })
 
     useEffect(() => {
         calculateHousePrice()

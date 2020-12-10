@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import Taro, { getCurrentInstance } from '@tarojs/taro'
+import Taro, { getCurrentInstance, useShareAppMessage, useShareTimeline } from '@tarojs/taro'
 import { View, Text, ScrollView, Image } from '@tarojs/components'
 import classnames from 'classnames'
 import find from 'lodash/find'
@@ -8,6 +8,7 @@ import remove from 'lodash/remove'
 import api from '@services/api'
 import app from '@services/request'
 import useNavData from '@hooks/useNavData'
+import { PROJECT_NAME } from '@constants/global'
 import { IPage, INIT_PAGE, getTotalPage } from '@utils/page'
 import { PRICE_TYPE, SALE_STATUS } from '@constants/house'
 import '@styles/common/house.scss'
@@ -124,6 +125,20 @@ const NewHouse = () => {
     const is_group = params.is_group || ''
     const is_recommend = params.is_recommend || ''
     const refParams = useRef<any>({ is_group, is_recommend })
+
+    useShareTimeline(() => {
+        return {
+            title: `${PROJECT_NAME}-新房`,
+            path: `/house/new/list/index`
+        }
+    })
+
+    useShareAppMessage(() => {
+        return {
+            title: `${PROJECT_NAME}-新房`,
+            path: `/house/new/list/index`
+        }
+    })
 
     useEffect(() => {
         fetchCondition()
