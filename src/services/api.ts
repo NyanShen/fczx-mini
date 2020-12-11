@@ -7,6 +7,7 @@ export default {
     registerAccount: '/user/register',
     getSessionKeyByCode: '/applet/get-session',
     decryptData: '/applet/decrypt-data',
+    syncWxUser: '/applet/sync-user',
     getUserData: '/user/get',
     updateUser: '/user/update',
 

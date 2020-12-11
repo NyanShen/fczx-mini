@@ -12,7 +12,7 @@ const INIT_VIEW = 'hot'
 const INIT_CITY_DATA = { city: {}, hotCity: [] }
 
 const City = () => {
-    const { appHeaderHeight, contentHeight } = useNavData()
+    const { contentHeight } = useNavData()
     const [viewInto, setViewInto] = useState<string>(INIT_VIEW)
     const [cityData, setCityData] = useState<any>(INIT_CITY_DATA)
 

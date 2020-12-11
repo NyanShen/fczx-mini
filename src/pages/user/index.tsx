@@ -6,8 +6,8 @@ import api from '@services/api'
 import app from '@services/request'
 import storage from '@utils/storage'
 import ChatEvent from '@utils/event'
-import './index.scss'
 import { toUrlParam } from '@utils/urlHandler'
+import './index.scss'
 
 interface IUser {
   id?: string
@@ -43,17 +43,35 @@ const User = () => {
       }
     })
   })
+  const getUserInfo = (e: any) => {
+    if (e.detail.errMsg === 'getUserInfo:ok') {
+      app.request({
+        url: app.apiUrl(api.syncWxUser),
+        method: 'POST',
+        data: { ...e.detail.userInfo }
+      }, { loading: false }).then((result: any) => {
+        setUser({
+          id: result.id,
+          sex: result.sex,
+          mobile: result.mobile,
+          avatarUrl: result.avatar,
+          username: result.username,
+          nickname: result.nickname
+        })
+        Taro.showToast({
+          title: '同步成功',
+          icon: 'success'
+        })
+      })
+    }
+  }
 
   const gotoLogin = () => {
     if (user.username) {
-      Taro.navigateTo({
-        url: `/user/profile/index${toUrlParam(user)}`
-      })
+      taroNavigateTo(`/user/profile/index${toUrlParam(user)}`)
       return
     }
-    Taro.navigateTo({
-      url: '/login/index'
-    })
+    taroNavigateTo('/login/index')
   }
 
   const handleLogout = () => {
@@ -65,18 +83,18 @@ const User = () => {
 
   const toUserModule = (url: string, type: string = 'esf') => {
     if (user.username) {
-      Taro.navigateTo({ url: `/house/manage/${url}/index?type=${type}` })
+      taroNavigateTo(`/house/manage/${url}/index?type=${type}`)
     } else {
-      Taro.navigateTo({
-        url: '/login/index'
-      })
+      taroNavigateTo('/login/index')
     }
   }
 
   const toOfficialAccount = () => {
-    Taro.navigateTo({
-      url: '/user/official/index'
-    })
+    taroNavigateTo('/user/official/index')
+  }
+
+  const taroNavigateTo = (url: string) => {
+    Taro.navigateTo({ url })
   }
 
   return (
@@ -97,7 +115,7 @@ const User = () => {
 
       <View className="user-group">
         <View className="user-item" onClick={() => toUserModule('list')}>
-          <View className="item-icon">
+          <View className="item-icon blue">
             <Text className="iconfont iconmanage"></Text>
           </View>
           <View className="item-text">管理出售</View>
@@ -106,7 +124,7 @@ const User = () => {
           </View>
         </View>
         <View className="user-item" onClick={() => toUserModule('list', 'rent')}>
-          <View className="item-icon">
+          <View className="item-icon blue">
             <Text className="iconfont iconmanage"></Text>
           </View>
           <View className="item-text">管理出租</View>
@@ -115,7 +133,7 @@ const User = () => {
           </View>
         </View>
         <View className="user-item" onClick={() => toUserModule('sale')}>
-          <View className="item-icon">
+          <View className="item-icon cyan">
             <Text className="iconfont iconsquare"></Text>
           </View>
           <View className="item-text">我要卖房</View>
@@ -124,7 +142,7 @@ const User = () => {
           </View>
         </View>
         <View className="user-item" onClick={() => toUserModule('sale', 'rent')}>
-          <View className="item-icon">
+          <View className="item-icon lightblue">
             <Text className="iconfont iconhomepage"></Text>
           </View>
           <View className="item-text">我要出租</View>
@@ -135,7 +153,7 @@ const User = () => {
       </View>
       <View className="user-group">
         <Button className="user-item user-item-btn" open-type="contact">
-          <View className="item-icon">
+          <View className="item-icon origin">
             <Text className="iconfont iconservice"></Text>
           </View>
           <View className="item-text">在线客服</View>
@@ -144,7 +162,7 @@ const User = () => {
           </View>
         </Button>
         <View className="user-item" onClick={() => makePhoneCall({ phoneNumber: JOIN_PHONE })}>
-          <View className="item-icon">
+          <View className="item-icon blue3">
             <Text className="iconfont iconjoin"></Text>
           </View>
           <View className="item-text">商务合作</View>
@@ -153,7 +171,7 @@ const User = () => {
           </View>
         </View>
         <View className="user-item" onClick={toOfficialAccount}>
-          <View className="item-icon">
+          <View className="item-icon blue2">
             <Text className="iconfont iconcode"></Text>
           </View>
           <View className="item-text">关注公众号</View>
@@ -161,15 +179,18 @@ const User = () => {
             <Text className="iconfont iconarrow-right-bold"></Text>
           </View>
         </View>
-        <Button className="user-item user-item-btn" open-type="getUserInfo">
-          <View className="item-icon">                          
-            <Text className="iconfont iconwechat"></Text>
-          </View>
-          <View className="item-text">同步微信</View>
-          <View className="item-arrow">
-            <Text className="iconfont iconarrow-right-bold"></Text>
-          </View>
-        </Button>
+        {
+          user.username &&
+          <Button className="user-item user-item-btn" open-type="getUserInfo" onGetUserInfo={getUserInfo}>
+            <View className="item-icon">
+              <Text className="iconfont iconwechat"></Text>
+            </View>
+            <View className="item-text">同步微信</View>
+            <View className="item-arrow">
+              <Text className="iconfont iconarrow-right-bold"></Text>
+            </View>
+          </Button>
+        }
       </View>
       {
         user.username &&

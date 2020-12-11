@@ -1,23 +1,27 @@
-import React, { ReactNode } from 'react'
+import React, { ReactElement, useState } from 'react'
 import { View } from "@tarojs/components"
 
 import './index.scss'
+import { useDidShow } from '@tarojs/taro'
 interface IProps {
     title?: string,
     message?: string,
     okText?: string,
     cancelText?: string,
-    specialBtn?: ReactNode,
+    SpecialBtn?: ReactElement,
     onCancel?: () => void,
     onConfirm?: () => void
 }
 
 const Confirm = (props: IProps) => {
-    const { title, message, specialBtn, okText = '是', cancelText = '否' } = props
+    const { title, message, SpecialBtn, okText = '是', cancelText = '否' } = props
+    const { onConfirm, onCancel } = props
+
     const renderOkBtn = () => {
-        return specialBtn ? specialBtn :
-            <View className="action-item" onClick={props.onConfirm}>{okText}</View>
+        return SpecialBtn ? SpecialBtn :
+            <View className="action-item" onClick={onConfirm}>{okText}</View>
     }
+
     return (
         <View className="confirm">
             <View className="confirm-wrap">
@@ -28,13 +32,13 @@ const Confirm = (props: IProps) => {
                         {message && <View className="message">{message}</View>}
                     </View>
                     <View className="confirm-action">
-                        <View className="action-item" onClick={props.onCancel}>{cancelText}</View>
+                        <View className="action-item" onClick={onCancel}>{cancelText}</View>
                         {renderOkBtn()}
                     </View>
                 </View>
             </View>
         </View>
-    )
+    ) 
 }
 
 export default Confirm

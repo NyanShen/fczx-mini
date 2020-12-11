@@ -66,6 +66,7 @@ const Profile = () => {
                 title: '保存成功',
                 icon: 'success'
             })
+            Taro.navigateBack({ delta: 1 })
         })
     }
 

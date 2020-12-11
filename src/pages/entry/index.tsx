@@ -67,7 +67,7 @@ const Entry = () => {
                 const pageModule = (
                     <Confirm
                         title='即将进入“小程序在线客服”'
-                        specialBtn={serviceBtn}
+                        SpecialBtn={serviceBtn}
                         onCancel={toPageIndex}
                         cancelText='取消'
                     ></Confirm>

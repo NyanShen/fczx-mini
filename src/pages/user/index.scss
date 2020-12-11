@@ -44,6 +44,36 @@
             margin: 0 20px;
             padding: 20px 30px;
             background-color: $white;
+            .item-icon {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                width: 50px;
+                height: 50px;
+                border-radius: $border-radius-base;
+                background-color: $primary-color;
+                .iconfont {
+                    color: $white;
+                }
+                &.blue {
+                    background-color: #6a90e6;
+                }
+                &.cyan {
+                    background-color: #00cc99;
+                }
+                &.lightblue {
+                    background-color: #17bfff;
+                }
+                &.blue2 {
+                    background-color: #67a3f9;
+                }
+                &.blue3 {
+                    background-color: #0e46c5;
+                }
+                &.origin {
+                    background-color: #f90;
+                }
+            }
             .item-arrow {
                 .iconfont {
                     font-size: $font-basic;
