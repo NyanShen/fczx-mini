@@ -40,6 +40,7 @@ const User = () => {
           username: result.username,
           nickname: result.nickname
         })
+        storage.setItem('subscrib_status', result.is_subscribe_wx)
       }
     })
   })

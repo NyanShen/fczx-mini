@@ -5,15 +5,18 @@ import { View, Image } from '@tarojs/components'
 import api from '@services/api'
 import app from '@services/request'
 import ChatEvent from '@utils/event'
+import storage from '@utils/storage'
 import { toUrlParam } from '@utils/urlHandler'
 import { formatTimestamp } from '@utils/index'
 import { hasLogin } from '@services/login'
+import logo from '@assets/icons/logo.png'
 import './index.scss'
 
 const Chat = () => {
   const [user, setUser] = useState<any>(null)
   const [unread, setUnread] = useState<string>('')
   const [chatDialog, setChatDialog] = useState<any[]>([])
+  const subscribeStatus = storage.getItem('subscrib_status')
 
   useDidShow(() => {
     hasLogin().then((result: any) => {
@@ -78,6 +81,12 @@ const Chat = () => {
     })
   }
 
+  const toOfficialAccount = () => {
+    Taro.navigateTo({
+      url: '/user/official/index'
+    })
+  }
+
   const renderLogin = () => {
     return (
       <View className="chat-login">
@@ -139,6 +148,22 @@ const Chat = () => {
 
   return (
     <View className="chat">
+      {
+        user && subscribeStatus != '1' &&
+        <View className="official">
+          <View className="official-photo">
+            <Image src={logo} mode="aspectFill"></Image>
+          </View>
+          <View className="official-context">
+            <View className="title">房产在线云</View>
+            <View className="memo">关注房产在线公众号，获取最新消息</View>
+          </View>
+          <View className="official-btn" onClick={toOfficialAccount}>
+            <View className="btn btn-plain">关注</View>
+          </View>
+        </View>
+      }
+
       <View className="chat-content">
         {
           user ? renderDialog() : renderLogin()
