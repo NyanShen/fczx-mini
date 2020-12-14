@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import Taro from '@tarojs/taro'
+import Taro, { getCurrentInstance } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 
 import ChatEvent from '@utils/event'
@@ -7,6 +7,12 @@ import './app.scss'
 
 
 class App extends Component {
+  tabbarList = [
+    '/pages/index/index',
+    '/pages/user/index',
+    '/pages/chat/index',
+    '/pages/entry/index',
+  ]
 
   componentDidMount() {
 
@@ -23,18 +29,21 @@ class App extends Component {
   }
 
   handleTabBarRedDot = (result: boolean | string) => {
-    if (result) {
-      Taro.showTabBarRedDot({
-        index: 1,
-        success() { },
-        fail() { },
-      })
-    } else {
-      Taro.hideTabBarRedDot({
-        index: 1,
-        success() { },
-        fail() { },
-      })
+    const pathname: any = getCurrentInstance().router?.path
+    if (this.tabbarList.includes(pathname)) {
+      if (result) {
+        Taro.showTabBarRedDot({
+          index: 1,
+          success() { },
+          fail() { },
+        })
+      } else {
+        Taro.hideTabBarRedDot({
+          index: 1,
+          success() { },
+          fail() { },
+        })
+      }
     }
   }
 
