@@ -152,7 +152,7 @@ const Index = () => {
       url: app.areaApiUrl(api.getHouseList),
       data: {
         page: 1,
-        limit: 20
+        limit: 10
       }
     }).then((result: any) => {
       setHouseList(result.data)
@@ -163,7 +163,7 @@ const Index = () => {
       url: app.areaApiUrl(api.getEsfList),
       data: {
         page: 1,
-        limit: 20
+        limit: 10
       }
     }).then((result: any) => {
       setEsfList(result.data)

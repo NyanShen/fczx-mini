@@ -90,8 +90,8 @@ const Search = (props: ISearchProps) => {
       url: app.areaApiUrl(searchUrl),
       data: {
         title: keyValue,
-        page: 0,
-        limit: 50
+        page: 1,
+        limit: 10
       }
     }, { loading: false }).then((result: any) => {
       setMatcheList(result.data)

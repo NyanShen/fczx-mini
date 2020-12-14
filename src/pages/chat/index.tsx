@@ -149,7 +149,7 @@ const Chat = () => {
   return (
     <View className="chat">
       {
-        user && subscribeStatus != '1' &&
+        user && subscribeStatus != 1 &&
         <View className="official">
           <View className="official-photo">
             <Image src={logo} mode="aspectFill"></Image>
