@@ -13,6 +13,14 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.iconcheckbox:before {
+  content: "\e870";
+}
+
+.iconcheckboxno:before {
+  content: "\e979";
+}
+
 .iconwechat:before {
   content: "\e618";
 }

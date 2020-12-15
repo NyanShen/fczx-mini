@@ -137,6 +137,14 @@ const Index = () => {
       fetchEsfList()
       fetchHomeData()
     }
+    Taro.getLocation({
+      type: 'wgs84',
+      success: (result: any) => {
+        if (result.errMsg === 'getLocation:ok') {
+          console.log(result)
+        }
+      }
+    })
   })
 
   const fetchHomeData = () => {

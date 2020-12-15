@@ -2,8 +2,10 @@ import React, { useEffect, useRef, useState } from 'react'
 import Taro, { getCurrentInstance, useShareAppMessage, useShareTimeline } from '@tarojs/taro'
 import { View, Text, ScrollView, Image } from '@tarojs/components'
 import classnames from 'classnames'
+import map from 'lodash/map'
 import find from 'lodash/find'
 import remove from 'lodash/remove'
+import isEmpty from 'lodash/isEmpty'
 
 import api from '@services/api'
 import app from '@services/request'
@@ -24,6 +26,9 @@ interface IFilter {
 interface IConditionState {
     currentPage: number
     areaList?: IFilter
+    circle?: IFilter[]
+    subway?: IFilter
+    station?: IFilter[]
     unitPrice?: IFilter
     totalPrice?: IFilter
     priceType?: string
@@ -44,6 +49,9 @@ const INIT_CONDITION: IConditionState = {
     currentPage: 1,
     priceType: '',
     areaList: default_value,
+    circle: [default_value],
+    subway: default_value,
+    station: [default_value],
     unitPrice: default_value,
     totalPrice: initial_value,
     room: default_value,
@@ -71,38 +79,69 @@ const SALE_STATUS_ATTR: IFilter[] = [
 ]
 const tabs: any[] = [
     {
-        type: 'areaList',
-        name: '区域',
-        keys: ['areaList']
+        type: 'location',
+        name: '位置',
+        keys: ['areaList', 'subway'],
+        subTabs: [
+            {
+                name: '区域',
+                type: 'areaList',
+                subType: 'circle',
+                actived: true
+            },
+            {
+                name: '地铁',
+                type: 'subway',
+                subType: 'station',
+                actived: false
+            }
+        ]
     },
     {
         type: 'price',
         name: '价格',
-        keys: ['totalPrice', 'unitPrice']
+        keys: ['totalPrice', 'unitPrice'],
+        subTabs: [
+            {
+                id: '1',
+                name: '按单价',
+                type: 'unitPrice',
+                subType: '',
+                actived: true
+            },
+            {
+                id: '2',
+                name: '按总价',
+                type: 'totalPrice',
+                subType: '',
+                actived: false
+            }
+        ]
     },
     {
         type: 'room',
         name: '户型',
-        keys: ['room']
+        keys: ['room'],
+        subTabs: []
     },
     {
         type: 'more',
         name: '更多',
-        keys: ['propertyType', 'fangBuildingType', 'renovationStatus']
+        keys: ['propertyType', 'fangBuildingType', 'renovationStatus'],
+        subTabs: []
     }
 ]
 
-const priceTabs: IFilter[] = [
-    {
-        id: '1',
-        name: '按单价',
-        value: "unitPrice"
-    },
-    {
-        id: '2',
-        name: '按总价',
-        value: "totalPrice"
-    }
+const keys = [
+    'areaList',
+    'subway',
+    'propertyType',
+    'totalPrice',
+    'unitPrice',
+    'room',
+    'fangBuildingType',
+    'renovationStatus',
+    'projectFeature'
 ]
 
 const NewHouse = () => {
@@ -111,15 +150,16 @@ const NewHouse = () => {
     const footerBtnHeight = 60
     const scrollHeight = contentHeight * 0.5 - footerBtnHeight
     const scrollMoreHeight = contentHeight * 0.6 - footerBtnHeight
-    const [tab, setTab] = useState<string>('')
-    const [priceType, setPriceType] = useState<string>('unitPrice')
+    const [tab, setTab] = useState<any>({})
+    const [subTabs, setSubTabs] = useState<any[]>(tabs[0].subTabs)
     const [selected, setSelected] = useState<IConditionState>(INIT_CONDITION)
+    const [condition, setCondition] = useState<any>({})
+    const [subCondition, setSubCondition] = useState<any>()
+    const [houseList, setHouseList] = useState<any>([])
+    const [activity, setActivity] = useState<string[]>([])
     const [page, setPage] = useState<IPage>(INIT_PAGE)
     const [loading, setLoading] = useState<boolean>(false)
     const [showEmpty, setShowEmpty] = useState<boolean>(false)
-    const [condition, setCondition] = useState<any>()
-    const [houseList, setHouseList] = useState<any>([])
-    const [activity, setActivity] = useState<string[]>([])
     const params: any = getCurrentInstance().router?.params
     const title = params.title
     const is_group = params.is_group || ''
@@ -148,7 +188,6 @@ const NewHouse = () => {
         fetchHouseList(selected.currentPage)
     }, [
         selected.currentPage,
-        selected.areaList,
         selected.unitPrice,
         selected.totalPrice,
         selected.room,
@@ -158,13 +197,27 @@ const NewHouse = () => {
 
     const fetchCondition = () => {
         app.request({
-            url: app.areaApiUrl(api.getHouseAttr)
+            url: app.areaApiUrl(api.getHouseAttr),
+            data: {
+                key: keys.join(',')
+            }
         }).then((result: any) => {
             setCondition({ ...result, saleStatus: SALE_STATUS_ATTR })
         })
     }
 
+    const fetchSubCondition = (type: string, apiUrl: string, param: any = {}) => {
+        app.request({
+            url: app.areaApiUrl(apiUrl),
+            data: param
+        }, { loading: false }).then((result: any) => {
+            setSubCondition({ [type]: result })
+        })
+    }
+
     const fetchHouseList = (currentPage: number = 1) => {
+        // const circleFilter = selected.circle && remove(selected.circle, { id: 'all' })
+        // const stationFilter = selected.station && remove(selected.station, { id: 'all' })
         app.request({
             url: app.areaApiUrl(api.getHouseList),
             data: {
@@ -172,6 +225,9 @@ const NewHouse = () => {
                 page: currentPage,
                 limit: PAGE_LIMIT,
                 fang_area_id: filterParam(selected.areaList?.id),
+                fang_subway: filterParam(selected.subway?.id),
+                // fang_area_circles: map(circleFilter, 'id').join(','),
+                // fang_subway_station: map(stationFilter, 'id').join(','),
                 price: filterParam(selected.unitPrice?.id || selected.totalPrice?.id),
                 price_type: filterParam(selected.priceType),
                 sale_status: selected.saleStatus?.id,
@@ -220,39 +276,96 @@ const NewHouse = () => {
         return id === 'all' ? '' : id
     }
 
+    const findTarget = (list: IFilter[], item: IFilter) => {
+        return find(list, { id: item.id })
+    }
+
     const switchCondition = (item) => {
-        if (tab === item.type) {
-            setTab('')
+        if (tab.type === item.type) {
+            setTab({})
             return
         }
-        setTab(item.type)
+        setTab(item)
+        setSubTabs(item.subTabs)
+    }
+
+    const handleSubTabsUpdate = (subTab: any) => {
+        for (const item of subTabs) {
+            item.actived = item.type === subTab.type
+        }
+        setSubTabs([...subTabs])
     }
 
     const handleSingleClick = (key: string, item: any) => {
-        setTab('')
+        switch (key) {
+            case 'unitPrice':
+                setSelected({
+                    ...selected,
+                    totalPrice: initial_value,
+                    priceType: '1',
+                    [key]: item,
+                    currentPage: INIT_CONDITION.currentPage
+                })
+                setTab({})
+                break
+            case 'totalPrice':
+                setSelected({
+                    ...selected,
+                    unitPrice: initial_value,
+                    priceType: '2',
+                    [key]: item,
+                    currentPage: INIT_CONDITION.currentPage
+                })
+                setTab({})
+                break
+            case 'areaList':
+                setSelected({
+                    ...selected,
+                    [key]: item,
+                    subway: default_value,
+                    circle: [default_value],
+                    station: [default_value]
+                })
+                if (item.id === 'all') {
+                    setSubCondition(null)
+                } else {
+                    fetchSubCondition('circle', api.getAreaCircle, { id: item.id })
+                }
+                break
+            case 'circle':
+                setSelected({
+                    ...selected,
+                    circle: [default_value]
+                })
+                break
+            case 'subway':
+                setSelected({
+                    ...selected,
+                    [key]: item,
+                    areaList: default_value,
+                    circle: [default_value],
+                    station: [default_value],
+                })
+                if (item.id === 'all') {
+                    setSubCondition(null)
+                } else {
+                    fetchSubCondition('station', api.getSubway, { pid: item.id })
+                }
+                break
+            case 'station':
+                setSelected({
+                    ...selected,
+                    station: [default_value]
+                })
+                break
+            default:
+                setSelected({
+                    ...selected,
+                    [key]: item,
+                    currentPage: INIT_CONDITION.currentPage
+                })
+                setTab({})
 
-        if (key === 'unitPrice') {
-            setSelected({
-                ...selected,
-                totalPrice: initial_value,
-                priceType: '1',
-                [key]: item,
-                currentPage: INIT_CONDITION.currentPage
-            })
-        } else if (key === 'totalPrice') {
-            setSelected({
-                ...selected,
-                unitPrice: initial_value,
-                priceType: '2',
-                [key]: item,
-                currentPage: INIT_CONDITION.currentPage
-            })
-        } else {
-            setSelected({
-                ...selected,
-                [key]: item,
-                currentPage: INIT_CONDITION.currentPage
-            })
         }
     }
     const handleMultiClick = (key: string, item: any) => {
@@ -272,8 +385,8 @@ const NewHouse = () => {
         }
 
         if (selectedValue instanceof Array) {
-            let target = find(selectedValue, { id: item.id })
-            if (target) {
+            remove(selectedValue, { id: 'all' })
+            if (findTarget(selectedValue, item)) {
                 remove(selectedValue, { id: item.id })
                 setSelected({
                     ...selected,
@@ -307,7 +420,17 @@ const NewHouse = () => {
         }
     }
 
-    const handleReset = () => {
+    const handleTabReset = () => {
+        setSelected({
+            ...selected,
+            areaList: default_value,
+            circle: [default_value],
+            subway: default_value
+        })
+        setSubCondition(null)
+    }
+
+    const handleMoreReset = () => {
         setSelected({
             ...selected,
             propertyType: initial_value,
@@ -318,7 +441,7 @@ const NewHouse = () => {
     }
 
     const handleConfirm = () => {
-        setTab('')
+        setTab({})
         fetchHouseList()
     }
 
@@ -349,7 +472,35 @@ const NewHouse = () => {
         }
     }
 
-    const renderSplitItem = (key: string) => {
+    const renderSubTabs = () => {
+        return (
+            <View className="split-list flex-item">
+                {
+                    subTabs.map((item: any, index: number) => {
+                        if (item.type === 'subway' && isEmpty(condition.subway)) {
+                            return null
+                        } else {
+                            return (
+                                <View
+                                    key={index}
+                                    className={classnames("split-item", item.actived && 'actived')}
+                                    onClick={() => handleSubTabsUpdate(item)}>
+                                    {item.name}
+                                </View>
+                            )
+                        }
+                    })
+                }
+            </View>
+        )
+    }
+
+    const renderSplitTabItem = () => {
+        if (!tab.type) {
+            return
+        }
+        const target = find(subTabs, { actived: true })
+        const key = target ? target.type : tab.keys[0]
         return (
             <ScrollView className="split-list flex-item" scrollY style={{ height: scrollHeight }}>
                 <View
@@ -358,7 +509,8 @@ const NewHouse = () => {
                 >{default_value.name}
                 </View>
                 {
-                    condition && condition[key].map((item: any, index: number) => (
+                    condition[key] &&
+                    condition[key].map((item: any, index: number) => (
                         <View
                             key={index}
                             className={classnames("split-item", selected[key].id === item.id && 'actived')}
@@ -371,13 +523,42 @@ const NewHouse = () => {
         )
     }
 
+    const renderSplitSubTabItem = () => {
+        const target = find(subTabs, { actived: true })
+        const key = target.subType
+        if (subCondition[key]) {
+            return (
+                <ScrollView className="split-list flex-item" scrollY style={{ height: scrollHeight }}>
+                    <View
+                        className={classnames("split-item", findTarget(selected[key], default_value) && 'actived')}
+                        onClick={() => handleSingleClick(key, default_value)}
+                    >{default_value.name}
+                    </View>
+                    {
+                        subCondition[key].map((item: any, index: number) => (
+                            <View
+                                key={index}
+                                className={classnames("split-item", findTarget(selected[key], item) && 'actived')}
+                                onClick={() => handleMultiClick(key, item)}
+                            >
+                                <Text className="text">{item.name}</Text>
+                                <Text className={classnames('iconfont', findTarget(selected[key], item) ? 'iconcheckbox' : 'iconcheckboxno')}></Text>
+                            </View>
+                        ))
+                    }
+                </ScrollView>
+            )
+        }
+    }
+
     const renderMultiItem = (key: string, title: string = '') => {
         return (
             <View className="search-multi-item">
                 {title && <View className="title">{title}</View>}
                 <View className="options">
                     {
-                        condition && condition[key].map((item: any, index: number) => (
+                        condition[key] &&
+                        condition[key].map((item: any, index: number) => (
                             <View
                                 key={index}
                                 className={classnames("options-item", selected[key].id === item.id && 'actived')}
@@ -435,7 +616,6 @@ const NewHouse = () => {
                 </View>
                 <View className="search-tab">
                     {
-
                         tabs.map((item: any, index: number) => {
                             let showName = renderShowName(item)
                             return (
@@ -451,32 +631,24 @@ const NewHouse = () => {
                         })
                     }
                 </View>
-                <View className={classnames('search-container', tab === 'areaList' && 'actived')}>
-                    <View className="search-content">
+                <View className={classnames('search-container', 'search-multi-container', tab.type === 'location' && 'actived')}>
+                    <View className="search-content search-content-scroll">
                         <View className="search-split">
-                            <View className="split-type flex-item">
-                                <View className="split-item actived">区域</View>
-                            </View>
-                            {renderSplitItem('areaList')}
+                            {renderSubTabs()}
+                            {renderSplitTabItem()}
+                            {subCondition && renderSplitSubTabItem()}
                         </View>
                     </View>
+                    <View className="search-footer">
+                        <View className="btn reset-btn" onClick={handleTabReset}>重置</View>
+                        <View className="btn confirm-btn" onClick={handleConfirm}>确定</View>
+                    </View>
                 </View>
-                <View className={classnames('search-container', tab === 'price' && 'actived')}>
+                <View className={classnames('search-container', tab.type === 'price' && 'actived')}>
                     <View className="search-content">
                         <View className="search-split">
-                            <View className="split-type flex-item">
-                                {
-                                    priceTabs.map((item: any) => (
-                                        <View
-                                            key={item.id}
-                                            className={classnames("split-item", item.value === priceType && 'actived')}
-                                            onClick={() => setPriceType(item.value)}>
-                                            {item.name}
-                                        </View>
-                                    ))
-                                }
-                            </View>
-                            {renderSplitItem(priceType)}
+                            {renderSubTabs()}
+                            {renderSplitTabItem()}
                         </View>
                     </View>
                     {/* <View className="search-footer">
@@ -485,14 +657,14 @@ const NewHouse = () => {
                         <View className="btn confirm-btn single-btn">确定</View>
                     </View> */}
                 </View>
-                <View className={classnames('search-container', tab === 'room' && 'actived')}>
+                <View className={classnames('search-container', tab.type === 'room' && 'actived')}>
                     <View className="search-content">
                         <View className="search-split">
-                            {renderSplitItem('room')}
+                            {renderSplitTabItem()}
                         </View>
                     </View>
                 </View>
-                <View className={classnames('search-container', 'search-multi-container', tab === 'more' && 'actived')}>
+                <View className={classnames('search-container', 'search-multi-container', tab.type === 'more' && 'actived')}>
                     <ScrollView className="search-content search-content-scroll" scrollY style={{ maxHeight: scrollMoreHeight }}>
                         {renderMultiItem('propertyType', '建筑类型')}
                         {renderMultiItem('renovationStatus', '装修状况')}
@@ -500,12 +672,12 @@ const NewHouse = () => {
                         {/* {renderMultiItem('projectFeature', '项目特色')} */}
                     </ScrollView>
                     <View className="search-footer">
-                        <View className="btn reset-btn" onClick={handleReset}>重置</View>
+                        <View className="btn reset-btn" onClick={handleMoreReset}>重置</View>
                         <View className="btn confirm-btn" onClick={handleConfirm}>确定</View>
                     </View>
                 </View>
             </View>
-            <View className={classnames('mask', tab && 'show')} onClick={() => setTab('')}></View>
+            <View className={classnames('mask', tab.type && 'show')} onClick={() => setTab({})}></View>
             <View className="newhouse-content">
                 <ScrollView
                     className="house-list"
@@ -523,7 +695,7 @@ const NewHouse = () => {
                             <Text className="tag-name">优惠楼盘</Text>
                         </View>
                         {
-                            condition &&
+                            condition['projectFeature'] &&
                             condition['projectFeature'].map((item: any, index: number) => (
                                 <View
                                     key={index}

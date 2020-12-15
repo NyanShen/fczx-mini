@@ -27,7 +27,7 @@ class ChatEvent {
         }
     }
 
-    public emit(eventName: string, params: any = {}, timer: number = 5000) {
+    public emit(eventName: string, params: any = {}, timer: number = 10000) {
         let _this = this
         hasLogin().then((result) => {
             if (result && _this.events[eventName]) {
