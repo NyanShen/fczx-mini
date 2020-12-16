@@ -233,6 +233,7 @@ const NewHouse = () => {
 
         }
     }
+    
     const handleMultiClick = (key: string, item: any) => {
         let selectedValue = selected[key]
         if (selectedValue instanceof Object) {
