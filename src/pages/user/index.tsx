@@ -44,28 +44,6 @@ const User = () => {
       }
     })
   })
-  const getUserInfo = (e: any) => {
-    if (e.detail.errMsg === 'getUserInfo:ok') {
-      app.request({
-        url: app.apiUrl(api.syncWxUser),
-        method: 'POST',
-        data: { ...e.detail.userInfo }
-      }, { loading: false }).then((result: any) => {
-        setUser({
-          id: result.id,
-          sex: result.sex,
-          mobile: result.mobile,
-          avatarUrl: result.avatar,
-          username: result.username,
-          nickname: result.nickname
-        })
-        Taro.showToast({
-          title: '同步成功',
-          icon: 'success'
-        })
-      })
-    }
-  }
 
   const gotoLogin = () => {
     if (user.username) {
@@ -180,18 +158,6 @@ const User = () => {
             <Text className="iconfont iconarrow-right-bold"></Text>
           </View>
         </View>
-        {
-          user.username &&
-          <Button className="user-item user-item-btn" open-type="getUserInfo" onGetUserInfo={getUserInfo}>
-            <View className="item-icon">
-              <Text className="iconfont iconwechat"></Text>
-            </View>
-            <View className="item-text">同步微信</View>
-            <View className="item-arrow">
-              <Text className="iconfont iconarrow-right-bold"></Text>
-            </View>
-          </Button>
-        }
       </View>
       {
         user.username &&

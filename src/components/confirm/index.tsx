@@ -1,13 +1,14 @@
-import React, { ReactElement, useState } from 'react'
+import React, { ReactElement } from 'react'
 import { View } from "@tarojs/components"
 
 import './index.scss'
-import { useDidShow } from '@tarojs/taro'
+
 interface IProps {
     title?: string,
     message?: string,
     okText?: string,
     cancelText?: string,
+    showCancel?: boolean,
     SpecialBtn?: ReactElement,
     onCancel?: () => void,
     onConfirm?: () => void
@@ -15,7 +16,7 @@ interface IProps {
 
 const Confirm = (props: IProps) => {
     const { title, message, SpecialBtn, okText = '是', cancelText = '否' } = props
-    const { onConfirm, onCancel } = props
+    const { onConfirm, onCancel, showCancel = true } = props
 
     const renderOkBtn = () => {
         return SpecialBtn ? SpecialBtn :
@@ -32,13 +33,16 @@ const Confirm = (props: IProps) => {
                         {message && <View className="message">{message}</View>}
                     </View>
                     <View className="confirm-action">
-                        <View className="action-item" onClick={onCancel}>{cancelText}</View>
+                        {
+                            showCancel &&
+                            <View className="action-item" onClick={onCancel}>{cancelText}</View>
+                        }
                         {renderOkBtn()}
                     </View>
                 </View>
             </View>
         </View>
-    ) 
+    )
 }
 
 export default Confirm

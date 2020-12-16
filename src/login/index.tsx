@@ -1,15 +1,13 @@
 import React, { useState } from 'react'
-import Taro, { getCurrentInstance } from '@tarojs/taro'
+import Taro, { getCurrentInstance, useReady } from '@tarojs/taro'
 import { View, Text, Button } from '@tarojs/components'
 
-import api from '@services/api'
-import app from '@services/request'
 import storage from '@utils/storage'
 import ChatEvent from '@utils/event'
+import Confirm from '@components/confirm'
 import { PROJECT_NAME } from '@constants/global'
 import { fetchSessionKey, fetchDecryptData } from '@services/login'
 import './index.scss'
-import Confirm from '@components/confirm'
 
 const Login = () => {
     const currentRouter: any = getCurrentInstance().router
@@ -18,29 +16,26 @@ const Login = () => {
     const [loginCode, setLoginCode] = useState<string>('')
     const [showConfirm, setShowConfirm] = useState<boolean>(false)
 
-    const handleLogin = () => {
+    useReady(() => {
         fetchSessionKey().then((result: any) => {
             setLoginCode(result)
         })
-    }
+    })
 
-    const getPhoneNumber = (e) => {
-        const errMsg = e.detail.errMsg
-        if (errMsg === 'getPhoneNumber:ok') {
-            fetchDecryptData({
-                sessionKey: loginCode,
-                encryptedData: e.detail.encryptedData,
-                iv: e.detail.iv
-            }).then((result: any) => {
+    const handleAuthorizeLogin = (loginData: any) => {
+        fetchDecryptData({
+            sessionKey: loginCode,
+            encryptedData: loginData.encryptedData,
+            iv: loginData.iv
+        }).then((result: any) => {
+            if (result.token) {
                 storage.setItem('token', result.token, 'login')
-                if (result.is_need_sync) {
-                    setShowConfirm(true)
-                    return
-                }
-                handleRedirect()
                 ChatEvent.emit('chat')
-            })
-        }
+                handleRedirect()
+            } else {
+                setShowConfirm(true)
+            }
+        })
     }
 
     const handleRedirect = () => {
@@ -63,37 +58,36 @@ const Login = () => {
         })
     }
 
-    const getUserInfo = (e: any) => {
-        if (e.detail.errMsg === 'getUserInfo:ok') {
-            app.request({
-                url: app.apiUrl(api.syncWxUser),
-                method: 'POST',
-                data: { ...e.detail.userInfo }
-            }, { loading: false })
+    const handelGetUserInfo = (e) => {
+        const errMsg = e.detail.errMsg
+        if (errMsg === 'getUserInfo:ok') {
+            // fetchSessionKey().then((result: any) => {
+            //     setLoginCode(result)
+            handleAuthorizeLogin(e.detail)
+            // })
         }
-        handleRedirect()
     }
 
-    const handleCancel = () => {
-        setShowConfirm(false)
-        handleRedirect()
+    const handleGetPhoneNumber = (e: any) => {
+        if (e.detail.errMsg === 'getPhoneNumber:ok') {
+            handleAuthorizeLogin(e.detail)
+        }
     }
 
     const renderUserInfo = () => {
         const userButton = (
             <Button
                 className="action-item"
-                open-type="getUserInfo"
-                onGetUserInfo={getUserInfo}
+                open-type="getPhoneNumber"
+                onGetPhoneNumber={handleGetPhoneNumber}
                 onClick={() => setShowConfirm(false)}
-            >同步</Button>
+            >登录并绑定</Button>
         )
         return (
             <Confirm
-                title='是否同步微信昵称，头像信息'
+                title='绑定微信关联手机号完成登录'
                 SpecialBtn={userButton}
-                cancelText='取消'
-                onCancel={handleCancel}
+                showCancel={false}
             ></Confirm>
         )
     }
@@ -109,7 +103,7 @@ const Login = () => {
                     <View className="cut-line"></View>
                     <Text className="desc">推荐使用登录方式</Text>
                 </View>
-                <Button className="btn btn-primary" openType="getPhoneNumber" onGetPhoneNumber={getPhoneNumber} onClick={handleLogin}>
+                <Button className="btn btn-primary" openType="getUserInfo" onGetUserInfo={handelGetUserInfo}>
                     <Text>微信登录</Text>
                 </Button>
                 <View className="btn btn-plain" onClick={handleLoginByPhone}>

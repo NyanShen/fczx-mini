@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react'
 import Taro, { getCurrentInstance, useShareAppMessage, useShareTimeline } from '@tarojs/taro'
 import { View, Text, ScrollView, Image } from '@tarojs/components'
 import classnames from 'classnames'
-import map from 'lodash/map'
 import find from 'lodash/find'
 import remove from 'lodash/remove'
 import isEmpty from 'lodash/isEmpty'
@@ -13,136 +12,21 @@ import useNavData from '@hooks/useNavData'
 import { PROJECT_NAME } from '@constants/global'
 import { IPage, INIT_PAGE, getTotalPage } from '@utils/page'
 import { PRICE_TYPE, SALE_STATUS } from '@constants/house'
+import {
+    tabs,
+    IConditionState,
+    initial_value,
+    default_value,
+    INIT_CONDITION,
+    SALE_STATUS_ATTR,
+    filterParam,
+    filterArrParam,
+    findTarget,
+    fetchCondition
+} from './index.util'
 import '@styles/common/house.scss'
 import '@styles/common/search-tab.scss'
 import './index.scss'
-
-interface IFilter {
-    id: string
-    name: string
-    value?: string
-}
-
-interface IConditionState {
-    currentPage: number
-    areaList?: IFilter
-    circle?: IFilter[]
-    subway?: IFilter
-    station?: IFilter[]
-    unitPrice?: IFilter
-    totalPrice?: IFilter
-    priceType?: string
-    room?: IFilter
-    propertyType?: IFilter
-    fangBuildingType?: IFilter
-    saleStatus?: IFilter
-    renovationStatus?: IFilter
-    projectFeature?: IFilter
-    __discount?: IFilter
-
-}
-
-const initial_value: IFilter = { id: '', name: '' }
-const default_value: IFilter = { id: 'all', name: '不限' }
-
-const INIT_CONDITION: IConditionState = {
-    currentPage: 1,
-    priceType: '',
-    areaList: default_value,
-    circle: [default_value],
-    subway: default_value,
-    station: [default_value],
-    unitPrice: default_value,
-    totalPrice: initial_value,
-    room: default_value,
-    propertyType: initial_value,
-    fangBuildingType: initial_value,
-    saleStatus: initial_value,
-    renovationStatus: initial_value,
-    projectFeature: initial_value,
-    __discount: initial_value
-}
-
-const SALE_STATUS_ATTR: IFilter[] = [
-    {
-        id: '1',
-        name: '在售'
-    },
-    {
-        id: '2',
-        name: '待售'
-    },
-    {
-        id: '3',
-        name: '售罄'
-    }
-]
-const tabs: any[] = [
-    {
-        type: 'location',
-        name: '位置',
-        keys: ['areaList', 'subway'],
-        subTabs: [
-            {
-                name: '区域',
-                type: 'areaList',
-                subType: 'circle',
-                actived: true
-            },
-            {
-                name: '地铁',
-                type: 'subway',
-                subType: 'station',
-                actived: false
-            }
-        ]
-    },
-    {
-        type: 'price',
-        name: '价格',
-        keys: ['totalPrice', 'unitPrice'],
-        subTabs: [
-            {
-                id: '1',
-                name: '按单价',
-                type: 'unitPrice',
-                subType: '',
-                actived: true
-            },
-            {
-                id: '2',
-                name: '按总价',
-                type: 'totalPrice',
-                subType: '',
-                actived: false
-            }
-        ]
-    },
-    {
-        type: 'room',
-        name: '户型',
-        keys: ['room'],
-        subTabs: []
-    },
-    {
-        type: 'more',
-        name: '更多',
-        keys: ['propertyType', 'fangBuildingType', 'renovationStatus'],
-        subTabs: []
-    }
-]
-
-const keys = [
-    'areaList',
-    'subway',
-    'propertyType',
-    'totalPrice',
-    'unitPrice',
-    'room',
-    'fangBuildingType',
-    'renovationStatus',
-    'projectFeature'
-]
 
 const NewHouse = () => {
     const { contentHeight } = useNavData()
@@ -181,7 +65,9 @@ const NewHouse = () => {
     })
 
     useEffect(() => {
-        fetchCondition()
+        fetchCondition((result: any) => {
+            setCondition({ ...result, saleStatus: SALE_STATUS_ATTR })
+        })
     }, [])
 
     useEffect(() => {
@@ -195,17 +81,6 @@ const NewHouse = () => {
         selected.__discount
     ])
 
-    const fetchCondition = () => {
-        app.request({
-            url: app.areaApiUrl(api.getHouseAttr),
-            data: {
-                key: keys.join(',')
-            }
-        }).then((result: any) => {
-            setCondition({ ...result, saleStatus: SALE_STATUS_ATTR })
-        })
-    }
-
     const fetchSubCondition = (type: string, apiUrl: string, param: any = {}) => {
         app.request({
             url: app.areaApiUrl(apiUrl),
@@ -216,8 +91,6 @@ const NewHouse = () => {
     }
 
     const fetchHouseList = (currentPage: number = 1) => {
-        // const circleFilter = selected.circle && remove(selected.circle, { id: 'all' })
-        // const stationFilter = selected.station && remove(selected.station, { id: 'all' })
         app.request({
             url: app.areaApiUrl(api.getHouseList),
             data: {
@@ -226,8 +99,8 @@ const NewHouse = () => {
                 limit: PAGE_LIMIT,
                 fang_area_id: filterParam(selected.areaList?.id),
                 fang_subway: filterParam(selected.subway?.id),
-                // fang_area_circles: map(circleFilter, 'id').join(','),
-                // fang_subway_station: map(stationFilter, 'id').join(','),
+                fang_area_circles: filterArrParam(selected.circle).join(','),
+                fang_subway_station: filterArrParam(selected.station).join(','),
                 price: filterParam(selected.unitPrice?.id || selected.totalPrice?.id),
                 price_type: filterParam(selected.priceType),
                 sale_status: selected.saleStatus?.id,
@@ -270,14 +143,6 @@ const NewHouse = () => {
         } else {
             setShowEmpty(true)
         }
-    }
-
-    const filterParam = (id: any) => {
-        return id === 'all' ? '' : id
-    }
-
-    const findTarget = (list: IFilter[], item: IFilter) => {
-        return find(list, { id: item.id })
     }
 
     const switchCondition = (item) => {
@@ -424,8 +289,9 @@ const NewHouse = () => {
         setSelected({
             ...selected,
             areaList: default_value,
+            subway: default_value,
             circle: [default_value],
-            subway: default_value
+            station: [default_value]
         })
         setSubCondition(null)
     }
@@ -435,8 +301,7 @@ const NewHouse = () => {
             ...selected,
             propertyType: initial_value,
             renovationStatus: initial_value,
-            saleStatus: initial_value,
-            // projectFeature: initial_value
+            saleStatus: initial_value
         })
     }
 
@@ -525,6 +390,9 @@ const NewHouse = () => {
 
     const renderSplitSubTabItem = () => {
         const target = find(subTabs, { actived: true })
+        if (!target) {
+            return
+        }
         const key = target.subType
         if (subCondition[key]) {
             return (
@@ -599,6 +467,23 @@ const NewHouse = () => {
             return <Text className="price">{price}<Text className="price-unit">{PRICE_TYPE[price_type]}</Text></Text>
         }
     }
+
+    const renderSearchTabs = () => {
+        return tabs.map((item: any, index: number) => {
+            let showName = renderShowName(item)
+            return (
+                <View
+                    key={index}
+                    className={classnames('search-tab-item', showName && 'actived')}
+                    onClick={() => switchCondition(item)}
+                >
+                    <Text className="text">{showName ? showName : item.name}</Text>
+                    <Text className="iconfont iconarrow-down-bold"></Text>
+                </View>
+            )
+        })
+    }
+
     return (
         <View className="newhouse">
             <View className="fixed" style={{ top: 0 }}>
@@ -615,21 +500,7 @@ const NewHouse = () => {
                     </View>
                 </View>
                 <View className="search-tab">
-                    {
-                        tabs.map((item: any, index: number) => {
-                            let showName = renderShowName(item)
-                            return (
-                                <View
-                                    key={index}
-                                    className={classnames('search-tab-item', showName && 'actived')}
-                                    onClick={() => switchCondition(item)}
-                                >
-                                    <Text className="text">{showName ? showName : item.name}</Text>
-                                    <Text className="iconfont iconarrow-down-bold"></Text>
-                                </View>
-                            )
-                        })
-                    }
+                    {renderSearchTabs()}
                 </View>
                 <View className={classnames('search-container', 'search-multi-container', tab.type === 'location' && 'actived')}>
                     <View className="search-content search-content-scroll">
@@ -669,7 +540,6 @@ const NewHouse = () => {
                         {renderMultiItem('propertyType', '建筑类型')}
                         {renderMultiItem('renovationStatus', '装修状况')}
                         {renderMultiItem('saleStatus', '销售状态')}
-                        {/* {renderMultiItem('projectFeature', '项目特色')} */}
                     </ScrollView>
                     <View className="search-footer">
                         <View className="btn reset-btn" onClick={handleMoreReset}>重置</View>
