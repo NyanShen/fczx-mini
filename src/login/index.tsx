@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 import Taro, { getCurrentInstance, useReady } from '@tarojs/taro'
-import { View, Text, Button } from '@tarojs/components'
+import { View, Text, Button, Image } from '@tarojs/components'
 
 import storage from '@utils/storage'
 import ChatEvent from '@utils/event'
-import Confirm from '@components/confirm'
+import logo from '@assets/icons/logo.png'
 import { PROJECT_NAME } from '@constants/global'
 import { fetchSessionKey, fetchDecryptData } from '@services/login'
 import './index.scss'
@@ -61,10 +61,7 @@ const Login = () => {
     const handelGetUserInfo = (e) => {
         const errMsg = e.detail.errMsg
         if (errMsg === 'getUserInfo:ok') {
-            // fetchSessionKey().then((result: any) => {
-            //     setLoginCode(result)
             handleAuthorizeLogin(e.detail)
-            // })
         }
     }
 
@@ -75,20 +72,23 @@ const Login = () => {
     }
 
     const renderUserInfo = () => {
-        const userButton = (
-            <Button
-                className="action-item"
-                open-type="getPhoneNumber"
-                onGetPhoneNumber={handleGetPhoneNumber}
-                onClick={() => setShowConfirm(false)}
-            >登录并绑定</Button>
-        )
         return (
-            <Confirm
-                title='绑定微信关联手机号完成登录'
-                SpecialBtn={userButton}
-                showCancel={false}
-            ></Confirm>
+            <View className="login-accredit">
+                <View className="acrredit-content">
+                    <View className="logo">
+                        <Image src={logo} mode="aspectFill"></Image>
+                    </View>
+                    <View className="context">
+                        <View className="title">授权微信手机号</View>
+                        <View className="desc">更方便为您提供服务</View>
+                    </View>
+                    <Button
+                        className="btn btn-primary"
+                        open-type="getPhoneNumber"
+                        onGetPhoneNumber={handleGetPhoneNumber}
+                    >立即授权</Button>
+                </View>
+            </View>
         )
     }
 
@@ -109,9 +109,6 @@ const Login = () => {
                 <View className="btn btn-plain" onClick={handleLoginByPhone}>
                     <Text>账号登录</Text>
                 </View>
-            </View>
-            <View className="login-accredit">
-                
             </View>
             {showConfirm && renderUserInfo()}
         </View>
