@@ -15,6 +15,7 @@ export default {
     getCityList: '/index/city-list',
     getAreaList: '/area/list',
     getHomeApplet: '/applet/home',
+    getCommonLocation: '/common/get-location',
 
     getHouseList: '/house/list',
     getHouseMap: '/house/area-house',

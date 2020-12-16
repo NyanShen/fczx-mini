@@ -117,16 +117,29 @@ const Index = () => {
   useDidShow(() => {
     const currentCity = storage.getItem('city')
     if (!currentCity) {
-      Taro.showModal({
-        title: '提示',
-        content: '请先选择一个的城市',
-        showCancel: false,
-        success: function (res) {
-          if (res.confirm) {
-            Taro.navigateTo({
-              url: '/house/city/index'
+      Taro.getLocation({
+        type: 'wgs84',
+        success: (result: any) => {
+          if (result.errMsg === 'getLocation:ok') {
+            app.request({
+              url: app.apiUrl(api.getCommonLocation),
+              method: 'POST',
+              data: result
+            }).then((result: any) => {
+              if (result) {
+                storage.setItem('city', result)
+                setCity(result)
+                fetchHouseList()
+                fetchEsfList()
+                fetchHomeData()
+              } else {
+                toCityList()
+              }
             })
           }
+        },
+        fail: () => {
+          toCityList()
         }
       })
       return
@@ -137,14 +150,7 @@ const Index = () => {
       fetchEsfList()
       fetchHomeData()
     }
-    Taro.getLocation({
-      type: 'wgs84',
-      success: (result: any) => {
-        if (result.errMsg === 'getLocation:ok') {
-          console.log(result)
-        }
-      }
-    })
+
   })
 
   const fetchHomeData = () => {
@@ -166,6 +172,7 @@ const Index = () => {
       setHouseList(result.data)
     })
   }
+
   const fetchEsfList = () => {
     app.request({
       url: app.areaApiUrl(api.getEsfList),

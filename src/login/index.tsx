@@ -110,6 +110,9 @@ const Login = () => {
                     <Text>账号登录</Text>
                 </View>
             </View>
+            <View className="login-accredit">
+                
+            </View>
             {showConfirm && renderUserInfo()}
         </View>
     )
