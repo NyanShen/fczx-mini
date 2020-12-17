@@ -190,6 +190,7 @@ const HouseMap = () => {
         let houseLabels: any[] = []
         for (const item of dataList) {
             const location = bMapTransQQMap(item.latitude, item.longitude)
+            const showPrice = item.price === '0' ? '价格待定' : `${item.price}${PRICE_TYPE[item.price_type]}`
             houseLabels.push({
                 id: Number(item.id),
                 latitude: location.latitude,
@@ -198,7 +199,7 @@ const HouseMap = () => {
                 width: 20,
                 height: 30,
                 callout: {
-                    content: `${item.price}${PRICE_TYPE[item.price_type]} | ${item.title}`,
+                    content: `${showPrice} | ${item.title}`,
                     color: '#fff',
                     anchorX: 0,
                     anchorY: 20,
