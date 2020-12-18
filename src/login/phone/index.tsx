@@ -122,7 +122,7 @@ const LoginPhone = () => {
             url: app.apiUrl(tab.login_url),
             data: postData
         }).then((result: any) => {
-            storage.setItem('token', result, 'login')
+            storage.setItem('token', result)
             if (backUrl && !isTab) {
                 Taro.redirectTo({ url: decodeURIComponent(backUrl) })
             }

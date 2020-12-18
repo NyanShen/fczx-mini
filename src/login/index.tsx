@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import Taro, { getCurrentInstance, useReady } from '@tarojs/taro'
+import React, { useEffect, useState } from 'react'
+import Taro, { getCurrentInstance } from '@tarojs/taro'
 import { View, Text, Button, Image } from '@tarojs/components'
 
 import storage from '@utils/storage'
@@ -13,14 +13,27 @@ const Login = () => {
     const currentRouter: any = getCurrentInstance().router
     const isTab: string = currentRouter.params?.isTab || ''
     const backUrl: string = currentRouter.params?.backUrl || ''
-    const [loginCode, setLoginCode] = useState<string>('')
+    const INIT_CODE = storage.getItem('session_key')
+    const [valid, setValid] = useState<Boolean>(false)
+    const [loginCode, setLoginCode] = useState<string>(INIT_CODE)
     const [showConfirm, setShowConfirm] = useState<boolean>(false)
 
-    useReady(() => {
-        fetchSessionKey().then((result: any) => {
-            setLoginCode(result)
+    useEffect(() => {
+        console.log(new Date().getTime())
+        Taro.checkSession({
+            success: () => {
+                setValid(true)
+                console.log(new Date().getTime())
+                console.log("test")
+            },
+            fail: () => {
+                fetchSessionKey().then((result: any) => {
+                    setLoginCode(result)
+                    setValid(true)
+                })
+            }
         })
-    })
+    }, [])
 
     const handleAuthorizeLogin = (loginData: any) => {
         fetchDecryptData({
@@ -29,7 +42,7 @@ const Login = () => {
             iv: loginData.iv
         }).then((result: any) => {
             if (result.token) {
-                storage.setItem('token', result.token, 'login')
+                storage.setItem('token', result.token)
                 ChatEvent.emit('chat')
                 handleRedirect()
             } else {
@@ -92,27 +105,28 @@ const Login = () => {
         )
     }
 
-    return (
-        <View className="login">
-            <View className="login-header">
-                <Text className="title">{PROJECT_NAME}</Text>
-                <Text className="small">Fczx.com</Text>
-            </View>
-            <View className="login-content">
-                <View className="login-memo">
-                    <View className="cut-line"></View>
-                    <Text className="desc">推荐使用登录方式</Text>
+    return valid &&
+        (
+            <View className="login">
+                <View className="login-header">
+                    <Text className="title">{PROJECT_NAME}</Text>
+                    <Text className="small">Fczx.com</Text>
                 </View>
-                <Button className="btn btn-primary" openType="getUserInfo" onGetUserInfo={handelGetUserInfo}>
-                    <Text>微信登录</Text>
-                </Button>
-                <View className="btn btn-plain" onClick={handleLoginByPhone}>
-                    <Text>账号登录</Text>
+                <View className="login-content">
+                    <View className="login-memo">
+                        <View className="cut-line"></View>
+                        <Text className="desc">推荐使用登录方式</Text>
+                    </View>
+                    <Button className="btn btn-primary" openType="getUserInfo" onGetUserInfo={handelGetUserInfo}>
+                        <Text>微信登录</Text>
+                    </Button>
+                    <View className="btn btn-plain" onClick={handleLoginByPhone}>
+                        <Text>账号登录</Text>
+                    </View>
                 </View>
+                {showConfirm && renderUserInfo()}
             </View>
-            {showConfirm && renderUserInfo()}
-        </View>
-    )
+        )
 }
 
 export default Login

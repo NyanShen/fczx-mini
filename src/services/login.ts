@@ -41,7 +41,7 @@ export const fetchSessionKey = () => {
                             code: res.code
                         }
                     }, { loading: false }).then((result: any) => {
-                        storage.setItem('session_key', result.session_key, 'login')
+                        storage.setItem('session_key', result.session_key)
                         resolve(result.session_key)
                     })
                 }

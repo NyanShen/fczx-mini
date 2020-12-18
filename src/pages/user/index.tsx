@@ -54,7 +54,7 @@ const User = () => {
   }
 
   const handleLogout = () => {
-    storage.clear('login')
+    storage.clear('token')
     setUser(INIT_USER)
     ChatEvent.clearTimer()
     Taro.hideTabBarRedDot({ index: 1 })

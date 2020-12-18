@@ -43,7 +43,7 @@ app.request = (params: any, { loading = true, toast = true }: any = {}) => {
     }
 
     const city = { 'X-City': getCityAlias() }
-    const token = { 'X-Token': storage.getItem('token', 'login') }
+    const token = { 'X-Token': storage.getItem('token') }
     params.header = { ...params.header, ...token, ...city }
 
     const { page, limit } = params.data
@@ -113,7 +113,7 @@ app.uploadFile = (data: any, callback: (string) => void) => {
                 file: data.tempFiles[i]
             },
             header: {
-                'X-Token': storage.getItem('token', 'login')
+                'X-Token': storage.getItem('token')
             },
             success: ((result: any) => {
                 callback(JSON.parse(result.data).data)
