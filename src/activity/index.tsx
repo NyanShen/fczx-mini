@@ -2,11 +2,22 @@ import React from 'react'
 import Taro, { useReady } from '@tarojs/taro'
 import { View, Image, Text } from '@tarojs/components'
 
+import CustomProgress from '@components/progress'
 import './index.scss'
 
 const Activity = () => {
     const titleColor = '#48a764'
     const mainColor = '#a7daad'
+    const dataList = [
+        {
+            name: '精美笔记本',
+            needCount: 10,
+        },
+        {
+            name: '豪华笔记本',
+            needCount: 20,
+        }
+    ]
     useReady(() => {
         Taro.setNavigationBarTitle({ title: '优惠活动' })
     })
@@ -24,7 +35,9 @@ const Activity = () => {
                             <Text className="subtitle">参加楼盘的助力活动</Text>
                         </View>
                     </View>
-                    <View className="main-progress mt20"></View>
+                    <View className="main-progress">
+                        <CustomProgress dataList={dataList} meetCount={10}/>
+                    </View>
                     <View className="main-action mt20">
                         <View className="btn btn-primary" style={{ backgroundColor: mainColor, borderColor: mainColor }}>邀请好友助力</View>
                     </View>

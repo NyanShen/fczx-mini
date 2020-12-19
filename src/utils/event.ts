@@ -1,7 +1,3 @@
-import api from '@services/api'
-import { hasLogin } from '@services/login'
-import app from '@services/request'
-
 class ChatEvent {
 
     public timer: any
@@ -27,33 +23,18 @@ class ChatEvent {
         }
     }
 
-    public emit(eventName: string, params: any = {}, timer: number = 10000) {
+    public emit(eventName: string, params: any = {}) {
         let _this = this
-        hasLogin().then((result) => {
-            if (result && _this.events[eventName]) {
-                _this.fetchChatUnread(eventName, params)
-                _this.timer = setInterval(() => {
-                    _this.fetchChatUnread(eventName, params)
-                }, timer)
-            }
-        })
+        if (_this.events[eventName]) {
+            _this.events[eventName].map((callBack) => {
+                callBack(params);
+            })
+        }
     }
 
     public clearTimer() {
         clearInterval(this.timer)
     }
-
-    fetchChatUnread(eventName: string, params: any = {}) {
-        let _this = this
-        app.request({
-            url: app.apiUrl(api.getUnread)
-        }, { loading: false }).then((result: any) => {
-            _this.events[eventName].map((callBack) => {
-                callBack(result.message, params);
-            })
-        })
-    }
-
 }
 
 export default new ChatEvent()

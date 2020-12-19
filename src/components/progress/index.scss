@@ -1,0 +1,78 @@
+.progress {
+    width: 90%;
+    height: 50px;
+    position: relative;
+    margin: auto;
+    margin-top: 30px;
+    .progress-linear {
+        width: 100%;
+        height: 10px;
+        position: absolute;
+        top: 50%;
+        left: 0;
+        margin-top: -20px;
+        background: $bgc-color;
+        border-radius: 25px;
+        .progress-linearbar {
+            position: absolute;
+            display: inline-block;
+            background: $primary-color;
+            height: 10px;
+        }
+    }
+    .progress-nodebar {
+        position: absolute;
+        top: 0;
+        margin-top: -10px;
+        margin-left: -20px;
+        text-align: center;
+        .node-statement {
+            position: absolute;
+            top: -100px;
+            left: -90px;
+            width: 220px;
+            height: 65px;
+            font-size: $font-26;
+            background-color: #a7daad;
+            border-radius: 15px;
+            padding: 8px 0;
+
+            .statement {
+                width: 100%;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                font-size: $font-24;
+            }
+            .iconarrow {
+                position: absolute;
+                bottom: -8px;
+                left: 100px;
+                border-width: 12px 12px 0 12px;
+                border-style: solid;
+                border-color: #a7daad transparent transparent transparent;
+            }
+        }
+        .node-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: $white;
+            background: $bgc-color;
+        }
+
+        .node-count {
+            font-size: $font-basic;
+            color: $sale-2;
+        }
+
+        &:nth-child(2) {
+            left: 0%;
+
+            .node-circle {
+                background-color: $primary-color;
+            }
+        }
+        
+    }
+}

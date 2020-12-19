@@ -40,7 +40,6 @@ const User = () => {
           username: result.username,
           nickname: result.nickname
         })
-        storage.setItem('subscrib_status', result.is_subscribe_wx)
       }
     })
   })
@@ -57,6 +56,10 @@ const User = () => {
     storage.clear('token')
     setUser(INIT_USER)
     ChatEvent.clearTimer()
+    Taro.onSocketOpen(function () {
+      console.log('closeSocket')
+      Taro.closeSocket()
+    })
     Taro.hideTabBarRedDot({ index: 1 })
   }
 

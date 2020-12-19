@@ -59,6 +59,7 @@
                     border-radius: 50%;
                     background-color: $bg-color;
                 }
+
                 .main-text {
                     margin-left: 30px;
                     .subtitle {
@@ -67,6 +68,10 @@
                     }
                 }
             }
+            .main-progress{
+                margin: 150px 0 60px 0;
+            } 
+        
             .main-subaction {
                 text-align: center;
                 .subaction-btn {

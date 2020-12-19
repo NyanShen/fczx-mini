@@ -6,11 +6,12 @@ import classnames from 'classnames'
 import api from '@services/api'
 import app from '@services/request'
 import useNavData from '@hooks/useNavData'
-import { toUrlParam } from '@utils/urlHandler'
 import { PRICE_TYPE } from '@constants/house'
 import { fetchUserData } from '@services/login'
+import { toUrlParam } from '@utils/urlHandler'
 import { formatChatListTime } from '@utils/index'
 import { getTotalPage, INIT_PAGE, IPage } from '@utils/page'
+import CustomSocket from '@utils/socket'
 import './index.scss'
 
 interface IParam {
@@ -46,6 +47,7 @@ const ChatRoom = () => {
     const [param, setParam] = useState<IParam>(INIT_PARAM)
     const [page, setPage] = useState<IPage>(INIT_PAGE)
     const [chatData, setChatData] = useState<any[]>([])
+    const [newChatData, setNewChatData] = useState<any[]>([])
     const [bottom, setBottom] = useState<number>(0)
     const [toView, setToView] = useState<string>('')
     const [images, setImages] = useState<string[]>([])
@@ -55,6 +57,17 @@ const ChatRoom = () => {
 
     useReady(() => {
         Taro.setNavigationBarTitle({ title: toUser.nickname })
+        if (messageType && content) {
+            sendMessage(messageType, content)
+        }
+    })
+
+    CustomSocket.onSocketMessage((message: any) => {
+        console.log('chatroom onSocketMessage', message)
+        console.log(message.from_user_id == toUser.id)
+        if (message.from_user_id == toUser.id) {
+            setNewChatData([...newChatData, message])
+        }
     })
 
     useDidShow(() => {
@@ -71,10 +84,21 @@ const ChatRoom = () => {
     })
 
     useEffect(() => {
-        if (messageType && content) {
-            sendMessage(messageType, content)
+        // TODO：处理第一次聊天空消息问题
+        if (chatData.length > 0) {
+            const currentView = `toView_${chatData[chatData.length - 1].id}`
+            if (currentView === toView) {
+                setChatData([...chatData, ...newChatData])
+                setNewChatData([])
+            }
         }
-    }, [])
+    }, [newChatData])
+
+    useEffect(() => {
+        if (chatData.length > 0) {
+            setToView(`toView_${chatData[chatData.length - 1].id}`)
+        }
+    }, [chatData])
 
     useEffect(() => {
         fetchChatData()
@@ -97,9 +121,6 @@ const ChatRoom = () => {
                 const dataList = [...resData, ...chatData]
                 setChatData(dataList)
                 imageFilter(dataList)
-            }
-            if (resData.length > 0) {
-                setToView(`toView_${resData[resData.length - 1].id}`)
             }
             setPage({
                 ...page,
@@ -169,19 +190,16 @@ const ChatRoom = () => {
     }
 
     const sendMessage = (type: string, content: any) => {
-        app.request({
-            url: app.apiUrl(api.postChatSend),
-            method: 'POST',
-            data: {
-                to_user_id: toUser.id,
-                message_type: type,
-                content
-            }
-        }, { loading: false }).then(() => {
-            setParam({
-                currentPage: INIT_PARAM.currentPage
-            })
-        })
+        const timestamp = new Date().getTime()
+        const message = {
+            id: 'tempid_' + timestamp,
+            type: 'chat',
+            to_user_id: toUser.id,
+            message_type: type,
+            content,
+        }
+        setChatData([...chatData, message])
+        CustomSocket.sendSocketMessage(JSON.stringify(message))
     }
 
     const sendActionMessage = (type: string, content: string) => {
@@ -306,6 +324,9 @@ const ChatRoom = () => {
     }
 
     const renderTime = (time: string) => {
+        if (!time) {
+            return null
+        }
         if (ref.current !== time) {
             ref.current = time
             return (
