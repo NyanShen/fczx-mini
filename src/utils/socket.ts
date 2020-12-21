@@ -7,7 +7,6 @@ class CustomSocket {
     private lockReConnect: boolean = false
     private timer: any = null
     private limit: number = 0
-    private token = storage.getItem('token')
     constructor() {
         this.connectSocket()
         console.log('init CustomSocket')
@@ -15,10 +14,11 @@ class CustomSocket {
     connectSocket() {
         const _this = this
         Taro.connectSocket({
-            url: `wss://api.fczx.com/wss?userToken=${_this.token}`,
+            url: `wss://api.fczx.com/wss?userToken=${_this.getToken()}`,
             success: (response: any) => {
                 console.log('connectSocket success:', response)
                 _this.initSocketEvent()
+                _this.limit = 0
             },
             fail: (e: any) => {
                 console.log('connectSocket fail:', e)
@@ -41,7 +41,7 @@ class CustomSocket {
         })
         Taro.onSocketClose(() => {
             console.log('WebSocket close！')
-            if (_this.token) {
+            if (_this.getToken()) {
                 _this.reconnectSocket()
             }
         })
@@ -61,6 +61,10 @@ class CustomSocket {
             }, 5000)
             _this.limit = _this.limit + 1
         }
+    }
+
+    getToken = () => {
+        return storage.getItem('token')
     }
 
     public sendSocketMessage(messgage: string, errorCallback: (any) => void = () => { }) {

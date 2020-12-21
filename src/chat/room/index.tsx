@@ -31,6 +31,7 @@ const EXPRESSIONS = [
     '什么时候方便看房子？',
     '房子的价格还可以谈么',
 ]
+let time: number = 0
 const PAGE_LIMIT: number = 20
 const INIT_ACTION = { expression: false, photo: false }
 const INIT_INPUT_DATA = { value: '', send: false }
@@ -38,8 +39,8 @@ const INIT_INPUT_DATA = { value: '', send: false }
 const ChatRoom = () => {
     const params: any = getCurrentInstance().router?.params
     const fromUserId: string = params.fromUserId
-    const messageType: string = params.messageType
-    const content: string = params.content
+    let messageType: string = params.messageType
+    let content: string = params.content
     const toUser: any = JSON.parse(params.toUser || '{}') || {}
     const { contentHeight } = useNavData()
 
@@ -55,19 +56,20 @@ const ChatRoom = () => {
     const [inputData, setInputData] = useState<any>(INIT_INPUT_DATA)
     const ref = useRef<string>('') // 判断显示时间点
 
-    useReady(() => {
-        Taro.setNavigationBarTitle({ title: toUser.nickname })
-        if (messageType && content) {
-            sendMessage(messageType, content)
+    CustomSocket.onSocketMessage((message: any) => {
+        console.log('chatroomchatroom', message.from_user_id == toUser.id)
+        if (message.from_user_id == toUser.id) {
+            const timestamp = handleMessageTime()
+            message.id = 'tempid_' + (timestamp + 1)
+            message.time = time
+            message.created = timestamp
+            console.log('chatroom onSocketMessage', message)
+            setNewChatData([...newChatData, message])
         }
     })
 
-    CustomSocket.onSocketMessage((message: any) => {
-        console.log('chatroom onSocketMessage', message)
-        console.log(message.from_user_id == toUser.id)
-        if (message.from_user_id == toUser.id) {
-            setNewChatData([...newChatData, message])
-        }
+    useReady(() => {
+        Taro.setNavigationBarTitle({ title: toUser.nickname })
     })
 
     useDidShow(() => {
@@ -84,13 +86,19 @@ const ChatRoom = () => {
     })
 
     useEffect(() => {
-        // TODO：处理第一次聊天空消息问题
+        if (newChatData.length < 1) {
+            return
+        }
         if (chatData.length > 0) {
             const currentView = `toView_${chatData[chatData.length - 1].id}`
+            console.log('currentView', chatData, toView)
             if (currentView === toView) {
                 setChatData([...chatData, ...newChatData])
                 setNewChatData([])
             }
+        } else {
+            setChatData([...newChatData])
+            setNewChatData([])
         }
     }, [newChatData])
 
@@ -117,6 +125,11 @@ const ChatRoom = () => {
             if (param.currentPage === INIT_PARAM.currentPage) {
                 setChatData(resData)
                 imageFilter(resData)
+                if (messageType && content) {
+                    sendMessage(messageType, content, resData)
+                    content = ''
+                    messageType = ''
+                }
             } else {
                 const dataList = [...resData, ...chatData]
                 setChatData(dataList)
@@ -189,16 +202,37 @@ const ChatRoom = () => {
         Taro.setClipboardData({ data: toUser.wx })
     }
 
-    const sendMessage = (type: string, content: any) => {
-        const timestamp = new Date().getTime()
+    const handleMessageTime = () => {
+        const timestamp = parseInt(`${new Date().getTime() / 1000}`)
+        if (chatData.length > 0) {
+            const lastTime = chatData[chatData.length - 1].created
+            if (timestamp - lastTime > 10 * 60) {
+                time = timestamp
+            } else {
+                time = parseInt(chatData[chatData.length - 1].time)
+            }
+        } else {
+            time = timestamp
+        }
+        return timestamp
+    }
+
+    const sendMessage = (type: string, content: any, dataList: any = null) => {
+        const timestamp = handleMessageTime()
         const message = {
             id: 'tempid_' + timestamp,
             type: 'chat',
             to_user_id: toUser.id,
             message_type: type,
+            created: timestamp,
             content,
+            time
         }
-        setChatData([...chatData, message])
+        if (dataList) {
+            setChatData([...dataList, message])
+        } else {
+            setChatData([...chatData, message])
+        }
         CustomSocket.sendSocketMessage(JSON.stringify(message))
     }
 
@@ -324,10 +358,7 @@ const ChatRoom = () => {
     }
 
     const renderTime = (time: string) => {
-        if (!time) {
-            return null
-        }
-        if (ref.current !== time) {
+        if (ref.current != time) {
             ref.current = time
             return (
                 <View className="item-tip">
@@ -341,7 +372,7 @@ const ChatRoom = () => {
         return chatData.map((item: any, index: number) => (
             <View key={index} id={`toView_${item.id}`}>
                 {
-                    item.from_user_id === fromUserId ?
+                    item.from_user_id == fromUserId ?
                         (
                             <View className="msg-item">
                                 {renderTime(item.time)}

@@ -6,6 +6,7 @@ import api from '@services/api'
 import app from '@services/request'
 import storage from '@utils/storage'
 import ChatEvent from '@utils/event'
+import CustomSocket from '@utils/socket'
 import { toUrlParam } from '@utils/urlHandler'
 import './index.scss'
 
@@ -56,10 +57,7 @@ const User = () => {
     storage.clear('token')
     setUser(INIT_USER)
     ChatEvent.clearTimer()
-    Taro.onSocketOpen(function () {
-      console.log('closeSocket')
-      Taro.closeSocket()
-    })
+    CustomSocket.closeSocket()
     Taro.hideTabBarRedDot({ index: 1 })
   }
 
