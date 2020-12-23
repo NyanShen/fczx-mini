@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Taro from '@tarojs/taro'
+import Taro, { getCurrentInstance } from '@tarojs/taro'
 import { View, ScrollView } from '@tarojs/components'
 
 import api from '@services/api'
@@ -18,7 +18,7 @@ const City = () => {
 
     useEffect(() => {
         app.request({
-            url: app.apiUrl(api.getCityList)
+            url: app.apiUrl(api.getCityList),
         }).then((result: any) => {
             setCityData(result || [])
         })
@@ -26,6 +26,13 @@ const City = () => {
 
     const handleCityClick = (city: any) => {
         storage.setItem('city', city)
+        const params: any = getCurrentInstance().router?.params
+        if (params.backUrl) {
+            Taro.reLaunch({
+                url: decodeURIComponent(params.backUrl)
+            })
+            return
+        }
         Taro.navigateBack({
             delta: 1
         })

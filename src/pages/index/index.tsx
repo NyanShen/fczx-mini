@@ -117,31 +117,13 @@ const Index = () => {
   useDidShow(() => {
     const currentCity = storage.getItem('city')
     if (!currentCity) {
-      Taro.getLocation({
-        type: 'wgs84',
-        success: (result: any) => {
-          if (result.errMsg === 'getLocation:ok') {
-            app.request({
-              url: app.apiUrl(api.getCommonLocation),
-              method: 'POST',
-              data: result
-            }).then((result: any) => {
-              if (result) {
-                storage.setItem('city', result)
-                setCity(result)
-                fetchHouseList()
-                fetchEsfList()
-                fetchHomeData()
-              } else {
-                toCityList()
-              }
-            })
-          }
-        },
-        fail: () => {
-          toCityList()
-        }
+      app.setLocation((result: any) => {
+        setCity(result)
+        fetchHouseList()
+        fetchEsfList()
+        fetchHomeData()
       })
+
       return
     }
     if (currentCity.id !== city.id) {

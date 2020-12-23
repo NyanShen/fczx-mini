@@ -1,6 +1,9 @@
-import Taro from '@tarojs/taro'
+import Taro, { getCurrentInstance } from '@tarojs/taro'
 import storage from '@utils/storage'
+import { toUrlParam } from '@utils/urlHandler'
+import api from './api'
 
+let count: number = 0
 const getCityAlias = (): string => {
     const city = storage.getItem('city')
     if (city) {
@@ -8,6 +11,14 @@ const getCityAlias = (): string => {
     } else {
         return ''
     }
+}
+
+const toCityList = () => {
+    const router: any = getCurrentInstance().router
+    const backUrl = `${router?.path}${toUrlParam(router?.params)}`
+    Taro.redirectTo({
+        url: `/house/city/index?backUrl=${encodeURIComponent(backUrl)}`
+    })
 }
 
 const agreement: string = 'https://'
@@ -34,6 +45,35 @@ app.randCode = (len: number) => {
         code += charset[parseInt(`${charsetLen * Math.random()}`)];
     }
     return code;
+}
+
+app.setLocation = (callback: (any) => void) => {
+    if (count > 0) {
+        return
+    }
+    count = count + 1
+    Taro.getLocation({
+        type: 'wgs84',
+        success: (result: any) => {
+            if (result.errMsg === 'getLocation:ok') {
+                app.request({
+                    url: app.apiUrl(api.getCommonLocation),
+                    method: 'POST',
+                    data: result
+                }).then((result: any) => {
+                    if (result) {
+                        storage.setItem('city', result)
+                        callback && callback(result)
+                    } else {
+                        toCityList()
+                    }
+                })
+            }
+        },
+        fail: () => {
+            toCityList()
+        }
+    })
 }
 
 app.request = (params: any, { loading = true, toast = true }: any = {}) => {
@@ -75,6 +115,17 @@ app.request = (params: any, { loading = true, toast = true }: any = {}) => {
                     }
                     resolve(data.data)
                 } else {
+                    reject(data)
+                    if (params.url.indexOf('areaapi') !== -1 && !getCityAlias()) {
+                        app.setLocation(() => {
+                            const router: any = getCurrentInstance().router
+                            const backUrl = `${router?.path}${toUrlParam(router?.params)}`
+                            Taro.reLaunch({
+                                url: backUrl
+                            })
+                        })
+                        return
+                    }
                     if (toast) {
                         Taro.showToast({
                             title: data.message,
@@ -84,11 +135,10 @@ app.request = (params: any, { loading = true, toast = true }: any = {}) => {
                     } else {
                         Taro.hideLoading()
                     }
-                    reject(data)
                 }
             },
             fail: function (err: any) {
-                console.log(err)
+                console.log('fail', err)
                 let msg = err.errMsg
                 if (msg == 'request:fail timeout') {
                     msg = '服务器请求超时，请稍后再试'
