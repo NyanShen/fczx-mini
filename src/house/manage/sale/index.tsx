@@ -587,7 +587,7 @@ const HouseSale = () => {
                 <View className="sale-item mt20">
                     <View className="item-text"><Text className="required">*</Text>联系人</View>
                     <View className="item-input">
-                        {renderInput('real_name', 10)}
+                        {renderInput('real_name', 50)}
                     </View>
                 </View>
                 <View className="sale-item">
