@@ -99,7 +99,7 @@ const Profile = () => {
                         <Input
                             placeholder="请输入"
                             value={inputValue.nickname}
-                            onBlur={(e: any) => handleInputChange(e, 'nickname')}
+                            onInput={(e: any) => handleInputChange(e, 'nickname')}
                             maxlength={20}
                         />
                     </View>
