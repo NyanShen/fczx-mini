@@ -1,26 +1,55 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Taro, { useReady } from '@tarojs/taro'
 import { View, Image, Text } from '@tarojs/components'
 
 import CustomProgress from '@components/progress'
 import './index.scss'
 
+let timer: any = null
+let animation: any = ''
+const titleColor = '#48a764'
+const mainColor = '#a7daad'
+const dataList = [
+    {
+        name: '精美笔记本',
+        needCount: 10,
+    },
+    {
+        name: '豪华笔记本',
+        needCount: 20,
+    }
+]
 const Activity = () => {
-    const titleColor = '#48a764'
-    const mainColor = '#a7daad'
-    const dataList = [
-        {
-            name: '精美笔记本',
-            needCount: 10,
-        },
-        {
-            name: '豪华笔记本',
-            needCount: 20,
-        }
-    ]
+    const [animationData, setAnimationData] = useState<any>()
+
     useReady(() => {
         Taro.setNavigationBarTitle({ title: '优惠活动' })
+        animation = Taro.createAnimation({
+            transformOrigin: "top center bottom",
+            timingFunction: "linear"
+        })
+
+        setAnimationData(animation.export())
+        animateTranslate()
     })
+
+    const animateTranslate = () => {
+        animation.translateY(-308).step({ duration: 10000 }).translateY(0).step({ duration: 0 })
+        setAnimationData(animation.export())
+        timer = setInterval(() => {
+            animation.translateY(-308).step({ duration: 10000 }).translateY(0).step({ duration: 0 })
+            setAnimationData(animation.export())
+        }, 500)
+    }
+
+    const handleTouchStart = (e: any) => {
+        console.log('handleTouchStart:', e)
+        clearInterval(timer)
+    }
+    const handleTouchEnd = (e: any) => {
+        console.log('handleTouchEnd:', e)
+        animateTranslate()
+    }
     return (
         <View className="activity" style={{ backgroundColor: mainColor }}>
             <View className="activity-photo">
@@ -36,7 +65,7 @@ const Activity = () => {
                         </View>
                     </View>
                     <View className="main-progress">
-                        <CustomProgress dataList={dataList} meetCount={10}/>
+                        <CustomProgress dataList={dataList} meetCount={10} />
                     </View>
                     <View className="main-action mt20">
                         <View className="btn btn-primary" style={{ backgroundColor: mainColor, borderColor: mainColor }}>邀请好友助力</View>
@@ -51,7 +80,12 @@ const Activity = () => {
                         <View className="line-split"></View>
                     </View>
                     <View className="news-content">
-                        <View className="news-scroll">
+                        <View
+                            className="news-scroll"
+                            onTouchStart={handleTouchStart}
+                            onTouchEnd={handleTouchEnd}
+                            animation={animationData}
+                        >
                             <View className="news-item">
                                 <View className="item-1">Nyan</View>
                                 <View className="item-2">2020/12/17 13:50</View>
