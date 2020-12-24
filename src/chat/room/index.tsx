@@ -11,7 +11,7 @@ import { fetchUserData } from '@services/login'
 import { toUrlParam } from '@utils/urlHandler'
 import { formatChatListTime } from '@utils/index'
 import { getTotalPage, INIT_PAGE, IPage } from '@utils/page'
-import CustomSocket from '@utils/socket'
+// import CustomSocket from '@utils/socket'
 import './index.scss'
 
 interface IParam {
@@ -31,7 +31,7 @@ const EXPRESSIONS = [
     '什么时候方便看房子？',
     '房子的价格还可以谈么',
 ]
-let time: number = 0
+// let time: number = 0
 const PAGE_LIMIT: number = 20
 const INIT_ACTION = { expression: false, photo: false }
 const INIT_INPUT_DATA = { value: '', send: false }
@@ -48,7 +48,7 @@ const ChatRoom = () => {
     const [param, setParam] = useState<IParam>(INIT_PARAM)
     const [page, setPage] = useState<IPage>(INIT_PAGE)
     const [chatData, setChatData] = useState<any[]>([])
-    const [newChatData, setNewChatData] = useState<any[]>([])
+    // const [newChatData, setNewChatData] = useState<any[]>([])
     const [bottom, setBottom] = useState<number>(0)
     const [toView, setToView] = useState<string>('')
     const [images, setImages] = useState<string[]>([])
@@ -56,20 +56,23 @@ const ChatRoom = () => {
     const [inputData, setInputData] = useState<any>(INIT_INPUT_DATA)
     const ref = useRef<string>('') // 判断显示时间点
 
-    CustomSocket.onSocketMessage((message: any) => {
-        console.log('chatroomchatroom', message.from_user_id == toUser.id)
-        if (message.from_user_id == toUser.id) {
-            const timestamp = handleMessageTime()
-            message.id = 'tempid_' + (timestamp + 1)
-            message.time = time
-            message.created = timestamp
-            console.log('chatroom onSocketMessage', message)
-            setNewChatData([...newChatData, message])
-        }
-    })
+    // CustomSocket.onSocketMessage((message: any) => {
+    //     console.log('chatroomchatroom', message.from_user_id == toUser.id)
+    //     if (message.from_user_id == toUser.id) {
+    //         const timestamp = handleMessageTime()
+    //         message.id = 'tempid_' + (timestamp + 1)
+    //         message.time = time
+    //         message.created = timestamp
+    //         console.log('chatroom onSocketMessage', message)
+    //         setNewChatData([...newChatData, message])
+    //     }
+    // })
 
     useReady(() => {
         Taro.setNavigationBarTitle({ title: toUser.nickname })
+        if (messageType && content) {
+            sendMessage(messageType, content)
+        }
     })
 
     useDidShow(() => {
@@ -85,28 +88,28 @@ const ChatRoom = () => {
         })
     })
 
-    useEffect(() => {
-        if (newChatData.length < 1) {
-            return
-        }
-        if (chatData.length > 0) {
-            const currentView = `toView_${chatData[chatData.length - 1].id}`
-            console.log('currentView', chatData, toView)
-            if (currentView === toView) {
-                setChatData([...chatData, ...newChatData])
-                setNewChatData([])
-            }
-        } else {
-            setChatData([...newChatData])
-            setNewChatData([])
-        }
-    }, [newChatData])
+    // useEffect(() => {
+    //     if (newChatData.length < 1) {
+    //         return
+    //     }
+    //     if (chatData.length > 0) {
+    //         const currentView = `toView_${chatData[chatData.length - 1].id}`
+    //         console.log('currentView', chatData, toView)
+    //         if (currentView === toView) {
+    //             setChatData([...chatData, ...newChatData])
+    //             setNewChatData([])
+    //         }
+    //     } else {
+    //         setChatData([...newChatData])
+    //         setNewChatData([])
+    //     }
+    // }, [newChatData])
 
-    useEffect(() => {
-        if (chatData.length > 0) {
-            setToView(`toView_${chatData[chatData.length - 1].id}`)
-        }
-    }, [chatData])
+    // useEffect(() => {
+    //     if (chatData.length > 0) {
+    //         setToView(`toView_${chatData[chatData.length - 1].id}`)
+    //     }
+    // }, [chatData])
 
     useEffect(() => {
         fetchChatData()
@@ -125,15 +128,18 @@ const ChatRoom = () => {
             if (param.currentPage === INIT_PARAM.currentPage) {
                 setChatData(resData)
                 imageFilter(resData)
-                if (messageType && content) {
-                    sendMessage(messageType, content, resData)
-                    content = ''
-                    messageType = ''
-                }
+                // if (messageType && content) {
+                //     sendMessage(messageType, content, resData)
+                //     content = ''
+                //     messageType = ''
+                // }
             } else {
                 const dataList = [...resData, ...chatData]
                 setChatData(dataList)
                 imageFilter(dataList)
+            }
+            if (resData.length > 0) {
+                setToView(`toView_${resData[resData.length - 1].id}`)
             }
             setPage({
                 ...page,
@@ -202,38 +208,54 @@ const ChatRoom = () => {
         Taro.setClipboardData({ data: toUser.wx })
     }
 
-    const handleMessageTime = () => {
-        const timestamp = parseInt(`${new Date().getTime() / 1000}`)
-        if (chatData.length > 0) {
-            const lastTime = chatData[chatData.length - 1].created
-            if (timestamp - lastTime > 10 * 60) {
-                time = timestamp
-            } else {
-                time = parseInt(chatData[chatData.length - 1].time)
-            }
-        } else {
-            time = timestamp
-        }
-        return timestamp
-    }
+    // const handleMessageTime = () => {
+    //     const timestamp = parseInt(`${new Date().getTime() / 1000}`)
+    //     if (chatData.length > 0) {
+    //         const lastTime = chatData[chatData.length - 1].created
+    //         if (timestamp - lastTime > 10 * 60) {
+    //             time = timestamp
+    //         } else {
+    //             time = parseInt(chatData[chatData.length - 1].time)
+    //         }
+    //     } else {
+    //         time = timestamp
+    //     }
+    //     return timestamp
+    // }
 
-    const sendMessage = (type: string, content: any, dataList: any = null) => {
-        const timestamp = handleMessageTime()
-        const message = {
-            id: 'tempid_' + timestamp,
-            type: 'chat',
-            to_user_id: toUser.id,
-            message_type: type,
-            created: timestamp,
-            content,
-            time
-        }
-        if (dataList) {
-            setChatData([...dataList, message])
-        } else {
-            setChatData([...chatData, message])
-        }
-        CustomSocket.sendSocketMessage(JSON.stringify(message))
+    // const sendMessage = (type: string, content: any, dataList: any = null) => {
+    //     const timestamp = handleMessageTime()
+    //     const message = {
+    //         id: 'tempid_' + timestamp,
+    //         type: 'chat',
+    //         to_user_id: toUser.id,
+    //         message_type: type,
+    //         created: timestamp,
+    //         content,
+    //         time
+    //     }
+    //     if (dataList) {
+    //         setChatData([...dataList, message])
+    //     } else {
+    //         setChatData([...chatData, message])
+    //     }
+    //     CustomSocket.sendSocketMessage(JSON.stringify(message))
+    // }
+
+    const sendMessage = (type: string, content: any) => {
+        app.request({
+            url: app.apiUrl(api.postChatSend),
+            method: 'POST',
+            data: {
+                to_user_id: toUser.id,
+                message_type: type,
+                content
+            }
+        }, { loading: false }).then(() => {
+            setParam({
+                currentPage: INIT_PARAM.currentPage
+            })
+        })
     }
 
     const sendActionMessage = (type: string, content: string) => {

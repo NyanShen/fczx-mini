@@ -3,7 +3,8 @@ import Taro, { getCurrentInstance } from '@tarojs/taro'
 import { View, Text, Button, Image } from '@tarojs/components'
 
 import storage from '@utils/storage'
-import CustomSocket from '@utils/socket'
+import ChatEvent from '@utils/event'
+// import CustomSocket from '@utils/socket'
 import logo from '@assets/icons/logo.png'
 import { PROJECT_NAME } from '@constants/global'
 import { fetchSessionKey, fetchDecryptData } from '@services/login'
@@ -14,31 +15,14 @@ const Login = () => {
     const isTab: string = currentRouter.params?.isTab || ''
     const backUrl: string = currentRouter.params?.backUrl || ''
     const INIT_CODE = storage.getItem('session_key')
-    const [valid, setValid] = useState<Boolean>(false)
     const [loginCode, setLoginCode] = useState<string>(INIT_CODE)
     const [showConfirm, setShowConfirm] = useState<boolean>(false)
 
     useEffect(() => {
-        Taro.checkSession({
-            success: () => {
-                if (loginCode) {
-                    setValid(true)
-                } else {
-                    setSessionKey()
-                }
-            },
-            fail: () => {
-                setSessionKey()
-            }
-        })
-    }, [])
-
-    const setSessionKey = () => {
         fetchSessionKey().then((result: any) => {
             setLoginCode(result)
-            setValid(true)
         })
-    }
+    }, [])
 
     const handleAuthorizeLogin = (loginData: any) => {
         fetchDecryptData({
@@ -48,7 +32,8 @@ const Login = () => {
         }).then((result: any) => {
             if (result.token) {
                 storage.setItem('token', result.token)
-                CustomSocket.connectSocket()
+                ChatEvent.emit('chat')
+                // CustomSocket.connectSocket()
                 handleRedirect()
             } else {
                 setShowConfirm(true)
@@ -110,7 +95,7 @@ const Login = () => {
         )
     }
 
-    return valid &&
+    return loginCode &&
         (
             <View className="login">
                 <View className="login-header">
