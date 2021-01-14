@@ -215,7 +215,7 @@ const HouseMap = () => {
     }
 
     const handleRegionChangeEnd = (e: any) => {
-        let causeType = e.detail.causedBy
+        let causeType = e.causedBy
         let zoom = e.detail.scale
         let ne = e.detail.region.northeast
         let sw = e.detail.region.southwest
@@ -519,7 +519,7 @@ const HouseMap = () => {
                     style={{ width: '100%', height: contentHeight }}
                     latitude={center.latitude}
                     longitude={center.longitude}
-                    scale={selected.zoom}
+                    scale={INIT_CONDITION.zoom}
                     markers={markers}
                     onEnd={handleRegionChangeEnd}
                     onCalloutTap={handleCalloutTap}
