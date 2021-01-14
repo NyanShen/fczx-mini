@@ -28,6 +28,10 @@ page {
   font-size: $font-26;
 }
 
+.required {
+  color: $tip-color;
+}
+
 .mt20 {
   margin-top: 20px;
 }

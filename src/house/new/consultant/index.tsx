@@ -56,6 +56,12 @@ const HouseConsultant = () => {
             url: `/chat/room/index${paramString}`
         })
     }
+
+    const toConsultantRegister = () => {
+        Taro.navigateTo({
+            url: `/house/new/consultant/register/index`
+        }) 
+    }
     return (
         <View className="house-consultant">
             <View className="house-consultant-content">
@@ -81,6 +87,9 @@ const HouseConsultant = () => {
                         </View>
                     ))
                 }
+            </View>
+            <View className="consultant-action" onClick={toConsultantRegister}>
+                <View className="btn btn-primary">立即入驻</View>
             </View>
         </View>
     )

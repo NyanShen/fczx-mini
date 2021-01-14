@@ -30,6 +30,7 @@ export default {
         'new/comment/index',
         'new/commentForm/index',
         'new/consultant/index',
+        'new/consultant/register/index',
         'city/index',
         'search/index',
 

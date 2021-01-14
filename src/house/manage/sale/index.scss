@@ -2,9 +2,6 @@
     height: 100%;
     background-color: $bg-color;
     &-content {
-        .required {
-            color: $tip-color;
-        }
         .sale-item {
             display: flex;
             align-items: center;

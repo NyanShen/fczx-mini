@@ -1,5 +1,8 @@
 .house-consultant {
+    position: relative;
     padding: 20px;
+    height: 100vh;
+    box-sizing: border-box;
     &-content {
         .consultant-item {
             display: flex;
@@ -43,6 +46,17 @@
                     color: $primary-color;
                 }
             }
+        }
+    }
+    .consultant-action {
+        position: absolute;
+        left: 50%;
+        bottom: 30px;
+        transform: translateX(-50%);
+
+        .btn {
+            width: 300px;
+            border-radius: 25px;
         }
     }
 }
