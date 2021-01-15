@@ -31,6 +31,7 @@ export default {
         'new/commentForm/index',
         'new/consultant/index',
         'new/consultant/register/index',
+        'new/consultant/houseSearch/index',
         'city/index',
         'search/index',
 

@@ -301,7 +301,7 @@ const HouseSale = () => {
                 placeholder="请输入"
                 adjustPosition={false}
                 value={inputValue[name]}
-                onBlur={(e: any) => handleInputChange(e, name)}
+                onInput={(e: any) => handleInputChange(e, name)}
                 type={type}
                 maxlength={maxLen}
             />
@@ -322,7 +322,7 @@ const HouseSale = () => {
                         autoHeight
                         placeholder="请输入"
                         value={inputValue[name]}
-                        onBlur={(e: any) => handleInputChange(e, name)}
+                        onInput={(e: any) => handleInputChange(e, name)}
                         maxlength={maxLen}
                     />
                 </View>

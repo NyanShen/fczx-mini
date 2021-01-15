@@ -10,9 +10,13 @@
                 margin-right: 20px;
             }
             .item-select {
-                color: $text-color;
+                color: $title-color;
                 .select-text {
                     margin-right: 20px;
+                }
+                .placeholder {
+                    color: $desc-color;
+                    font-size: $font-24;
                 }
             }
         }
@@ -20,6 +24,7 @@
             padding: 30px;
             margin-bottom: 20px;
             background-color: $white;
+            font-size: $font-basic;
 
             .item-label {
                 color: $text-color;
@@ -51,6 +56,11 @@
                 height: 230px;
                 background-color: $bg-color;
                 margin-top: 20px;
+
+                Image {
+                    width: 100%;
+                    height: 100%;
+                }
 
                 .iconfont {
                     position: absolute;
