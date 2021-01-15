@@ -47,9 +47,6 @@ export default {
         'community/list/index',
         'community/search/index',
 
-        'manage/sale/index',
-        'manage/list/index',
-
         'sale/photo/index',
         'sale/community/index'
       ]
@@ -80,6 +77,10 @@ export default {
       pages: [
         'official/index',
         'profile/index',
+        'consultant/index',
+
+        'house/sale/index',
+        'house/list/index',
       ]
     },
     {

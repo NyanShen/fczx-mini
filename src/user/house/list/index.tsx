@@ -83,7 +83,7 @@ const HouseManageSale = () => {
 
     const toHouseSale = (id: string = '') => {
         Taro.navigateTo({
-            url: `/house/manage/sale/index?id=${id}&type=${saleType}`
+            url: `/user/house/sale/index?id=${id}&type=${saleType}`
         })
     }
 

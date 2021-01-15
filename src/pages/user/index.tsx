@@ -17,6 +17,7 @@ interface IUser {
   avatarUrl: string
   nickname?: string
   username: string
+  is_consultant?: number
 }
 
 const INIT_USER: IUser = {
@@ -45,9 +46,9 @@ const User = () => {
     })
   })
 
-  const gotoLogin = () => {
+  const toUserModule = (module: string) => {
     if (user.username) {
-      taroNavigateTo(`/user/profile/index${toUrlParam(user)}`)
+      taroNavigateTo(`/user/${module}/index${toUrlParam(user)}`)
       return
     }
     taroNavigateTo('/login/index')
@@ -61,9 +62,9 @@ const User = () => {
     Taro.hideTabBarRedDot({ index: 1 })
   }
 
-  const toUserModule = (url: string, type: string = 'esf') => {
+  const toHouseModule = (url: string, type: string = 'esf') => {
     if (user.username) {
-      taroNavigateTo(`/house/manage/${url}/index?type=${type}`)
+      taroNavigateTo(`/user/house/${url}/index?type=${type}`)
     } else {
       taroNavigateTo('/login/index')
     }
@@ -80,7 +81,7 @@ const User = () => {
   return (
     <View className="user">
       <View className="user-group">
-        <View className="user-item user-header" onClick={gotoLogin}>
+        <View className="user-item user-header" onClick={() => toUserModule('profile')}>
           <View className="login-photo">
             <Image className="login-photo-image" src={user.avatarUrl} />
           </View>
@@ -94,7 +95,19 @@ const User = () => {
       </View>
 
       <View className="user-group">
-        <View className="user-item" onClick={() => toUserModule('list')}>
+        {
+          user.is_consultant == 1 &&
+          <View className="user-item" onClick={() => toUserModule('consultant')}>
+            <View className="item-icon origin">
+              <Text className="iconfont iconwechat"></Text>
+            </View>
+            <View className="item-text">置业顾问</View>
+            <View className="item-arrow">
+              <Text className="iconfont iconarrow-right-bold"></Text>
+            </View>
+          </View>
+        }
+        <View className="user-item" onClick={() => toHouseModule('list')}>
           <View className="item-icon blue">
             <Text className="iconfont iconmanage"></Text>
           </View>
@@ -103,7 +116,7 @@ const User = () => {
             <Text className="iconfont iconarrow-right-bold"></Text>
           </View>
         </View>
-        <View className="user-item" onClick={() => toUserModule('list', 'rent')}>
+        <View className="user-item" onClick={() => toHouseModule('list', 'rent')}>
           <View className="item-icon blue">
             <Text className="iconfont iconmanage"></Text>
           </View>
@@ -112,7 +125,7 @@ const User = () => {
             <Text className="iconfont iconarrow-right-bold"></Text>
           </View>
         </View>
-        <View className="user-item" onClick={() => toUserModule('sale')}>
+        <View className="user-item" onClick={() => toHouseModule('sale')}>
           <View className="item-icon cyan">
             <Text className="iconfont iconsquare"></Text>
           </View>
@@ -121,7 +134,7 @@ const User = () => {
             <Text className="iconfont iconarrow-right-bold"></Text>
           </View>
         </View>
-        <View className="user-item" onClick={() => toUserModule('sale', 'rent')}>
+        <View className="user-item" onClick={() => toHouseModule('sale', 'rent')}>
           <View className="item-icon lightblue">
             <Text className="iconfont iconhomepage"></Text>
           </View>
