@@ -399,39 +399,55 @@ const House = () => {
 
     const renderConsultant = () => {
         const { enableFangHouseConsultant } = houseData
-        return enableFangHouseConsultant.length > 0 &&
+        return (
             <View className="house-item house-consultant mt20">
                 <View className="house-item-header">
                     <View className="title">置业顾问({enableFangHouseConsultant.length})</View>
-                    <View className="more" onClick={toHouseConsultant}>
-                        <Text>更多</Text>
-                        <Text className="iconfont iconarrow-right-bold"></Text>
-                    </View>
+                    {
+                        enableFangHouseConsultant.length > 0 &&
+                        <View className="more" onClick={toHouseConsultant}>
+                            <Text>更多</Text>
+                            <Text className="iconfont iconarrow-right-bold"></Text>
+                        </View>
+                    }
                 </View>
                 <View className="house-consultant-content">
                     <View className="consultant-desc view-content">为你提供以下服务：政策解读 楼盘导览 户型解析</View>
-                    <ScrollView className="consultant-scroll" scrollX>
-                        {
-                            enableFangHouseConsultant.map((item: any, index: number) => (
-                                <View key={index} className="consultant-item">
-                                    <View className="consultant-context">
-                                        <View className="item-image">
-                                            <Image src={item.user.avatar}></Image>
+                    {
+                        enableFangHouseConsultant.length > 0 ?
+                            <ScrollView className="consultant-scroll" scrollX>
+                                {
+                                    enableFangHouseConsultant.map((item: any, index: number) => (
+                                        <View key={index} className="consultant-item">
+                                            <View className="consultant-context">
+                                                <View className="item-image">
+                                                    <Image src={item.user.avatar}></Image>
+                                                </View>
+                                                <View className="item-name">{item.user.nickname}</View>
+                                                <View className="item-btn">
+                                                    <Button className="ovalbtn ovalbtn-brown" onClick={() => toChatRoom(item)}>
+                                                        <Text className="iconfont iconmessage"></Text>
+                                                        <Text>咨询</Text>
+                                                    </Button>
+                                                </View>
+                                            </View>
                                         </View>
-                                        <View className="item-name">{item.user.nickname}</View>
-                                        <View className="item-btn">
-                                            <Button className="ovalbtn ovalbtn-brown" onClick={() => toChatRoom(item)}>
-                                                <Text className="iconfont iconmessage"></Text>
-                                                <Text>咨询</Text>
-                                            </Button>
-                                        </View>
-                                    </View>
+                                    ))
+                                }
+                            </ScrollView> :
+                            <View className="house-item-content">
+                                <View className="empty-container">
+                                    <View className="iconfont iconempty"></View>
+                                    <View>暂无置业顾问信息</View>
                                 </View>
-                            ))
-                        }
-                    </ScrollView>
+                                <View className="btn btn-blue" onClick={() => toHouseModule('consultant/register', true)}>
+                                    <Text className="btn-name">立即入驻</Text>
+                                </View>
+                            </View>
+                    }
                 </View>
             </View>
+        )
     }
 
     const getSandCommonComponent = useMemo(() => (
