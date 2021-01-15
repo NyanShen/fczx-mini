@@ -6,7 +6,7 @@ import './index.scss'
 import { fetchUserData } from '@services/login'
 import app from '@services/request'
 
-const HouseConsultant = () => {
+const HouseConsultantForm = () => {
     const [inputValue, setInputValue] = useState<any>({})
 
     useDidShow(() => {
@@ -121,13 +121,13 @@ const HouseConsultant = () => {
                         <Text className="placeholder">(如需切换手机号,请重新登录)</Text>
                     </View>
                 </View>
-                <View className="form-item flex-item">
+                {/* <View className="form-item flex-item">
                     <View className="item-label"><Text className="required">*</Text>验证码</View>
                     <View className="item-input">
                         {renderInput('randCode', 6)}
                         <View className="btn btn-plain">获取验证码</View>
                     </View>
-                </View>
+                </View> */}
                 <View className="form-item flex-item">
                     <View className="item-label">邀请码</View>
                     <View className="item-input">
@@ -172,4 +172,4 @@ const HouseConsultant = () => {
     )
 }
 
-export default HouseConsultant
+export default HouseConsultantForm

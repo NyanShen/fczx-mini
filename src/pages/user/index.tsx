@@ -40,7 +40,8 @@ const User = () => {
           mobile: result.mobile,
           avatarUrl: result.avatar,
           username: result.username,
-          nickname: result.nickname
+          nickname: result.nickname,
+          is_consultant: result.is_consultant
         })
       }
     })
