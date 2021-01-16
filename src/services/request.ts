@@ -34,7 +34,7 @@ app.areaApiUrl = (uri: string) => {
 }
 
 app.testApiUrl = (uri: string) => {
-    return `http://192.168.2.248:12306${uri}`
+    return `http://localhost:12306${uri}`
 }
 
 app.randCode = (len: number) => {

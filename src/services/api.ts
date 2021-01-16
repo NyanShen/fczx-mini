@@ -67,5 +67,7 @@ export default {
     postChatSend: '/chat/send',
     getUnread: '/chat/get-to-read',
     getChatData: '/chat/chat-data',
-    getChatUser: '/chat/scan-chat'
+    getChatUser: '/chat/scan-chat',
+
+    getDiscoverList: '/discover/list'
 }

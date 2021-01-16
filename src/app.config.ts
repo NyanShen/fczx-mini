@@ -6,6 +6,7 @@ export default {
     'pages/index/index',
     'pages/user/index',
     'pages/chat/index',
+    'pages/discover/index',
     'pages/entry/index',
   ],
   subPackages: [
@@ -107,6 +108,12 @@ export default {
         iconPath: './assets/icons/chat.png',
         selectedIconPath: './assets/icons/chat_hv.png',
         text: '微聊'
+      },
+      {
+        pagePath: 'pages/discover/index',
+        iconPath: './assets/icons/discover.png',
+        selectedIconPath: './assets/icons/discover_hv.png',
+        text: '发现'
       },
       {
         pagePath: 'pages/user/index',

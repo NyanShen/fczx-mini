@@ -1,0 +1,146 @@
+.discover {
+    height: 100vh;
+    padding: 30px 20px;
+    background-color: $bg-color;
+    box-sizing: border-box;
+    .discover-content {
+        .discover-list {
+            .discover-item {
+                background-color: $white;
+                margin-bottom: 20px;
+                padding: 20px;
+                .discover-title {
+                    display: flex;
+                    align-items: center;
+                    .discover-profile {
+                        width: 100px;
+                        height: 100px;
+                        margin-right: 20px;
+                        Image {
+                            width: 100%;
+                            height: 100%;
+                            border-radius: 50%;
+                            background-color: $bg-color;
+                        }
+                    }
+                    .discover-header {
+                        flex: 1;
+                        overflow: hidden;
+
+                        .header-item {
+                            display: flex;
+                            align-items: center;
+                            line-height: 50px;
+                            .title {
+                                flex: 1;
+                                margin-right: 10px;
+                                overflow: hidden;
+                                white-space: nowrap;
+                                text-overflow: ellipsis;
+                                font-weight: bold;
+                            }
+                            .tags {
+                                max-width: 200px;
+                                overflow: hidden;
+                                white-space: nowrap;
+                            }
+                            .subtitle {
+                                margin-right: 20px;
+                                color: $search-actived;
+                            }
+                            .describ {
+                                font-size: $font-26;
+                                color: $text-color;
+                                .describ-text {
+                                    margin-right: 10px;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .discover-digest {
+                    margin: 30px 0;
+                    color: $text-color;
+                    white-space: normal;
+                    display: -webkit-box;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
+                    -webkit-line-clamp: 2;
+                }
+
+                .discover-media {
+                    margin-bottom: 30px;
+                    .media-image {
+                        width: 100%;
+                        height: 210px;
+
+                        .item-image {
+                            float: left;
+                            position: relative;
+                            width: 210px;
+                            height: 210px;
+                            margin-right: 20px;
+
+                            &:last-child {
+                                margin-right: 0;
+                            }
+
+                            Image {
+                                width: 100%;
+                                height: 100%;
+                                background-color: $bg-color;
+                                border-radius: $border-radius-base;
+                            }
+
+                            .item-count {
+                                position: absolute;
+                                right: 0;
+                                bottom: 0;
+                                font-size: $font-26;
+                                padding: 2px 12px;
+                                color: $white;
+                                background-color: rgba($color: $black, $alpha: 0.8);
+                            }
+                        }
+                    }
+                    .media-video {
+                        width: 100%;
+                        height: 350px;
+                        Video {
+                            width: 100%;
+                            height: 100%;
+                        }
+                    }
+                }
+                .discover-author {
+                    position: relative;
+                    display: flex;
+                    align-items: center;
+                    font-size: $font-basic;
+                    padding: 10px 20px;
+                    background-color: $bg-color;
+                    .author-profile {
+                        width: 60px;
+                        height: 60px;
+                        margin-right: 20px;
+
+                        Image {
+                            width: 100%;
+                            height: 100%;
+                            border-radius: 50%;
+                            background-color: $bg2-color;
+                        }
+                    }
+                    .author-name {
+                        margin-right: 20px;
+                        color: $text-color;
+                    }
+                    .author-agent {
+                        color: $desc-color;
+                    }
+                }
+            }
+        }
+    }
+}
