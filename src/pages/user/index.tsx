@@ -75,6 +75,12 @@ const User = () => {
     taroNavigateTo('/user/official/index')
   }
 
+  const toConsultantModule = () => {
+    Taro.navigateTo({
+      url: '/consultant/release/index'
+    })
+  }
+
   const taroNavigateTo = (url: string) => {
     Taro.navigateTo({ url })
   }

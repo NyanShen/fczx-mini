@@ -92,7 +92,7 @@ const Discover = () => {
                                                     <View className="media-image">
                                                         {
                                                             item.media.map((imageItem: any, index: number) => (
-                                                                <View className="item-image">
+                                                                <View className="item-image" key={index}>
                                                                     <Image src={imageItem.image_path} mode="aspectFill" />
                                                                     { index === 2 && <View className="item-count">共{index + 1}张</View>}
                                                                 </View>

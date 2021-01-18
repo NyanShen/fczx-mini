@@ -89,6 +89,12 @@ export default {
       pages: [
         'index'
       ]
+    },
+    {
+      root: 'consultant',
+      pages: [
+        'release/index'
+      ]
     }
   ],
   tabBar: {

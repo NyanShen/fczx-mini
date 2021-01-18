@@ -154,13 +154,17 @@ app.request = (params: any, { loading = true, toast = true }: any = {}) => {
 }
 
 app.uploadFile = (data: any, callback: (string) => void) => {
-    for (let i = 0; i < data.tempFiles.length; i++) {
+    if (data.errMsg === 'chooseVideo:ok') {
         Taro.uploadFile({
             url: uploadFileUrl,
-            filePath: data.tempFilePaths[i],
+            filePath: data.tempFilePath,
             name: 'file',
             formData: {
-                file: data.tempFiles[i]
+                file: {
+                    video_path: data.tempFilePath,
+                    image_path: data.thumbTempFilePath,
+                    size: data.size
+                }
             },
             header: {
                 'X-Token': storage.getItem('token')
@@ -169,6 +173,25 @@ app.uploadFile = (data: any, callback: (string) => void) => {
                 callback(JSON.parse(result.data).data)
             })
         })
+    }
+    if (data.errMsg === 'chooseImage:ok') {
+        for (let i = 0; i < data.tempFiles.length; i++) {
+            Taro.uploadFile({
+                url: uploadFileUrl,
+                filePath: data.tempFilePaths[i],
+                name: 'file',
+                formData: {
+                    file: data.tempFiles[i]
+                },
+                header: {
+                    'X-Token': storage.getItem('token')
+                },
+                success: ((result: any) => {
+                    callback(JSON.parse(result.data).data)
+                })
+            })
+        }
+
     }
 }
 
