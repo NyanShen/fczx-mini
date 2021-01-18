@@ -1,5 +1,5 @@
 .release {
-    padding: 30px 0 30px 30px;
+    padding: 30px;
     box-sizing: border-box;
 
     &-content {
@@ -9,7 +9,6 @@
                 color: $text-color;
             }
             .item-input {
-                margin-right: 30px;
                 Textarea {
                     width: 100%;
                 }
@@ -26,6 +25,9 @@
                     margin-bottom: 30px;
                     background-color: $bg-color;
                     border-radius: $border-radius-base;
+                    &:nth-child(3n) {
+                        margin-right: 0;
+                    }
                     Image {
                         width: 100%;
                         height: 100%;
@@ -46,7 +48,7 @@
                         right: -10px;
                         color: $desc-color;
                     }
-                    .iconVideo {
+                    .iconvideo {
                         position: absolute;
                         top: 50%;
                         left: 50%;
@@ -55,9 +57,6 @@
                         color: rgba($color: $white, $alpha: .9);
                     }
                 }
-            }
-            .btn {
-                margin-right: 30px;
             }
         }
     }

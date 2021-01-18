@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import { View, Image, Video, Text, ScrollView } from '@tarojs/components'
+import Taro from '@tarojs/taro'
+import { View, Image, Text, ScrollView } from '@tarojs/components'
+import map from 'lodash/map'
 
 import api from '@services/api'
 import app from '@services/request'
@@ -51,6 +53,13 @@ const Discover = () => {
             setShowEmpty(true)
         }
     }
+
+    const handleImagePreview = (images: any[], image_path: string) => {
+        Taro.previewImage({
+            urls: map(images, 'image_path'),
+            current: image_path
+        })
+    }
     return (
         <View className="discover">
             {
@@ -93,22 +102,18 @@ const Discover = () => {
                                                         {
                                                             item.media.map((imageItem: any, index: number) => (
                                                                 <View className="item-image" key={index}>
-                                                                    <Image src={imageItem.image_path} mode="aspectFill" />
-                                                                    { index === 2 && <View className="item-count">共{index + 1}张</View>}
+                                                                    <Image
+                                                                        src={imageItem.image_path}
+                                                                        mode="aspectFill"
+                                                                        onClick={() => handleImagePreview(item.media, imageItem.image_path)}
+                                                                    />
                                                                 </View>
                                                             ))
                                                         }
                                                     </View> :
                                                     <View className="media-video">
-                                                        <Video
-                                                            src={item.media.video_path}
-                                                            controls={true}
-                                                            autoplay={false}
-                                                            poster={item.media.poster_path}
-                                                            id='video'
-                                                            loop={false}
-                                                            muted={false}
-                                                        />
+                                                        <Image src={item.media.poster_path} mode="aspectFill" />
+                                                        <Text className="iconfont iconvideo"></Text>
                                                     </View>
                                             }
                                         </View>
@@ -131,7 +136,7 @@ const Discover = () => {
                                 </View>
                             }
                         </ScrollView>
-                    </View>:
+                    </View> :
                     <View className="empty-container">
                         <View>暂无动态</View>
                     </View>

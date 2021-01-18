@@ -93,7 +93,8 @@ export default {
     {
       root: 'consultant',
       pages: [
-        'release/index'
+        'release/index',
+        'dynamic/index',
       ]
     }
   ],

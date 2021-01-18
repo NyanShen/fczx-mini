@@ -124,7 +124,7 @@ const ReleaseDynamic = () => {
                             media.list.map((item: string, index: number) => (
                                 <View className="media-item" key={index}>
                                     <Image src={item} mode="aspectFill" />
-                                    {media.type === 'video' && <Text className="iconfont iconVideo"></Text>}
+                                    {media.type === 'video' && <Text className="iconfont iconvideo"></Text>}
                                     <Text className="iconfont iconclear" onClick={() => deleteMediaItem(index)}></Text>
                                 </View>
                             ))
