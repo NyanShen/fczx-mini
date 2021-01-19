@@ -9,7 +9,7 @@ const HouseVideo = () => {
     let params: any = currentRouter.params
     const video = JSON.parse(params.video)
     useReady(() => {
-        Taro.setNavigationBarTitle({ title: '楼盘视频' })
+        Taro.setNavigationBarTitle({ title: '视频' })
     })
     return (
         <View className="house-video">

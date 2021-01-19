@@ -5,10 +5,11 @@ import map from 'lodash/map'
 
 import api from '@services/api'
 import app from '@services/request'
-import { INIT_PAGE, IPage, getTotalPage } from '@utils/page'
+import { toUrlParam } from '@utils/urlHandler'
 import { PRICE_TYPE, SALE_STATUS } from '@constants/house'
-import useNavData from '@hooks/useNavData'
+import { INIT_PAGE, IPage, getTotalPage } from '@utils/page'
 import './index.scss'
+import useNavData from '@hooks/useNavData'
 
 interface IParam {
     currentPage: number
@@ -18,7 +19,7 @@ const INIT_PARAM: IParam = { currentPage: 1 }
 
 const Discover = () => {
     const PAGE_LIMIT = 10
-    const { contentHeight } = useNavData()
+    const { windowHeight } = useNavData()
     const [page, setPage] = useState<IPage>(INIT_PAGE)
     const [param, setParam] = useState<IParam>(INIT_PARAM)
     const [discover, setDiscover] = useState<any[]>([])
@@ -37,9 +38,15 @@ const Discover = () => {
             }
         }).then((result: any) => {
             setDiscover([...discover, ...result.data])
+            const totalPage = getTotalPage(PAGE_LIMIT, result.pagination.totalCount)
+            if (totalPage <= INIT_PARAM.currentPage) {
+                setShowEmpty(true)
+            } else {
+                setShowEmpty(false)
+            }
             setPage({
                 totalCount: result.pagination.totalCount,
-                totalPage: getTotalPage(PAGE_LIMIT, result.pagination.totalCount)
+                totalPage
             })
         })
     }
@@ -60,6 +67,18 @@ const Discover = () => {
             current: image_path
         })
     }
+    const toHouseVideo = (video: any) => {
+        const videoParam = {
+            image_path: video.poster_image,
+            video_path: video.video_path
+        }
+        const paramString = toUrlParam({
+            video: JSON.stringify(videoParam)
+        })
+        Taro.navigateTo({
+            url: `/house/new/video/index${paramString}`
+        })
+    }
     return (
         <View className="discover">
             {
@@ -68,7 +87,7 @@ const Discover = () => {
                         <ScrollView
                             className="discover-list"
                             scrollY
-                            style={{ height: contentHeight }}
+                            style={{ maxHeight: windowHeight }}
                             lowerThreshold={40}
                             onScrollToLower={handleScrollToLower}
                         >
@@ -111,7 +130,7 @@ const Discover = () => {
                                                             ))
                                                         }
                                                     </View> :
-                                                    <View className="media-video">
+                                                    <View className="media-video" onClick={() => toHouseVideo(item.media)}>
                                                         <Image src={item.media.poster_path} mode="aspectFill" />
                                                         <Text className="iconfont iconvideo"></Text>
                                                     </View>

@@ -1,14 +1,15 @@
 .discover {
     height: 100vh;
-    padding: 30px 20px;
     background-color: $bg-color;
-    box-sizing: border-box;
     .discover-content {
         .discover-list {
+            background-color: $bg-color;
             .discover-item {
+                padding: 30px;
+                margin: 20px;
+                border-radius: $border-radius-base;
                 background-color: $white;
-                margin-bottom: 20px;
-                padding: 20px;
+                box-sizing: border-box;
                 .discover-title {
                     display: flex;
                     align-items: center;
@@ -73,13 +74,13 @@
                     margin-bottom: 30px;
                     .media-image {
                         width: 100%;
-                        height: 210px;
+                        height: 200px;
 
                         .item-image {
                             float: left;
                             position: relative;
-                            width: 210px;
-                            height: 210px;
+                            width: 200px;
+                            height: 200px;
                             margin-right: 20px;
 
                             &:last-child {

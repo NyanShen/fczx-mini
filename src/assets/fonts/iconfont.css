@@ -13,6 +13,18 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.iconlove:before {
+  content: "\e606";
+}
+
+.iconstar:before {
+  content: "\e7f0";
+}
+
+.icondynamic:before {
+  content: "\e621";
+}
+
 .iconvideo:before {
   content: "\e61b";
 }
