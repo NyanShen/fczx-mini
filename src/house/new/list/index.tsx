@@ -28,10 +28,11 @@ import '@styles/common/house.scss'
 import '@styles/common/search-tab.scss'
 import './index.scss'
 
+const PAGE_LIMIT = 10
+const footerBtnHeight = 60
+
 const NewHouse = () => {
     const { contentHeight } = useNavData()
-    const PAGE_LIMIT = 10
-    const footerBtnHeight = 60
     const scrollHeight = contentHeight * 0.5 - footerBtnHeight
     const scrollMoreHeight = contentHeight * 0.6 - footerBtnHeight
     const [tab, setTab] = useState<any>({})
@@ -313,7 +314,7 @@ const NewHouse = () => {
 
     const handleHouseItemClick = (item: any) => {
         Taro.navigateTo({
-            url: `/house/new/index/index?id=${item.id}&name=${item.title}`
+            url: `/house/new/index/index?id=${item.id}`
         })
     }
 

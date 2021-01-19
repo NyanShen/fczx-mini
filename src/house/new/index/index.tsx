@@ -499,7 +499,11 @@ const House = () => {
                         </View>
                     </View>
                     <View className="header-right">
-                        <Button className="share" openType="share">
+                        <Button className="header-btn">
+                            <View className="iconfont iconstar"></View>
+                            <View className="text">收藏</View>
+                        </Button>
+                        <Button className="header-btn" openType="share">
                             <View className="iconfont iconshare"></View>
                             <View className="text">分享</View>
                         </Button>

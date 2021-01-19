@@ -21,6 +21,10 @@
   content: "\e7f0";
 }
 
+.iconstarfill:before {
+  content: "\e607";
+}
+
 .icondynamic:before {
   content: "\e621";
 }

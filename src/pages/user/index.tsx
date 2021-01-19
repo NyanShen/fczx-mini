@@ -126,6 +126,15 @@ const User = () => {
               </View>
             </View>
           }
+          <View className="user-item" onClick={() => toUserModule('collect')}>
+            <View className="item-icon lightblue">
+              <Text className="iconfont iconstar"></Text>
+            </View>
+            <View className="item-text">我的收藏</View>
+            <View className="item-arrow">
+              <Text className="iconfont iconarrow-right-bold"></Text>
+            </View>
+          </View>
           <View className="user-item" onClick={() => toHouseModule('list')}>
             <View className="item-icon blue">
               <Text className="iconfont iconmanage"></Text>

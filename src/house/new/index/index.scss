@@ -30,9 +30,12 @@
         }
 
         .header-right {
-            .share {
+            display: flex;
+            align-items: center;
+            .header-btn {
                 line-height: 1;
                 background-color: $white;
+                padding-right: 0;
                 &::after {
                     border: none;
                 }
