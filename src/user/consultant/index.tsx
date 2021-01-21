@@ -41,7 +41,7 @@ const HouseConsultant = () => {
                     <View className="item-icon"></View>
                 </View>
                 <View className="consultant-item">
-                    <View className="item-label">楼盘信息</View>
+                    <View className="item-label">关联楼盘</View>
                     <View className="item-input">
                         <Text className="input-text">{params.houseTitle}</Text>
                     </View>

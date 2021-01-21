@@ -70,8 +70,9 @@ const User = () => {
   return (
     <View className="user">
       <View className="user-content">
-        <View className="user-group">
-          <View className="user-item user-header" onClick={() => toUserModule('profile')}>
+        <View className="user-header">
+          <View className="header-bg"></View>
+          <View className="user-item user-login" onClick={() => toUserModule('profile')}>
             <View className="login-photo">
               <Image className="login-photo-image" src={user.avatar} />
             </View>
@@ -88,7 +89,6 @@ const User = () => {
                   <Text className="login-name">登录/注册</Text>
                 </View>
             }
-
             <View className="login-nav">
               <Text className="iconfont iconarrow-right-bold"></Text>
             </View>
@@ -97,7 +97,7 @@ const User = () => {
 
         <View className="user-group">
           {
-            user.is_consultant == 1 &&
+            user.is_consultant !== 1 &&
             <View>
               <View className="user-item" onClick={() => toUserModule('consultant')}>
                 <View className="item-icon origin">
@@ -137,40 +137,31 @@ const User = () => {
               <Text className="iconfont iconarrow-right-bold"></Text>
             </View>
           </View>
-          <View className="user-item" onClick={() => toHouseModule('list')}>
-            <View className="item-icon blue">
-              <Text className="iconfont iconmanage"></Text>
+        </View>
+
+        <View className="user-group">
+          <View className="user-item">
+            <View className="item-icon origin">
+              <Text className="iconfont iconhousemanage"></Text>
             </View>
-            <View className="item-text">管理出售</View>
-            <View className="item-arrow">
-              <Text className="iconfont iconarrow-right-bold"></Text>
-            </View>
+            <View className="item-text">管理房源</View>
           </View>
-          <View className="user-item" onClick={() => toHouseModule('list', 'rent')}>
-            <View className="item-icon blue">
-              <Text className="iconfont iconmanage"></Text>
+          <View className="user-row">
+            <View className="row-item" onClick={() => toHouseModule('list')}>
+              <View className="iconfont iconmanage"></View>
+              <View className="text">我的出售</View>
             </View>
-            <View className="item-text">管理出租</View>
-            <View className="item-arrow">
-              <Text className="iconfont iconarrow-right-bold"></Text>
+            <View className="row-item" onClick={() => toHouseModule('list', 'rent')}>
+              <View className="iconfont iconhome"></View>
+              <View className="text">我的出租</View>
             </View>
-          </View>
-          <View className="user-item" onClick={() => toHouseModule('sale')}>
-            <View className="item-icon cyan">
-              <Text className="iconfont iconsquare"></Text>
+            <View className="row-item" onClick={() => toHouseModule('sale')}>
+              <View className="iconfont iconsquare"></View>
+              <View className="text">发布出售</View>
             </View>
-            <View className="item-text">我要卖房</View>
-            <View className="item-arrow">
-              <Text className="iconfont iconarrow-right-bold"></Text>
-            </View>
-          </View>
-          <View className="user-item" onClick={() => toHouseModule('sale', 'rent')}>
-            <View className="item-icon lightblue">
-              <Text className="iconfont iconhomepage"></Text>
-            </View>
-            <View className="item-text">我要出租</View>
-            <View className="item-arrow">
-              <Text className="iconfont iconarrow-right-bold"></Text>
+            <View className="row-item" onClick={() => toHouseModule('sale', 'rent')}>
+              <View className="iconfont iconhomepage"></View>
+              <View className="text">发布出租</View>
             </View>
           </View>
         </View>

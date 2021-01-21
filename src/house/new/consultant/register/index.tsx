@@ -108,7 +108,7 @@ const HouseConsultantForm = () => {
                     </View>
                 </View>
                 <View className="form-item flex-item">
-                    <View className="item-label">楼盘信息</View>
+                    <View className="item-label">关联楼盘</View>
                     <View className="item-select" onClick={toHouseSearch}>
                         <Text className="select-text">{inputValue.houseTitle || '请搜索选择楼盘信息'}</Text>
                         <Text className="iconfont iconarrow-right-bold"></Text>
