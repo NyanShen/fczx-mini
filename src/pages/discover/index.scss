@@ -122,7 +122,7 @@
                             left: 50%;
                             transform: translate(-50%, -50%);
                             font-size: 100px;
-                            color: rgba($color: $white, $alpha: .9);
+                            color: rgba($color: $white, $alpha: 0.9);
                         }
                     }
                 }
@@ -151,6 +151,30 @@
                     }
                     .author-agent {
                         color: $desc-color;
+                    }
+                    .author-chat {
+                        position: absolute;
+                        right: 0;
+                        top: 50%;
+                        transform: translateY(-50%);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        .chat-item {
+                            position: relative;
+                            width: 60px;
+                            height: 60px;
+                            margin-right: 20px;
+                            border-radius: 50%;
+                            background-color: $white;
+                            .iconfont {
+                                position: absolute;
+                                top: 50%;
+                                left: 50%;
+                                transform: translate(-50%, -50%);
+                                color: $primary-color;
+                            }
+                        }
                     }
                 }
             }

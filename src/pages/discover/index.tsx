@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import Taro from '@tarojs/taro'
+import Taro, { makePhoneCall } from '@tarojs/taro'
 import { View, Image, Text, ScrollView } from '@tarojs/components'
 import map from 'lodash/map'
 
 import api from '@services/api'
 import app from '@services/request'
+import useNavData from '@hooks/useNavData'
+import { formatPhoneCall } from '@utils/index'
 import { toUrlParam } from '@utils/urlHandler'
 import { PRICE_TYPE, SALE_STATUS } from '@constants/house'
 import { INIT_PAGE, IPage, getTotalPage } from '@utils/page'
 import './index.scss'
-import useNavData from '@hooks/useNavData'
 
 interface IParam {
     currentPage: number
@@ -79,6 +80,32 @@ const Discover = () => {
             url: `/house/new/video/index${paramString}`
         })
     }
+
+    const toChatRoom = (discoverItem: any) => {
+        const { id, title, price, price_type, image_path } = discoverItem.fangHouse
+        const paramString = toUrlParam({
+            messageType: '3',
+            fromUserId: discoverItem.author.id,
+            toUser: JSON.stringify(discoverItem.author),
+            content: JSON.stringify({
+                id,
+                title,
+                price,
+                price_type,
+                image_path,
+                areaName: discoverItem.fangHouse.area.name
+            })
+        })
+        Taro.navigateTo({
+            url: `/chat/room/index${paramString}`
+        })
+    }
+
+    const handlePhoneCall = (mobile: string) => {
+        makePhoneCall({
+            phoneNumber: formatPhoneCall(mobile)
+        })
+    }
     return (
         <View className="discover">
             {
@@ -119,15 +146,22 @@ const Discover = () => {
                                                 item.type === 'image' ?
                                                     <View className="media-image">
                                                         {
-                                                            item.media.map((imageItem: any, index: number) => (
-                                                                <View className="item-image" key={index}>
-                                                                    <Image
-                                                                        src={imageItem.image_path}
-                                                                        mode="aspectFill"
-                                                                        onClick={() => handleImagePreview(item.media, imageItem.image_path)}
-                                                                    />
-                                                                </View>
-                                                            ))
+                                                            item.media.map((imageItem: any, index: number) => {
+                                                                if (index <= 3) {
+                                                                    return (
+                                                                        <View className="item-image" key={index}>
+                                                                            <Image
+                                                                                src={imageItem.image_path}
+                                                                                mode="aspectFill"
+                                                                                onClick={() => handleImagePreview(item.media, imageItem.image_path)}
+                                                                            />
+                                                                            {
+                                                                                index == 2 && <Text className="item-count">共{item.media.length}张</Text>
+                                                                            }
+                                                                        </View>
+                                                                    )
+                                                                }
+                                                            })
                                                         }
                                                     </View> :
                                                     <View className="media-video" onClick={() => toHouseVideo(item.media)}>
@@ -144,6 +178,14 @@ const Discover = () => {
                                                 <Text className="name">{item.author.nickname}</Text>
                                             </View>
                                             <View className="author-agent"></View>
+                                            <View className="author-chat">
+                                                <View className="chat-item" onClick={() => toChatRoom(item)}>
+                                                    <Text className="iconfont iconmessage"></Text>
+                                                </View>
+                                                <View className="chat-item" onClick={() => handlePhoneCall(item.author.mobile)}>
+                                                    <Text className="iconfont iconcall"></Text>
+                                                </View>
+                                            </View>
                                         </View>
                                     </View>
                                 ))
