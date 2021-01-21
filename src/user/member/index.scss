@@ -1,0 +1,152 @@
+.member {
+    &-content {
+        .member-header {
+            position: relative;
+            width: 100%;
+            height: 300px;
+            background-image: linear-gradient(180deg, #1e2025, #444242);
+            .member-user {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 48px 72px 120px 72px;
+                .user-photo {
+                    width: 135px;
+                    height: 135px;
+                    overflow: hidden;
+                    Image {
+                        width: 100%;
+                        height: 100%;
+                        border-radius: 50%;
+                        background-color: $bg-color;
+                    }
+                }
+                .user-text {
+                    flex: 1;
+                    margin-left: 20px;
+                    color: $white;
+                }
+            }
+            .member-tabs {
+                display: flex;
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                height: 80px;
+                .tabs-item {
+                    flex: 1;
+                    padding: 20px;
+                    text-align: center;
+                    font-weight: bold;
+                    background-color: #4b4b50;
+                    border-top-left-radius: $border-radius-10;
+                    border-top-right-radius: $border-radius-10;
+                    opacity: 0.7;
+                    color: $desc-color;
+                    &.actived {
+                        background-image: linear-gradient(90deg, #e5ba72, #f4dbb3);
+                        opacity: 1;
+                        color: $title-color;
+                    }
+                }
+            }
+        }
+        .member-form {
+            padding: 30px;
+            .member-equity {
+                line-height: 50px;
+                font-size: $font-basic;
+                .equity-label {
+                    font-weight: bold;
+                    color: $title-color;
+                }
+                .equity-text {
+                    color: $desc-color;
+                    .value {
+                        padding: 0 4px;
+                        color: $search-actived;
+                    }
+                }
+            }
+            .form-item {
+                .item-label {
+                    font-size: $font-basic;
+                    margin: 24px 0;
+                    color: $text-color;
+                }
+                .item-title {
+                    font-size: $font-34;
+                    font-weight: bold;
+                    margin: 24px 0;
+                    color: $title-color;
+                }
+                .item-flex {
+                    display: flex;
+                    flex-wrap: wrap;
+                    .vip-item {
+                        position: relative;
+                        width: 150px;
+                        border-radius: $border-radius-base;
+                        padding: 20px 40px 60px 20px;
+                        margin: 0 20px 20px 0;
+                        text-align: center;
+                        border: $border;
+                        &:nth-child(3n) {
+                            margin-right: 0;
+                        }
+
+                        .title {
+                            font-size: $font-30;
+                            font-weight: bold;
+                            color: $title-color;
+                        }
+
+                        .unit {
+                            font-size: $font-26;
+                            margin: 16px 0;
+                            color: $tip-color;
+                        }
+
+                        .total {
+                            position: absolute;
+                            left: 0;
+                            right: 0;
+                            bottom: 0;
+                            padding: 8px 16px;
+                            background-color: $bg2-color;
+                        }
+                        &.actived  {
+                            border-color: #e5ba72;
+                            background-color: #fcf1e2;
+                            .total {
+                                color: $white;
+                                background-color: #e5ba72;
+                            } 
+                        }
+                    }
+                }
+
+                .vip-gave {
+                    width: 80%;
+                    padding: 20px 60px;
+                    border-radius: $border-radius-10;
+                    background-color: rgba($color: #f4dbb3, $alpha: .15);
+                    border-left: 6px solid #e5ba72;
+                }
+                .vip-btn {
+                    margin-top: 20px;
+                    border-radius: 100px;
+                    background-color: #e5ba72;
+                    color: $white;
+                }
+            }
+            .form-flex-right {
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+                margin-top: 60px;
+            }
+        }
+    }
+}

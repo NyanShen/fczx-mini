@@ -13,6 +13,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.iconmember:before {
+  content: "\e69f";
+}
+
 .iconlove:before {
   content: "\e606";
 }

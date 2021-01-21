@@ -76,6 +76,7 @@ export default {
     {
       root: 'user',
       pages: [
+        'member/index',
         'collect/index',
         'official/index',
         'profile/index',

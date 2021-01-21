@@ -93,9 +93,20 @@ const User = () => {
             <View className="login-photo">
               <Image className="login-photo-image" src={user.avatarUrl} />
             </View>
-            <View className="login-text">
-              <Text className="login-name">{user.username ? user.nickname || user.username : '登录/注册'}</Text>
-            </View>
+            {
+              user.username ?
+                <View className="login-text">
+                  <View className="login-name">{user.nickname || user.username}</View>
+                  {/* <View className="user-type">
+                    <Text className="iconfont"></Text>
+                    <Text></Text>
+                  </View> */}
+                </View> :
+                <View className="login-text">
+                  <Text className="login-name">登录/注册</Text>
+                </View>
+            }
+
             <View className="login-nav">
               <Text className="iconfont iconarrow-right-bold"></Text>
             </View>
@@ -126,6 +137,15 @@ const User = () => {
               </View>
             </View>
           }
+          <View className="user-item" onClick={() => toUserModule('member')}>
+            <View className="item-icon blue2">
+              <Text className="iconfont iconmember"></Text>
+            </View>
+            <View className="item-text">会员升级</View>
+            <View className="item-arrow">
+              <Text className="iconfont iconarrow-right-bold"></Text>
+            </View>
+          </View>
           <View className="user-item" onClick={() => toUserModule('collect')}>
             <View className="item-icon lightblue">
               <Text className="iconfont iconstar"></Text>
