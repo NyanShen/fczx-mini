@@ -10,39 +10,21 @@ import ChatEvent from '@utils/event'
 import { toUrlParam } from '@utils/urlHandler'
 import './index.scss'
 
-interface IUser {
-  id?: string
-  sex?: string
-  mobile?: string
-  avatarUrl: string
-  nickname?: string
-  username: string
-  is_consultant?: number
-}
-
-const INIT_USER: IUser = {
-  avatarUrl: 'https://static.fczx.com/www/assets/mini/user_photo.png',
+const INIT_USER: any = {
+  avatar: 'https://static.fczx.com/www/assets/mini/user_photo.png',
   username: ''
 }
 const JOIN_PHONE = '18671072505'
 
 const User = () => {
-  const [user, setUser] = useState<IUser>(INIT_USER)
+  const [user, setUser] = useState<any>(INIT_USER)
 
   useDidShow(() => {
     app.request({
       url: app.apiUrl(api.getUserData)
     }, { loading: false }).then((result: any) => {
       if (result) {
-        setUser({
-          id: result.id,
-          sex: result.sex,
-          mobile: result.mobile,
-          avatarUrl: result.avatar,
-          username: result.username,
-          nickname: result.nickname,
-          is_consultant: result.is_consultant
-        })
+        setUser(result)
       }
     })
   })
@@ -91,7 +73,7 @@ const User = () => {
         <View className="user-group">
           <View className="user-item user-header" onClick={() => toUserModule('profile')}>
             <View className="login-photo">
-              <Image className="login-photo-image" src={user.avatarUrl} />
+              <Image className="login-photo-image" src={user.avatar} />
             </View>
             {
               user.username ?

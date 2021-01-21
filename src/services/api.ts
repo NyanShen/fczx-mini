@@ -69,5 +69,6 @@ export default {
     getChatData: '/chat/chat-data',
     getChatUser: '/chat/scan-chat',
 
-    getDiscoverList: '/discover/list'
+    getDiscoverList: '/discover/list',
+    getMemberUpgrade: '/member/upgrade',
 }

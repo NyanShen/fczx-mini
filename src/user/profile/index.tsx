@@ -21,7 +21,7 @@ const Profile = () => {
     const INIT_PICKER_VALUE = {
         sex: { id: params.sex }
     }
-    const [photo, setPhoto] = useState<string>(params.avatarUrl)
+    const [photo, setPhoto] = useState<string>(params.avatar)
     const [inputValue, setInputValue] = useState<any>({ nickname: params.nickname })
     const [pickerValue, setPickerValue] = useState<any>(INIT_PICKER_VALUE)
 
