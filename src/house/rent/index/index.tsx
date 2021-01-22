@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Taro, { getCurrentInstance, useShareAppMessage, useShareTimeline } from '@tarojs/taro'
-import { View, ScrollView, Text, Image, Swiper, SwiperItem } from '@tarojs/components'
+import { View, ScrollView, Text, Image, Button, Swiper, SwiperItem } from '@tarojs/components'
 
 import api from '@services/api'
 import app from '@services/request'
@@ -179,10 +179,25 @@ const RentIndex = () => {
                     <View className="album-count">共{rentData.rentImage.length}张</View>
                 </View>
                 <View className="rent-item">
-                    <View className="rent-item-header">
-                        <View className="title mb16">
-                            {rentData.title}
+                    <View className="header">
+                        <View className="header-left">
+                            <View className="title">
+                                {rentData.title}
+                            </View>
                         </View>
+                        <View className="header-right">
+                            <Button className="header-btn">
+                                <View className="iconfont iconstar"></View>
+                                <View className="text">收藏</View>
+                            </Button>
+                            <Button className="header-btn" openType="share">
+                                <View className="iconfont iconshare"></View>
+                                <View className="text">分享</View>
+                            </Button>
+                        </View>
+                    </View>
+                    <View className="rent-item-header">
+
                         <View className="address mb16">
                             <View className="name">{rentData.area.name}-{rentData.address}</View>
                             <View className="iconfont iconaddress" onClick={toLocation}>地址</View>
@@ -291,11 +306,11 @@ const RentIndex = () => {
             </ScrollView>
             <View className="bottom-bar">
                 <View className="bar-item">
-                    <View className="user-photo">
+                    <View className="item-photo">
                         <Image src={rentData.user.avatar}></Image>
                     </View>
-                    <View>
-                        <View>{rentData.user.nickname}</View>
+                    <View className="item-text">
+                        <View className="name">{rentData.user.nickname}</View>
                         <View className="small-desc">{SOURCE_TYPE[rentData.source_type]}</View>
                     </View>
                 </View>

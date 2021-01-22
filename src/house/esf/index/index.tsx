@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Taro, { getCurrentInstance, makePhoneCall, useShareAppMessage, useShareTimeline } from '@tarojs/taro'
-import { ScrollView, View, Text, Image, Swiper, SwiperItem } from '@tarojs/components'
+import { ScrollView, View, Text, Image, Button, Swiper, SwiperItem } from '@tarojs/components'
 
 import api from '@services/api'
 import app from '@services/request'
@@ -69,7 +69,7 @@ const esfHouse = () => {
             const { latitude, longitude } = result.fangHouse
             const static_map = getStaticMap(latitude, longitude)
             setEsfData({ ...result, ...{ static_map: static_map } })
-            Taro.setNavigationBarTitle({ title: result.title})
+            Taro.setNavigationBarTitle({ title: result.title })
             if (params.c) {
                 handlePhoneCall(result.mobile)
             }
@@ -167,7 +167,17 @@ const esfHouse = () => {
                 </View>
                 <View className="esf-item">
                     <View className="header">
-                        <Text>{esfData.title}</Text>
+                        <View className="header-left">{esfData.title}</View>
+                        <View className="header-right">
+                            <Button className="header-btn">
+                                <View className="iconfont iconstar"></View>
+                                <View className="text">收藏</View>
+                            </Button>
+                            <Button className="header-btn" openType="share">
+                                <View className="iconfont iconshare"></View>
+                                <View className="text">分享</View>
+                            </Button>
+                        </View>
                     </View>
                     <View className="address" onClick={toLocation}>
                         <View className="name">{esfData.area.name}-{esfData.address}</View>
@@ -307,11 +317,11 @@ const esfHouse = () => {
             </ScrollView>
             <View className="bottom-bar">
                 <View className="bar-item">
-                    <View className="user-photo">
+                    <View className="item-photo">
                         <Image src={esfData.user.avatar}></Image>
                     </View>
-                    <View>
-                        <View>{esfData.user.nickname}</View>
+                    <View className="item-text">
+                        <View className="text">{esfData.user.nickname}</View>
                         <View className="small-desc">{SOURCE_TYPE[esfData.source_type]}</View>
                     </View>
                 </View>

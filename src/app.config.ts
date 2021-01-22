@@ -3,8 +3,8 @@ import { Config } from '@tarojs/taro';
 export default {
   pages: [
     // 'activity/index',
-    'pages/user/index',
     'pages/index/index',
+    'pages/user/index',
     'pages/chat/index',
     'pages/discover/index',
     'pages/entry/index',

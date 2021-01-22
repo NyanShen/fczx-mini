@@ -71,4 +71,5 @@ export default {
 
     getDiscoverList: '/discover/list',
     getMemberUpgrade: '/member/upgrade',
+    getCollectList: '/collect/list',
 }
