@@ -65,6 +65,7 @@ const Collect = () => {
     return (
         <View className="collect">
             <View className="collect-content">
+                
                 {
                     collectList.length > 0 ?
                         <ScrollView

@@ -3,20 +3,29 @@
     box-sizing: border-box;
 
     &-content {
+        .release-flex {
+            display: flex;
+            .item-label {
+                margin-right: 30px;
+            }
+        }
         .release-item {
             margin-bottom: 30px;
             .item-label {
+                margin-bottom: 30px;
                 color: $text-color;
             }
             .item-input {
                 Textarea {
                     width: 100%;
                 }
+                .text {
+                    color: $text-color;
+                }
             }
             .item-media {
                 display: flex;
                 flex-wrap: wrap;
-                margin-top: 30px;
                 .media-item {
                     position: relative;
                     width: 210px;
