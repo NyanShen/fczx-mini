@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import Taro from "@tarojs/taro";
 import { getCurrentInstance } from '@tarojs/taro'
 import { View, Image, Text } from '@tarojs/components'
 import classnames from 'classnames'
@@ -30,6 +31,24 @@ const Member = () => {
     const handleCurrentTypeClick = (item: any) => {
         setCurrentType(item)
         setCurrentVip(item.types[0])
+    }
+
+    const handleSubmit = () => {
+        app.request({
+            url: app.testApiUrl(api.getPayment)
+        }, { loading: false }).then((result: any) => {
+            const { nonceStr, paySign, timeStamp, signType } = result
+            Taro.requestPayment({
+                nonceStr,
+                package: result.package,
+                paySign,
+                timeStamp,
+                signType,
+                complete: (res: any) => {
+                    console.log(res)
+                }
+            })
+        })
     }
 
     return (
@@ -95,7 +114,7 @@ const Member = () => {
                     <View className="form-flex-right">
                         <View className="pay-total">需支付：¥{currentVip.money}</View>
                     </View>
-                    <View className="form-item">
+                    <View className="form-item" onClick={handleSubmit}>
                         <View className="btn vip-btn">去支付</View>
                     </View>
                 </View>
