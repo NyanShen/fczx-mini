@@ -25,6 +25,8 @@ const User = () => {
     }, { loading: false }).then((result: any) => {
       if (result) {
         setUser(result)
+        const chat_unread: any[] = storage.getItem('chat_unread') || []
+        ChatEvent.emitStatus('chat_unread', chat_unread)
       }
     })
   })

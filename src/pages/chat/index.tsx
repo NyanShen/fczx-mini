@@ -1,26 +1,32 @@
 import React, { useEffect, useState } from 'react'
-import Taro, { useDidShow } from '@tarojs/taro'
+import Taro, { getCurrentInstance, useDidShow } from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
 
 import api from '@services/api'
 import app from '@services/request'
 import ChatEvent from '@utils/event'
+import storage from '@utils/storage'
 import { toUrlParam } from '@utils/urlHandler'
 import { formatTimestamp } from '@utils/index'
 import { hasLogin } from '@services/login'
 import logo from '@assets/icons/logo.png'
 import './index.scss'
 
+const chatPath = '/pages/chat/index'
+
 const Chat = () => {
   const [user, setUser] = useState<any>(null)
-  const [unread, setUnread] = useState<string>('')
   const [chatDialog, setChatDialog] = useState<any[]>([])
 
   useDidShow(() => {
+    if (user) {
+      fetchChatDialog()
+      return
+    }
     hasLogin().then((result: any) => {
       if (result) {
         setUser(result)
-        fetchChatDialog(result)
+        fetchChatDialog()
       } else {
         setUser(null)
       }
@@ -28,33 +34,41 @@ const Chat = () => {
   })
 
   useEffect(() => {
-    if (user && unread) {
-      fetchChatDialog(user)
+    if (user) {
+      ChatEvent.on('chat', () => {
+        const currentPath = getCurrentInstance().router?.path
+        if (chatPath === currentPath) {
+          fetchChatDialog()
+        }
+      })
     }
-  }, [unread])
+  }, [user])
 
-  const fetchChatDialog = (user: any) => {
+  const fetchChatDialog = () => {
     app.request({
       url: app.apiUrl(api.getChatDialog)
     }, { loading: false }).then((result: any) => {
       setChatDialog(result)
-      getUnreadStatus(result, user)
-    })
-    ChatEvent.on('chat', (result: string) => {
-      setUnread(result)
+      syncChatUnread()
+      // getUnreadStatus(result, user)
     })
   }
 
-  const getUnreadStatus = (result: any[], user: any) => {
-    let status = false
-    for (const item of result) {
-      if (item.status == '1' && item.to_user_id == user.id) {
-        status = true
-        break
-      }
-    }
-    ChatEvent.emitStatus('chat_status', { status })
+  const syncChatUnread = () => {
+    const chat_unread: any[] = storage.getItem('chat_unread') || []
+    ChatEvent.emitStatus('chat_unread', chat_unread)
   }
+
+  // const getUnreadStatus = (result: any[], user: any) => {
+  //   let status = false
+  //   for (const item of result) {
+  //     if (item.status == '1' && item.to_user_id == user.id) {
+  //       status = true
+  //       break
+  //     }
+  //   }
+  //   ChatEvent.emitStatus('chat_status', { status })
+  // }
 
   const toChatRoom = (item: any) => {
     let fromUserId: string = ''
@@ -63,6 +77,8 @@ const Chat = () => {
     } else {
       fromUserId = item.from_user_id
     }
+    updateChatUnread(fromUserId)
+
     const paramString = toUrlParam({
       fromUserId,
       toUser: JSON.stringify(item.user)
@@ -70,6 +86,17 @@ const Chat = () => {
     Taro.navigateTo({
       url: `/chat/room/index${paramString}`
     })
+  }
+
+  const updateChatUnread = (fromUserId: string | number) => {
+    const new_chat_unread: any[] = []
+    const chat_unread: any[] = storage.getItem('chat_unread') || []
+    for (const item of chat_unread) {
+      if (item.from_user_id != fromUserId) {
+        new_chat_unread.push(item)
+      }
+    }
+    storage.setItem('chat_unread', new_chat_unread)
   }
 
   const toLogin = () => {

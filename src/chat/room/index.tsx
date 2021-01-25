@@ -12,6 +12,8 @@ import { toUrlParam } from '@utils/urlHandler'
 import { formatChatListTime } from '@utils/index'
 import { getTotalPage, INIT_PAGE, IPage } from '@utils/page'
 // import CustomSocket from '@utils/socket'
+import ChatEvent from '@utils/event'
+import storage from '@utils/storage'
 import './index.scss'
 
 interface IParam {
@@ -31,7 +33,7 @@ const EXPRESSIONS = [
     '什么时候方便看房子？',
     '房子的价格还可以谈么',
 ]
-// let time: number = 0
+let time: number = 0
 const PAGE_LIMIT: number = 20
 const INIT_ACTION = { expression: false, photo: false }
 const INIT_INPUT_DATA = { value: '', send: false }
@@ -48,7 +50,7 @@ const ChatRoom = () => {
     const [param, setParam] = useState<IParam>(INIT_PARAM)
     const [page, setPage] = useState<IPage>(INIT_PAGE)
     const [chatData, setChatData] = useState<any[]>([])
-    // const [newChatData, setNewChatData] = useState<any[]>([])
+    const [newChatData, setNewChatData] = useState<any[]>([])
     const [bottom, setBottom] = useState<number>(0)
     const [toView, setToView] = useState<string>('')
     const [images, setImages] = useState<string[]>([])
@@ -68,11 +70,33 @@ const ChatRoom = () => {
     //     }
     // })
 
+    const messageFilter = (message: any, chatData: any) => {
+        if (message.from_user_id == toUser.id) {
+            const timestamp = handleMessageTime(chatData)
+            message.id = 'tempid_' + (timestamp + 1)
+            message.time = time
+            message.created = timestamp
+            console.log('chatroom onEventMessage', message)
+            setNewChatData([...newChatData, message])
+        }
+    }
+
+    const updateChatUnread = () => {
+        const new_chat_unread: any[] = []
+        const chat_unread: any[] = storage.getItem('chat_unread') || []
+        for (const item of chat_unread) {
+            if (item.from_user_id != fromUserId) {
+                new_chat_unread.push(item)
+            }
+        }
+        storage.setItem('chat_unread', new_chat_unread)
+    }
+
     useReady(() => {
         Taro.setNavigationBarTitle({ title: toUser.nickname })
-        if (messageType && content) {
-            sendMessage(messageType, content)
-        }
+        // if (messageType && content) {
+        //     sendMessage(messageType, content)
+        // }
     })
 
     useDidShow(() => {
@@ -88,28 +112,33 @@ const ChatRoom = () => {
         })
     })
 
-    // useEffect(() => {
-    //     if (newChatData.length < 1) {
-    //         return
-    //     }
-    //     if (chatData.length > 0) {
-    //         const currentView = `toView_${chatData[chatData.length - 1].id}`
-    //         console.log('currentView', chatData, toView)
-    //         if (currentView === toView) {
-    //             setChatData([...chatData, ...newChatData])
-    //             setNewChatData([])
-    //         }
-    //     } else {
-    //         setChatData([...newChatData])
-    //         setNewChatData([])
-    //     }
-    // }, [newChatData])
+    useEffect(() => {
+        if (newChatData.length < 1) {
+            return
+        }
+        if (chatData.length > 0) {
+            const currentView = `toView_${chatData[chatData.length - 1].id}`
+            console.log('currentView', chatData, toView)
+            if (currentView === toView) {
+                setChatData([...chatData, ...newChatData])
+                setNewChatData([])
+                updateChatUnread()
+            }
+        } else {
+            setChatData([...newChatData])
+            setNewChatData([])
+            updateChatUnread()
+        }
+    }, [newChatData])
 
-    // useEffect(() => {
-    //     if (chatData.length > 0) {
-    //         setToView(`toView_${chatData[chatData.length - 1].id}`)
-    //     }
-    // }, [chatData])
+    useEffect(() => {
+        if (chatData.length > 0) {
+            setToView(`toView_${chatData[chatData.length - 1].id}`)
+        }
+        ChatEvent.on('chat', (_, message: any) => {
+            messageFilter(message, chatData)
+        })
+    }, [chatData])
 
     useEffect(() => {
         fetchChatData()
@@ -128,11 +157,11 @@ const ChatRoom = () => {
             if (param.currentPage === INIT_PARAM.currentPage) {
                 setChatData(resData)
                 imageFilter(resData)
-                // if (messageType && content) {
-                //     sendMessage(messageType, content, resData)
-                //     content = ''
-                //     messageType = ''
-                // }
+                if (messageType && content) {
+                    sendMessage(messageType, content, resData)
+                    content = ''
+                    messageType = ''
+                }
             } else {
                 const dataList = [...resData, ...chatData]
                 setChatData(dataList)
@@ -208,20 +237,21 @@ const ChatRoom = () => {
         Taro.setClipboardData({ data: toUser.wx })
     }
 
-    // const handleMessageTime = () => {
-    //     const timestamp = parseInt(`${new Date().getTime() / 1000}`)
-    //     if (chatData.length > 0) {
-    //         const lastTime = chatData[chatData.length - 1].created
-    //         if (timestamp - lastTime > 10 * 60) {
-    //             time = timestamp
-    //         } else {
-    //             time = parseInt(chatData[chatData.length - 1].time)
-    //         }
-    //     } else {
-    //         time = timestamp
-    //     }
-    //     return timestamp
-    // }
+    const handleMessageTime = (chatData: any[]) => {
+        const timestamp = parseInt(`${new Date().getTime() / 1000}`)
+        if (chatData.length > 0) {
+            const lastTime = chatData[chatData.length - 1].created
+
+            if (timestamp - lastTime > 10 * 60) {
+                time = timestamp
+            } else {
+                time = parseInt(chatData[chatData.length - 1].time)
+            }
+        } else {
+            time = timestamp
+        }
+        return timestamp
+    }
 
     // const sendMessage = (type: string, content: any, dataList: any = null) => {
     //     const timestamp = handleMessageTime()
@@ -242,7 +272,22 @@ const ChatRoom = () => {
     //     CustomSocket.sendSocketMessage(JSON.stringify(message))
     // }
 
-    const sendMessage = (type: string, content: any) => {
+    const sendMessage = (type: string, content: any, dataList: any = null) => {
+        const timestamp = handleMessageTime(dataList || chatData)
+        const message = {
+            id: 'tempid_' + timestamp,
+            type: 'chat',
+            to_user_id: toUser.id,
+            message_type: type,
+            created: timestamp,
+            content,
+            time
+        }
+        if (dataList) {
+            setChatData([...dataList, message])
+        } else {
+            setChatData([...chatData, message])
+        }
         app.request({
             url: app.apiUrl(api.postChatSend),
             method: 'POST',
@@ -252,9 +297,9 @@ const ChatRoom = () => {
                 content
             }
         }, { loading: false }).then(() => {
-            setParam({
-                currentPage: INIT_PARAM.currentPage
-            })
+            // setParam({
+            //     currentPage: INIT_PARAM.currentPage
+            // })
         })
     }
 

@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import Taro, { makePhoneCall } from '@tarojs/taro'
+import Taro, { makePhoneCall, useDidShow } from '@tarojs/taro'
 import { View, Image, Text, ScrollView } from '@tarojs/components'
 import map from 'lodash/map'
 
 import api from '@services/api'
 import app from '@services/request'
+import ChatEvent from '@utils/event'
+import storage from '@utils/storage'
 import useNavData from '@hooks/useNavData'
 import { formatPhoneCall } from '@utils/index'
 import { toUrlParam } from '@utils/urlHandler'
@@ -25,6 +27,11 @@ const Discover = () => {
     const [param, setParam] = useState<IParam>(INIT_PARAM)
     const [discover, setDiscover] = useState<any[]>([])
     const [showEmpty, setShowEmpty] = useState<boolean>(false)
+
+    useDidShow(() => {
+        const chat_unread: any[] = storage.getItem('chat_unread') || []
+        ChatEvent.emitStatus('chat_unread', chat_unread)
+    })
 
     useEffect(() => {
         fetchDiscover()

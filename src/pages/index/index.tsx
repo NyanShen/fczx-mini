@@ -5,6 +5,7 @@ import classnames from 'classnames'
 
 import api from '@services/api'
 import app from '@services/request'
+import ChatEvent from '@utils/event'
 import storage from '@utils/storage'
 import new_house from '@assets/icons/new_house.png'
 import second_house from '@assets/icons/house.png'
@@ -115,6 +116,8 @@ const Index = () => {
   })
 
   useDidShow(() => {
+    const chat_unread: any[] = storage.getItem('chat_unread') || []
+    ChatEvent.emitStatus('chat_unread', chat_unread)
     const currentCity = storage.getItem('city')
     if (!currentCity) {
       app.setLocation((result: any) => {
@@ -123,7 +126,6 @@ const Index = () => {
         fetchEsfList()
         fetchHomeData()
       })
-
       return
     }
     if (currentCity.id !== city.id) {

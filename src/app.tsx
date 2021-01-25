@@ -16,22 +16,27 @@ class App extends Component {
 
   componentDidMount() {
 
-    ChatEvent.emit('chat')
-
-    ChatEvent.on('chat', (result: string) => {
+    ChatEvent.on('chat', (result: any[]) => {
       this.handleTabBarRedDot(result)
     })
 
-    ChatEvent.on('chat_status', (result: any) => {
-      this.handleTabBarRedDot(result.status)
+    ChatEvent.on('chat_unread', (result: any[]) => {
+      this.handleTabBarRedDot(result)
     })
 
+    ChatEvent.emit('chat')
   }
 
-  handleTabBarRedDot = (result: boolean | string) => {
+  componentDidUpdate() {
+    ChatEvent.on('chat', (result: any[]) => {
+      this.handleTabBarRedDot(result)
+    })
+  }
+
+  handleTabBarRedDot = (result: any[]) => {
     const pathname: any = getCurrentInstance().router?.path
     if (this.tabbarList.includes(pathname)) {
-      if (result) {
+      if (result.length > 0) {
         Taro.showTabBarRedDot({
           index: 1,
           success() { },
