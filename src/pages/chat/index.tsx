@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Taro, { useDidShow, useReady } from '@tarojs/taro'
+import Taro, { useDidShow } from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
 
 import api from '@services/api'
