@@ -3,8 +3,7 @@ import Taro, { getCurrentInstance } from '@tarojs/taro'
 import { View, Text, Button, Image } from '@tarojs/components'
 
 import storage from '@utils/storage'
-import ChatEvent from '@utils/event'
-// import CustomSocket from '@utils/socket'
+import CustomSocket from '@utils/socket'
 import logo from '@assets/icons/logo.png'
 import { PROJECT_NAME } from '@constants/global'
 import { fetchSessionKey, fetchDecryptData } from '@services/login'
@@ -32,8 +31,7 @@ const Login = () => {
         }).then((result: any) => {
             if (result.token) {
                 storage.setItem('token', result.token)
-                ChatEvent.emit('chat')
-                // CustomSocket.connectSocket()
+                CustomSocket.connectSocket()
                 handleRedirect()
             } else {
                 setShowConfirm(true)

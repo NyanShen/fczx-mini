@@ -8,13 +8,15 @@ class CustomSocket {
     private timer: any = null
     private limit: number = 0
     constructor() {
-        this.connectSocket()
-        console.log('init CustomSocket')
+        if (this.getToken()) {
+            this.connectSocket()
+            console.log('init CustomSocket')
+        }
     }
     connectSocket() {
         const _this = this
         Taro.connectSocket({
-            url: `wss://api.fczx.com/wss?userToken=${_this.getToken()}`,
+            url: `wss://api.fczx.com:7272`,
             success: (response: any) => {
                 console.log('connectSocket success:', response)
                 _this.initSocketEvent()
@@ -31,6 +33,9 @@ class CustomSocket {
         Taro.onSocketOpen(() => {
             console.log('onSocketOpen')
             _this.socketOpen = true
+            const loginMsg = `{"type":"login","token":"${_this.getToken()}"}`
+            _this.sendSocketMessage(loginMsg)
+            
             for (const item of _this.socketMsgQueue) {
                 _this.sendSocketMessage(item)
             }
@@ -85,11 +90,18 @@ class CustomSocket {
         }
     }
 
-    public onSocketMessage(callback: (string) => void) {
+    public onSocketMessage(callback: (...any) => void) {
+        const _this = this
         Taro.onSocketMessage((response: any) => {
             const message: any = JSON.parse(response.data)
             if (message.type === 'chat') {
-                callback(message)
+                let unreadList = storage.getItem('chat_unread') || []
+                unreadList = [...unreadList, message]
+                storage.setItem('chat_unread', unreadList)
+                callback(message, unreadList)
+            }
+            if (message.type === 'ping') {
+                _this.sendSocketMessage('{"type":"pong"}')
             }
             console.log('onSocketMessage:', message)
         })

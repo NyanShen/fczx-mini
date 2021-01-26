@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import Taro, { getCurrentInstance, useDidShow } from '@tarojs/taro'
+import React, { useState } from 'react'
+import Taro, { useDidShow } from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
 
 import api from '@services/api'
@@ -9,17 +9,20 @@ import storage from '@utils/storage'
 import { toUrlParam } from '@utils/urlHandler'
 import { formatTimestamp } from '@utils/index'
 import { hasLogin } from '@services/login'
+import CustomSocket from '@utils/socket'
 import logo from '@assets/icons/logo.png'
 import './index.scss'
-
-const chatPath = '/pages/chat/index'
 
 const Chat = () => {
   const [user, setUser] = useState<any>(null)
   const [chatDialog, setChatDialog] = useState<any[]>([])
 
+  CustomSocket.onSocketMessage(() => {
+    fetchChatDialog()
+  })
+
   useDidShow(() => {
-    if (user) {
+    if (user && CustomSocket.getToken()) {
       fetchChatDialog()
       return
     }
@@ -32,17 +35,6 @@ const Chat = () => {
       }
     })
   })
-
-  useEffect(() => {
-    if (user) {
-      ChatEvent.on('chat', () => {
-        const currentPath = getCurrentInstance().router?.path
-        if (chatPath === currentPath) {
-          fetchChatDialog()
-        }
-      })
-    }
-  }, [user])
 
   const fetchChatDialog = () => {
     app.request({

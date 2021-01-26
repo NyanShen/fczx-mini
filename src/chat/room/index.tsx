@@ -11,8 +11,7 @@ import { fetchUserData } from '@services/login'
 import { toUrlParam } from '@utils/urlHandler'
 import { formatChatListTime } from '@utils/index'
 import { getTotalPage, INIT_PAGE, IPage } from '@utils/page'
-// import CustomSocket from '@utils/socket'
-import ChatEvent from '@utils/event'
+import CustomSocket from '@utils/socket'
 import storage from '@utils/storage'
 import './index.scss'
 
@@ -58,28 +57,17 @@ const ChatRoom = () => {
     const [inputData, setInputData] = useState<any>(INIT_INPUT_DATA)
     const ref = useRef<string>('') // 判断显示时间点
 
-    // CustomSocket.onSocketMessage((message: any) => {
-    //     console.log('chatroomchatroom', message.from_user_id == toUser.id)
-    //     if (message.from_user_id == toUser.id) {
-    //         const timestamp = handleMessageTime()
-    //         message.id = 'tempid_' + (timestamp + 1)
-    //         message.time = time
-    //         message.created = timestamp
-    //         console.log('chatroom onSocketMessage', message)
-    //         setNewChatData([...newChatData, message])
-    //     }
-    // })
-
-    const messageFilter = (message: any, chatData: any) => {
+    CustomSocket.onSocketMessage((message: any) => {
+        console.log('chatroom', message.from_user_id == toUser.id)
         if (message.from_user_id == toUser.id) {
             const timestamp = handleMessageTime(chatData)
             message.id = 'tempid_' + (timestamp + 1)
             message.time = time
             message.created = timestamp
-            console.log('chatroom onEventMessage', message)
+            console.log('chatroom onSocketMessage', message)
             setNewChatData([...newChatData, message])
         }
-    }
+    })
 
     const updateChatUnread = () => {
         const new_chat_unread: any[] = []
@@ -135,9 +123,7 @@ const ChatRoom = () => {
         if (chatData.length > 0) {
             setToView(`toView_${chatData[chatData.length - 1].id}`)
         }
-        ChatEvent.on('chat', (_, message: any) => {
-            messageFilter(message, chatData)
-        })
+       
     }, [chatData])
 
     useEffect(() => {

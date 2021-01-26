@@ -6,6 +6,7 @@ import classnames from 'classnames'
 import api from '@services/api'
 import app from '@services/request'
 import storage from '@utils/storage'
+import CustomSocket from '@utils/socket'
 import { PHONE_PATTERN } from '@constants/pattern'
 import './index.scss'
 
@@ -123,6 +124,7 @@ const LoginPhone = () => {
             data: postData
         }).then((result: any) => {
             storage.setItem('token', result)
+            CustomSocket.connectSocket()
             if (backUrl && !isTab) {
                 Taro.redirectTo({ url: decodeURIComponent(backUrl) })
             }

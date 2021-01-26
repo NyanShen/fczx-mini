@@ -3,8 +3,8 @@ import Taro, { getCurrentInstance } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 
 import ChatEvent from '@utils/event'
+import CustomSocket from '@utils/socket'
 import './app.scss'
-
 
 class App extends Component {
   tabbarList = [
@@ -15,8 +15,7 @@ class App extends Component {
   ]
 
   componentDidMount() {
-
-    ChatEvent.on('chat', (result: any[]) => {
+    CustomSocket.onSocketMessage((_, result: any[]) => {
       this.handleTabBarRedDot(result)
     })
 
@@ -24,13 +23,6 @@ class App extends Component {
       this.handleTabBarRedDot(result)
     })
 
-    ChatEvent.emit('chat')
-  }
-
-  componentDidUpdate() {
-    ChatEvent.on('chat', (result: any[]) => {
-      this.handleTabBarRedDot(result)
-    })
   }
 
   handleTabBarRedDot = (result: any[]) => {
