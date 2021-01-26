@@ -13,6 +13,7 @@ import '@styles/common/house.scss'
 import '@styles/common/house-album.scss'
 import '@styles/common/bottom-bar.scss'
 import './index.scss'
+import { getToken, hasLoginBack } from '@services/login'
 const INIT_ESF_DATA = {
     esfImage: [],
     tags: [],
@@ -75,7 +76,9 @@ const esfHouse = () => {
                 handlePhoneCall(result.mobile)
             }
         })
-        fetchCollectStatus()
+        if (getToken()) {
+            fetchCollectStatus()
+        }
     }, [])
 
     const fetchCollectStatus = () => {
@@ -91,15 +94,17 @@ const esfHouse = () => {
     }
 
     const updateUserCollect = (url: string, status: boolean) => {
-        app.request({
-            url: app.areaApiUrl(url),
-            method: 'POST',
-            data: {
-                type_id: params.id,
-                type: '2'
-            }
-        }).then(() => {
-            setCollect(status)
+        hasLoginBack().then(() => {
+            app.request({
+                url: app.areaApiUrl(url),
+                method: 'POST',
+                data: {
+                    type_id: params.id,
+                    type: '2'
+                }
+            }).then(() => {
+                setCollect(status)
+            })
         })
     }
 

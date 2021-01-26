@@ -6,8 +6,8 @@ import classnames from 'classnames'
 import api from '@services/api'
 import app from '@services/request'
 import { hasLogin } from '@services/login'
-import './index.scss'
 import { PHONE_PATTERN } from '@constants/pattern'
+import './index.scss'
 
 interface ICustom {
     id?: string,

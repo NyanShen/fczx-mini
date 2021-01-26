@@ -4,6 +4,9 @@ import { toUrlParam } from '@utils/urlHandler'
 import api from './api'
 
 let count: number = 0
+
+const getToken = () => storage.getItem('token')
+
 const getCityAlias = (): string => {
     const city = storage.getItem('city')
     if (city) {
@@ -83,7 +86,7 @@ app.request = (params: any, { loading = true, toast = true }: any = {}) => {
     }
 
     const city = { 'X-City': getCityAlias() }
-    const token = { 'X-Token': storage.getItem('token') }
+    const token = { 'X-Token': getToken() }
     params.header = { ...params.header, ...token, ...city }
 
     const { page, limit } = params.data
@@ -109,6 +112,13 @@ app.request = (params: any, { loading = true, toast = true }: any = {}) => {
             method: params.method,
             header: params.header,
             success: function ({ data }: any) {
+                if (data.status === 401) {
+                    const router: any = getCurrentInstance().router
+                    const backUrl = `${router?.path}${toUrlParam(router?.params)}`
+                    Taro.redirectTo({
+                        url: `/login/index?backUrl=${encodeURIComponent(backUrl)}`
+                    })
+                }
                 if (data.code == 1 && data.message == 'ok') {
                     if (loading) {
                         Taro.hideLoading()
@@ -167,7 +177,7 @@ app.uploadFile = (data: any, callback: (string) => void) => {
                 }
             },
             header: {
-                'X-Token': storage.getItem('token')
+                'X-Token': getToken()
             },
             success: ((result: any) => {
                 callback(JSON.parse(result.data).data)
@@ -184,7 +194,7 @@ app.uploadFile = (data: any, callback: (string) => void) => {
                     file: data.tempFiles[i]
                 },
                 header: {
-                    'X-Token': storage.getItem('token')
+                    'X-Token': getToken()
                 },
                 success: ((result: any) => {
                     callback(JSON.parse(result.data).data)

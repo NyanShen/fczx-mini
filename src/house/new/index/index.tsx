@@ -7,7 +7,7 @@ import api from '@services/api'
 import app from '@services/request'
 import { toUrlParam } from '@utils/urlHandler'
 import { formatTimestamp, formatPhoneCall } from '@utils/index'
-import { fetchUserData } from '@services/login'
+import { getToken, hasLoginBack } from '@services/login'
 import useNavData from '@hooks/useNavData'
 import Popup from '@components/popup/index'
 import SandCommon from '@house/new/sand/common'
@@ -92,7 +92,9 @@ const House = () => {
                 handlePhoneCall(result.phone)
             }
         })
-        fetchCollectStatus()
+        if (getToken()) {
+            fetchCollectStatus()
+        }
     }, [])
 
     const fetchCollectStatus = () => {
@@ -108,15 +110,17 @@ const House = () => {
     }
 
     const updateUserCollect = (url: string, status: boolean) => {
-        app.request({
-            url: app.areaApiUrl(url),
-            method: 'POST',
-            data: {
-                type_id: params.id,
-                type: '1'
-            }
-        }).then(() => {
-            setCollect(status)
+        hasLoginBack().then(() => {
+            app.request({
+                url: app.areaApiUrl(url),
+                method: 'POST',
+                data: {
+                    type_id: params.id,
+                    type: '1'
+                }
+            }).then(() => {
+                setCollect(status)
+            })
         })
     }
 
@@ -159,7 +163,7 @@ const House = () => {
         })
         const targetUrl = `/house/new/${module}/index${paramString}`
         if (checkLogin) {
-            fetchUserData(targetUrl)
+            hasLoginBack(targetUrl)
                 .then(() => {
                     Taro.navigateTo({ url: targetUrl })
                 })
@@ -528,11 +532,11 @@ const House = () => {
                     <View className="header-right">
                         {
                             collect ?
-                                <Button className="header-btn" onClick={() =>updateUserCollect(api.userCollectDelete, false)}>
+                                <Button className="header-btn" onClick={() => updateUserCollect(api.userCollectDelete, false)}>
                                     <View className="iconfont iconstarfill"></View>
                                     <View className="text">已收藏</View>
                                 </Button> :
-                                <Button className="header-btn" onClick={() =>updateUserCollect(api.userCollectAdd, true)}>
+                                <Button className="header-btn" onClick={() => updateUserCollect(api.userCollectAdd, true)}>
                                     <View className="iconfont iconstar"></View>
                                     <View className="text">收藏</View>
                                 </Button>

@@ -1,11 +1,30 @@
-import Taro from '@tarojs/taro'
+import Taro, { getCurrentInstance } from '@tarojs/taro'
 
 import api from '@services/api'
 import app from '@services/request'
 import storage from '@utils/storage'
+import { toUrlParam } from '@utils/urlHandler'
+
+export const getToken = () => storage.getItem('token')
+
+export const hasLoginBack = (backUrl: string = '') => {
+    return new Promise((resolve: any) => {
+        if (getToken()) {
+            resolve(true)
+        } else {
+            if (!backUrl) {
+                const router: any = getCurrentInstance().router
+                backUrl = `${router?.path}${toUrlParam(router?.params)}`
+            }
+            Taro.redirectTo({
+                url: `/login/index?backUrl=${encodeURIComponent(backUrl)}`
+            })
+        }
+    })
+}
 
 export const hasLogin = () => {
-    return new Promise((resolve) => {
+    return new Promise((resolve: any) => {
         app.request({
             url: app.apiUrl(api.getUserData)
         }, { loading: false }).then((result: any) => {
@@ -15,7 +34,7 @@ export const hasLogin = () => {
 }
 
 export const fetchUserData = (backUrl: string = '') => {
-    return new Promise((resolve) => {
+    return new Promise((resolve: any) => {
         app.request({
             url: app.apiUrl(api.getUserData)
         }, { loading: false }).then((result: any) => {
@@ -31,7 +50,7 @@ export const fetchUserData = (backUrl: string = '') => {
 }
 
 export const fetchSessionKey = () => {
-    return new Promise((resolve) => {
+    return new Promise((resolve: any) => {
         Taro.login({
             success: function (res) {
                 if (res.code) {
@@ -57,7 +76,7 @@ interface IDecryptParam {
 }
 
 export const fetchDecryptData = (decryptParam: IDecryptParam) => {
-    return new Promise((resolve) => {
+    return new Promise((resolve: any) => {
         app.request({
             method: 'POST',
             url: app.apiUrl(api.decryptData),

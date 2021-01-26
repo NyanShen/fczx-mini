@@ -6,6 +6,7 @@ import api from '@services/api'
 import app from '@services/request'
 import useNavData from '@hooks/useNavData'
 import { toUrlParam } from '@utils/urlHandler'
+import { getToken, hasLoginBack } from '@services/login'
 import { bMapTransQQMap, getStaticMap } from '@utils/map'
 import { formatPhoneCall, formatTimestamp } from '@utils/index'
 import '@styles/common/bottom-bar.scss'
@@ -93,7 +94,9 @@ const RentIndex = () => {
                 handlePhoneCall(result.mobile)
             }
         })
-        fetchCollectStatus()
+        if (getToken()) {
+            fetchCollectStatus()
+        }
     }, [])
 
     const fetchCollectStatus = () => {
@@ -109,15 +112,17 @@ const RentIndex = () => {
     }
 
     const updateUserCollect = (url: string, status: boolean) => {
-        app.request({
-            url: app.areaApiUrl(url),
-            method: 'POST',
-            data: {
-                type_id: params.id,
-                type: '3'
-            }
-        }).then(() => {
-            setCollect(status)
+        hasLoginBack().then(() => {
+            app.request({
+                url: app.areaApiUrl(url),
+                method: 'POST',
+                data: {
+                    type_id: params.id,
+                    type: '3'
+                }
+            }).then(() => {
+                setCollect(status)
+            })
         })
     }
 
