@@ -50,7 +50,6 @@ const ChatRoom = () => {
     const [page, setPage] = useState<IPage>(INIT_PAGE)
     const [chatData, setChatData] = useState<any[]>([])
     const [newChatData, setNewChatData] = useState<any[]>([])
-    const [bottom, setBottom] = useState<number>(0)
     const [toView, setToView] = useState<string>('')
     const [images, setImages] = useState<string[]>([])
     const [action, setAction] = useState<any>(INIT_ACTION)
@@ -58,33 +57,37 @@ const ChatRoom = () => {
     const ref = useRef<string>('') // 判断显示时间点
 
     CustomSocket.onSocketMessage((message: any) => {
-        console.log('chatroom', message.from_user_id == toUser.id)
+        console.log('chatroom onSocketMessage', message, message.from_user_id == toUser.id)
         if (message.from_user_id == toUser.id) {
             const timestamp = handleMessageTime(chatData)
             message.id = 'tempid_' + (timestamp + 1)
             message.time = time
             message.created = timestamp
-            console.log('chatroom onSocketMessage', message)
             setNewChatData([...newChatData, message])
         }
     })
 
     const updateChatUnread = () => {
-        const new_chat_unread: any[] = []
-        const chat_unread: any[] = storage.getItem('chat_unread') || []
-        for (const item of chat_unread) {
-            if (item.from_user_id != fromUserId) {
-                new_chat_unread.push(item)
+        app.request({
+            url: app.apiUrl(api.updateChatRead),
+            method: 'POST',
+            data: {
+                id: fromUserId,
             }
-        }
-        storage.setItem('chat_unread', new_chat_unread)
+        }, { loading: false }).then(() => {
+            const new_chat_unread: any[] = []
+            const chat_unread: any[] = storage.getItem('chat_unread') || []
+            for (const item of chat_unread) {
+                if (item.from_user_id != fromUserId) {
+                    new_chat_unread.push(item)
+                }
+            }
+            storage.setItem('chat_unread', new_chat_unread)
+        })
     }
 
     useReady(() => {
         Taro.setNavigationBarTitle({ title: toUser.nickname })
-        // if (messageType && content) {
-        //     sendMessage(messageType, content)
-        // }
     })
 
     useDidShow(() => {
@@ -106,7 +109,6 @@ const ChatRoom = () => {
         }
         if (chatData.length > 0) {
             const currentView = `toView_${chatData[chatData.length - 1].id}`
-            console.log('currentView', chatData, toView)
             if (currentView === toView) {
                 setChatData([...chatData, ...newChatData])
                 setNewChatData([])
@@ -123,7 +125,6 @@ const ChatRoom = () => {
         if (chatData.length > 0) {
             setToView(`toView_${chatData[chatData.length - 1].id}`)
         }
-       
     }, [chatData])
 
     useEffect(() => {
@@ -189,9 +190,8 @@ const ChatRoom = () => {
         }
     }
 
-    const handleInputFocus = (e: any) => {
+    const handleInputFocus = () => {
         setAction(INIT_ACTION)
-        setBottom(e.detail.height)
         setToView(`toView_${chatData[chatData.length - 1].id}`)
     }
 
@@ -283,9 +283,7 @@ const ChatRoom = () => {
                 content
             }
         }, { loading: false }).then(() => {
-            // setParam({
-            //     currentPage: INIT_PARAM.currentPage
-            // })
+
         })
     }
 
@@ -463,7 +461,7 @@ const ChatRoom = () => {
                 <ScrollView
                     scrollY
                     className="msg-box"
-                    style={{ maxHeight: contentHeight - 94 }}
+                    style={{ maxHeight: contentHeight - 106 }}
                     upperThreshold={40}
                     onScrollToUpper={handleScrollToUpper}
                     onClick={() => setAction(INIT_ACTION)}
@@ -472,7 +470,7 @@ const ChatRoom = () => {
                 >
                     {renderChatList()}
                 </ScrollView>
-                <View className="send-box" style={{ bottom }}>
+                <View className="send-box">
                     <View className="send-action">
                         <View
                             className={classnames('action-item', action.expression && 'actived')}
@@ -495,9 +493,7 @@ const ChatRoom = () => {
                     </View>
                     <View className="send-content">
                         <Input
-                            adjustPosition={false}
                             onFocus={handleInputFocus}
-                            onBlur={() => setBottom(0)}
                             value={inputData.value}
                             onInput={handleInputChange}
                         />

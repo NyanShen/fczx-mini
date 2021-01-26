@@ -17,7 +17,8 @@ const Chat = () => {
   const [user, setUser] = useState<any>(null)
   const [chatDialog, setChatDialog] = useState<any[]>([])
 
-  CustomSocket.onSocketMessage(() => {
+  CustomSocket.onSocketMessage((message: any) => {
+    console.log('chatDiaglog onSocketMessage', message)
     fetchChatDialog()
   })
 

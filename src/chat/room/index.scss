@@ -111,7 +111,7 @@
             bottom: 0;
             width: 100%;
             font-size: $font-basic;
-            padding: 20px 0;
+            padding-top: 30px;
             background-color: $white;
             z-index: 99;
             box-shadow: 0 -1px 6px 0 rgba(0, 0, 0, 0.08);
@@ -145,16 +145,19 @@
                     border: $border;
                     border-radius: $border-radius-10;
                     margin-right: 20px;
+                    margin-bottom: 30px;
                     padding: 0 20px;
                     background-color: $white;
                 }
                 .btn {
                     width: 100px;
                     height: 60px;
+                    margin-bottom: 30px;
                 }
                 .icon-btn {
                     font-size: 40px;
                     color: $text-color;
+                    margin-bottom: 30px;
                     
                     &.actived {
                         color: $primary-color;

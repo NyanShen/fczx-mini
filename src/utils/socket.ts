@@ -94,16 +94,16 @@ class CustomSocket {
         const _this = this
         Taro.onSocketMessage((response: any) => {
             const message: any = JSON.parse(response.data)
-            if (message.type === 'chat') {
+            if (message.type === 'receiveChat') {
                 let unreadList = storage.getItem('chat_unread') || []
-                unreadList = [...unreadList, message]
+                unreadList = [...unreadList, message.data]
                 storage.setItem('chat_unread', unreadList)
-                callback(message, unreadList)
+                callback(message.data, unreadList)
             }
             if (message.type === 'ping') {
                 _this.sendSocketMessage('{"type":"pong"}')
             }
-            console.log('onSocketMessage:', message)
+            console.log('customSocket onSocketMessage:', message)
         })
     }
 

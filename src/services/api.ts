@@ -63,7 +63,7 @@ export default {
     getNewsCateList: '/news/cate-list',
 
     getChatDialog: '/chat/dialog',
-    getChatRead: '/chat/read',
+    updateChatRead: '/chat/read',
     postChatSend: '/chat/send',
     getUnread: '/chat/get-to-read',
     getChatData: '/chat/chat-data',
