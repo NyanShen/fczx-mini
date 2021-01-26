@@ -71,6 +71,9 @@ export default {
 
     getDiscoverList: '/discover/list',
     getMemberUpgrade: '/member/upgrade',
-    getCollectList: '/collect/list',
+    userCollectAdd: '/user-collection/create',
+    userCollectDelete: '/user-collection/delete',
+    userIsCollect: '/user-collection/is-collection',
+    getCollectList: '/user-collection/find',
     getPayment: '/pay/get',
 }

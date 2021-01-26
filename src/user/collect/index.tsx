@@ -32,17 +32,12 @@ const collectCate = [
         name: '租房'
     }
 ]
-const RENT_TYPE: any = {
-    '1': '整租',
-    '2': '合租'
-}
+
 const Collect = () => {
     const { contentHeight } = useNavData()
     const [page, setPage] = useState<IPage>(INIT_PAGE)
     const [param, setParam] = useState<IParam>(INIT_PARAM)
     const [collectList, setCollectList] = useState<any[]>([])
-
-    const [activity, setActivity] = useState<string[]>([])
 
     useEffect(() => {
         fetchCollectList()
@@ -50,11 +45,11 @@ const Collect = () => {
 
     const fetchCollectList = () => {
         app.request({
-            url: app.testApiUrl(api.getCollectList),
+            url: app.areaApiUrl(api.getCollectList),
             data: {
                 page: param.currentPage,
                 limit: PAGE_LIMIT,
-                cateId: param.cateId
+                type: param.cateId
             }
         }).then((result: any) => {
             const totalPage = getTotalPage(PAGE_LIMIT, result.pagination.totalCount)
@@ -78,6 +73,7 @@ const Collect = () => {
         }
     }
     const handleCateChange = (cateId: string) => {
+        setCollectList([])
         setParam({
             cateId,
             currentPage: INIT_PARAM.currentPage
@@ -88,14 +84,7 @@ const Collect = () => {
             url: `/house/${type}/index/index?id=${item.id}`
         })
     }
-    const handleActivity = (houseId: string) => {
-        if (activity.includes(houseId)) {
-            activity.splice(activity.findIndex((item: string) => item === houseId), 1)
-            setActivity([...activity])
-        } else {
-            setActivity([...activity, houseId])
-        }
-    }
+
     const renderPrice = (price: string, price_type: string) => {
         if (price === '0') {
             return <Text className="price">待定</Text>
@@ -108,114 +97,47 @@ const Collect = () => {
         return (
             <View className="house-list-ul">
                 {
-                    collectList.map((item: any, index: number) => (
-                        <View key={index} className="house-list-li">
-                            <View className="house-content" onClick={() => handleHouseItemClick(item, 'new')}>
-                                <View className="house-image">
-                                    <Image src={item.image_path} mode="aspectFill"></Image>
-                                </View>
-                                <View className="house-text">
-                                    <View className="text-item title mb8">
-                                        <Text className={classnames('sale-status', `sale-status-${item.sale_status}`)}>{SALE_STATUS[item.sale_status]}</Text>
-                                        <Text>{item.title}</Text>
+                    collectList.map((collectItem: any, index: number) => {
+                        const item = collectItem.fangHouse
+                        return (
+                            <View key={index} className="house-list-li">
+                                <View className="house-content" onClick={() => handleHouseItemClick(item, 'new')}>
+                                    <View className="house-image">
+                                        <Image src={item.image_path} mode="aspectFill"></Image>
                                     </View>
-                                    <View className="text-item small-desc mb8">
-                                        <Text>{item.area && item.area.name}</Text>
-                                        <Text className="line-split"></Text>
-                                        <Text>{item.comment_num}条评论</Text>
-                                    </View>
-                                    <View className="mb12">
-                                        {renderPrice(item.price, item.price_type)}
-                                    </View>
-                                    <View className="text-item tags">
-                                        {
-                                            item.tags && item.tags.map((tag: string, index: number) => (
-                                                <Text key={index} className="tags-item">{tag}</Text>
-                                            ))
-                                        }
-                                    </View>
-                                </View>
-                            </View>
-                            <View className="house-activity" onClick={() => handleActivity(item.id)}>
-                                <View className="activity-content">
-                                    {
-                                        item.is_discount == '1' &&
-                                        <View className="activity-item">
-                                            <Text className="iconfont iconcoupon"></Text>
-                                            <Text className="text">{item.fangHouseDiscount.title}</Text>
+                                    <View className="house-text">
+                                        <View className="text-item title mb8">
+                                            <Text>{item.title}</Text>
                                         </View>
-                                    }
-                                    {
-                                        item.is_group == '1' && activity.includes(item.id) &&
-                                        <View className="activity-item">
-                                            <Text className="iconfont iconstars"></Text>
-                                            <Text className="text">{item.fangHouseGroup.title}</Text>
+                                        <View className="text-item title mb8">
+                                            <Text className={classnames('sale-status', `sale-status-${item.sale_status}`)}>{SALE_STATUS[item.sale_status]}</Text>
                                         </View>
-                                    }
-                                </View>
-                                {
-                                    item.is_discount == '1' &&
-                                    item.is_group == '1' &&
-                                    <View className="activity-icon">
-                                        <Text className={classnames('iconfont', activity.includes(item.id) ? 'iconarrow-up-bold' : 'iconarrow-down-bold')}></Text>
+                                        <View className="mb12">
+                                            {renderPrice(item.price, item.price_type)}
+                                        </View>
+
                                     </View>
-                                }
+                                </View>
+
                             </View>
-                        </View>
-                    ))
+                        )
+                    })
                 }
             </View>)
     }
     const renderEsf = () => {
         return <View className="house-list-ul">
             {
-                collectList.map((item: any, index: number) => (
-                    <View key={index} className="house-list-li">
-                        <View className="house-content" onClick={() => handleHouseItemClick(item, 'esf')}>
-                            <View className="house-image">
-                                <Image src={item.image_path} mode="aspectFill"></Image>
-                            </View>
-                            <View className="house-text">
-                                <View className="text-item title row2">
-                                    <Text>{item.title}</Text>
-                                </View>
-                                <View className="text-item text-item-small">
-                                    <Text>{item.room}室{item.office}厅{item.toilet}卫</Text>
-                                    <Text className="line-split"></Text>
-                                    <Text>{item.building_area}m²</Text>
-                                    <Text className="ml20">{item.community}</Text>
-                                </View>
-                                <View className="text-item mb12">
-                                    <Text className="price">{item.price_total}</Text>
-                                    <Text className="price-unit">万</Text>
-                                    <Text className="small-desc ml20">{item.price_unit}元/m²</Text>
-                                </View>
-                                <View className="text-item tags">
-                                    {
-                                        item.tags.map((item: string, index: number) => (
-                                            <Text key={index} className="tags-item">{item}</Text>
-                                        ))
-                                    }
-                                </View>
-                            </View>
-                        </View>
-                    </View>
-                ))
-            }
-        </View>
-    }
-    const renderRent = () => {
-        return (
-            <View className="house-list-ul">
-                {
-                    collectList.map((item: any, index: number) => (
+                collectList.map((collectItem: any, index: number) => {
+                    const item = collectItem.esf
+                    return (
                         <View key={index} className="house-list-li">
-                            <View className="house-content" onClick={() => handleHouseItemClick(item, 'rent')}>
+                            <View className="house-content" onClick={() => handleHouseItemClick(item, 'esf')}>
                                 <View className="house-image">
                                     <Image src={item.image_path} mode="aspectFill"></Image>
                                 </View>
                                 <View className="house-text">
-                                    <View className="text-item row2">
+                                    <View className="text-item title row2">
                                         <Text>{item.title}</Text>
                                     </View>
                                     <View className="text-item text-item-small">
@@ -225,20 +147,49 @@ const Collect = () => {
                                         <Text className="ml20">{item.community}</Text>
                                     </View>
                                     <View className="text-item mb12">
-                                        {renderPrice(item.price, '3')}
+                                        <Text className="price">{item.price_total}</Text>
+                                        <Text className="price-unit">万</Text>
+                                        <Text className="small-desc ml20">{item.price_unit}元/m²</Text>
                                     </View>
-                                    <View className="text-item tags">
-                                        <Text className="tags-item sale-status-2">{RENT_TYPE[item.rent_type]}</Text>
-                                        {
-                                            item.tags.map((tag: string, tagIndex: number) => (
-                                                <Text key={tagIndex} className="tags-item">{tag}</Text>
-                                            ))
-                                        }
-                                    </View>
+
                                 </View>
                             </View>
                         </View>
-                    ))
+                    )
+                })
+            }
+        </View>
+    }
+    const renderRent = () => {
+        return (
+            <View className="house-list-ul">
+                {
+                    collectList.map((collectItem: any, index: number) => {
+                        const item = collectItem.rent
+                        return (
+                            <View key={index} className="house-list-li">
+                                <View className="house-content" onClick={() => handleHouseItemClick(item, 'rent')}>
+                                    <View className="house-image">
+                                        <Image src={item.image_path} mode="aspectFill"></Image>
+                                    </View>
+                                    <View className="house-text">
+                                        <View className="text-item row2">
+                                            <Text>{item.title}</Text>
+                                        </View>
+                                        <View className="text-item text-item-small">
+                                            <Text>{item.room}室{item.office}厅{item.toilet}卫</Text>
+                                            <Text className="line-split"></Text>
+                                            <Text>{item.building_area}m²</Text>
+                                            <Text className="ml20">{item.community}</Text>
+                                        </View>
+                                        <View className="text-item mb12">
+                                            {renderPrice(item.price, '3')}
+                                        </View>
+                                    </View>
+                                </View>
+                            </View>
+                        )
+                    })
                 }
             </View>
         )

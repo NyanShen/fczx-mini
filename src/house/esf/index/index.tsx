@@ -43,6 +43,7 @@ const esfHouse = () => {
     const [open, setOpen] = useState<boolean>(false)
     const [album, setAlbum] = useState<IAlbum>(INIT_ALNUM)
     const [esfData, setEsfData] = useState<any>(INIT_ESF_DATA)
+    const [collect, setCollect] = useState<boolean>(false)
 
     useShareTimeline(() => {
         return {
@@ -74,7 +75,33 @@ const esfHouse = () => {
                 handlePhoneCall(result.mobile)
             }
         })
+        fetchCollectStatus()
     }, [])
+
+    const fetchCollectStatus = () => {
+        app.request({
+            url: app.areaApiUrl(api.userIsCollect),
+            data: {
+                type_id: params.id,
+                type: '2'
+            }
+        }).then((res: any) => {
+            setCollect(res)
+        })
+    }
+
+    const updateUserCollect = (url: string, status: boolean) => {
+        app.request({
+            url: app.areaApiUrl(url),
+            method: 'POST',
+            data: {
+                type_id: params.id,
+                type: '2'
+            }
+        }).then(() => {
+            setCollect(status)
+        })
+    }
 
     const onSwiperChange = (event) => {
         let swiperIndex = event.detail.current;
@@ -169,10 +196,17 @@ const esfHouse = () => {
                     <View className="header">
                         <View className="header-left">{esfData.title}</View>
                         <View className="header-right">
-                            <Button className="header-btn">
-                                <View className="iconfont iconstar"></View>
-                                <View className="text">收藏</View>
-                            </Button>
+                            {
+                                collect ?
+                                    <Button className="header-btn" onClick={() => updateUserCollect(api.userCollectDelete, false)}>
+                                        <View className="iconfont iconstarfill"></View>
+                                        <View className="text">已收藏</View>
+                                    </Button> :
+                                    <Button className="header-btn" onClick={() => updateUserCollect(api.userCollectAdd, true)}>
+                                        <View className="iconfont iconstar"></View>
+                                        <View className="text">收藏</View>
+                                    </Button>
+                            }
                             <Button className="header-btn" openType="share">
                                 <View className="iconfont iconshare"></View>
                                 <View className="text">分享</View>
