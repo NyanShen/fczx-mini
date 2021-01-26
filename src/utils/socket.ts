@@ -95,13 +95,16 @@ class CustomSocket {
         Taro.onSocketMessage((response: any) => {
             const message: any = JSON.parse(response.data)
             if (message.type === 'receiveChat') {
-                let unreadList = storage.getItem('chat_unread') || []
+                let unreadList: any[] = storage.getItem('chat_unread') || []
                 unreadList = [...unreadList, message.data]
                 storage.setItem('chat_unread', unreadList)
                 callback(message.data, unreadList)
             }
             if (message.type === 'ping') {
                 _this.sendSocketMessage('{"type":"pong"}')
+            }
+            if (message.type === 'subscribeWxAccount') {
+                storage.setItem('is_subscribe_wx', true)
             }
             console.log('customSocket onSocketMessage:', message)
         })

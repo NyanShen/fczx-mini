@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Taro, { useDidShow } from '@tarojs/taro'
+import Taro, { useDidShow, useReady } from '@tarojs/taro'
 import { View, Image } from '@tarojs/components'
 
 import api from '@services/api'
@@ -12,6 +12,8 @@ import { hasLogin } from '@services/login'
 import CustomSocket from '@utils/socket'
 import logo from '@assets/icons/logo.png'
 import './index.scss'
+
+let is_subscribe_wx: boolean = false
 
 const Chat = () => {
   const [user, setUser] = useState<any>(null)
@@ -43,7 +45,6 @@ const Chat = () => {
     }, { loading: false }).then((result: any) => {
       setChatDialog(result)
       syncChatUnread()
-      // getUnreadStatus(result, user)
     })
   }
 
@@ -51,17 +52,6 @@ const Chat = () => {
     const chat_unread: any[] = storage.getItem('chat_unread') || []
     ChatEvent.emitStatus('chat_unread', chat_unread)
   }
-
-  // const getUnreadStatus = (result: any[], user: any) => {
-  //   let status = false
-  //   for (const item of result) {
-  //     if (item.status == '1' && item.to_user_id == user.id) {
-  //       status = true
-  //       break
-  //     }
-  //   }
-  //   ChatEvent.emitStatus('chat_status', { status })
-  // }
 
   const toChatRoom = (item: any) => {
     let fromUserId: string = ''
@@ -167,7 +157,7 @@ const Chat = () => {
   return (
     <View className="chat">
       {
-        user && user.is_subscribe_wx != 1 &&
+        user && user.is_subscribe_wx != 1 && !is_subscribe_wx &&
         <View className="official">
           <View className="official-photo">
             <Image src={logo} mode="aspectFill"></Image>

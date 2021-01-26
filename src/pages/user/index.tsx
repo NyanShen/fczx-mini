@@ -2,11 +2,10 @@ import React, { useState } from 'react'
 import Taro, { makePhoneCall, useDidShow } from '@tarojs/taro'
 import { View, Text, Image, Button } from '@tarojs/components'
 
-import api from '@services/api'
-import app from '@services/request'
 import storage from '@utils/storage'
 import ChatEvent from '@utils/event'
 import CustomSocket from '@utils/socket'
+import { hasLogin } from '@services/login'
 import { toUrlParam } from '@utils/urlHandler'
 import './index.scss'
 
@@ -20,9 +19,7 @@ const User = () => {
   const [user, setUser] = useState<any>(INIT_USER)
 
   useDidShow(() => {
-    app.request({
-      url: app.apiUrl(api.getUserData)
-    }, { loading: false }).then((result: any) => {
+    hasLogin().then((result: any) => {
       if (result) {
         setUser(result)
         const chat_unread: any[] = storage.getItem('chat_unread') || []
@@ -41,8 +38,8 @@ const User = () => {
 
   const handleLogout = () => {
     storage.clear('token')
+    storage.clear('login_user')
     setUser(INIT_USER)
-    // ChatEvent.clearTimer()
     CustomSocket.closeSocket()
     Taro.hideTabBarRedDot({ index: 1 })
   }
