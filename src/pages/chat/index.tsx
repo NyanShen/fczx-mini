@@ -37,6 +37,7 @@ const Chat = () => {
         setUser(null)
       }
     })
+    is_subscribe_wx = storage.getItem('is_subscribe_wx')
   })
 
   const fetchChatDialog = () => {
