@@ -1,0 +1,45 @@
+.consultant-check {
+    position: relative;
+    height: 100vh;
+    .check-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+
+        .check-flex {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            .check-image {
+                width: 320px;
+                height: 320px;
+                margin-bottom: 60px;
+                Image {
+                    width: 100%;
+                    height: 100%;
+                    background-color: $bg-color;
+                }
+            }
+
+            .check-title {
+                font-weight: bold;
+                margin-bottom: 30px;
+                color: $text-color;
+            }
+
+            .check-text {
+                font-size: $font-basic;
+                margin-bottom: 20px;
+                color: $desc-color;
+            }
+
+            .check-link {
+                width: 80%;
+                margin-top: 40px;
+            }
+        }
+    }
+}

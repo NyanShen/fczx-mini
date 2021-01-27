@@ -148,6 +148,7 @@ const LoginPhone = () => {
                 storage.setItem('login_user', {
                     id: user.id,
                     avatar: user.avatar,
+                    mobile: user.mobile,
                     nickname: user.nickname
                 })
                 app.request({

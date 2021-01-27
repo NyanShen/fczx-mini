@@ -31,8 +31,6 @@ export default {
         'new/comment/index',
         'new/commentForm/index',
         'new/consultant/index',
-        'new/consultant/register/index',
-        'new/consultant/houseSearch/index',
         'city/index',
         'search/index',
 
@@ -97,6 +95,9 @@ export default {
       pages: [
         'release/index',
         'dynamic/index',
+        'register/index',
+        'checkStatus/index',
+        'houseSearch/index',
       ]
     }
   ],

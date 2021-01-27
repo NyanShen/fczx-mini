@@ -1,5 +1,5 @@
 export default {
-    navigationBarTitleText: '申请成为置业顾问',
+    navigationBarTitleText: '',
     backgroundTextStyle: 'dark',
     navigationBarBackgroundColor: '#ffffff',
     navigationBarTextStyle: 'black',

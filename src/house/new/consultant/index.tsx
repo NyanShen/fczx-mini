@@ -4,6 +4,7 @@ import { View, Image, Text } from '@tarojs/components'
 
 import api from '@services/api'
 import app from '@services/request'
+import { hasLoginBack } from '@services/login'
 import { toUrlParam } from '@utils/urlHandler'
 import { formatPhoneCall } from '@utils/index'
 import './index.scss'
@@ -57,10 +58,34 @@ const HouseConsultant = () => {
         })
     }
 
-    const toConsultantRegister = () => {
-        Taro.navigateTo({
-            url: `/house/new/consultant/register/index`
-        }) 
+    const toConsultantModule = () => {
+        hasLoginBack().then(() => {
+            app.request({
+                url: app.testApiUrl(api.getHouseConsultantData),
+            }).then((result: any) => {
+                let toUrl: string = ''
+                const consultant = encodeURIComponent(JSON.stringify(result))
+                switch (result.status) {
+                    case '1': // 正常
+                        const navTitle: string = '修改置业顾问信息'
+                        const paramString: any = toUrlParam({ consultant, navTitle })
+                        toUrl = `/consultant/register/index${paramString}`
+                        break;
+                    case '2': // 禁用
+                    case '3': // 审核中
+                        toUrl = `/consultant/checkStatus/index?status=${result.status}`
+                        break;
+                    case '4': // 审核不通过
+                        toUrl = `/consultant/checkStatus/index${toUrlParam({ consultant, status: result.status })}`
+                        break;
+                    default:
+                        toUrl = `/consultant/register/index?apply=true`
+                }
+                Taro.navigateTo({
+                    url: toUrl
+                })
+            })
+        })
     }
     return (
         <View className="house-consultant">
@@ -88,7 +113,7 @@ const HouseConsultant = () => {
                     ))
                 }
             </View>
-            <View className="consultant-action" onClick={toConsultantRegister}>
+            <View className="consultant-action" onClick={toConsultantModule}>
                 <View className="btn btn-primary">立即入驻</View>
             </View>
         </View>

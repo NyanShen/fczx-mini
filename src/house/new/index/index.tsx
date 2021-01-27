@@ -240,6 +240,36 @@ const House = () => {
         })
     }
 
+    const toConsultantModule = () => {
+        hasLoginBack().then(() => {
+            app.request({
+                url: app.testApiUrl(api.getHouseConsultantData),
+            }).then((result: any) => {
+                let toUrl: string = ''
+                const consultant = encodeURIComponent(JSON.stringify(result))
+                switch (result.status) {
+                    case '1': // 正常
+                        const navTitle: string = '修改置业顾问信息'
+                        const paramString: any = toUrlParam({ consultant, navTitle })
+                        toUrl = `/consultant/register/index${paramString}`
+                        break;
+                    case '2': // 禁用
+                    case '3': // 审核中
+                        toUrl = `/consultant/checkStatus/index?status=${result.status}`
+                        break;
+                    case '4': // 审核不通过
+                        toUrl = `/consultant/checkStatus/index${toUrlParam({ consultant, status: result.status })}`
+                        break;
+                    default:
+                        toUrl = `/consultant/register/index?apply=true`
+                }
+                Taro.navigateTo({
+                    url: toUrl
+                })
+            })
+        })
+    }
+
     const toHome = () => {
         Taro.switchTab({ url: '/pages/index/index' })
     }
@@ -471,7 +501,7 @@ const House = () => {
                                     <View className="iconfont iconempty"></View>
                                     <View>暂无置业顾问信息</View>
                                 </View>
-                                <View className="btn btn-blue" onClick={() => toHouseModule('consultant/register', true)}>
+                                <View className="btn btn-blue" onClick={toConsultantModule}>
                                     <Text className="btn-name">立即入驻</Text>
                                 </View>
                             </View>

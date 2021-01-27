@@ -36,6 +36,9 @@ export default {
     getHouseTypeDetail: '/house/room-detail',
     getHouseConsultantList: '/house/consultant-list',
     postHouseCustomer: '/house/customer',
+    getHouseConsultantData: '/fang-house-consultant/get',
+    applyHouseConsultant: '/fang-house-consultant/apply-consultant',
+    updateHouseConsultant: '/fang-house-consultant/update',
 
     getEsfList: '/esf/list',
     getEsfById: '/esf/get',
@@ -52,7 +55,6 @@ export default {
     rentAdd: '/rent/add',
     rentDelete: '/rent/delete',
     rentUpdate: '/rent/update',
-
 
     getCommunityList: '/community/list',
     getCommunityById: '/community/get',
@@ -71,9 +73,11 @@ export default {
 
     getDiscoverList: '/discover/list',
     getMemberUpgrade: '/member/upgrade',
+    getPayment: '/pay/get',
+
     userCollectAdd: '/user-collection/create',
     userCollectDelete: '/user-collection/delete',
     userIsCollect: '/user-collection/is-collection',
     getCollectList: '/user-collection/find',
-    getPayment: '/pay/get',
+
 }
