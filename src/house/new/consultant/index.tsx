@@ -61,7 +61,7 @@ const HouseConsultant = () => {
     const toConsultantModule = () => {
         hasLoginBack().then(() => {
             app.request({
-                url: app.testApiUrl(api.getHouseConsultantData),
+                url: app.areaApiUrl(api.getHouseConsultantData),
             }).then((result: any) => {
                 let toUrl: string = ''
                 const consultant = encodeURIComponent(JSON.stringify(result))

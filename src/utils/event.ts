@@ -42,7 +42,7 @@ class ChatEvent {
     fetchChatUnread(eventName: string, params: any = {}) {
         let _this = this
         app.request({
-            url: app.testApiUrl(api.getUnread)
+            url: app.apiUrl(api.getUnread)
         }, { loading: false })
             .then((result: any) => {
                 let unreadList = storage.getItem('chat_unread') || []

@@ -13,12 +13,12 @@ const serviceTypes = {
     '3': '全天拒接'
 }
 
-// const checkStatus = {
-//     '1': '审核通过',
-//     '2': '账号已被禁用',
-//     '3': '正在审核中',
-//     '4': '审核不通过'
-// }
+const checkStatus = {
+    '1': '审核通过',
+    '2': '账号已被禁用',
+    '3': '正在审核中',
+    '4': '审核不通过'
+}
 
 const HouseConsultant = () => {
     const [consultant, setConsultant] = useState<any>({ user: {}, fangHouse: {} })
@@ -29,7 +29,7 @@ const HouseConsultant = () => {
 
     const fetchConsultant = () => {
         app.request({
-            url: app.testApiUrl(api.getHouseConsultantData),
+            url: app.areaApiUrl(api.getHouseConsultantData),
         }).then((result: any) => {
             setConsultant(result)
         })
@@ -62,14 +62,12 @@ const HouseConsultant = () => {
                     <View className="item-input">
                         <Text className="input-text">{consultant.user.nickname}</Text>
                     </View>
-                    <View className="item-icon"></View>
                 </View>
                 <View className="consultant-item">
                     <View className="item-label">微信号</View>
                     <View className="item-input">
                         <Text className="input-text">{consultant.user.wx || '暂无信息'}</Text>
                     </View>
-                    <View className="item-icon"></View>
                 </View>
                 {/* <View className="consultant-item">
                     <View className="item-label">个人简介</View>
@@ -83,21 +81,24 @@ const HouseConsultant = () => {
                     <View className="item-input">
                         <Text className="input-text">{consultant.fangHouse.title}</Text>
                     </View>
-                    <View className="item-icon"></View>
                 </View>
                 <View className="consultant-item">
                     <View className="item-label">服务时间</View>
                     <View className="item-input">
                         <Text className="input-text">{serviceTypes[consultant.service_type]}</Text>
                     </View>
-                    <View className="item-icon"></View>
                 </View>
                 <View className="consultant-item">
                     <View className="item-label">手机号码</View>
                     <View className="item-input">
                         <Text className="input-text">{consultant.user.mobile}</Text>
                     </View>
-                    <View className="item-icon"></View>
+                </View>
+                <View className="consultant-item">
+                    <View className="item-label">审核状态</View>
+                    <View className="item-input">
+                        <Text className="input-text status">{checkStatus[consultant.status]}</Text>
+                    </View>
                 </View>
                 {/* <View className="consultant-item">
                     <View className="item-label">邀请码</View>
