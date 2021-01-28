@@ -106,6 +106,13 @@ const HouseDynamic = () => {
             }
         })
     }
+
+    const toHouseModule = (fang_house_id: string) => {
+        Taro.navigateTo({
+            url: `/house/new/index/index?id=${fang_house_id}`
+        })
+    }
+    
     const toRelease = () => {
         Taro.navigateTo({
             url: '/consultant/release/index'
@@ -124,7 +131,7 @@ const HouseDynamic = () => {
                     {
                         dynamic.map((item: any) => (
                             <View className="dynamic-item" key={item.id}>
-                                <View className="dynamic-flex">
+                                <View className="dynamic-flex" onClick={() => toHouseModule(item.fangHouse.id)}>
                                     <View className="dynamic-title">{item.fangHouse.title}</View>
                                     <View className="more">
                                         <Text>更多</Text>

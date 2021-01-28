@@ -189,14 +189,14 @@ const ReleaseDynamic = () => {
     return (
         <View className="release">
             <View className="release-content">
-                <View className="release-item release-flex">
+                {/* <View className="release-item release-flex">
                     <View className="item-label">
                         关联楼盘
                     </View>
                     <View className="item-input">
                         <Text className="text">楼盘信息</Text>
                     </View>
-                </View>
+                </View> */}
                 <View className="release-item">
                     <View className="item-label">
                         文字描述

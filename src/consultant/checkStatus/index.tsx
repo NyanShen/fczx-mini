@@ -43,7 +43,7 @@ const ConsultantCheckStatus = () => {
 
     const handleCheckTo = () => {
         if (checkStatus.url) {
-            const paramString: any = toUrlParam({ consultant: params.consultant, apply: true })
+            const paramString: any = toUrlParam({ consultant: params.consultant })
             Taro.redirectTo({
                 url: `${checkStatus.url}${paramString}`
             })

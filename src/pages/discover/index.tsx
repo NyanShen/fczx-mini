@@ -79,6 +79,13 @@ const Discover = () => {
             current: image_path
         })
     }
+
+    const toHouseModule = (fang_house_id: string) => {
+        Taro.navigateTo({
+            url: `/house/new/index/index?id=${fang_house_id}`
+        })
+    }
+
     const toHouseVideo = (image_path: string, video_path: string) => {
         const videoParam = {
             image_path,
@@ -132,7 +139,7 @@ const Discover = () => {
                             {
                                 discover.map((item: any, index: number) => (
                                     <View className="discover-item" key={index}>
-                                        <View className="discover-title">
+                                        <View className="discover-title" onClick={() => toHouseModule(item.fangHouse.id)}>
                                             <View className="discover-profile">
                                                 <Image src={item.fangHouse.image_path} mode="aspectFill" />
                                             </View>

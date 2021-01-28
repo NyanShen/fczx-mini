@@ -151,15 +151,9 @@ const HouseConsultantForm = () => {
                 service_type: pickerValue.service_type.id
             }
         }).then(() => {
-            if (params.apply) {
-                Taro.navigateTo({
-                    url: `/consultant/checkStatus/index`
-                })
-            } else {
-                Taro.showToast({
-                    title: '信息修改成功'
-                })
-            }
+            Taro.navigateTo({
+                url: `/consultant/checkStatus/index`
+            })
         })
     }
 

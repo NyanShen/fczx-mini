@@ -13,13 +13,6 @@ const serviceTypes = {
     '3': '全天拒接'
 }
 
-const checkStatus = {
-    '1': '审核通过',
-    '2': '账号已被禁用',
-    '3': '正在审核中',
-    '4': '审核不通过'
-}
-
 const HouseConsultant = () => {
     const [consultant, setConsultant] = useState<any>({ user: {}, fangHouse: {} })
 
@@ -37,18 +30,11 @@ const HouseConsultant = () => {
 
     const toConsultantForm = () => {
         const consultant_encode = encodeURIComponent(JSON.stringify(consultant))
-        if (consultant.status == '1') {
-            const navTitle: string = '修改置业顾问信息'
-            const paramString: any = toUrlParam({ consultant: consultant_encode, navTitle })
-            Taro.navigateTo({
-                url: `/consultant/register/index${paramString}`
-            })
-        } else {
-            const paramString: any = toUrlParam({ consultant: consultant_encode, apply: true })
-            Taro.navigateTo({
-                url: `/consultant/register/index${paramString}`
-            })
-        }
+        const navTitle: string = '修改置业顾问信息'
+        const paramString: any = toUrlParam({ consultant: consultant_encode, navTitle })
+        Taro.navigateTo({
+            url: `/consultant/register/index${paramString}`
+        })
     }
 
     return (
@@ -94,12 +80,12 @@ const HouseConsultant = () => {
                         <Text className="input-text">{consultant.user.mobile}</Text>
                     </View>
                 </View>
-                <View className="consultant-item">
+                {/* <View className="consultant-item">
                     <View className="item-label">审核状态</View>
                     <View className="item-input">
                         <Text className="input-text status">{checkStatus[consultant.status]}</Text>
                     </View>
-                </View>
+                </View> */}
                 {/* <View className="consultant-item">
                     <View className="item-label">邀请码</View>
                     <View className="item-input">
@@ -125,8 +111,7 @@ const HouseConsultant = () => {
                     </View>
                 </View>
                 <View className="consultant-action">
-                    {consultant.status == '1' && <View className="btn btn-primary" onClick={toConsultantForm}>修改</View>}
-                    {consultant.status == '4' && <View className="btn btn-primary" onClick={toConsultantForm}>重新申请</View>}
+                    <View className="btn btn-primary" onClick={toConsultantForm}>修改</View>
                 </View>
             </View>
         </View>

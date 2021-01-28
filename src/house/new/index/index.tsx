@@ -261,7 +261,7 @@ const House = () => {
                         toUrl = `/consultant/checkStatus/index${toUrlParam({ consultant, status: result.status })}`
                         break;
                     default:
-                        toUrl = `/consultant/register/index?apply=true`
+                        toUrl = `/consultant/register/index`
                 }
                 Taro.navigateTo({
                     url: toUrl
