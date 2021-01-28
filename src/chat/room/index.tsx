@@ -259,21 +259,6 @@ const ChatRoom = () => {
     // }
 
     const sendMessage = (type: string, content: any, dataList: any = null) => {
-        const timestamp = handleMessageTime(dataList || chatData)
-        const message = {
-            id: 'tempid_' + timestamp,
-            type: 'chat',
-            to_user_id: toUser.id,
-            message_type: type,
-            created: timestamp,
-            content,
-            time
-        }
-        if (dataList) {
-            setChatData([...dataList, message])
-        } else {
-            setChatData([...chatData, message])
-        }
         app.request({
             url: app.apiUrl(api.postChatSend),
             method: 'POST',
@@ -283,7 +268,21 @@ const ChatRoom = () => {
                 content
             }
         }, { loading: false }).then(() => {
-
+            const timestamp = handleMessageTime(dataList || chatData)
+            const message = {
+                id: 'tempid_' + timestamp,
+                type: 'chat',
+                to_user_id: toUser.id,
+                message_type: type,
+                created: timestamp,
+                content,
+                time
+            }
+            if (dataList) {
+                setChatData([...dataList, message])
+            } else {
+                setChatData([...chatData, message])
+            }
         })
     }
 

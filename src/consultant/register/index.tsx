@@ -151,7 +151,7 @@ const HouseConsultantForm = () => {
                 service_type: pickerValue.service_type.id
             }
         }).then(() => {
-            Taro.navigateTo({
+            Taro.redirectTo({
                 url: `/consultant/checkStatus/index`
             })
         })

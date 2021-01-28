@@ -103,15 +103,14 @@ const Discover = () => {
         const { id, title, price, price_type, image_path } = discoverItem.fangHouse
         const paramString = toUrlParam({
             messageType: '3',
-            fromUserId: discoverItem.author.id,
-            toUser: JSON.stringify(discoverItem.author),
+            fromUserId: discoverItem.user.id,
+            toUser: JSON.stringify(discoverItem.user),
             content: JSON.stringify({
                 id,
                 title,
                 price,
                 price_type,
-                image_path,
-                areaName: discoverItem.fangHouse.area.name
+                image_path
             })
         })
         Taro.navigateTo({
@@ -189,7 +188,7 @@ const Discover = () => {
                                             }
                                         </View>
                                         <View className="discover-author">
-                                            <View className="author-profile">
+                                            <View className="author-profile" onClick={() => toChatRoom(item)}>
                                                 <Image src={item.user.avatar} mode="aspectFill" />
                                             </View>
                                             <View className="author-name">
