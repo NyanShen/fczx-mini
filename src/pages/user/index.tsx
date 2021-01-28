@@ -96,7 +96,7 @@ const User = () => {
 
         <View className="user-group">
           {
-            user.is_consultant == 1 &&
+            // user.is_consultant == 1 &&
             <View>
               <View className="user-item" onClick={() => toUserModule('consultant')}>
                 <View className="item-icon origin">

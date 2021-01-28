@@ -39,6 +39,10 @@ export default {
     getHouseConsultantData: '/fang-house-consultant/get',
     applyHouseConsultant: '/fang-house-consultant/apply-consultant',
     updateHouseConsultant: '/fang-house-consultant/update',
+    getHouseDynamic: '/fang-house-circle/find',
+    postUserDynamic: '/fang-house-circle/create',
+    deleteUserDynamic: '/fang-house-circle/delete',
+    getUserDynamic: '/fang-house-circle/find-self',
 
     getEsfList: '/esf/list',
     getEsfById: '/esf/get',
@@ -71,7 +75,6 @@ export default {
     getChatData: '/chat/chat-data',
     getChatUser: '/chat/scan-chat',
 
-    getDiscoverList: '/discover/list',
     getMemberUpgrade: '/member/upgrade',
     getPayment: '/pay/get',
 

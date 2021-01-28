@@ -163,43 +163,29 @@ app.request = (params: any, { loading = true, toast = true }: any = {}) => {
     })
 }
 
-app.uploadFile = (data: any, callback: (string) => void) => {
-    if (data.errMsg === 'chooseVideo:ok') {
-        Taro.uploadFile({
-            url: uploadFileUrl,
-            filePath: data.tempFilePath,
-            name: 'file',
-            formData: {
-                file: {
-                    video_path: data.tempFilePath,
-                    image_path: data.thumbTempFilePath,
-                    size: data.size
-                }
-            },
-            header: {
-                'X-Token': getToken()
-            },
-            success: ((result: any) => {
-                callback(JSON.parse(result.data).data)
-            })
+const taroUploadFile = (filePath: string, callback: (...any) => void, file: any = {}) => {
+    Taro.uploadFile({
+        url: uploadFileUrl,
+        filePath: filePath,
+        name: 'file',
+        formData: { file },
+        header: {
+            'X-Token': getToken()
+        },
+        success: ((result: any) => {
+            callback(JSON.parse(result.data).data)
         })
+    })
+}
+
+app.uploadFile = (data: any, callback: (...any) => void) => {
+    if (data.errMsg === 'chooseVideo:ok') {
+        taroUploadFile(data.tempFilePath, callback)
+        taroUploadFile(data.thumbTempFilePath, callback)
     }
     if (data.errMsg === 'chooseImage:ok') {
         for (let i = 0; i < data.tempFiles.length; i++) {
-            Taro.uploadFile({
-                url: uploadFileUrl,
-                filePath: data.tempFilePaths[i],
-                name: 'file',
-                formData: {
-                    file: data.tempFiles[i]
-                },
-                header: {
-                    'X-Token': getToken()
-                },
-                success: ((result: any) => {
-                    callback(JSON.parse(result.data).data)
-                })
-            })
+            taroUploadFile(data.tempFilePaths[i], callback, data.tempFiles[i])
         }
 
     }

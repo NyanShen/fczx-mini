@@ -14,6 +14,7 @@ import { PRICE_TYPE, SALE_STATUS } from '@constants/house'
 import { INIT_PAGE, IPage, getTotalPage } from '@utils/page'
 import './index.scss'
 
+const PAGE_LIMIT = 10
 interface IParam {
     currentPage: number
 }
@@ -21,7 +22,6 @@ interface IParam {
 const INIT_PARAM: IParam = { currentPage: 1 }
 
 const Discover = () => {
-    const PAGE_LIMIT = 10
     const { windowHeight } = useNavData()
     const [page, setPage] = useState<IPage>(INIT_PAGE)
     const [param, setParam] = useState<IParam>(INIT_PARAM)
@@ -39,14 +39,18 @@ const Discover = () => {
 
     const fetchDiscover = () => {
         app.request({
-            url: app.testApiUrl(api.getDiscoverList),
+            url: app.areaApiUrl(api.getHouseDynamic),
             data: {
                 page: param.currentPage,
                 limit: PAGE_LIMIT
             }
         }).then((result: any) => {
-            setDiscover([...discover, ...result.data])
             const totalPage = getTotalPage(PAGE_LIMIT, result.pagination.totalCount)
+            if (param.currentPage === INIT_PARAM.currentPage) {
+                setDiscover(result.data)
+            } else {
+                setDiscover([...discover, ...result.data])
+            }
             if (totalPage <= INIT_PARAM.currentPage) {
                 setShowEmpty(true)
             } else {
@@ -75,10 +79,10 @@ const Discover = () => {
             current: image_path
         })
     }
-    const toHouseVideo = (video: any) => {
+    const toHouseVideo = (image_path: string, video_path: string) => {
         const videoParam = {
-            image_path: video.poster_image,
-            video_path: video.video_path
+            image_path,
+            video_path
         }
         const paramString = toUrlParam({
             video: JSON.stringify(videoParam)
@@ -142,7 +146,7 @@ const Discover = () => {
                                                 <View className="header-item">
                                                     <View className="subtitle">{item.fangHouse.price}{PRICE_TYPE[item.fangHouse.price_type]}</View>
                                                     <View className="describ">
-                                                        <Text className="describ-text">{item.fangHouse.area.name}</Text>
+                                                        {/* <Text className="describ-text">{item.fangHouse.area.name}</Text> */}
                                                     </View>
                                                 </View>
                                             </View>
@@ -150,46 +154,46 @@ const Discover = () => {
                                         <View className="discover-digest">{item.content}</View>
                                         <View className="discover-media">
                                             {
-                                                item.type === 'image' ?
+                                                item.video_path ?
+                                                    <View className="media-video" onClick={() => toHouseVideo(item.face_path, item.video_path)}>
+                                                        <Image src={item.face_path} mode="aspectFill" />
+                                                        <Text className="iconfont iconvideo"></Text>
+                                                    </View> :
                                                     <View className="media-image">
                                                         {
-                                                            item.media.map((imageItem: any, index: number) => {
-                                                                if (index <= 3) {
+                                                            item.fangHouseCircleImage.map((imageItem: any, index: number) => {
+                                                                if (index < 3) {
                                                                     return (
                                                                         <View className="item-image" key={index}>
                                                                             <Image
                                                                                 src={imageItem.image_path}
                                                                                 mode="aspectFill"
-                                                                                onClick={() => handleImagePreview(item.media, imageItem.image_path)}
+                                                                                onClick={() => handleImagePreview(item.fangHouseCircleImage, imageItem.image_path)}
                                                                             />
                                                                             {
-                                                                                index == 2 && <Text className="item-count">共{item.media.length}张</Text>
+                                                                                index == 2 && <Text className="item-count">共{item.fangHouseCircleImage.length}张</Text>
                                                                             }
                                                                         </View>
                                                                     )
                                                                 }
                                                             })
                                                         }
-                                                    </View> :
-                                                    <View className="media-video" onClick={() => toHouseVideo(item.media)}>
-                                                        <Image src={item.media.poster_path} mode="aspectFill" />
-                                                        <Text className="iconfont iconvideo"></Text>
                                                     </View>
                                             }
                                         </View>
                                         <View className="discover-author">
                                             <View className="author-profile">
-                                                <Image src={item.author.avatar} mode="aspectFill" />
+                                                <Image src={item.user.avatar} mode="aspectFill" />
                                             </View>
                                             <View className="author-name">
-                                                <Text className="name">{item.author.nickname}</Text>
+                                                <Text className="name">{item.user.nickname}</Text>
                                             </View>
                                             <View className="author-agent"></View>
                                             <View className="author-chat">
                                                 <View className="chat-item" onClick={() => toChatRoom(item)}>
                                                     <Text className="iconfont iconmessage"></Text>
                                                 </View>
-                                                <View className="chat-item" onClick={() => handlePhoneCall(item.author.mobile)}>
+                                                <View className="chat-item" onClick={() => handlePhoneCall(item.user.mobile)}>
                                                     <Text className="iconfont iconcall"></Text>
                                                 </View>
                                             </View>

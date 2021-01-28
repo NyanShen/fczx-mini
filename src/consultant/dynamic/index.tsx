@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Taro from '@tarojs/taro'
+import Taro, { getCurrentPages, useDidShow } from '@tarojs/taro'
 import { View, Text, Image, ScrollView } from '@tarojs/components'
 import map from 'lodash/map'
 
@@ -23,19 +23,32 @@ const HouseDynamic = () => {
     const [param, setParam] = useState<IParam>(INIT_PARAM)
     const [dynamic, setDynamic] = useState<any[]>([])
 
+    useDidShow(() => {
+        const pages: any = getCurrentPages()
+        const currPageData: any = pages[pages.length - 1].data
+        const isUpdate = currPageData.isUpdate
+        if (isUpdate) {
+            fetchDynamic()
+        }
+    })
+
     useEffect(() => {
-        fetchDynamic()
+        fetchDynamic(param.currentPage)
     }, [param.currentPage])
 
-    const fetchDynamic = () => {
+    const fetchDynamic = (currentPage: number = 1) => {
         app.request({
-            url: app.testApiUrl(api.getDiscoverList),
+            url: app.areaApiUrl(api.getUserDynamic),
             data: {
-                page: param.currentPage,
+                page: currentPage,
                 limit: PAGE_LIMIT
             }
         }).then((result: any) => {
-            setDynamic([...dynamic, ...result.data])
+            if (currentPage === INIT_PARAM.currentPage) {
+                setDynamic(result.data)
+            } else {
+                setDynamic([...dynamic, ...result.data])
+            }
             setPage({
                 totalCount: result.pagination.totalCount,
                 totalPage: getTotalPage(PAGE_LIMIT, result.pagination.totalCount)
@@ -56,11 +69,14 @@ const HouseDynamic = () => {
             urls: map(images, 'image_path'),
             current: image_path
         })
+        const pages: any = getCurrentPages()
+        const prevPage: any = pages[pages.length - 1]
+        prevPage.setData({ isUpdate: false })
     }
-    const toHouseVideo = (video: any) => {
+    const toHouseVideo = (face_path: string, video_path: string) => {
         const videoParam = {
-            image_path: video.poster_image,
-            video_path: video.video_path
+            image_path: face_path,
+            video_path
         }
         const paramString = toUrlParam({
             video: JSON.stringify(videoParam)
@@ -71,12 +87,29 @@ const HouseDynamic = () => {
     }
 
     const handleDynamicDelete = (itemId: string) => {
-        console.log(itemId)
+        app.request({
+            url: app.areaApiUrl(api.deleteUserDynamic),
+            method: 'POST',
+            data: {
+                id: itemId
+            }
+        }).then(() => {
+            Taro.showToast({
+                title: '删除成功'
+            })
+            if (param.currentPage === INIT_PARAM.currentPage) {
+                fetchDynamic()
+            } else {
+                setParam({
+                    currentPage: param.currentPage + 1
+                })
+            }
+        })
     }
     const toRelease = () => {
         Taro.navigateTo({
             url: '/consultant/release/index'
-          })
+        })
     }
     return (
         <View className="dynamic">
@@ -101,34 +134,34 @@ const HouseDynamic = () => {
                                 <View className="dynamic-text">{item.content}</View>
                                 <View className="dynamic-media">
                                     {
-                                        item.type === 'image' ?
+                                        item.video_path ?
+                                            <View className="media-video" onClick={() => toHouseVideo(item.face_path, item.video_path)}>
+                                                <Image src={item.face_path} mode="aspectFill" />
+                                                <Text className="iconfont iconvideo"></Text>
+                                            </View> :
                                             <View className="media-image">
                                                 {
-                                                    item.media.map((imageItem: any, index: number) => (
+                                                    item.fangHouseCircleImage.map((imageItem: any, index: number) => (
                                                         <View className="item-image" key={index}>
                                                             <Image
                                                                 src={imageItem.image_path}
                                                                 mode="aspectFill"
-                                                                onClick={() => handleImagePreview(item.media, imageItem.image_path)}
+                                                                onClick={() => handleImagePreview(item.fangHouseCircleImage, imageItem.image_path)}
                                                             />
                                                         </View>
                                                     ))
                                                 }
-                                            </View> :
-                                            <View className="media-video" onClick={() => toHouseVideo(item.media)}>
-                                                <Image src={item.media.poster_path} mode="aspectFill" />
-                                                <Text className="iconfont iconvideo"></Text>
                                             </View>
                                     }
                                 </View>
-                                <View className="dynamic-action clearfix">
+                                {/* <View className="dynamic-action clearfix">
+                                </View> */}
+                                <View className="dynamic-flex dynamic-check">
+                                    <View className="check-time">2021-01-18 16:06:21</View>
+                                    {/* <View className="check-status">等待审核</View> */}
                                     <View className="action-item" onClick={() => handleDynamicDelete(item.id)}>
                                         <View className="btn btn-plain">删除</View>
                                     </View>
-                                </View>
-                                <View className="dynamic-flex dynamic-check">
-                                    <View className="check-time">2021-01-18 16:06:21</View>
-                                    <View className="check-status">等待审核</View>
                                 </View>
                             </View>
                         ))

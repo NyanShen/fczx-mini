@@ -157,8 +157,7 @@ const HouseConsultantForm = () => {
                 })
             } else {
                 Taro.showToast({
-                    title: '信息修改成功',
-                    icon: 'none'
+                    title: '信息修改成功'
                 })
             }
         })
