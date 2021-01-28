@@ -88,7 +88,10 @@ const ReleaseDynamic = () => {
         let face_path: string = ''
         let video_path: string = ''
         let fileCount: number = 0
-        Taro.chooseVideo({
+
+        Taro.chooseMedia({
+            count: 1,
+            mediaType: ['video'],
             sourceType: sourceType,
             success: (res: any) => {
                 app.uploadFile(res, (result: string) => {
@@ -110,7 +113,6 @@ const ReleaseDynamic = () => {
                             face_path,
                             video_path
                         })
-                        console.log(media.list)
                         setMedia({ ...media })
                     }
                 })

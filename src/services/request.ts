@@ -179,15 +179,15 @@ const taroUploadFile = (filePath: string, callback: (...any) => void, file: any 
 }
 
 app.uploadFile = (data: any, callback: (...any) => void) => {
-    if (data.errMsg === 'chooseVideo:ok') {
-        taroUploadFile(data.tempFilePath, callback)
-        taroUploadFile(data.thumbTempFilePath, callback)
+    if (data.errMsg === 'chooseMedia:ok') {
+        const videoData = data.tempFiles[0]
+        taroUploadFile(videoData.tempFilePath, callback)
+        taroUploadFile(videoData.thumbTempFilePath, callback)
     }
     if (data.errMsg === 'chooseImage:ok') {
         for (let i = 0; i < data.tempFiles.length; i++) {
             taroUploadFile(data.tempFilePaths[i], callback, data.tempFiles[i])
         }
-
     }
 }
 
