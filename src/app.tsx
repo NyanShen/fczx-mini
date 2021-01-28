@@ -11,7 +11,7 @@ class App extends Component {
     '/pages/index/index',
     '/pages/user/index',
     '/pages/chat/index',
-    '/pages/entry/index',
+    '/pages/discover/index',
   ]
 
   componentDidMount() {
