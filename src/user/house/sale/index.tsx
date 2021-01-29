@@ -299,7 +299,6 @@ const HouseSale = () => {
         return (
             <Input
                 placeholder="请输入"
-                adjustPosition={false}
                 value={inputValue[name]}
                 onInput={(e: any) => handleInputChange(e, name)}
                 type={type}
@@ -318,7 +317,6 @@ const HouseSale = () => {
                 <View className="item-input">
                     <Textarea
                         className="input-whole"
-                        adjustPosition={false}
                         autoHeight
                         placeholder="请输入"
                         value={inputValue[name]}

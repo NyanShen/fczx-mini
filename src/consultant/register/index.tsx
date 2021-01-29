@@ -161,7 +161,6 @@ const HouseConsultantForm = () => {
         return (
             <Input
                 placeholder="请输入"
-                adjustPosition={false}
                 value={inputValue[name]}
                 onInput={(e: any) => handleInputChange(e, name)}
                 type={type}
