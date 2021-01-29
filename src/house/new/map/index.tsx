@@ -100,6 +100,7 @@ const HouseMap = () => {
     const centerLocation = bMapTransQQMap(city.latitude, city.longitude)
     const [tab, setTab] = useState<string>('')
     const [center, setCenter] = useState<any>(centerLocation)
+    const [customZoom, setCustomZoom] = useState<number>(INIT_CONDITION.zoom)
     const [condition, setCondition] = useState<any>()
     const [priceType, setPriceType] = useState<string>('unitPrice')
     const [selected, setSelected] = useState<IConditionState>(INIT_CONDITION)
@@ -260,6 +261,7 @@ const HouseMap = () => {
                 zoom: 13,
                 areaList: areaTarget
             })
+            setCustomZoom(13)
             setCenter(bMapTransQQMap(areaTarget.latitude, areaTarget.longitude))
         } else {
             Taro.navigateTo({
@@ -306,21 +308,24 @@ const HouseMap = () => {
                 break
             case 'areaList':
                 if (item.latitude) {
+                    const newZoom = 13 + Math.random() / 1000
                     setSelected({
                         ...selected,
                         [key]: item,
-                        zoom: 13
+                        zoom: newZoom
                     })
+                    setCustomZoom(newZoom)
                     setCenter(bMapTransQQMap(item.latitude, item.longitude))
                 } else {
+                    const newZoom = INIT_CONDITION.zoom + Math.random() / 1000
                     setSelected({
                         ...selected,
                         [key]: item,
-                        zoom: INIT_CONDITION.zoom
+                        zoom: newZoom
                     })
+                    setCustomZoom(newZoom)
                     setCenter(bMapTransQQMap(centerLocation.latitude, centerLocation.longitude))
                 }
-
                 break
             default:
                 setSelected({
@@ -388,11 +393,9 @@ const HouseMap = () => {
                 showList.push(showName)
             }
         }
-
         if (showList.length > 1) {
             showList = ['多选']
         }
-
         return showList.join(',')
     }
 
@@ -519,7 +522,7 @@ const HouseMap = () => {
                     style={{ width: '100%', height: contentHeight }}
                     latitude={center.latitude}
                     longitude={center.longitude}
-                    scale={INIT_CONDITION.zoom}
+                    scale={customZoom}
                     markers={markers}
                     onEnd={handleRegionChangeEnd}
                     onCalloutTap={handleCalloutTap}
