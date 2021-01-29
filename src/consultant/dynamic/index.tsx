@@ -87,24 +87,33 @@ const HouseDynamic = () => {
     }
 
     const handleDynamicDelete = (itemId: string) => {
-        app.request({
-            url: app.areaApiUrl(api.deleteUserDynamic),
-            method: 'POST',
-            data: {
-                id: itemId
-            }
-        }).then(() => {
-            Taro.showToast({
-                title: '删除成功'
-            })
-            if (param.currentPage === INIT_PARAM.currentPage) {
-                fetchDynamic()
-            } else {
-                setParam({
-                    currentPage: param.currentPage + 1
-                })
+        Taro.showModal({
+            title: '确定删除该条动态',
+            success: (res: any) => {
+                if (res.confirm) {
+                    app.request({
+                        url: app.areaApiUrl(api.deleteUserDynamic),
+                        method: 'POST',
+                        data: {
+                            id: itemId
+                        }
+                    }).then(() => {
+                        Taro.showToast({
+                            title: '删除成功',
+                            duration: 2000
+                        })
+                        if (param.currentPage === INIT_PARAM.currentPage) {
+                            fetchDynamic()
+                        } else {
+                            setParam({
+                                currentPage: INIT_PARAM.currentPage
+                            })
+                        }
+                    })
+                }
             }
         })
+
     }
 
     const toHouseModule = (fang_house_id: string) => {
@@ -112,7 +121,7 @@ const HouseDynamic = () => {
             url: `/house/new/index/index?id=${fang_house_id}`
         })
     }
-    
+
     const toRelease = () => {
         Taro.navigateTo({
             url: '/consultant/release/index'

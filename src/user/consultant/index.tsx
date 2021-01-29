@@ -52,7 +52,7 @@ const HouseConsultant = () => {
                 <View className="consultant-item">
                     <View className="item-label">微信号</View>
                     <View className="item-input">
-                        <Text className="input-text">{consultant.user.wx || '暂无信息'}</Text>
+                        <Text className="input-text">{consultant.wx || '暂无信息'}</Text>
                     </View>
                 </View>
                 {/* <View className="consultant-item">

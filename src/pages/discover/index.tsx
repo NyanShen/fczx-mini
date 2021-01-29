@@ -27,6 +27,7 @@ const Discover = () => {
     const [param, setParam] = useState<IParam>(INIT_PARAM)
     const [discover, setDiscover] = useState<any[]>([])
     const [showEmpty, setShowEmpty] = useState<boolean>(false)
+    const [triggered, setTriggered] = useState<boolean>(false)
 
     useDidShow(() => {
         const chat_unread: any[] = storage.getItem('chat_unread') || []
@@ -60,6 +61,7 @@ const Discover = () => {
                 totalCount: result.pagination.totalCount,
                 totalPage
             })
+            setTriggered(false)
         })
     }
 
@@ -123,6 +125,17 @@ const Discover = () => {
             phoneNumber: formatPhoneCall(mobile)
         })
     }
+
+    const handleRefresherRefresh = () => {
+        setTriggered(true)
+        if (param.currentPage === INIT_PARAM.currentPage) {
+            fetchDiscover()
+        } else {
+            setParam({
+                currentPage: INIT_PARAM.currentPage
+            })
+        }
+    }
     return (
         <View className="discover">
             {
@@ -134,6 +147,9 @@ const Discover = () => {
                             style={{ maxHeight: windowHeight }}
                             lowerThreshold={40}
                             onScrollToLower={handleScrollToLower}
+                            refresherEnabled={true}
+                            refresherTriggered={triggered}
+                            onRefresherRefresh={handleRefresherRefresh}
                         >
                             {
                                 discover.map((item: any, index: number) => (

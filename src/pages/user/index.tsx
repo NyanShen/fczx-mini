@@ -118,7 +118,7 @@ const User = () => {
               </View>
             </View>
           }
-          <View className="user-item" onClick={() => toUserModule('member')}>
+          {/* <View className="user-item" onClick={() => toUserModule('member')}>
             <View className="item-icon blue2">
               <Text className="iconfont iconmember"></Text>
             </View>
@@ -126,7 +126,7 @@ const User = () => {
             <View className="item-arrow">
               <Text className="iconfont iconarrow-right-bold"></Text>
             </View>
-          </View>
+          </View> */}
           <View className="user-item" onClick={() => toUserModule('collect')}>
             <View className="item-icon lightblue">
               <Text className="iconfont iconstar"></Text>
