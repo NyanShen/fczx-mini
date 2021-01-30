@@ -256,12 +256,13 @@ const HouseMap = () => {
         const markerId = e.detail.markerId
         const areaTarget = find(condition.areaList, { id: `${markerId}` })
         if (areaTarget) {
+            const newZoom = 13 + Math.random() / 1000
             setSelected({
                 ...selected,
-                zoom: 13,
+                zoom: newZoom,
                 areaList: areaTarget
             })
-            setCustomZoom(13)
+            setCustomZoom(newZoom)
             setCenter(bMapTransQQMap(areaTarget.latitude, areaTarget.longitude))
         } else {
             Taro.navigateTo({
