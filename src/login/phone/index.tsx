@@ -6,11 +6,10 @@ import classnames from 'classnames'
 import api from '@services/api'
 import app from '@services/request'
 import storage from '@utils/storage'
-import ChatEvent from '@utils/event'
 import CustomSocket from '@utils/socket'
+import { hasLogin } from '@services/login'
 import { PHONE_PATTERN } from '@constants/pattern'
 import './index.scss'
-import { hasLogin } from '@services/login'
 
 interface ILoginData {
     mobile?: string
@@ -127,22 +126,26 @@ const LoginPhone = () => {
         }).then((result: any) => {
             storage.setItem('token', result)
             CustomSocket.connectSocket()
-            fetchChatDialog()
-            if (backUrl && !isTab) {
-                Taro.redirectTo({ url: decodeURIComponent(backUrl) })
-            }
-            else if (isTab) {
-                Taro.switchTab({ url: decodeURIComponent(backUrl) })
-            }
-            else {
-                Taro.switchTab({
-                    url: '/pages/user/index'
-                })
-            }
+            syncLoginData()
+            handleRedirect()
         })
     }
-    
-    const fetchChatDialog = () => {
+
+    const handleRedirect = () => {
+        if (backUrl && !isTab) {
+            Taro.redirectTo({ url: decodeURIComponent(backUrl) })
+        }
+        else if (isTab) {
+            Taro.switchTab({ url: decodeURIComponent(backUrl) })
+        }
+        else {
+            Taro.switchTab({
+                url: '/pages/user/index'
+            })
+        }
+    }
+
+    const syncLoginData = () => {
         hasLogin().then((user: any) => {
             if (user) {
                 storage.setItem('login_user', {
@@ -151,33 +154,9 @@ const LoginPhone = () => {
                     mobile: user.mobile,
                     nickname: user.nickname
                 })
-                app.request({
-                    url: app.apiUrl(api.getChatDialog)
-                }, { loading: false }).then((result: any) => {
-                    getUnreadStatus(result, user.id)
-                })
+                CustomSocket.syncChatUnreadInLogout(user.id)
             }
         })
-
-    }
-
-    const getUnreadStatus = (result: any[], userId: number | string) => {
-        let new_chat_unread: any[] = []
-        let chat_unread: any[] = storage.getItem('chat_unread') || []
-        for (const item of result) {
-            if (item.status == '1' && item.to_user_id == userId) {
-                new_chat_unread.push({
-                    to_user_id: item.to_user_id,
-                    from_user_id: item.from_user_id,
-                    content: item.last_content,
-                    message_type: item.message_type
-                })
-                break
-            }
-        }
-        chat_unread = [...chat_unread, ...new_chat_unread]
-        storage.setItem('chat_unread', chat_unread)
-        ChatEvent.emitStatus('chat_unread', chat_unread)
     }
 
     const toRegister = () => {

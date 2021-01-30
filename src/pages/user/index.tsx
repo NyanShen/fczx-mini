@@ -1,9 +1,7 @@
 import React, { useState } from 'react'
-import Taro, { makePhoneCall, useDidShow } from '@tarojs/taro'
+import Taro, { makePhoneCall, useDidShow, eventCenter } from '@tarojs/taro'
 import { View, Text, Image, Button } from '@tarojs/components'
 
-import storage from '@utils/storage'
-import ChatEvent from '@utils/event'
 import CustomSocket from '@utils/socket'
 import { hasLogin } from '@services/login'
 import { toUrlParam } from '@utils/urlHandler'
@@ -22,8 +20,9 @@ const User = () => {
     hasLogin().then((result: any) => {
       if (result) {
         setUser(result)
-        const chat_unread: any[] = storage.getItem('chat_unread') || []
-        ChatEvent.emitStatus('chat_unread', chat_unread)
+        CustomSocket.onChatUnread()
+      } else {
+        setUser(INIT_USER)
       }
     })
   })
@@ -37,11 +36,8 @@ const User = () => {
   }
 
   const handleLogout = () => {
-    storage.clear('token')
-    storage.clear('login_user')
     setUser(INIT_USER)
-    CustomSocket.closeSocket()
-    Taro.hideTabBarRedDot({ index: 1 })
+    eventCenter.trigger('logout')
   }
 
   const toHouseModule = (url: string, type: string = 'esf') => {

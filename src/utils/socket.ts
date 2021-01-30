@@ -1,4 +1,8 @@
-import Taro from '@tarojs/taro'
+import Taro, { eventCenter } from '@tarojs/taro'
+import find from 'lodash/find'
+
+import api from '@services/api'
+import app from '@services/request'
 import storage from './storage'
 
 class CustomSocket {
@@ -13,29 +17,19 @@ class CustomSocket {
             console.log('init CustomSocket')
         }
     }
-    connectSocket() {
-        const _this = this
-        Taro.connectSocket({
-            url: `wss://api.fczx.com:7272`,
-            success: (response: any) => {
-                console.log('connectSocket success:', response)
-                _this.initSocketEvent()
-                _this.limit = 0
-            },
-            fail: (e: any) => {
-                console.log('connectSocket fail:', e)
-            }
-        })
+
+    private getToken = () => {
+        return storage.getItem('token')
     }
 
-    initSocketEvent() {
+    private initSocketEvent() {
         const _this = this
         Taro.onSocketOpen(() => {
             console.log('onSocketOpen')
             _this.socketOpen = true
             const loginMsg = `{"type":"login","token":"${_this.getToken()}"}`
             _this.sendSocketMessage(loginMsg)
-            
+
             for (const item of _this.socketMsgQueue) {
                 _this.sendSocketMessage(item)
             }
@@ -52,7 +46,7 @@ class CustomSocket {
         })
     }
 
-    reconnectSocket() {
+    private reconnectSocket() {
         const _this = this
         if (_this.lockReConnect) {
             return
@@ -68,8 +62,19 @@ class CustomSocket {
         }
     }
 
-    getToken = () => {
-        return storage.getItem('token')
+    public connectSocket() {
+        const _this = this
+        Taro.connectSocket({
+            url: `wss://api.fczx.com:7272`,
+            success: (response: any) => {
+                console.log('connectSocket success:', response)
+                _this.initSocketEvent()
+                _this.limit = 0
+            },
+            fail: (e: any) => {
+                console.log('connectSocket fail:', e)
+            }
+        })
     }
 
     public sendSocketMessage(messgage: string, errorCallback: (any) => void = () => { }) {
@@ -114,6 +119,44 @@ class CustomSocket {
         if (this.socketOpen) {
             Taro.closeSocket()
         }
+    }
+
+    public onChatUnread() {
+        if (this.getToken()) {
+            const chat_unread: any[] = storage.getItem('chat_unread') || []
+            eventCenter.trigger('chat_unread', chat_unread)
+        }
+    }
+
+    public syncChatUnreadInLogout(userId: string) { //同步登陆之前未读的信息
+        const _this = this
+        app.request({
+            url: app.apiUrl(api.getChatDialog)
+        }, { loading: false }).then((result: any) => {
+            _this.getUnreadStatus(result, userId)
+        })
+    }
+
+    private getUnreadStatus(result: any[], userId: number | string) {
+        let new_chat_unread: any[] = []
+        let chat_unread: any[] = storage.getItem('chat_unread') || []
+        for (const item of result) {
+            if (item.status == '1' && item.to_user_id == userId) {
+                const target = find(chat_unread, { modified: item.modified })
+                if (!target) {
+                    new_chat_unread.push({
+                        modified: item.modified,
+                        to_user_id: item.to_user_id,
+                        from_user_id: item.from_user_id,
+                        content: item.last_content,
+                        message_type: item.message_type
+                    })
+                }
+            }
+        }
+        chat_unread = [...chat_unread, ...new_chat_unread]
+        storage.setItem('chat_unread', chat_unread)
+        eventCenter.trigger('chat_unread', chat_unread)
     }
 
 }

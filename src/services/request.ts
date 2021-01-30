@@ -1,4 +1,4 @@
-import Taro, { getCurrentInstance } from '@tarojs/taro'
+import Taro, { eventCenter, getCurrentInstance } from '@tarojs/taro'
 import storage from '@utils/storage'
 import { toUrlParam } from '@utils/urlHandler'
 import api from './api'
@@ -6,6 +6,12 @@ import api from './api'
 let count: number = 0
 
 const getToken = () => storage.getItem('token')
+
+const getBackUrl = () => {
+    const router: any = getCurrentInstance().router
+    const backUrl = `${router?.path}${toUrlParam(router?.params)}`
+    return backUrl
+}
 
 const getCityAlias = (): string => {
     const city = storage.getItem('city')
@@ -17,10 +23,8 @@ const getCityAlias = (): string => {
 }
 
 const toCityList = () => {
-    const router: any = getCurrentInstance().router
-    const backUrl = `${router?.path}${toUrlParam(router?.params)}`
     Taro.redirectTo({
-        url: `/house/city/index?backUrl=${encodeURIComponent(backUrl)}`
+        url: `/house/city/index?backUrl=${encodeURIComponent(getBackUrl())}`
     })
 }
 
@@ -113,10 +117,9 @@ app.request = (params: any, { loading = true, toast = true }: any = {}) => {
             header: params.header,
             success: function ({ data }: any) {
                 if (data.status === 401) {
-                    const router: any = getCurrentInstance().router
-                    const backUrl = `${router?.path}${toUrlParam(router?.params)}`
+                    eventCenter.trigger('logout')
                     Taro.redirectTo({
-                        url: `/login/index?backUrl=${encodeURIComponent(backUrl)}`
+                        url: `/login/index?backUrl=${encodeURIComponent(getBackUrl())}`
                     })
                 }
                 if (data.code == 1 && data.message == 'ok') {
@@ -128,10 +131,8 @@ app.request = (params: any, { loading = true, toast = true }: any = {}) => {
                     reject(data)
                     if (params.url.indexOf('areaapi') !== -1 && !getCityAlias()) {
                         app.setLocation(() => {
-                            const router: any = getCurrentInstance().router
-                            const backUrl = `${router?.path}${toUrlParam(router?.params)}`
                             Taro.reLaunch({
-                                url: backUrl
+                                url: getBackUrl()
                             })
                         })
                         return

@@ -2,10 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Taro, { getCurrentInstance } from '@tarojs/taro'
 import { View, Text, Button, Image } from '@tarojs/components'
 
-import api from '@services/api'
-import app from '@services/request'
 import storage from '@utils/storage'
-import ChatEvent from '@utils/event'
 import CustomSocket from '@utils/socket'
 import logo from '@assets/icons/logo.png'
 import { PROJECT_NAME } from '@constants/global'
@@ -35,7 +32,7 @@ const Login = () => {
             if (result.token) {
                 storage.setItem('token', result.token)
                 CustomSocket.connectSocket()
-                fetchChatDialog()
+                syncLoginData()
                 handleRedirect()
             } else {
                 setShowConfirm(true)
@@ -55,6 +52,7 @@ const Login = () => {
                 delta: 1
             })
         }
+
     }
 
     const handleLoginByPhone = () => {
@@ -76,7 +74,7 @@ const Login = () => {
         }
     }
 
-    const fetchChatDialog = () => {
+    const syncLoginData = () => {
         hasLogin().then((user: any) => {
             if (user) {
                 storage.setItem('login_user', {
@@ -85,33 +83,9 @@ const Login = () => {
                     mobile: user.mobile,
                     nickname: user.nickname
                 })
-                app.request({
-                    url: app.apiUrl(api.getChatDialog)
-                }, { loading: false }).then((result: any) => {
-                    getUnreadStatus(result, user.id)
-                })
+                CustomSocket.syncChatUnreadInLogout(user.id)
             }
         })
-
-    }
-
-    const getUnreadStatus = (result: any[], userId: number | string) => {
-        let new_chat_unread: any[] = []
-        let chat_unread: any[] = storage.getItem('chat_unread') || []
-        for (const item of result) {
-            if (item.status == '1' && item.to_user_id == userId) {
-                new_chat_unread.push({
-                    to_user_id: item.to_user_id,
-                    from_user_id: item.from_user_id,
-                    content: item.last_content,
-                    message_type: item.message_type
-                })
-                break
-            }
-        }
-        chat_unread = [...chat_unread, ...new_chat_unread]
-        storage.setItem('chat_unread', chat_unread)
-        ChatEvent.emitStatus('chat_unread', chat_unread)
     }
 
     const renderUserInfo = () => {

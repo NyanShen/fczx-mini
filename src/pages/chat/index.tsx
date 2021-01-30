@@ -4,12 +4,11 @@ import { View, Image } from '@tarojs/components'
 
 import api from '@services/api'
 import app from '@services/request'
-import ChatEvent from '@utils/event'
 import storage from '@utils/storage'
+import CustomSocket from '@utils/socket'
+import { getToken, hasLogin } from '@services/login'
 import { toUrlParam } from '@utils/urlHandler'
 import { formatTimestamp } from '@utils/index'
-import { hasLogin } from '@services/login'
-import CustomSocket from '@utils/socket'
 import logo from '@assets/icons/logo.png'
 import './index.scss'
 
@@ -25,7 +24,7 @@ const Chat = () => {
   })
 
   useDidShow(() => {
-    if (user && CustomSocket.getToken()) {
+    if (user && getToken()) {
       fetchChatDialog()
       return
     }
@@ -45,13 +44,8 @@ const Chat = () => {
       url: app.apiUrl(api.getChatDialog)
     }, { loading: false }).then((result: any) => {
       setChatDialog(result)
-      syncChatUnread()
+      CustomSocket.onChatUnread()
     })
-  }
-
-  const syncChatUnread = () => {
-    const chat_unread: any[] = storage.getItem('chat_unread') || []
-    ChatEvent.emitStatus('chat_unread', chat_unread)
   }
 
   const toChatRoom = (item: any) => {

@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import Taro, { getCurrentInstance } from '@tarojs/taro'
+import Taro, { getCurrentInstance, eventCenter } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 
-import ChatEvent from '@utils/event'
+import storage from '@utils/storage'
 import CustomSocket from '@utils/socket'
 import './app.scss'
 
@@ -19,10 +19,22 @@ class App extends Component {
       this.handleTabBarRedDot(result)
     })
 
-    ChatEvent.on('chat_unread', (result: any[]) => {
+    eventCenter.on('chat_unread', (result: any[]) => {
+      console.log('on chat_unread', result)
       this.handleTabBarRedDot(result)
     })
 
+    eventCenter.on('logout', () => {
+      storage.clear('token')
+      storage.clear('login_user')
+      CustomSocket.closeSocket()
+      this.handleTabBarRedDot([])
+    })
+  }
+
+  componentWillUnmount() {
+    eventCenter.off()
+    console.log('app componentWillUnmount bye bye')
   }
 
   handleTabBarRedDot = (result: any[]) => {
