@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Taro from '@tarojs/taro'
 import { View, Text, Input } from '@tarojs/components'
 import classnames from 'classnames'
@@ -18,10 +18,21 @@ const INIT_VERIFY_STATUS: IVerifyStatus = {
     actived: false
 }
 
+const DISABLED_CLASS = 'btn-disabled'
+const ACTIVED_CLASS = 'btn-primary'
 const Register = () => {
     const [registerData, setRegisterData] = useState<any>({})
+    const [submitClass, setSubmitClass] = useState<string>(DISABLED_CLASS)
     const [verifyStatus, setVerifyStatus] = useState<IVerifyStatus>(INIT_VERIFY_STATUS)
     const phoneRegExp = new RegExp(PHONE_PATTERN)
+
+    useEffect(() => {
+        if (registerData.mobile && registerData.randCode && registerData.password) {
+            setSubmitClass(ACTIVED_CLASS)
+        } else {
+            setSubmitClass(DISABLED_CLASS)
+        }
+    }, [registerData])
 
     const handleInput = (e: any, name: string) => {
         const value = e.detail.value;
@@ -112,6 +123,7 @@ const Register = () => {
                         className="input-control"
                         placeholder="请输入手机号"
                         maxlength={11}
+                        value={registerData.mobile}
                         onInput={(e) => handleInput(e, 'mobile')}
                         autoFocus
                     />
@@ -123,6 +135,7 @@ const Register = () => {
                         className="input-control"
                         placeholder="请输入手机验证码"
                         maxlength={6}
+                        value={registerData.randCode}
                         onInput={(e) => handleInput(e, 'randCode')}
                     />
                     <Text
@@ -137,13 +150,14 @@ const Register = () => {
                         password
                         className="input-control"
                         placeholder="请输入密码"
+                        value={registerData.password}
                         onInput={(e) => handleInput(e, 'password')}
                     />
                 </View>
                 <View className="link" onClick={toLogin}>
                     <Text className="link-text">已有账号？</Text><Text className="link-btn">去登录</Text>
                 </View>
-                <View onClick={handleSubmit} className="btn btn-primary">立即注册</View>
+                <View onClick={handleSubmit} className={classnames('btn', submitClass)}>立即注册</View>
 
             </View>
 

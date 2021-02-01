@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Taro, { getCurrentInstance } from '@tarojs/taro'
 import { View, Text, Input } from '@tarojs/components'
 import classnames from 'classnames'
@@ -44,16 +44,37 @@ const loginTabs = [{
     login_url: api.loginByVerifyCode
 }]
 
+const DISABLED_CLASS = 'btn-disabled'
+const ACTIVED_CLASS = 'btn-primary'
+
 const LoginPhone = () => {
     const params: any = getCurrentInstance().router?.params
     const isTab: string = params?.isTab
     const backUrl: string = params?.backUrl
     const authorizationCode = app.randCode(16);
     const [tab, setTab] = useState(loginTabs[0])
+    const [submitClass, setSubmitClass] = useState<string>(DISABLED_CLASS)
     const [loginData, setLoginData] = useState<ILoginData>(INIT_LOGIN_PHONE)
     const [verifyStatus, setVerifyStatus] = useState<IVerifyStatus>(INIT_VERIFY_STATUS)
     const phoneRegExp = new RegExp(PHONE_PATTERN)
 
+    useEffect(() => {
+        if (tab.type === 'code') {
+            if (loginData.mobile && loginData.verifyCode) {
+                setSubmitClass(ACTIVED_CLASS)
+            } else {
+                setSubmitClass(DISABLED_CLASS)
+            }
+        }
+        if (tab.type === 'pass') {
+            if (loginData.account && loginData.password) {
+                setSubmitClass(ACTIVED_CLASS)
+            } else {
+                setSubmitClass(DISABLED_CLASS)
+            }
+        }
+    }, [loginData, tab])
+    
     const handleInput = (e: any, name: string) => {
         const value = e.detail.value;
         setLoginData({
@@ -103,32 +124,42 @@ const LoginPhone = () => {
 
     const validateData = () => {
         if (tab.type === 'code') {
-            return {
-                mobile: loginData.mobile,
-                randCode: loginData.verifyCode,
-                requestId: authorizationCode
+            if (loginData.mobile && loginData.verifyCode) {
+                return {
+                    mobile: loginData.mobile,
+                    randCode: loginData.verifyCode,
+                    requestId: authorizationCode
+                }
+            } else {
+                return null
             }
         }
         if (tab.type === 'pass') {
-            return {
-                account: loginData.account,
-                password: loginData.password,
+            if (loginData.account && loginData.password) {
+                return {
+                    account: loginData.account,
+                    password: loginData.password,
+                }
+            } else {
+                return null
             }
         }
     }
 
     const handleSubmit = () => {
         let postData = validateData()
-        app.request({
-            method: 'POST',
-            url: app.apiUrl(tab.login_url),
-            data: postData
-        }).then((result: any) => {
-            storage.setItem('token', result)
-            CustomSocket.connectSocket()
-            syncLoginData()
-            handleRedirect()
-        })
+        if (postData) {
+            app.request({
+                method: 'POST',
+                url: app.apiUrl(tab.login_url),
+                data: postData
+            }).then((result: any) => {
+                storage.setItem('token', result)
+                CustomSocket.connectSocket()
+                syncLoginData()
+                handleRedirect()
+            })
+        }
     }
 
     const handleRedirect = () => {
@@ -190,6 +221,7 @@ const LoginPhone = () => {
                                 className="input-control"
                                 placeholder="请输入手机号"
                                 maxlength={11}
+                                value={loginData.mobile}
                                 onInput={(e) => handleInput(e, 'mobile')}
                                 autoFocus
                             />
@@ -200,6 +232,7 @@ const LoginPhone = () => {
                                 className="input-control"
                                 placeholder="请输入手机验证码"
                                 maxlength={6}
+                                value={loginData.verifyCode}
                                 onInput={(e) => handleInput(e, 'verifyCode')}
                             />
                             <Text
@@ -220,6 +253,7 @@ const LoginPhone = () => {
                                 className="input-control"
                                 placeholder="请输入登录账号"
                                 maxlength={11}
+                                value={loginData.account}
                                 onInput={(e) => handleInput(e, 'account')}
                                 autoFocus
                             />
@@ -229,6 +263,7 @@ const LoginPhone = () => {
                                 password
                                 className="input-control"
                                 placeholder="请输入密码"
+                                value={loginData.password}
                                 onInput={(e) => handleInput(e, 'password')}
                             />
                         </View>
@@ -239,7 +274,7 @@ const LoginPhone = () => {
                         立即注册
                     </View>
                 </View>
-                <View onClick={handleSubmit} className="btn btn-primary">立即登录</View>
+                <View onClick={handleSubmit} className={classnames('btn', submitClass)}>立即登录</View>
             </View>
 
         </View>
