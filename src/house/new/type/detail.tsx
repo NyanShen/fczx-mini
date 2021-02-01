@@ -93,6 +93,10 @@ const HouseTypeDetail = () => {
         })
     }
 
+    const toHome = () => {
+        Taro.switchTab({ url: '/pages/index/index' })
+    }
+
     return (
         <View className="house-type-detail">
             <View className="detail-wrapper">
@@ -165,11 +169,18 @@ const HouseTypeDetail = () => {
                 </ScrollView>
             </View>
             <View className="bottom-bar">
-                <View className="bar-item-btn" onClick={() => toChatRoom(houseType.fangHouseConsultant[0])}>
-                    <View className="btn btn-yellow btn-bar ml30">
-                        <View>联系置业顾问</View>
-                    </View>
+                <View className="bar-item" onClick={toHome}>
+                    <Text className="iconfont iconhome"></Text>
+                    <Text>首页</Text>
                 </View>
+                {
+                    houseType.fangHouseConsultant.length > 0 &&
+                    <View className="bar-item-btn" onClick={() => toChatRoom(houseType.fangHouseConsultant[0])}>
+                        <View className="btn btn-yellow btn-bar ml30">
+                            <View>联系置业顾问</View>
+                        </View>
+                    </View>
+                }
                 <View className="bar-item-btn">
                     <View className="btn btn-primary btn-bar" onClick={handlePhoneCall}>
                         <View>免费电话咨询</View>

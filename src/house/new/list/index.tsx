@@ -486,6 +486,55 @@ const NewHouse = () => {
         })
     }
 
+    const renderActivity = (houseItem: any) => {
+        let activities: any[] = []
+        if (houseItem.is_discount == '1') {
+          activities.push({
+            icon: 'iconcoupon',
+            title: houseItem.fangHouseDiscount.title
+          })
+        }
+        if (houseItem.is_group == '1') {
+          activities.push({
+            icon: 'iconstars',
+            title: houseItem.fangHouseGroup.title
+          })
+        }
+    
+        return (
+          <View className="house-activity" onClick={() => handleActivity(houseItem.id)}>
+            <View className="activity-content">
+              {
+                activities.map((item: any, index: number) => {
+                  if (index === 0) {
+                    return (
+                      <View className="activity-item" key={index}>
+                        <Text className={classnames('iconfont', item.icon)}></Text>
+                        <Text className="text">{item.title}</Text>
+                      </View>
+                    )
+                  }
+                  if (index > 0 && activity.includes(houseItem.id)) {
+                    return (
+                      <View className="activity-item" key={index}>
+                        <Text className={classnames('iconfont', item.icon)}></Text>
+                        <Text className="text">{item.title}</Text>
+                      </View>
+                    )
+                  }
+                })
+              }
+            </View>
+            {
+              activities.length > 1 &&
+              <View className="activity-icon">
+                <Text className={classnames('iconfont', activity.includes(houseItem.id) ? 'iconarrow-up-bold' : 'iconarrow-down-bold')}></Text>
+              </View>
+            }
+          </View>
+        )
+      }
+
     return (
         <View className="newhouse">
             <View className="fixed" style={{ top: 0 }}>
@@ -609,31 +658,7 @@ const NewHouse = () => {
                                             </View>
                                         </View>
                                     </View>
-                                    <View className="house-activity" onClick={() => handleActivity(item.id)}>
-                                        <View className="activity-content">
-                                            {
-                                                item.is_discount == '1' &&
-                                                <View className="activity-item">
-                                                    <Text className="iconfont iconcoupon"></Text>
-                                                    <Text className="text">{item.fangHouseDiscount.title}</Text>
-                                                </View>
-                                            }
-                                            {
-                                                item.is_group == '1' && activity.includes(item.id) &&
-                                                <View className="activity-item">
-                                                    <Text className="iconfont iconstars"></Text>
-                                                    <Text className="text">{item.fangHouseGroup.title}</Text>
-                                                </View>
-                                            }
-                                        </View>
-                                        {
-                                            item.is_discount == '1' &&
-                                            item.is_group == '1' &&
-                                            <View className="activity-icon">
-                                                <Text className={classnames('iconfont', activity.includes(item.id) ? 'iconarrow-up-bold' : 'iconarrow-down-bold')}></Text>
-                                            </View>
-                                        }
-                                    </View>
+                                    {renderActivity(item)}
                                 </View>
                             ))
                         }
