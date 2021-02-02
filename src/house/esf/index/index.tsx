@@ -178,6 +178,14 @@ const esfHouse = () => {
         return value ? value : '暂无信息'
     }
 
+    const renderPrice = (price: string, price_type: string) => {
+        if (price === '0') {
+            return '待定'
+        } else {
+            return price + PRICE_TYPE[price_type]
+        }
+    }
+
     return (
         <View className="esf">
             <ScrollView style={{ maxHeight: contentHeight - 55 }} scrollY>
@@ -331,7 +339,7 @@ const esfHouse = () => {
                             <View className="community-item">
                                 <View className="label">参考均价</View>
                                 <View className="value price-unit">
-                                    {esfData.fangHouse.price}{PRICE_TYPE[esfData.fangHouse.price_type]}
+                                    {renderPrice(esfData.fangHouse.price, esfData.fangHouse.price_type)}
                                 </View>
                             </View>
                             <View className="community-item">

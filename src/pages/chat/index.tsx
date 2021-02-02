@@ -44,6 +44,10 @@ const Chat = () => {
       url: app.apiUrl(api.getChatDialog)
     }, { loading: false }).then((result: any) => {
       setChatDialog(result)
+      //异常删除会话列表处理
+      if (result.length <= 0) {
+        storage.setItem('chat_unread', [])
+      }
       CustomSocket.onChatUnread()
     })
   }

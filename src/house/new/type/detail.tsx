@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import Taro, { getCurrentInstance, useShareAppMessage, useShareTimeline } from '@tarojs/taro'
-import { View, Image, Text, ScrollView, Swiper, SwiperItem } from '@tarojs/components'
+import Taro, { getCurrentInstance, previewImage, useShareAppMessage, useShareTimeline } from '@tarojs/taro'
+import { View, Image, Text, ScrollView } from '@tarojs/components'
 import classnames from 'classnames'
 
 import api from '@services/api'
@@ -16,7 +16,6 @@ const HouseTypeDetail = () => {
     const bottomHeight = 55
     const params: any = getCurrentInstance().router?.params
     const { contentHeight } = useNavData()
-    const [open, setOpen] = useState<boolean>(false)
     const [houseType, setHouseType] = useState<any>({
         tags: [],
         fangHouse: {},
@@ -64,9 +63,10 @@ const HouseTypeDetail = () => {
         })
     }
 
-    const toNewHouse = () => {
-        Taro.navigateTo({
-            url: `/house/new/index/index?id=${params.houseId}`
+    const handlePreviewImage = (image_path: string) => {
+        previewImage({
+            current: image_path,
+            urls: [image_path]
         })
     }
 
@@ -88,8 +88,15 @@ const HouseTypeDetail = () => {
                 title: houseType.fangHouse.title
             })
         })
+
         Taro.navigateTo({
             url: `/chat/room/index${paramString}`
+        })
+    }
+
+    const toNewHouse = () => {
+        Taro.navigateTo({
+            url: `/house/new/index/index?id=${params.houseId}`
         })
     }
 
@@ -104,7 +111,7 @@ const HouseTypeDetail = () => {
                     scrollY
                     style={{ maxHeight: contentHeight - bottomHeight }}
                 >
-                    <View className="detail-image" onClick={() => setOpen(true)}>
+                    <View className="detail-image" onClick={() => handlePreviewImage(houseType.image_path)}>
                         <Image src={houseType.image_path} mode="aspectFit"></Image>
                     </View>
                     <View className="detail-header">
@@ -187,26 +194,6 @@ const HouseTypeDetail = () => {
                     </View>
                 </View>
             </View>
-            {
-                open &&
-                <View className="album-swiper" style={{ top: 0 }}>
-                    <View className="album-swiper-header">
-                        <View className="album-count">
-                            <Text>1/1</Text>
-                        </View>
-                        <View className="iconfont iconclose" onClick={() => setOpen(false)}></View>
-                    </View>
-                    <View className="album-swiper-content">
-                        <Swiper style={{ height: contentHeight - 80 }}>
-                            <SwiperItem >
-                                <Image className="swiper-image" src={houseType.image_path} mode='widthFix'></Image>
-                                <View className="swiper-text">
-                                </View>
-                            </SwiperItem>
-                        </Swiper>
-                    </View>
-                </View>
-            }
         </View>
     )
 }

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { getCurrentInstance, useReady } from '@tarojs/taro'
+import Taro, { getCurrentInstance, useReady } from '@tarojs/taro'
 import { View, Text, Map } from "@tarojs/components"
 import classnames from 'classnames'
 import QQMapWX from 'qqmap-wx-jssdk'
