@@ -33,6 +33,7 @@ export default {
         'new/consultant/index',
         'city/index',
         'search/index',
+        'group/index',
 
         'esf/index/index',
         'esf/list/index',
