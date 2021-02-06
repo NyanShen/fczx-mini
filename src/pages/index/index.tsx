@@ -64,7 +64,8 @@ const house_menus = [
   },
   {
     name: '看房团',
-    path: `/house/group/index`
+    // path: `/house/group/index`,
+    path: `${housePath}?is_group=1`
   },
   {
     name: '地图找房',

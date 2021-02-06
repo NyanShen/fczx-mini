@@ -23,6 +23,7 @@ const getCityAlias = (): string => {
 }
 
 const toCityList = () => {
+    count = 0
     Taro.redirectTo({
         url: `/house/city/index?backUrl=${encodeURIComponent(getBackUrl())}`
     })
@@ -58,7 +59,6 @@ app.setLocation = (callback: (any) => void) => {
     if (count > 0) {
         return
     }
-    count = count + 1
     Taro.getLocation({
         type: 'wgs84',
         success: (result: any) => {
@@ -128,13 +128,13 @@ app.request = (params: any, { loading = true, toast = true }: any = {}) => {
                     }
                     resolve(data.data)
                 } else {
-                    reject(data)
                     if (params.url.indexOf('areaapi') !== -1 && !getCityAlias()) {
                         app.setLocation(() => {
                             Taro.reLaunch({
                                 url: getBackUrl()
                             })
                         })
+                        count = count + 1
                         return
                     }
                     if (toast) {
@@ -146,6 +146,7 @@ app.request = (params: any, { loading = true, toast = true }: any = {}) => {
                     } else {
                         Taro.hideLoading()
                     }
+                    reject(data)
                 }
             },
             fail: function (err: any) {
