@@ -7,11 +7,12 @@ import api from '@services/api'
 import app from '@services/request'
 import storage from '@utils/storage'
 import CustomSocket from '@utils/socket'
-import new_house from '@assets/icons/new_house.png'
-import second_house from '@assets/icons/house.png'
-import rent_house from '@assets/icons/rent_house.png'
-import community from '@assets/icons/community.png'
-import house_calc from '@assets/icons/house_calc.png'
+import HOUSE_ICON from '@assets/icons/house.png'
+import ESF_ICON from '@assets/icons/esf.png'
+import RENT_ICON from '@assets/icons/rent.png'
+import COMMUNITY from '@assets/icons/community.png'
+import CALC_ICON from '@assets/icons/calc.png'
+import BUS from '@assets/icons/bus.png'
 import news from '@assets/icons/news.png'
 import { PROJECT_NAME } from '@constants/global'
 import { PRICE_TYPE, SALE_STATUS } from '@constants/house'
@@ -23,22 +24,27 @@ const menuContent = [{
   children: [
     {
       name: '新盘',
-      icon: new_house,
+      icon: HOUSE_ICON,
       path: housePath
     },
     {
+      name: '看房团',
+      icon: BUS,
+      path: '/house/group/index'
+    },
+    {
       name: '二手房',
-      icon: second_house,
+      icon: ESF_ICON,
       path: esfPath
     },
     {
       name: '租房',
-      icon: rent_house,
+      icon: RENT_ICON,
       path: '/house/rent/list/index'
     },
     {
       name: '小区',
-      icon: community,
+      icon: COMMUNITY,
       path: '/house/community/list/index'
     },
     {
@@ -48,7 +54,7 @@ const menuContent = [{
     },
     {
       name: '房贷计算',
-      icon: house_calc,
+      icon: CALC_ICON,
       path: '/calculator/index'
     }
   ]
@@ -64,8 +70,7 @@ const house_menus = [
   },
   {
     name: '看房团',
-    // path: `/house/group/index`,
-    path: `${housePath}?is_group=1`
+    path: `/house/group/index`
   },
   {
     name: '地图找房',

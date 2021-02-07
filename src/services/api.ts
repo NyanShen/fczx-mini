@@ -22,6 +22,7 @@ export default {
     getHouseSearchHot: '/house/hot-search',
     getHouseById: '/house/get',
     getHouseAttr: '/house/attr',
+    getHouseGroup: '/house/group',
     getSubway: '/subway/find-all',
     getAreaCircle: '/area/circle',
     getHouseAlbum: '/house/all-image',
