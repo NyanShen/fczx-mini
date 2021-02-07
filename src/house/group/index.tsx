@@ -29,7 +29,6 @@ const HouseGroup = () => {
     }
 
     const timeCountDown = (intDiff: number) => {
-        console.log(intDiff)
         let day: number = 0;
         let hour: number = 0;
         let minute: number = 0;
@@ -128,7 +127,7 @@ const HouseGroup = () => {
                                                                     btnText="免费报名"
                                                                     iconClass=""
                                                                     title={item.fangHouseGroup.title}
-                                                                    description="√免费专车 √一对一来回接送 √随时看房"
+                                                                    description="√免费大巴接送 √来回接送 √全程免费"
                                                                 ></Popup>
                                                             </View>
                                                         </View>

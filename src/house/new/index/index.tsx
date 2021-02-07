@@ -689,7 +689,7 @@ const House = () => {
                                             houseId={houseData.id}
                                             btnText="立即参与"
                                             title={houseData.fangHouseGroup.title}
-                                            description="√免费专车 √一对一来回接送 √随时看房"
+                                            description="√免费大巴接送 √来回接送 √全程免费"
                                         ></Popup>
                                     </View>
                                 </View>
@@ -834,7 +834,7 @@ const House = () => {
                             btnText="团购"
                             iconClass="icongroup"
                             title={houseData.fangHouseGroup.title}
-                            description="√免费专车 √一对一来回接送 √随时看房"
+                            description="√免费大巴接送 √来回接送 √全程免费"
                         ></Popup>
                     </View>
                 }
