@@ -335,7 +335,7 @@ const House = () => {
                 itemId={video.id}
                 onClick={() => toHouseVideo(video)}
             >
-                <Image src={video.image_path}></Image>
+                <Image className="taro-image" src={video.image_path}></Image>
                 <Text className="icon-vedio"></Text>
             </SwiperItem>
         )
@@ -369,7 +369,7 @@ const House = () => {
                             comment.map((item: any, index: number) => (
                                 <View key={index} className="comment-item">
                                     <View className="user-photo">
-                                        <Image src={item.user.avatar}></Image>
+                                        <Image className="taro-image" src={item.user.avatar}></Image>
                                     </View>
                                     <View className="comment-text">
                                         <View className="name">{item.user.nickname}</View>
@@ -377,7 +377,7 @@ const House = () => {
                                         {
                                             item.image_path &&
                                             <View className="comment-image">
-                                                <Image
+                                                <Image className="taro-image"
                                                     src={item.image_path}
                                                     mode="aspectFill"
                                                     onClick={() => handleViewImage(item.image_path)}
@@ -483,7 +483,7 @@ const House = () => {
                                         <View key={index} className="consultant-item">
                                             <View className="consultant-context">
                                                 <View className="item-image">
-                                                    <Image src={item.user.avatar}></Image>
+                                                    <Image className="taro-image" src={item.user.avatar}></Image>
                                                 </View>
                                                 <View className="item-name">{item.user.nickname}</View>
                                                 <View className="item-btn">
@@ -533,7 +533,7 @@ const House = () => {
                     >
                         {houseData.imagesData.video && renderVideo(houseData.imagesData.video)}
                         <SwiperItem itemId={imageId} onClick={() => toHouseModule('album')}>
-                            <Image src={houseData.image_path}></Image>
+                            <Image className="taro-image" src={houseData.image_path}></Image>
                         </SwiperItem>
                     </Swiper>
                     <View className="album-count" onClick={() => toHouseModule('album')}>
@@ -714,7 +714,7 @@ const House = () => {
                                 houseData.fangHouseRoom.map((item: any, index: any) => (
                                     <View key={index} className="swiper-item" onClick={() => toHouseTypeDetail(item)}>
                                         <View className="item-image">
-                                            <Image src={item.image_path} mode="aspectFill"></Image>
+                                            <Image className="taro-image" src={item.image_path} mode="aspectFill"></Image>
                                         </View>
                                         <View className="item-text tags">
                                             <Text>{item.room}室{item.office}厅{item.toilet}卫</Text>
@@ -781,7 +781,7 @@ const House = () => {
                     <View className="house-item-content surround">
                         <View className="surround-wrapper">
                             <View className="map">
-                                <Image className="map-image" src={houseData.static_map} mode="center"></Image>
+                                <Image className="taro-image" className="map-image" src={houseData.static_map} mode="center"></Image>
                                 <View className="map-label">
                                     <View className="text">{houseData.title}</View>
                                     <View className="iconfont iconmap"></View>

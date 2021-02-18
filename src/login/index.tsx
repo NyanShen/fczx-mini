@@ -93,7 +93,7 @@ const Login = () => {
             <View className="login-accredit">
                 <View className="acrredit-content">
                     <View className="logo">
-                        <Image src={logo} mode="aspectFill"></Image>
+                        <Image className="taro-image" src={logo} mode="aspectFill"></Image>
                     </View>
                     <View className="context">
                         <View className="title">授权微信手机号</View>

@@ -79,7 +79,7 @@ const HouseCommentForm = () => {
                                 imagePath &&
                                 <View className="image-show">
                                     <Text className="iconfont iconclear" onClick={() => setImagePath('')}></Text>
-                                    <Image src={imagePath} mode="aspectFill"/>
+                                    <Image className="taro-image" src={imagePath} mode="aspectFill"/>
                                 </View>
                             }
                         </View>

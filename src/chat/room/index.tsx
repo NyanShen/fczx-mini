@@ -329,7 +329,7 @@ const ChatRoom = () => {
             case '1':
                 return <Text className={classnames('text', isMine && 'text-primary')} selectable>{chatItem.content}</Text>
             case '2':
-                return <Image
+                return <Image className="taro-image"
                     className="image"
                     src={chatItem.content}
                     mode="widthFix"
@@ -340,7 +340,7 @@ const ChatRoom = () => {
                 return (
                     <View className="content" onClick={() => toHouseRoom('new', itemContent)}>
                         <View className="content-image">
-                            <Image src={itemContent.image_path} mode="aspectFill" />
+                            <Image className="taro-image" src={itemContent.image_path} mode="aspectFill" />
                             <View className="tag">新房</View>
                         </View>
                         <View className="content-title">{itemContent.title}</View>
@@ -353,7 +353,7 @@ const ChatRoom = () => {
                 return (
                     <View className="content" onClick={() => toHouseRoom('rent', itemContent)}>
                         <View className="content-image">
-                            <Image src={itemContent.image_path} mode="aspectFill" />
+                            <Image className="taro-image" src={itemContent.image_path} mode="aspectFill" />
                             <View className="tag">二手房</View>
                         </View>
                         <View className="content-title">{itemContent.title}</View>
@@ -373,7 +373,7 @@ const ChatRoom = () => {
                 return (
                     <View className="content" onClick={() => toHouseRoom('rent', itemContent)}>
                         <View className="content-image">
-                            <Image src={itemContent.image_path} mode="aspectFill" />
+                            <Image className="taro-image" src={itemContent.image_path} mode="aspectFill" />
                             <View className="tag">租房</View>
                         </View>
                         <View className="content-title">{itemContent.title}</View>
@@ -389,7 +389,7 @@ const ChatRoom = () => {
                 return (
                     <View className="content" onClick={() => toHouseType(itemContent)}>
                         <View className="content-image">
-                            <Image src={itemContent.image_path} mode="aspectFill" />
+                            <Image className="taro-image" src={itemContent.image_path} mode="aspectFill" />
                             <View className="tag">新房户型</View>
                         </View>
                         <View className="content-title">
@@ -428,7 +428,7 @@ const ChatRoom = () => {
                                 {renderTime(item.time)}
                                 <View className="item-content">
                                     <View className="photo">
-                                        <Image src={toUser.avatar} />
+                                        <Image className="taro-image" src={toUser.avatar} />
                                     </View>
                                     <View className="message">
                                         {renderContentByType(item)}
@@ -441,7 +441,7 @@ const ChatRoom = () => {
                                 {renderTime(item.time)}
                                 <View className="item-content item-content-reverse">
                                     <View className="photo">
-                                        <Image src={user.avatar} />
+                                        <Image className="taro-image" src={user.avatar} />
                                     </View>
                                     <View className="message">
                                         {renderContentByType(item, true)}

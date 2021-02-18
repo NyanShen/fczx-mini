@@ -438,7 +438,7 @@ const CommunityList = () => {
                                 <View key={index} className="house-list-li">
                                     <View className="house-content" onClick={() => handleHouseItemClick(item)}>
                                         <View className="house-image">
-                                            <Image src={item.image_path}></Image>
+                                            <Image className="taro-image" src={item.image_path}></Image>
                                         </View>
                                         <View className="house-text">
                                             <View className="text-item row2">

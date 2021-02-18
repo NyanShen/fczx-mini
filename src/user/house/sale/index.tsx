@@ -366,7 +366,7 @@ const HouseSale = () => {
                         <View className="image-icon">
                             {
                                 findFaceImage() ?
-                                    <Image src={findFaceImage()} mode="aspectFill" /> :
+                                    <Image className="taro-image" src={findFaceImage()} mode="aspectFill" /> :
                                     <Text className="iconfont iconaddphoto"></Text>
                             }
 

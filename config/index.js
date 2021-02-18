@@ -5,6 +5,8 @@ const resolvePath = (pathname) => {
   return path.resolve(__dirname, '..', pathname)
 }
 
+const IS_H5 = process.env.TARO_ENV === 'h5'
+
 const config = {
   projectName: 'mini',
   date: '2020-8-6',
@@ -17,7 +19,12 @@ const config = {
   sourceRoot: 'src',
   outputRoot: `dist/${process.env.TARO_ENV}`,
   plugins: [],
-  defineConstants: {},
+  defineConstants: {
+    IS_H5,
+    IS_WEAPP: process.env.TARO_ENV === 'weapp',
+    API_URL: IS_H5 ? '"/api"' : '"https://api.fczx.com"',
+    AREA_API_URL: IS_H5 ? '"/areaapi"' : '"https://areaapi.fczx.com"'
+  },
   copy: {
     patterns: [
     ],

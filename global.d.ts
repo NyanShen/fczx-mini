@@ -16,3 +16,8 @@ declare const process: {
     [key: string]: any;
   }
 }
+
+declare const IS_H5: boolean
+declare const IS_WEAPP: boolean
+declare const API_URL: string
+declare const AREA_API_URL: string

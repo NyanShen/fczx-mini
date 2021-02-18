@@ -204,7 +204,7 @@ const RentIndex = () => {
                         {
                             rentData.rentImage.map((item: any, index: number) => (
                                 <SwiperItem key={index} itemId={item.id} onClick={() => setOpen(true)}>
-                                    <Image src={item.image_path}></Image>
+                                    <Image className="taro-image" src={item.image_path}></Image>
                                 </SwiperItem>
                             ))
                         }
@@ -330,7 +330,7 @@ const RentIndex = () => {
                             </View>
                         </View>
                         <View className="map" onClick={toLocation}>
-                            <Image className="map-image" src={rentData.static_map} mode="center"></Image>
+                            <Image className="taro-image" className="map-image" src={rentData.static_map} mode="center"></Image>
                             <View className="map-label">
                                 <View className="text">{rentData.fangHouse.title}</View>
                                 <View className="iconfont iconmap"></View>
@@ -347,7 +347,7 @@ const RentIndex = () => {
             <View className="bottom-bar">
                 <View className="bar-item">
                     <View className="item-photo">
-                        <Image src={rentData.user.avatar}></Image>
+                        <Image className="taro-image" src={rentData.user.avatar}></Image>
                     </View>
                     <View className="item-text">
                         <View className="name">{rentData.user.nickname}</View>
@@ -382,7 +382,7 @@ const RentIndex = () => {
                             {
                                 rentData.rentImage.map((item: any, index: number) => (
                                     <SwiperItem key={index}>
-                                        <Image className="swiper-image" src={item.image_path} mode='widthFix'></Image>
+                                        <Image className="taro-image" className="swiper-image" src={item.image_path} mode='widthFix'></Image>
                                         <View className="swiper-text"></View>
                                     </SwiperItem>
                                 ))

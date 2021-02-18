@@ -112,7 +112,7 @@ const HouseTypeDetail = () => {
                     style={{ maxHeight: contentHeight - bottomHeight }}
                 >
                     <View className="detail-image" onClick={() => handlePreviewImage(houseType.image_path)}>
-                        <Image src={houseType.image_path} mode="aspectFit"></Image>
+                        <Image className="taro-image" src={houseType.image_path} mode="aspectFit"></Image>
                     </View>
                     <View className="detail-header">
                         <View className="title">{houseType.name}</View>

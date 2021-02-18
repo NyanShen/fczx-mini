@@ -129,7 +129,7 @@ const NewsList = () => {
                                 {
                                     item.image_path &&
                                     <View className="item-image">
-                                        <Image src={item.image_path} mode="aspectFill"></Image>
+                                        <Image className="taro-image" src={item.image_path} mode="aspectFill"></Image>
                                     </View>
                                 }
                             </View>

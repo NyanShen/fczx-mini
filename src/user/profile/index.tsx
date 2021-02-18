@@ -74,7 +74,7 @@ const Profile = () => {
         <View className="profile">
             <View className="profile-photo" onClick={handlePhotoChange}>
                 <View className="photo">
-                    <Image src={photo} mode="aspectFill" />
+                    <Image className="taro-image" src={photo} mode="aspectFill" />
                 </View>
                 <View className="text">点击修改头像</View>
             </View>

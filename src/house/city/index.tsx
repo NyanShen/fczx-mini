@@ -67,7 +67,7 @@ const City = () => {
             <ScrollView
                 scrollY
                 className="city-content"
-                style={{ height: contentHeight }}
+                style={{ maxHeight: `${contentHeight}px` }}
                 scrollIntoView={viewInto}
             >
                 <View className="city-list">

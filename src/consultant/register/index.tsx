@@ -174,7 +174,7 @@ const HouseConsultantForm = () => {
             <View className="item-image" onClick={() => handleUploadImage(name)}>
                 {
                     inputValue[name] ?
-                        <Image src={inputValue[name]} mode="aspectFill" /> :
+                        <Image className="taro-image" src={inputValue[name]} mode="aspectFill" /> :
                         <Text className="iconfont iconphotograph"></Text>
                 }
                 <Text className="image-tip">点击上传</Text>
@@ -209,7 +209,7 @@ const HouseConsultantForm = () => {
             <View className="consultant-form">
                 <View className="form-item flex-column">
                     <View className="item-image">
-                        <Image src={inputValue.avatar} mode="aspectFill" />
+                        <Image className="taro-image" src={inputValue.avatar} mode="aspectFill" />
                     </View>
                     <View className="item-label">用户头像</View>
                     <View className="placeholder">(头像, 姓名, 手机号将自动同步关联用户信息)</View>

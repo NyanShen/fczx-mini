@@ -88,7 +88,7 @@ const HouseGroup = () => {
                                                 <View className="line-site">
                                                     <View className="site-content">
                                                         <View className="house-image">
-                                                            <Image src={item.image_path} mode="aspectFill" />
+                                                            <Image className="taro-image" src={item.image_path} mode="aspectFill" />
                                                         </View>
                                                         <View className="house-context">
                                                             <View className="name">{item.title}</View>
@@ -143,7 +143,7 @@ const HouseGroup = () => {
                         </ScrollView> :
                         <View className="empty-container empty-container-center">
                             <View className="empty-image">
-                                <Image src={no_bus} mode="aspectFill" />
+                                <Image className="taro-image" src={no_bus} mode="aspectFill" />
                             </View>
                             <View className="empty-text">暂无数据，近期看房团正在策划中~</View>
                         </View>

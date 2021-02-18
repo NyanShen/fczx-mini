@@ -103,7 +103,7 @@ const Collect = () => {
                             <View key={index} className="house-list-li">
                                 <View className="house-content" onClick={() => handleHouseItemClick(item, 'new')}>
                                     <View className="house-image">
-                                        <Image src={item.image_path} mode="aspectFill"></Image>
+                                        <Image className="taro-image" src={item.image_path} mode="aspectFill"></Image>
                                     </View>
                                     <View className="house-text">
                                         <View className="text-item title mb8">
@@ -134,7 +134,7 @@ const Collect = () => {
                         <View key={index} className="house-list-li">
                             <View className="house-content" onClick={() => handleHouseItemClick(item, 'esf')}>
                                 <View className="house-image">
-                                    <Image src={item.image_path} mode="aspectFill"></Image>
+                                    <Image className="taro-image" src={item.image_path} mode="aspectFill"></Image>
                                 </View>
                                 <View className="house-text">
                                     <View className="text-item title row2">
@@ -170,7 +170,7 @@ const Collect = () => {
                             <View key={index} className="house-list-li">
                                 <View className="house-content" onClick={() => handleHouseItemClick(item, 'rent')}>
                                     <View className="house-image">
-                                        <Image src={item.image_path} mode="aspectFill"></Image>
+                                        <Image className="taro-image" src={item.image_path} mode="aspectFill"></Image>
                                     </View>
                                     <View className="house-text">
                                         <View className="text-item row2">

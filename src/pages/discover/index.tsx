@@ -154,7 +154,7 @@ const Discover = () => {
                                     <View className="discover-item" key={index}>
                                         <View className="discover-title" onClick={() => toHouseModule(item.fangHouse.id)}>
                                             <View className="discover-profile">
-                                                <Image src={item.fangHouse.image_path} mode="aspectFill" />
+                                                <Image className="taro-image" src={item.fangHouse.image_path} mode="aspectFill" />
                                             </View>
                                             <View className="discover-header">
                                                 <View className="header-item">
@@ -176,7 +176,7 @@ const Discover = () => {
                                             {
                                                 item.video_path ?
                                                     <View className="media-video" onClick={() => toHouseVideo(item.face_path, item.video_path)}>
-                                                        <Image src={item.face_path} mode="aspectFill" />
+                                                        <Image className="taro-image" src={item.face_path} mode="aspectFill" />
                                                         <Text className="iconfont iconvideo"></Text>
                                                     </View> :
                                                     <View className="media-image">
@@ -185,7 +185,7 @@ const Discover = () => {
                                                                 if (index < 3) {
                                                                     return (
                                                                         <View className="item-image" key={index}>
-                                                                            <Image
+                                                                            <Image className="taro-image"
                                                                                 src={imageItem.image_path}
                                                                                 mode="aspectFill"
                                                                                 onClick={() => handleImagePreview(item.fangHouseCircleImage, imageItem.image_path)}
@@ -203,7 +203,7 @@ const Discover = () => {
                                         </View>
                                         <View className="discover-author">
                                             <View className="author-profile" onClick={() => toChatRoom(item)}>
-                                                <Image src={item.user.avatar} mode="aspectFill" />
+                                                <Image className="taro-image" src={item.user.avatar} mode="aspectFill" />
                                             </View>
                                             <View className="author-name">
                                                 <Text className="name">{item.user.nickname}</Text>

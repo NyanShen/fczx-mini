@@ -125,7 +125,7 @@ const HouseManageSale = () => {
                 list.map((item: any, index: number) => (
                     <View key={index} className="house-list-item">
                         <View className="item-image">
-                            <Image src={item.image_path} mode="aspectFill"></Image>
+                            <Image className="taro-image" src={item.image_path} mode="aspectFill"></Image>
                         </View>
                         <View className="item-content">
                             <View className="item-title">{item.title}</View>

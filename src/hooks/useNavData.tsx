@@ -33,31 +33,39 @@ const useNavData = (): INavData => {
     useEffect(function () {
         const { statusBarHeight, screenWidth, screenHeight, windowHeight } = Taro.getSystemInfoSync()
         // 获取胶囊信息
-        const { width, height, left, top, right } = Taro.getMenuButtonBoundingClientRect()
-        // 计算标题栏高度
-        const titleBarHeight = height + (top - statusBarHeight) * 2
-        // 计算导航栏高度
-        const appHeaderHeight = statusBarHeight + titleBarHeight
-        //边距，两边的
-        const marginSides = screenWidth - right
-        //标题宽度
-        const titelBarWidth = screenWidth - width - marginSides * 3
-        //去掉导航栏，屏幕剩余的高度
-        const contentHeight = screenHeight - appHeaderHeight
+        if (IS_WEAPP) {
+            const { width, height, left, top, right } = Taro.getMenuButtonBoundingClientRect()
+            // 计算标题栏高度
+            const titleBarHeight = height + (top - statusBarHeight) * 2
+            // 计算导航栏高度
+            const appHeaderHeight = statusBarHeight + titleBarHeight
+            //边距，两边的
+            const marginSides = screenWidth - right
+            //标题宽度
+            const titelBarWidth = screenWidth - width - marginSides * 3
+            //去掉导航栏，屏幕剩余的高度
+            const contentHeight = screenHeight - appHeaderHeight
 
-        setNavData({
-            statusBarHeight: statusBarHeight, //状态栏高度
-            titleBarHeight: titleBarHeight,  //标题栏高度
-            titelBarWidth: titelBarWidth,  //标题栏宽度
-            appHeaderHeight: appHeaderHeight, //整个导航栏高度
-            marginSides: marginSides, //侧边距
-            capsuleWidth: width, //胶囊宽度
-            capsuleHeight: height, //胶囊高度
-            capsuleLeft: left,
-            contentHeight: contentHeight,
-            screenHeight: screenHeight,
-            windowHeight: windowHeight,
-        })
+            setNavData({
+                statusBarHeight: statusBarHeight, //状态栏高度
+                titleBarHeight: titleBarHeight,  //标题栏高度
+                titelBarWidth: titelBarWidth,  //标题栏宽度
+                appHeaderHeight: appHeaderHeight, //整个导航栏高度
+                marginSides: marginSides, //侧边距
+                capsuleWidth: width, //胶囊宽度
+                capsuleHeight: height, //胶囊高度
+                capsuleLeft: left,
+                contentHeight: contentHeight,
+                screenHeight: screenHeight,
+                windowHeight: windowHeight,
+            })
+        } else {
+            setNavData({
+                ...navData,
+                contentHeight: screenHeight
+            })
+        }
+
     }, [])
     return navData
 }

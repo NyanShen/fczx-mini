@@ -220,7 +220,7 @@ const ReleaseDynamic = () => {
                             media.type === 'image' &&
                             media.list.map((item: any, index: number) => (
                                 <View className="media-item" key={index} onClick={() => handleImageClick(index)}>
-                                    <Image src={item.image_path} mode="aspectFill" />
+                                    <Image className="taro-image" src={item.image_path} mode="aspectFill" />
                                     {item.is_face === '0' &&
                                         <View className="media-statement">
                                             <View className="media-mask"></View>
@@ -234,7 +234,7 @@ const ReleaseDynamic = () => {
                         {
                             media.type === 'video' &&
                             <View className="media-item">
-                                <Image src={media.list[0].face_path} mode="aspectFill" />
+                                <Image className="taro-image" src={media.list[0].face_path} mode="aspectFill" />
                                 <Text className="iconfont iconvideo"></Text>
                                 <Text className="iconfont iconclear" onClick={() => deleteMediaItem(0)}></Text>
                             </View>

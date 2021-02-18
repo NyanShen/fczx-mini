@@ -69,7 +69,7 @@ const User = () => {
           <View className="header-bg"></View>
           <View className="user-item user-login" onClick={() => toUserModule('profile')}>
             <View className="login-photo">
-              <Image className="login-photo-image" src={user.avatar} />
+              <Image className="taro-image" className="login-photo-image" src={user.avatar} />
             </View>
             {
               user.username ?

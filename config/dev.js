@@ -17,7 +17,7 @@ module.exports = {
       open: false,
       proxy: {
         '/api/': {
-          target: "https://api.fczx.com",
+          target: 'https://api.fczx.com',
           ws: true, //开启websoket
           pathRewrite: {
             '^/api/': '/'
@@ -25,7 +25,7 @@ module.exports = {
           changeOrigin: true
         },
         '/areaapi/': {
-          target: "https://areaapi.fczx.com",
+          target: 'https://areaapi.fczx.com',
           pathRewrite: {
             '^/areaapi/': '/'
           },

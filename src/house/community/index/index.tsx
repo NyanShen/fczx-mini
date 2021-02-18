@@ -151,7 +151,7 @@ const CommunityIndex = () => {
                 itemId={video.id}
                 onClick={() => toHouseVideo(video)}
             >
-                <Image src={video.image_path}></Image>
+                <Image className="taro-image" src={video.image_path}></Image>
                 <Text className="icon-vedio"></Text>
             </SwiperItem>
         )
@@ -184,7 +184,7 @@ const CommunityIndex = () => {
                 >
                     {communityData.imagesData.video && renderVideo(communityData.imagesData.video)}
                     <SwiperItem itemId={imageId} onClick={() => toHouseModule('album')}>
-                        <Image src={communityData.image_path}></Image>
+                        <Image className="taro-image" src={communityData.image_path}></Image>
                     </SwiperItem>
                 </Swiper>
                 <View className="album-count">共{communityData.imagesData.imageCount}张</View>
@@ -272,7 +272,7 @@ const CommunityIndex = () => {
                     </View>
                     <View className="surround-wrapper">
                         <View className="map">
-                            <Image className="map-image" src={communityData.static_map} mode="center"></Image>
+                            <Image className="taro-image" className="map-image" src={communityData.static_map} mode="center"></Image>
                             <View className="map-label">
                                 <View className="text">{communityData.title}</View>
                                 <View className="iconfont iconmap"></View>

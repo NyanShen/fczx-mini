@@ -53,12 +53,12 @@ const Activity = () => {
     return (
         <View className="activity" style={{ backgroundColor: mainColor }}>
             <View className="activity-photo">
-                <Image src="" mode="aspectFill" />
+                <Image className="taro-image" src="" mode="aspectFill" />
             </View>
             <View className="activity-content">
                 <View className="activity-item activity-main">
                     <View className="main-header">
-                        <Image src="" mode="aspectFill" />
+                        <Image className="taro-image" src="" mode="aspectFill" />
                         <View className="main-text">
                             <Text className="title" style={{ color: titleColor }}>您正在参加助力赢好礼活动</Text>
                             <Text className="subtitle">参加楼盘的助力活动</Text>

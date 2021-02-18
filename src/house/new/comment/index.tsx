@@ -117,7 +117,7 @@ const HouseComment = () => {
                         commentList.map((item: any, index: number) => (
                             <View key={index} className="comment-item">
                                 <View className="user-photo">
-                                    <Image src={item.user.avatar}></Image>
+                                    <Image className="taro-image" src={item.user.avatar}></Image>
                                 </View>
                                 <View className="comment-text">
                                     <View className="name">{item.user.nickname}</View>
@@ -125,7 +125,7 @@ const HouseComment = () => {
                                     {
                                         item.image_path &&
                                         <View className="comment-image">
-                                            <Image
+                                            <Image className="taro-image"
                                                 src={item.image_path}
                                                 mode="aspectFill"
                                                 onClick={() => handleViewImage(item.image_path)}

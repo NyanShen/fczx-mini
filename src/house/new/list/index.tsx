@@ -634,7 +634,7 @@ const NewHouse = () => {
                                 <View key={index} className="house-list-li">
                                     <View className="house-content" onClick={() => handleHouseItemClick(item)}>
                                         <View className="house-image">
-                                            <Image src={item.image_path} mode="aspectFill"></Image>
+                                            <Image className="taro-image" src={item.image_path} mode="aspectFill"></Image>
                                         </View>
                                         <View className="house-text">
                                             <View className="text-item title mb8">

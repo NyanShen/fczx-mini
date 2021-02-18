@@ -56,7 +56,7 @@ const ConsultantCheckStatus = () => {
             <View className="check-content">
                 <View className="check-flex">
                     <View className="check-image">
-                        <Image src={user_check} mode="aspectFill" />
+                        <Image className="taro-image" src={user_check} mode="aspectFill" />
                     </View>
                     <View className="check-title">{checkStatus.title}</View>
                     <View className="check-text">{checkStatus.text}</View>

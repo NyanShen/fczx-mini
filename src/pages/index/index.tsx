@@ -282,7 +282,7 @@ const Index = () => {
             {
               homeData['ad-rotation-top'].map((item: any, index: number) => (
                 <SwiperItem key={index} className="swiper-item">
-                  <Image src={item.image_path} mode="aspectFill"></Image>
+                  <Image className="taro-image" src={item.image_path} mode="aspectFill"></Image>
                 </SwiperItem>
               ))
             }
@@ -311,7 +311,7 @@ const Index = () => {
                     return (
                       <View className="index-menu-item" key={childIndex} onClick={() => handleMenuClick(childItem.path)}>
                         <View className="index-menu-icon">
-                          <Image src={childItem.icon}></Image>
+                          <Image className="taro-image" src={childItem.icon} mode="aspectFill"></Image>
                         </View>
                         <View className="index-menu-name">
                           <Text>{childItem.name}</Text>
@@ -367,7 +367,7 @@ const Index = () => {
                 <View key={item.id} className="house-list-li">
                   <View className="house-content" onClick={() => toHouseItem(item, 'new')}>
                     <View className="house-image">
-                      <Image src={item.image_path} mode="aspectFill"></Image>
+                      <Image className="taro-image" src={item.image_path} mode="aspectFill"></Image>
                     </View>
                     <View className="house-text">
                       <View className="text-item title mb8">
@@ -422,7 +422,7 @@ const Index = () => {
                 <View key={index} className="house-list-li">
                   <View className="house-content" onClick={() => toHouseItem(item, 'esf')}>
                     <View className="house-image">
-                      <Image src={item.image_path} mode="aspectFill"></Image>
+                      <Image className="taro-image" src={item.image_path} mode="aspectFill"></Image>
                     </View>
                     <View className="house-text">
                       <View className="text-item title row2">

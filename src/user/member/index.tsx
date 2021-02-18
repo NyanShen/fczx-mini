@@ -57,7 +57,7 @@ const Member = () => {
                 <View className="member-header">
                     <View className="member-user">
                         <View className="user-photo">
-                            <Image src={params.avatar} />
+                            <Image className="taro-image" src={params.avatar} />
                         </View>
                         <View className="user-text">
                             <View className="name">{params.nickname || params.username}</View>

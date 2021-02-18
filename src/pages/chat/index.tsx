@@ -127,7 +127,7 @@ const Chat = () => {
       return chatDialog.map((item: any, index: number) => (
         <View key={index} className="chat-item" onClick={() => toChatRoom(item)}>
           <View className="item-photo">
-            <Image src={item.user.avatar} mode="aspectFill"></Image>
+            <Image className="taro-image" src={item.user.avatar} mode="aspectFill"></Image>
             {
               item.status == '1' && item.to_user_id == user.id &&
               <View className="item-dot"></View>
@@ -159,7 +159,7 @@ const Chat = () => {
         user && user.is_subscribe_wx != 1 && !is_subscribe_wx &&
         <View className="official">
           <View className="official-photo">
-            <Image src={logo} mode="aspectFill"></Image>
+            <Image className="taro-image" src={logo} mode="aspectFill"></Image>
           </View>
           <View className="official-context">
             <View className="title">房产在线云</View>

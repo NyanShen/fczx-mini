@@ -98,15 +98,15 @@ const HouseConsultant = () => {
                 </View>
                 <View className="consultant-item">
                     <View className="item-image">
-                        <Image src={consultant.user.avatar} mode="aspectFill" />
+                        <Image className="taro-image" src={consultant.user.avatar} mode="aspectFill" />
                         <View className="image-label">头像</View>
                     </View>
                     <View className="item-image">
-                        <Image src={consultant.wx_qrcode_path} mode="aspectFill" />
+                        <Image className="taro-image" src={consultant.wx_qrcode_path} mode="aspectFill" />
                         <View className="image-label">微信二维码</View>
                     </View>
                     <View className="item-image">
-                        <Image src={consultant.work_photo_path} mode="aspectFill" />
+                        <Image className="taro-image" src={consultant.work_photo_path} mode="aspectFill" />
                         <View className="image-label">工作证(名片)</View>
                     </View>
                 </View>

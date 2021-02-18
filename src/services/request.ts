@@ -34,11 +34,11 @@ const topDomain: string = '.fczx.com'
 const uploadFileUrl = `${agreement}api${topDomain}/file/upload`
 const app: any = {}
 app.apiUrl = (uri: string) => {
-    return `${agreement}api${topDomain}${uri}`
+    return `${API_URL}${uri}`
 }
 
 app.areaApiUrl = (uri: string) => {
-    return `${agreement}areaapi${topDomain}${uri}`
+    return `${AREA_API_URL}${uri}`
 }
 
 app.testApiUrl = (uri: string) => {
@@ -59,7 +59,7 @@ app.setLocation = (callback: (any) => void) => {
     if (count > 0) {
         return
     }
-    if (process.env.TARO_ENV === 'h5') {
+    if (IS_H5) {
         toCityList()
         return 
     }

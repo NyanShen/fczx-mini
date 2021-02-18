@@ -136,7 +136,7 @@ const AlbumList = () => {
                                                 onClick={() => handleImageClick(item, imageIndex)}
                                             >
                                                 {item.type == '2' && <Text className="icon-vedio"></Text>}
-                                                <Image src={imageItem.image_path} mode="aspectFill"></Image>
+                                                <Image className="taro-image" src={imageItem.image_path} mode="aspectFill"></Image>
                                             </View>
                                         ))
                                     }

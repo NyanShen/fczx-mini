@@ -97,7 +97,7 @@ const SalePhoto = () => {
                 <View className="item-image" onClick={() => setShow(true)}>
                     {
                         findFaceImage() ?
-                            <Image src={findFaceImage()} /> :
+                            <Image className="taro-image" src={findFaceImage()} /> :
                             <Text className="iconfont iconaddphoto"></Text>
                     }
                 </View>
@@ -116,7 +116,7 @@ const SalePhoto = () => {
                         {
                             images.map((item: IImage, index: number) => (
                                 <View key={index} className="item-image">
-                                    <Image
+                                    <Image className="taro-image"
                                         src={item.image_path}
                                         mode="aspectFill"
                                         onClick={() => handlePreviewImage(item.image_path)}
@@ -152,7 +152,7 @@ const SalePhoto = () => {
                         {
                             images.map((item: IImage, index: number) => (
                                 <View key={index} className="item-image">
-                                    <Image
+                                    <Image className="taro-image"
                                         src={item.image_path}
                                         mode="aspectFill"
                                         onClick={() => handleFaceImage(index)}

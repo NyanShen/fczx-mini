@@ -152,14 +152,14 @@ const HouseDynamic = () => {
                                     {
                                         item.video_path ?
                                             <View className="media-video" onClick={() => toHouseVideo(item.face_path, item.video_path)}>
-                                                <Image src={item.face_path} mode="aspectFill" />
+                                                <Image className="taro-image" src={item.face_path} mode="aspectFill" />
                                                 <Text className="iconfont iconvideo"></Text>
                                             </View> :
                                             <View className="media-image">
                                                 {
                                                     item.fangHouseCircleImage.map((imageItem: any, index: number) => (
                                                         <View className="item-image" key={index}>
-                                                            <Image
+                                                            <Image className="taro-image"
                                                                 src={imageItem.image_path}
                                                                 mode="aspectFill"
                                                                 onClick={() => handleImagePreview(item.fangHouseCircleImage, imageItem.image_path)}
