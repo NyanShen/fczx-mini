@@ -104,7 +104,8 @@ const RentIndex = () => {
             url: app.areaApiUrl(api.userIsCollect),
             data: {
                 type_id: params.id,
-                type: '3'
+                type: '3',
+                static: true
             }
         }).then((res: any) => {
             setCollect(res)

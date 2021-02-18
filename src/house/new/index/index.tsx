@@ -102,7 +102,8 @@ const House = () => {
             url: app.areaApiUrl(api.userIsCollect),
             data: {
                 type_id: params.id,
-                type: '1'
+                type: '1',
+                static: true
             }
         }).then((res: any) => {
             setCollect(res)

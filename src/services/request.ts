@@ -32,7 +32,7 @@ const toCityList = () => {
 const agreement: string = 'https://'
 const topDomain: string = '.fczx.com'
 const uploadFileUrl = `${agreement}api${topDomain}/file/upload`
-const app: any = {};
+const app: any = {}
 app.apiUrl = (uri: string) => {
     return `${agreement}api${topDomain}${uri}`
 }
@@ -58,6 +58,10 @@ app.randCode = (len: number) => {
 app.setLocation = (callback: (any) => void) => {
     if (count > 0) {
         return
+    }
+    if (process.env.TARO_ENV === 'h5') {
+        toCityList()
+        return 
     }
     Taro.getLocation({
         type: 'wgs84',
@@ -118,9 +122,11 @@ app.request = (params: any, { loading = true, toast = true }: any = {}) => {
             success: function ({ data }: any) {
                 if (data.status === 401) {
                     eventCenter.trigger('logout')
-                    Taro.redirectTo({
-                        url: `/login/index?backUrl=${encodeURIComponent(getBackUrl())}`
-                    })
+                    if (!params.data.static) {
+                        Taro.redirectTo({
+                            url: `/login/index?backUrl=${encodeURIComponent(getBackUrl())}`
+                        })
+                    }
                 }
                 if (data.code == 1 && data.message == 'ok') {
                     if (loading) {

@@ -12,8 +12,26 @@ module.exports = {
   },
   h5: {
     devServer: {
-      host: "0.0.0.0",
-      port: 10086
+      host: "www.loubei.com",
+      port: 80,
+      open: false,
+      proxy: {
+        '/api/': {
+          target: "https://api.fczx.com",
+          ws: true, //开启websoket
+          pathRewrite: {
+            '^/api/': '/'
+          },
+          changeOrigin: true
+        },
+        '/areaapi/': {
+          target: "https://areaapi.fczx.com",
+          pathRewrite: {
+            '^/areaapi/': '/'
+          },
+          changeOrigin: true
+        }
+      }
     }
   }
 }

@@ -1,4 +1,9 @@
+const { resolve } = require('dns')
 const path = require('path')
+
+const resolvePath = (pathname) => {
+  return path.resolve(__dirname, '..', pathname)
+}
 
 const config = {
   projectName: 'mini',
@@ -12,8 +17,7 @@ const config = {
   sourceRoot: 'src',
   outputRoot: `dist/${process.env.TARO_ENV}`,
   plugins: [],
-  defineConstants: {
-  },
+  defineConstants: {},
   copy: {
     patterns: [
     ],
@@ -66,18 +70,19 @@ const config = {
     }
   },
   alias: {
-    '@components': path.resolve(__dirname, '..', 'src/components'),
-    '@constants': path.resolve(__dirname, '..', 'src/constants'),
-    '@services': path.resolve(__dirname, '..', 'src/services'),
-    '@hooks': path.resolve(__dirname, '..', 'src/hooks'),
-    '@utils': path.resolve(__dirname, '..', 'src/utils'),
-    '@assets': path.resolve(__dirname, '..', 'src/assets'),
-    '@styles': path.resolve(__dirname, '..', 'src/styles'),
-    '@pages': path.resolve(__dirname, '..', 'src/pages'),
-    '@house': path.resolve(__dirname, '..', 'src/house'),
+    '@': resolvePath('src'),
+    '@components': resolvePath('src/components'),
+    '@constants': resolvePath('src/constants'),
+    '@services': resolvePath('src/services'),
+    '@hooks': resolvePath('src/hooks'),
+    '@utils': resolvePath('src/utils'),
+    '@assets': resolvePath('src/assets'),
+    '@styles': resolvePath('src/styles'),
+    '@pages': resolvePath('src/pages'),
+    '@house': resolvePath('src/house'),
   },
   sass: {
-    resource: path.resolve(__dirname, '..', 'src/styles/variable.scss')
+    resource: resolvePath('src/styles/variable.scss')
   }
 }
 

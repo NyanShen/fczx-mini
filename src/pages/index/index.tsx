@@ -65,11 +65,11 @@ const house_menus = [
     name: '热门楼盘',
   },
   {
-    name: '精选楼盘',
+    name: '热门团购',
     path: `${housePath}?is_recommend=1`
   },
   {
-    name: '看房团',
+    name: '组队看房',
     path: `/house/group/index`
   },
   {

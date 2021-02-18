@@ -86,7 +86,8 @@ const esfHouse = () => {
             url: app.areaApiUrl(api.userIsCollect),
             data: {
                 type_id: params.id,
-                type: '2'
+                type: '2',
+                static: true
             }
         }).then((res: any) => {
             setCollect(res)
