@@ -24,6 +24,7 @@ import {
     findTarget,
     fetchCondition
 } from './index.util'
+import NavBar from '@/components/navbar'
 import '@styles/common/house.scss'
 import '@styles/common/search-tab.scss'
 import './index.scss'
@@ -537,7 +538,8 @@ const NewHouse = () => {
 
     return (
         <View className="newhouse">
-            <View className="fixed" style={{ top: 0 }}>
+            <NavBar title="楼盘列表" />
+            <View className="fixed">
                 <View className="newhouse-header view-content">
                     <View className="newhouse-search" onClick={handleSearchClick}>
                         <Text className="iconfont iconsearch"></Text>

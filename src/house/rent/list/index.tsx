@@ -7,10 +7,11 @@ import api from '@services/api'
 import app from '@services/request'
 import useNavData from '@hooks/useNavData'
 import { IPage, INIT_PAGE, getTotalPage } from '@utils/page'
+import { PROJECT_NAME } from '@constants/global'
+import NavBar from '@/components/navbar'
 import '@styles/common/house.scss'
 import '@styles/common/search-tab.scss'
 import './index.scss'
-import { PROJECT_NAME } from '@constants/global'
 
 interface IFilter {
     id: string
@@ -305,7 +306,8 @@ const RentList = () => {
 
     return (
         <View className="rent">
-            <View className="fixed" style={{ top: 0 }}>
+            <NavBar title="租房列表" />
+            <View className="fixed">
                 <View className="rent-header view-content">
                     <View className="rent-search" onClick={handleSearchClick}>
                         <Text className="iconfont iconsearch"></Text>

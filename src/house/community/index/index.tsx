@@ -178,7 +178,7 @@ const CommunityIndex = () => {
         <View className="community">
             <View className="house-album">
                 <Swiper
-                    style={{ height: '225px' }}
+                    style={{ height: '250px' }}
                     current={albumSwiper.swiperIndex}
                     onChange={onSwiperChange}
                 >

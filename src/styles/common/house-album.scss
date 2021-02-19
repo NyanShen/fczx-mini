@@ -3,7 +3,7 @@
 
     .taro-image {
         width: 100%;
-        height: 450px;
+        height: 500px;
     }
 
     .icon-vedio {
@@ -29,14 +29,16 @@
         border-radius: 15px;
         color: #fff;
         background-color: rgba($color: #000000, $alpha: 0.6);
+        z-index: 10;
     }
 
     .album-text {
         position: absolute;
         left: 50%;
-        bottom: 30px;
+        bottom: 20px;
         transform: translateX(-50%);
         color: #333;
+        z-index: 10;
 
         &-item {
             font-size: 24px;
@@ -44,6 +46,7 @@
             background-color: rgba($color: #ffffff, $alpha: 0.8);
             border-radius: 15px;
             margin: 0 10px;
+            display: inline-block;
         }
 
         &-actived {

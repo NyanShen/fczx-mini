@@ -8,6 +8,7 @@ import useNavData from '@hooks/useNavData'
 import { PRICE_TYPE } from '@constants/house'
 import { formatTimestamp } from '@utils/index'
 import './index.scss'
+import NavBar from '@/components/navbar'
 
 const no_bus = 'https://static.fczx.com/www/assets/mini/data_no_bus.png'
 
@@ -65,6 +66,7 @@ const HouseGroup = () => {
     }
     return (
         <View className="kft">
+            <NavBar title="看房团"/>
             <View className="kft-content">
                 {
                     groupData.length > 0 ?

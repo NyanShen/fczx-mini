@@ -78,7 +78,10 @@ const config = {
     router: {
       mode: 'browser', // 或者是 'hash会有#号'
       customRoutes: {
-        '/pages/index/index': '/index'
+        '/pages/index/index': '/index',
+        '/pages/user/index': '/user',
+        '/pages/chat/index': '/chat',
+        '/pages/discover/index': '/discover',
       }
     }
   },

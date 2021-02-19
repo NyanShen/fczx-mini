@@ -9,6 +9,7 @@ import useNavData from '@hooks/useNavData'
 import { formatTimestamp } from '@utils/index'
 import { PROJECT_NAME } from '@constants/global'
 import { getTotalPage, INIT_PAGE, IPage } from '@utils/page'
+import NavBar from '@/components/navbar'
 import './index.scss'
 
 interface IParam {
@@ -96,6 +97,7 @@ const NewsList = () => {
 
     return (
         <View className="news">
+            <NavBar title="资讯列表" />
             <View className="news-cate">
                 <ScrollView scrollX>
                     {

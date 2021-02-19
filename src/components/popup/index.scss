@@ -78,6 +78,9 @@
                         height: 100%;
                         padding-left: 30px;
                         color: $text-color;
+                        input {
+                            height: 100%;
+                        }
                     }
 
                     .btn-code {
@@ -94,6 +97,7 @@
                     display: block;
                     height: 80px;
                     line-height: 80px;
+                    font-size: $font-32;
                     text-align: center;
                     border-radius: 5px;
                     color: $white;

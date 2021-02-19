@@ -23,6 +23,7 @@ import {
     findTarget,
     fetchCondition
 } from './index.util'
+import NavBar from '@/components/navbar'
 
 import '@styles/common/house.scss'
 import '@styles/common/search-tab.scss'
@@ -238,7 +239,7 @@ const CommunityList = () => {
         })
     }
 
-    
+
     const handleTabReset = () => {
         setSelected({
             ...selected,
@@ -382,7 +383,8 @@ const CommunityList = () => {
 
     return (
         <View className="community">
-            <View className="fixed" style={{ top: 0 }}>
+            <NavBar title="小区列表" />
+            <View className="fixed">
                 <View className="community-header view-content">
                     <View className="community-search" onClick={handleSearchClick}>
                         <Text className="iconfont iconsearch"></Text>

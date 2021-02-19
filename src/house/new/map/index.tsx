@@ -445,7 +445,7 @@ const HouseMap = () => {
 
     return (
         <View className="house-map">
-            <View className="fixed" style={{ top: 0 }}>
+            <View className="fixed">
                 <View className="search-tab">
                     {
                         tabs.map((item: any, index: number) => {

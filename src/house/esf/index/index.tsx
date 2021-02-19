@@ -192,7 +192,7 @@ const esfHouse = () => {
             <ScrollView style={{ maxHeight: `${contentHeight - 55}px` }} scrollY>
                 <View className="house-album">
                     <Swiper
-                        style={{ height: '225px' }}
+                        style={{ height: '250px' }}
                         current={album.currentIdex}
                         onChange={onSwiperChange}
                     >

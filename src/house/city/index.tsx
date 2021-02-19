@@ -6,6 +6,7 @@ import api from '@services/api'
 import app from '@services/request'
 import storage from '@utils/storage'
 import useNavData from '@hooks/useNavData'
+import NavBar from '@/components/navbar'
 import './index.scss'
 
 const INIT_VIEW = 'hot'
@@ -58,6 +59,7 @@ const City = () => {
 
     return (
         <View className="city">
+            <NavBar title="切换城市" />
             {/* <View className="fixd city-search">
                 <View className="search-content">
                     <Text className="iconfont iconsearch"></Text>
@@ -85,7 +87,7 @@ const City = () => {
                     }
                 </View>
             </ScrollView>
-            <View className="city-order" style={{ top: 0, height: contentHeight }}>
+            <View className="city-order" style={{ top: 0, height: `${contentHeight}px` }}>
                 <View className="city-order-list">
                     <View
                         className="order-item"

@@ -13,6 +13,7 @@ import Popup from '@components/popup/index'
 import SandCommon from '@house/new/sand/common'
 import { getStaticMap } from '@utils/map'
 import { SALE_STATUS, PRICE_TYPE, SURROUND_TABS, ISurroundTab, INIT_SURROUND_TAB } from '@constants/house'
+import NavBar from '@/components/navbar'
 
 import '@styles/common/house.scss'
 import '@styles/common/house-album.scss'
@@ -136,6 +137,9 @@ const House = () => {
     }
 
     const switchAlbum = (albumId: string, swiperIndex: number) => {
+        if (albumSwiper.albumId === albumId) {
+            return
+        }
         setAlbumSwiper({
             albumId,
             swiperIndex
@@ -524,10 +528,11 @@ const House = () => {
 
     return (
         <View className="house">
+            <NavBar title={houseData.title} primary={true}/>
             <ScrollView style={{ maxHeight: `${contentHeight - 55}px`, backgroundColor: '#f7f7f7' }} scrollY>
                 <View className="house-album">
                     <Swiper
-                        style={{ height: '225px' }}
+                        style={{ height: '250px' }}
                         current={albumSwiper.swiperIndex}
                         onChange={onSwiperChange}
                     >
