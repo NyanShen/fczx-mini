@@ -194,7 +194,7 @@ const RentIndex = () => {
 
     return (
         <View className="rent">
-            <ScrollView style={{ maxHeight: contentHeight - 55 }} scrollY>
+            <ScrollView style={{ maxHeight: `${contentHeight - 55}px` }} scrollY>
                 <View className="house-album">
                     <Swiper
                         style={{ height: '225px' }}
@@ -330,7 +330,7 @@ const RentIndex = () => {
                             </View>
                         </View>
                         <View className="map" onClick={toLocation}>
-                            <Image className="taro-image" className="map-image" src={rentData.static_map} mode="center"></Image>
+                            <Image className="taro-image" src={rentData.static_map} mode="center"></Image>
                             <View className="map-label">
                                 <View className="text">{rentData.fangHouse.title}</View>
                                 <View className="iconfont iconmap"></View>
@@ -382,7 +382,7 @@ const RentIndex = () => {
                             {
                                 rentData.rentImage.map((item: any, index: number) => (
                                     <SwiperItem key={index}>
-                                        <Image className="taro-image" className="swiper-image" src={item.image_path} mode='widthFix'></Image>
+                                        <Image className="taro-image" src={item.image_path} mode='widthFix'></Image>
                                         <View className="swiper-text"></View>
                                     </SwiperItem>
                                 ))

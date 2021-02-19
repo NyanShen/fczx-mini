@@ -213,7 +213,7 @@ const Collect = () => {
                         <ScrollView
                             className="house-list"
                             scrollY
-                            style={{ maxHeight: contentHeight }}
+                            style={{ maxHeight: `${contentHeight}px` }}
                             lowerThreshold={40}
                             onScrollToLower={handleScrollToLower}
                         >

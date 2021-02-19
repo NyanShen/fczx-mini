@@ -74,6 +74,12 @@ const config = {
           generateScopedName: '[name]__[local]___[hash:base64:5]'
         }
       }
+    },
+    router: {
+      mode: 'browser', // 或者是 'hash会有#号'
+      customRoutes: {
+        '/pages/index/index': '/index'
+      }
     }
   },
   alias: {

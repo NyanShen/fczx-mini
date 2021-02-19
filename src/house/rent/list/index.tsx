@@ -235,7 +235,7 @@ const RentList = () => {
 
     const renderSplitItem = (key: string) => {
         return (
-            <ScrollView className="split-list flex-item" scrollY style={{ height: scrollHeight }}>
+            <ScrollView className="split-list flex-item" scrollY style={{ maxHeight: `${scrollHeight}px` }}>
                 <View
                     className={classnames("split-item", selected[key].id === default_value.id && 'actived')}
                     onClick={() => handleSingleClick(key, default_value)}
@@ -356,7 +356,7 @@ const RentList = () => {
                     </View>
                 </View>
                 <View className={classnames('search-container', 'search-multi-container', tab === 'more' && 'actived')}>
-                    <ScrollView className="search-content search-content-scroll" scrollY style={{ maxHeight: scrollMoreHeight }}>
+                    <ScrollView className="search-content search-content-scroll" scrollY style={{ maxHeight: `${scrollMoreHeight}px` }}>
                         {renderMultiItem('rentType', '租房类型')}
                         {renderMultiItem('propertyType', '建筑类型')}
                         {renderMultiItem('renovationStatus', '装修状况')}
@@ -374,7 +374,7 @@ const RentList = () => {
                 <ScrollView
                     className="house-list"
                     scrollY
-                    style={{ maxHeight: contentHeight - 108 }}
+                    style={{ maxHeight: `${contentHeight - 108}px` }}
                     lowerThreshold={30}
                     onScrollToLower={handleScrollToLower}
                 >

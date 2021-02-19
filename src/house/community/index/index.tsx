@@ -272,7 +272,7 @@ const CommunityIndex = () => {
                     </View>
                     <View className="surround-wrapper">
                         <View className="map">
-                            <Image className="taro-image" className="map-image" src={communityData.static_map} mode="center"></Image>
+                            <Image className="taro-image" src={communityData.static_map} mode="center"></Image>
                             <View className="map-label">
                                 <View className="text">{communityData.title}</View>
                                 <View className="iconfont iconmap"></View>

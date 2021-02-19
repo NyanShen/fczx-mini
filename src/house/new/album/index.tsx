@@ -119,7 +119,7 @@ const AlbumList = () => {
                     scrollY
                     scrollIntoView={currentView}
                     scrollWithAnimation={true}
-                    style={{ maxHeight: contentHeight - fixedHeight }}
+                    style={{ maxHeight: `${contentHeight - fixedHeight}px` }}
                 >
                     {
                         albumData.length > 0 &&

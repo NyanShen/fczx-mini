@@ -781,7 +781,7 @@ const House = () => {
                     <View className="house-item-content surround">
                         <View className="surround-wrapper">
                             <View className="map">
-                                <Image className="taro-image" className="map-image" src={houseData.static_map} mode="center"></Image>
+                                <Image className="taro-image" src={houseData.static_map} mode="center"></Image>
                                 <View className="map-label">
                                     <View className="text">{houseData.title}</View>
                                     <View className="iconfont iconmap"></View>

@@ -339,7 +339,7 @@ const Calculator = () => {
         <View className="calculator">
             <ScrollView
                 scrollY
-                style={{ maxHeight: contentHeight }}
+                style={{ maxHeight: `${contentHeight}px` }}
                 scrollIntoView={resultShow.intoView}
             >
                 <View className="calculator-cate">

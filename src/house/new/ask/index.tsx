@@ -83,7 +83,7 @@ const HouseAsk = () => {
                 <ScrollView
                     className="ask-list"
                     scrollY
-                    style={{ height: contentHeight - 80 }}
+                    style={{ maxHeight: `${contentHeight - 80}px` }}
                     lowerThreshold={40}
                     onScrollToLower={handleScrollToLower}
                 >

@@ -108,6 +108,10 @@
                     background-color: $bg2-color;
                     color: $text-color;
 
+                    &:nth-child(4n) {
+                        margin-right: 0;
+                    }
+
                     &.actived {
                         color: $primary-color;
                         border-color: $primary-color;

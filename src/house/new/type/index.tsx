@@ -117,7 +117,7 @@ const HouseType = () => {
                 <ScrollView
                     scrollY
                     className="type-list"
-                    style={{ maxHeight: contentHeight - fixedHeight }}
+                    style={{ maxHeight: `${contentHeight - fixedHeight}px` }}
                     lowerThreshold={40}
                     onScrollToLower={handleScrollToLower}
                 >

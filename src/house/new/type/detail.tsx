@@ -109,7 +109,7 @@ const HouseTypeDetail = () => {
             <View className="detail-wrapper">
                 <ScrollView
                     scrollY
-                    style={{ maxHeight: contentHeight - bottomHeight }}
+                    style={{ maxHeight: `${contentHeight - bottomHeight}px` }}
                 >
                     <View className="detail-image" onClick={() => handlePreviewImage(houseType.image_path)}>
                         <Image className="taro-image" src={houseType.image_path} mode="aspectFit"></Image>

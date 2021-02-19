@@ -184,7 +184,7 @@ const Search = (props: ISearchProps) => {
         </View>
         <Text className="search-cancel" onClick={handleCancel}>取消</Text>
       </View>
-      <ScrollView scrollY style={{ maxHeight: contentHeight - 50 }}>
+      <ScrollView scrollY style={{ maxHeight: `${contentHeight - 50}px` }}>
         {searchValue ?
           <View className="search-matches">
             <View className="match-header" onClick={handleConfirm}>

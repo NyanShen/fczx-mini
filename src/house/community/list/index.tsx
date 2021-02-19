@@ -285,7 +285,7 @@ const CommunityList = () => {
         const target = find(subTabs, { actived: true })
         const key = target ? target.type : tab.keys[0]
         return (
-            <ScrollView className="split-list flex-item" scrollY style={{ height: scrollHeight }}>
+            <ScrollView className="split-list flex-item" scrollY style={{ maxHeight: `${scrollHeight}px` }}>
                 <View
                     className={classnames("split-item", selected[key].id === default_value.id && 'actived')}
                     onClick={() => handleSingleClick(key, default_value)}
@@ -314,7 +314,7 @@ const CommunityList = () => {
         const key = target.subType
         if (subCondition[key]) {
             return (
-                <ScrollView className="split-list flex-item" scrollY style={{ height: scrollHeight }}>
+                <ScrollView className="split-list flex-item" scrollY style={{ maxHeight: `${scrollHeight}px` }}>
                     <View
                         className={classnames("split-item", findTarget(selected[key], default_value) && 'actived')}
                         onClick={() => handleSingleClick(key, default_value)}
@@ -428,7 +428,7 @@ const CommunityList = () => {
                 <ScrollView
                     className="house-list"
                     scrollY
-                    style={{ maxHeight: contentHeight - 108 }}
+                    style={{ maxHeight: `${contentHeight - 108}px` }}
                     lowerThreshold={30}
                     onScrollToLower={handleScrollToLower}
                 >

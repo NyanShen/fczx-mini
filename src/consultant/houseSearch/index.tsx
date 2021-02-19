@@ -88,7 +88,7 @@ const SearchHouse = () => {
         </View>
         <Text className="search-cancel" onClick={handleCancel}>取消</Text>
       </View>
-      <ScrollView scrollY style={{ maxHeight: contentHeight - 50 }}>
+      <ScrollView scrollY style={{ maxHeight: `${contentHeight - 50}px` }}>
         <View className="search-matches">
           {
             matcheList.map((item: any, index: number) => {

@@ -70,7 +70,7 @@ const HouseGroup = () => {
                     groupData.length > 0 ?
                         <ScrollView
                             className="kft-list"
-                            style={{ maxHeight: contentHeight }}
+                            style={{ maxHeight: `${contentHeight}px` }}
                             scrollY>
                             {
                                 groupData.map((item: any, index: number) => {

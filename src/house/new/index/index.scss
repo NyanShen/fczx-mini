@@ -21,6 +21,7 @@
                 }
             }
             .address {
+                font-size: $font-32;
                 margin-top: 16px;
                 .iconaddress {
                     margin-left: 30px;
@@ -36,6 +37,7 @@
                 line-height: 1;
                 background-color: $white;
                 padding-right: 0;
+                margin-top: 0;
                 &::after {
                     border: none;
                 }

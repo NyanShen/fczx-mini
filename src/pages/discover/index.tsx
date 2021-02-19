@@ -142,7 +142,7 @@ const Discover = () => {
                         <ScrollView
                             className="discover-list"
                             scrollY
-                            style={{ maxHeight: windowHeight }}
+                            style={{ maxHeight: `${windowHeight}px` }}
                             lowerThreshold={40}
                             onScrollToLower={handleScrollToLower}
                             refresherEnabled={true}

@@ -133,7 +133,7 @@ const HouseDynamic = () => {
                 <ScrollView
                     className="dynamic-list"
                     scrollY
-                    style={{ height: contentHeight - 60 }}
+                    style={{ height: `${contentHeight - 60}px` }}
                     lowerThreshold={40}
                     onScrollToLower={handleScrollToLower}
                 >

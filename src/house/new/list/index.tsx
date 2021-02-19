@@ -369,7 +369,7 @@ const NewHouse = () => {
         const target = find(subTabs, { actived: true })
         const key = target ? target.type : tab.keys[0]
         return (
-            <ScrollView className="split-list flex-item" scrollY style={{ height: scrollHeight }}>
+            <ScrollView className="split-list flex-item" scrollY style={{ maxHeight: `${scrollHeight}px` }}>
                 <View
                     className={classnames("split-item", selected[key].id === default_value.id && 'actived')}
                     onClick={() => handleSingleClick(key, default_value)}
@@ -398,7 +398,7 @@ const NewHouse = () => {
         const key = target.subType
         if (subCondition[key]) {
             return (
-                <ScrollView className="split-list flex-item" scrollY style={{ height: scrollHeight }}>
+                <ScrollView className="split-list flex-item" scrollY style={{ maxHeight: `${scrollHeight}px` }}>
                     <View
                         className={classnames("split-item", findTarget(selected[key], default_value) && 'actived')}
                         onClick={() => handleSingleClick(key, default_value)}
@@ -587,7 +587,7 @@ const NewHouse = () => {
                     </View>
                 </View>
                 <View className={classnames('search-container', 'search-multi-container', tab.type === 'more' && 'actived')}>
-                    <ScrollView className="search-content search-content-scroll" scrollY style={{ maxHeight: scrollMoreHeight }}>
+                    <ScrollView className="search-content search-content-scroll" scrollY style={{ maxHeight: `${scrollMoreHeight}px` }}>
                         {renderMultiItem('propertyType', '建筑类型')}
                         {renderMultiItem('renovationStatus', '装修状况')}
                         {renderMultiItem('saleStatus', '销售状态')}
@@ -603,7 +603,7 @@ const NewHouse = () => {
                 <ScrollView
                     className="house-list"
                     scrollY
-                    style={{ maxHeight: contentHeight - 108 }}
+                    style={{ maxHeight: `${contentHeight - 108}px` }}
                     lowerThreshold={30}
                     onScrollToLower={handleScrollToLower}
                 >

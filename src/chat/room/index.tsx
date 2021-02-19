@@ -460,7 +460,7 @@ const ChatRoom = () => {
                 <ScrollView
                     scrollY
                     className="msg-box"
-                    style={{ maxHeight: contentHeight - 106 }}
+                    style={{ maxHeight: `${contentHeight - 106}px` }}
                     upperThreshold={40}
                     onScrollToUpper={handleScrollToUpper}
                     onClick={() => setAction(INIT_ACTION)}

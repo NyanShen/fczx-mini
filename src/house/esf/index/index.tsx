@@ -189,7 +189,7 @@ const esfHouse = () => {
 
     return (
         <View className="esf">
-            <ScrollView style={{ maxHeight: contentHeight - 55 }} scrollY>
+            <ScrollView style={{ maxHeight: `${contentHeight - 55}px` }} scrollY>
                 <View className="house-album">
                     <Swiper
                         style={{ height: '225px' }}
@@ -349,7 +349,7 @@ const esfHouse = () => {
                             </View>
                         </View>
                         <View className="map" onClick={toLocation}>
-                            <Image className="taro-image" className="map-image" src={esfData.static_map} mode="center"></Image>
+                            <Image className="taro-image" src={esfData.static_map} mode="center"></Image>
                             <View className="map-label">
                                 <View className="text">{esfData.fangHouse.title}</View>
                                 <View className="iconfont iconmap"></View>
@@ -401,7 +401,7 @@ const esfHouse = () => {
                             {
                                 esfData.esfImage.map((item: any, index: number) => (
                                     <SwiperItem key={index}>
-                                        <Image className="taro-image" className="swiper-image" src={item.image_path} mode='widthFix'></Image>
+                                        <Image className="taro-image" src={item.image_path} mode='widthFix'></Image>
                                         <View className="swiper-text"></View>
                                     </SwiperItem>
                                 ))

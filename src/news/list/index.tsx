@@ -112,7 +112,7 @@ const NewsList = () => {
             <View className="news-content">
                 <ScrollView
                     scrollY
-                    style={{ maxHeight: contentHeight - 42 }}
+                    style={{ maxHeight: `${contentHeight - 42}px` }}
                     lowerThreshold={40}
                     onScrollToLower={handleScrollToLower}
                 >

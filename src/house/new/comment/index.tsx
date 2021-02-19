@@ -109,7 +109,7 @@ const HouseComment = () => {
                 <ScrollView
                     className="comment-list"
                     scrollY
-                    style={{ height: contentHeight - 80 }}
+                    style={{ height: `${contentHeight - 80}px` }}
                     lowerThreshold={40}
                     onScrollToLower={handleScrollToLower}
                 >

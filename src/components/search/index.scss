@@ -36,6 +36,9 @@
                 padding-left: 20px;
                 color: $title-color;
                 font-size: 30px;
+                input { // h5 style
+                    height: 100%;
+                }
             }
 
             .iconclear {
