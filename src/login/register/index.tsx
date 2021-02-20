@@ -5,6 +5,7 @@ import classnames from 'classnames'
 
 import api from '@services/api'
 import app from '@services/request'
+import NavBar from '@/components/navbar'
 import { PHONE_PATTERN } from '@constants/pattern'
 import './index.scss'
 
@@ -104,14 +105,13 @@ const Register = () => {
     }
 
     const toLogin = () => {
-        Taro.redirectTo({
-            url: '/login/index'
-        })
+        app.toLogin()
     }
 
 
     return (
         <View className="register">
+            <NavBar title="注册" />
             <View className="register-header">
                 <Text>注册账号</Text>
             </View>

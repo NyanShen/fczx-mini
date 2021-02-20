@@ -147,8 +147,8 @@ const SandCommon = (props: IProps) => {
                     direction="all"
                     animation={false}
                 >
-                    <Image className="taro-image"
-                        className="sand-image"
+                    <Image
+                        className="taro-image"
                         src={sandData.fang_sand_pic}
                         onLoad={handleSandImageLoad}
                     />

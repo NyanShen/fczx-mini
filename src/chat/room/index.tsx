@@ -329,8 +329,8 @@ const ChatRoom = () => {
             case '1':
                 return <Text className={classnames('text', isMine && 'text-primary')} selectable>{chatItem.content}</Text>
             case '2':
-                return <Image className="taro-image"
-                    className="image"
+                return <Image
+                    className="taro-image"
                     src={chatItem.content}
                     mode="widthFix"
                     onClick={() => handleViewImage(chatItem.content)}

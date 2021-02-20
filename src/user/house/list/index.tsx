@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Taro, { getCurrentInstance, getCurrentPages, useDidShow } from '@tarojs/taro'
+import Taro, { getCurrentInstance, getCurrentPages, setNavigationBarTitle, useDidShow, useReady } from '@tarojs/taro'
 import { ScrollView, View, Text, Image } from '@tarojs/components'
 
 import api from '@services/api'
@@ -35,6 +35,10 @@ const HouseManageSale = () => {
     const [page, setPage] = useState<IPage>(INIT_PAGE)
     const [param, setParam] = useState<IParam>(INIT_PARAM)
     const [list, setList] = useState<any[]>([])
+
+    useReady(() => {
+        setNavigationBarTitle({ title: saleType == 'esf' ? '管理出售' : '管理出租' })
+    })
 
     useDidShow(() => {
         const pages: any = getCurrentPages()
@@ -120,48 +124,62 @@ const HouseManageSale = () => {
     }
 
     const renderList = () => (
-        <View className="house-list">
+        <ScrollView
+            scrollY
+            style={{ maxHeight: `${contentHeight}px` }}
+            lowerThreshold={40}
+            onScrollToLower={handleScrollToLower}
+        >
+            <View className="house-list">
+                {
+                    list.map((item: any, index: number) => (
+                        <View key={index} className="house-list-item">
+                            <View className="item-image">
+                                <Image className="taro-image" src={item.image_path} mode="aspectFill"></Image>
+                            </View>
+                            <View className="item-content">
+                                <View className="item-title">{item.title}</View>
+                                <View className="item-text item-text-small">
+                                    <View className="right">
+                                        <Text>{item.room}室{item.office}厅{item.toilet}卫</Text>
+                                        <Text className="line-split"></Text>
+                                        <Text>{item.building_area}m²</Text>
+                                    </View>
+                                </View>
+                                <View className="item-text">
+                                    <View className="right">
+                                        {renderSalePrice(item)}
+                                    </View>
+                                </View>
+                                <View className="item-text item-text-middle">
+                                    <View className="right">
+                                        <Text className="item-city">[{item.city.name}]</Text>
+                                        <Text>{item.area.name}</Text>
+                                        <Text>-</Text>
+                                        <Text>{item.fangHouse.title}</Text>
+                                    </View>
+                                </View>
+                            </View>
+                            <View className="item-action">
+                                <View className="action-item" onClick={() => toHouseSale(item.id)}>
+                                    <View className="btn btn-plain">修改</View>
+                                </View>
+                                <View className="action-item" onClick={() => handleDelete(item.id)}>
+                                    <View className="btn btn-plain">删除</View>
+                                </View>
+                            </View>
+                        </View>
+                    ))
+                }
+            </View>
             {
-                list.map((item: any, index: number) => (
-                    <View key={index} className="house-list-item">
-                        <View className="item-image">
-                            <Image className="taro-image" src={item.image_path} mode="aspectFill"></Image>
-                        </View>
-                        <View className="item-content">
-                            <View className="item-title">{item.title}</View>
-                            <View className="item-text item-text-small">
-                                <View className="right">
-                                    <Text>{item.room}室{item.office}厅{item.toilet}卫</Text>
-                                    <Text className="line-split"></Text>
-                                    <Text>{item.building_area}m²</Text>
-                                </View>
-                            </View>
-                            <View className="item-text">
-                                <View className="right">
-                                    {renderSalePrice(item)}
-                                </View>
-                            </View>
-                            <View className="item-text item-text-middle">
-                                <View className="right">
-                                    <Text className="item-city">[{item.city.name}]</Text>
-                                    <Text>{item.area.name}</Text>
-                                    <Text>-</Text>
-                                    <Text>{item.fangHouse.title}</Text>
-                                </View>
-                            </View>
-                        </View>
-                        <View className="item-action">
-                            <View className="action-item" onClick={() => toHouseSale(item.id)}>
-                                <View className="btn btn-plain">修改</View>
-                            </View>
-                            <View className="action-item" onClick={() => handleDelete(item.id)}>
-                                <View className="btn btn-plain">删除</View>
-                            </View>
-                        </View>
-                    </View>
-                ))
+                showEmpty &&
+                <View className="empty-container">
+                    <Text>没有更多数据了</Text>
+                </View>
             }
-        </View>
+        </ScrollView>
+
     )
 
     const renderEmpty = () => (
@@ -175,20 +193,7 @@ const HouseManageSale = () => {
     return (
         <View className="house-manage">
             <View className="house-content">
-                <ScrollView
-                    scrollY
-                    style={{ maxHeight: `${contentHeight}px` }}
-                    lowerThreshold={40}
-                    onScrollToLower={handleScrollToLower}
-                >
-                    {list.length > 0 ? renderList() : renderEmpty()}
-                    {
-                        showEmpty &&
-                        <View className="empty-container">
-                            <Text>没有更多数据了</Text>
-                        </View>
-                    }
-                </ScrollView>
+                {list.length > 0 ? renderList() : renderEmpty()}
             </View>
         </View>
     )

@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import Taro, { getCurrentInstance, getCurrentPages, useDidShow } from '@tarojs/taro'
+import Taro, { getCurrentInstance, getCurrentPages, setNavigationBarTitle, useDidShow, useReady } from '@tarojs/taro'
 import { View, Text, Input, Textarea, Image, RadioGroup, Label, Radio } from '@tarojs/components'
 import classnames from 'classnames'
 import find from 'lodash/find'
@@ -50,6 +50,10 @@ const HouseSale = () => {
         fangMatching: {}
     })
     const [pickerValue, setPickerValue] = useState<any>(INIT_PICKER_VALUE)
+
+    useReady(() => {
+        setNavigationBarTitle({ title: saleType == 'esf' ? '发布出售' : '发布出租' })
+    })
 
     useDidShow(() => {
         const pages: any = getCurrentPages()

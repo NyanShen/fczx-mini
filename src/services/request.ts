@@ -8,8 +8,12 @@ let count: number = 0
 const getToken = () => storage.getItem('token')
 
 const getBackUrl = () => {
+    let path: string = '/pages/index/index'
     const router: any = getCurrentInstance().router
-    const backUrl = `${router?.path}${toUrlParam(router?.params)}`
+    if (router?.path) {
+        path = router?.path
+    }
+    const backUrl = `${path}${toUrlParam(router?.params)}`
     return backUrl
 }
 
@@ -61,7 +65,7 @@ app.setLocation = (callback: (any) => void) => {
     }
     if (IS_H5) {
         toCityList()
-        return 
+        return
     }
     Taro.getLocation({
         type: 'wgs84',
@@ -85,6 +89,20 @@ app.setLocation = (callback: (any) => void) => {
             toCityList()
         }
     })
+}
+
+app.toLogin = (backUrl: string = '', isTab: string = '', type: string = '') => {
+    let url: string = ''
+    if (IS_H5) {
+        url = `/login/phone/index?backUrl=${encodeURIComponent(backUrl)}&isTab=${isTab}`
+    } else {
+        url = `/login/index?backUrl=${encodeURIComponent(backUrl)}&isTab=${isTab}`
+    }
+    if (type) {
+        Taro.navigateTo({ url })
+    } else {
+        Taro.redirectTo({ url })
+    }
 }
 
 app.request = (params: any, { loading = true, toast = true }: any = {}) => {
@@ -123,10 +141,10 @@ app.request = (params: any, { loading = true, toast = true }: any = {}) => {
                 if (data.status === 401) {
                     eventCenter.trigger('logout')
                     if (!params.data.static) {
-                        Taro.redirectTo({
-                            url: `/login/index?backUrl=${encodeURIComponent(getBackUrl())}`
-                        })
+                        app.toLogin(getBackUrl())
                     }
+                    reject(data)
+                    return
                 }
                 if (data.code == 1 && data.message == 'ok') {
                     if (loading) {
@@ -196,6 +214,59 @@ app.uploadFile = (data: any, callback: (...any) => void) => {
         for (let i = 0; i < data.tempFiles.length; i++) {
             taroUploadFile(data.tempFilePaths[i], callback, data.tempFiles[i])
         }
+    }
+}
+
+
+
+
+//设置cookie
+
+app.setCookie = function (key: string, value: string, expires: number, domain: string, path: string = '/') {
+    let today: any = new Date();
+    today.setTime(today.getTime());
+    if (expires) {
+        expires = expires * 1000 * 60 * 60 * 24;
+    }
+    let expiresDate: any = new Date(today.getTime() + (expires));
+
+    document.cookie = key + "=" + escape(value) +
+        ((expires) ? ";expires=" + expiresDate.toGMTString() : "") +
+        ((path) ? ";path=" + path : "") +
+        ((domain) ? ";domain=" + domain : "");
+}
+
+app.getCookie = function (key) {
+    let allCookies: string[] = document.cookie.split(';');
+    let cookieKey: string = '';
+    let cookieValue: string = '';
+    let tempCookie: string[] = [];
+    let isFound: boolean = false;
+
+    allCookies.forEach(function (item) {
+        tempCookie = item.split('=');
+        cookieKey = tempCookie[0].replace(/^\s+|\s+$/g, '');
+        if (cookieKey == key) {
+            isFound = true;
+            if (tempCookie.length > 1) {
+                cookieValue = unescape(tempCookie[1].replace(/^\s+|\s+$/g, ''));
+            }
+        }
+        cookieKey = '';
+        tempCookie = [];
+    })
+
+    if (!isFound) {
+        return null
+    }
+    return cookieValue
+}
+
+app.deleteCookie = function (key: string, domain: string = 'loubei.com', path: string = '/') {
+    if (app.getCookie(key)) {
+        document.cookie = key + "=" +
+            ((path) ? ";path=" + path : "") +
+            ((domain) ? ";domain=" + domain : "") + ";expires=Thu, 01-Jan-1970 00:00:01 GMT";
     }
 }
 

@@ -185,7 +185,8 @@ const Discover = () => {
                                                                 if (index < 3) {
                                                                     return (
                                                                         <View className="item-image" key={index}>
-                                                                            <Image className="taro-image"
+                                                                            <Image
+                                                                                className="taro-image"
                                                                                 src={imageItem.image_path}
                                                                                 mode="aspectFill"
                                                                                 onClick={() => handleImagePreview(item.fangHouseCircleImage, imageItem.image_path)}

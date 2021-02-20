@@ -7,6 +7,7 @@ import api from '@services/api'
 import app from '@services/request'
 import storage from '@utils/storage'
 import CustomSocket from '@utils/socket'
+import NavBar from '@/components/navbar'
 import { hasLogin } from '@services/login'
 import { PHONE_PATTERN } from '@constants/pattern'
 import './index.scss'
@@ -74,7 +75,7 @@ const LoginPhone = () => {
             }
         }
     }, [loginData, tab])
-    
+
     const handleInput = (e: any, name: string) => {
         const value = e.detail.value;
         setLoginData({
@@ -198,6 +199,7 @@ const LoginPhone = () => {
 
     return (
         <View className="login-phone">
+            <NavBar title="登录" />
             <View className="login-phone-header">
                 {
                     loginTabs.map((item: any, index: number) => (

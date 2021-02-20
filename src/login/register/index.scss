@@ -8,6 +8,7 @@
     &-form {
         width: 90%;
         margin: 0 auto;
+        font-size: $font-32;
 
         .form-item {
             display: flex;
@@ -26,6 +27,9 @@
                 flex: 1;
                 height: 100px;
                 line-height: 100px;
+                input {
+                    height: 100%;
+                }
             }
 
             .btn-code {

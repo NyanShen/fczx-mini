@@ -2,10 +2,12 @@ import React, { useState } from 'react'
 import Taro, { makePhoneCall, useDidShow, eventCenter } from '@tarojs/taro'
 import { View, Text, Image, Button } from '@tarojs/components'
 
+import app from '@services/request'
 import CustomSocket from '@utils/socket'
 import { hasLogin } from '@services/login'
 import { toUrlParam } from '@utils/urlHandler'
 import './index.scss'
+import NavBar from '@/components/navbar'
 
 const INIT_USER: any = {
   avatar: 'https://static.fczx.com/www/assets/mini/user_photo.png',
@@ -32,7 +34,7 @@ const User = () => {
       taroNavigateTo(`/user/${module}/index${toUrlParam(user)}`)
       return
     }
-    taroNavigateTo('/login/index')
+    app.toLogin('', '', 'navigateTo')
   }
 
   const handleLogout = () => {
@@ -44,7 +46,7 @@ const User = () => {
     if (user.username) {
       taroNavigateTo(`/user/house/${url}/index?type=${type}`)
     } else {
-      taroNavigateTo('/login/index')
+      app.toLogin('', '', 'navigateTo')
     }
   }
 
@@ -64,12 +66,13 @@ const User = () => {
 
   return (
     <View className="user">
+      <NavBar title="个人中心" primary={true} showIcon={false}/>
       <View className="user-content">
         <View className="user-header">
           <View className="header-bg"></View>
           <View className="user-item user-login" onClick={() => toUserModule('profile')}>
             <View className="login-photo">
-              <Image className="taro-image" className="login-photo-image" src={user.avatar} />
+              <Image className="taro-image" src={user.avatar} />
             </View>
             {
               user.username ?

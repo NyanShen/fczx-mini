@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import Taro, { getCurrentInstance, eventCenter } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 
+import app from '@services/request'
 import storage from '@utils/storage'
 import CustomSocket from '@utils/socket'
 import './app.scss'
@@ -27,6 +28,9 @@ class App extends Component {
     eventCenter.on('logout', () => {
       storage.clear('token')
       storage.clear('login_user')
+      if (IS_H5) {
+        app.deleteCookie('_x_token')
+      }
       CustomSocket.closeSocket()
       this.handleTabBarRedDot([])
     })

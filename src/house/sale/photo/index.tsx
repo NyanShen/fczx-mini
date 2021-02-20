@@ -116,7 +116,8 @@ const SalePhoto = () => {
                         {
                             images.map((item: IImage, index: number) => (
                                 <View key={index} className="item-image">
-                                    <Image className="taro-image"
+                                    <Image
+                                        className="taro-image"
                                         src={item.image_path}
                                         mode="aspectFill"
                                         onClick={() => handlePreviewImage(item.image_path)}
@@ -152,7 +153,8 @@ const SalePhoto = () => {
                         {
                             images.map((item: IImage, index: number) => (
                                 <View key={index} className="item-image">
-                                    <Image className="taro-image"
+                                    <Image
+                                        className="taro-image"
                                         src={item.image_path}
                                         mode="aspectFill"
                                         onClick={() => handleFaceImage(index)}

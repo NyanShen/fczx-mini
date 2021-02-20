@@ -381,7 +381,8 @@ const House = () => {
                                         {
                                             item.image_path &&
                                             <View className="comment-image">
-                                                <Image className="taro-image"
+                                                <Image
+                                                    className="taro-image"
                                                     src={item.image_path}
                                                     mode="aspectFill"
                                                     onClick={() => handleViewImage(item.image_path)}
@@ -528,7 +529,7 @@ const House = () => {
 
     return (
         <View className="house">
-            <NavBar title={houseData.title} primary={true}/>
+            <NavBar title={houseData.title} primary={true} />
             <ScrollView style={{ maxHeight: `${contentHeight - 55}px`, backgroundColor: '#f7f7f7' }} scrollY>
                 <View className="house-album">
                     <Swiper

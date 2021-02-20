@@ -159,7 +159,8 @@ const HouseDynamic = () => {
                                                 {
                                                     item.fangHouseCircleImage.map((imageItem: any, index: number) => (
                                                         <View className="item-image" key={index}>
-                                                            <Image className="taro-image"
+                                                            <Image
+                                                                className="taro-image"
                                                                 src={imageItem.image_path}
                                                                 mode="aspectFill"
                                                                 onClick={() => handleImagePreview(item.fangHouseCircleImage, imageItem.image_path)}

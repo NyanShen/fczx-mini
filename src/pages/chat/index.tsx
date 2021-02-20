@@ -10,6 +10,7 @@ import { getToken, hasLogin } from '@services/login'
 import { toUrlParam } from '@utils/urlHandler'
 import { formatTimestamp } from '@utils/index'
 import logo from '@assets/icons/logo.png'
+import NavBar from '@/components/navbar'
 import './index.scss'
 
 let is_subscribe_wx: boolean = false
@@ -83,9 +84,7 @@ const Chat = () => {
 
   const toLogin = () => {
     const backUrl = '/pages/chat/index'
-    Taro.navigateTo({
-      url: `/login/index?backUrl=${encodeURIComponent(backUrl)}&isTab=istab`
-    })
+    app.toLogin(backUrl, 'istab', 'navigateTo')
   }
 
   const toOfficialAccount = () => {
@@ -155,6 +154,7 @@ const Chat = () => {
 
   return (
     <View className="chat">
+      <NavBar title="会话列表" showIcon={false}/>
       {
         user && user.is_subscribe_wx != 1 && !is_subscribe_wx &&
         <View className="official">

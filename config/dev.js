@@ -12,7 +12,7 @@ module.exports = {
   },
   h5: {
     devServer: {
-      host: "www.loubei.com",
+      host: "m.loubei.com",
       port: 80,
       open: false,
       proxy: {

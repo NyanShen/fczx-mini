@@ -14,11 +14,14 @@ export const hasLoginBack = (backUrl: string = '') => {
         } else {
             if (!backUrl) {
                 const router: any = getCurrentInstance().router
-                backUrl = `${router?.path}${toUrlParam(router?.params)}`
+                if (router?.path) {
+                    backUrl = `${router?.path}${toUrlParam(router?.params)}`
+                } else {
+                    const lastIndex = router?.onReady.lastIndexOf('.')
+                    backUrl = router?.onReady.substring(0, lastIndex)
+                }
             }
-            Taro.redirectTo({
-                url: `/login/index?backUrl=${encodeURIComponent(backUrl)}`
-            })
+            app.toLogin(backUrl)
         }
     })
 }
@@ -41,9 +44,7 @@ export const fetchUserData = (backUrl: string = '') => {
             if (result) {
                 resolve(result)
             } else {
-                Taro.redirectTo({
-                    url: `/login/index?backUrl=${encodeURIComponent(backUrl)}`
-                })
+                app.toLogin(backUrl)
             }
         })
     })

@@ -7,6 +7,7 @@ import './index.scss'
 
 interface IProps {
     title?: string,
+    showIcon?: boolean,
     primary?: boolean,
     backgroundColor?: string,
     color?: string,
@@ -30,6 +31,7 @@ const NavBar = (props: IProps) => {
     const defaultProps = {
         title: '',
         primary: false,
+        showIcon: true,
         icon: '', //\ue608, home ；\ue685 ,back
         iconClass: '',
         iconStyle: null,
@@ -48,18 +50,25 @@ const NavBar = (props: IProps) => {
         Taro.navigateBack({ delta: 1 })
     }
 
-    const { iconClass, iconStyle } = props;
+    const { iconClass, iconStyle, showIcon, callback } = props;
+
+    const renderIcon = () => {
+        if (showIcon) {
+            return lastPage ?
+                <View className="iconfont iconhome" style={iconStyle} onClick={() => handleHomeClick()}></View> :
+                <View className="iconfont iconarrow-left-bold" style={iconStyle} onClick={() => handleBackClick()}></View>
+
+        } else {
+            return null
+        }
+    }
 
     return IS_H5 ? (
         <View className="navbar" style={{ height: `${props.height}px` }}>
             <View className="navbar-content" style={style}>
-                {
-                    lastPage ?
-                        <View className="iconfont iconhome" style={iconStyle} onClick={() => handleHomeClick()}></View> :
-                        <View className="iconfont iconarrow-left-bold" style={iconStyle} onClick={() => handleBackClick()}></View>
-                }
+                {renderIcon()}
                 <View className="navbar-title">{props.title}</View>
-                {iconClass && <View className={classnames('iconfont', iconClass)} style={iconStyle} onClick={props.callback}></View>}
+                {iconClass && <View className={classnames('iconfont', iconClass)} style={iconStyle} onClick={callback}></View>}
             </View>
         </View>
     ) : null

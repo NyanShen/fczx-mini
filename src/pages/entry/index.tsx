@@ -44,9 +44,7 @@ const Entry = () => {
             })
         }).catch((err: any) => {
             if (err.status === 401) {
-                Taro.redirectTo({
-                    url: `/login/index?backUrl=${encodeURIComponent(currentPath)}`
-                })
+                app.toLogin(currentPath)
             } else {
                 setTimeout(() => {
                     toPageIndex()

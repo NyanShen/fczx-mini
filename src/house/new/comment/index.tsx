@@ -125,7 +125,8 @@ const HouseComment = () => {
                                     {
                                         item.image_path &&
                                         <View className="comment-image">
-                                            <Image className="taro-image"
+                                            <Image
+                                                className="taro-image"
                                                 src={item.image_path}
                                                 mode="aspectFill"
                                                 onClick={() => handleViewImage(item.image_path)}
