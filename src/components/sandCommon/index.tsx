@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react'
 import Taro from '@tarojs/taro'
 import {
     View,
-    MovableArea,
-    MovableView,
     Image,
     Text,
     Label,
     CheckboxGroup,
-    Checkbox
+    Checkbox,
+    MovableArea,
+    MovableView
 } from '@tarojs/components'
 import classnames from 'classnames'
 import find from 'lodash/find'
@@ -16,7 +16,7 @@ import includes from 'lodash/includes'
 
 import api from '@services/api'
 import app from '@services/request'
-import './common.scss'
+import './index.scss'
 
 interface ISandState {
     value: string
@@ -62,6 +62,13 @@ interface IProps {
     updateSandBuilding: (any) => void
 }
 
+let lastPointX: number = 0
+let lastPointY: number = 0
+let imgTop: number = 0
+let imgLeft: number = 0
+let maxLeft: number = 0
+let maxTop: number = 0
+
 const SandCommon = (props: IProps) => {
     const { houseId, outerHeight, currentBuilding = {} } = props
     const [movableView, setMovableView] = useState<any>({})
@@ -70,8 +77,8 @@ const SandCommon = (props: IProps) => {
     const [sandData, setSandData] = useState<any>(INIT_SAND_DATA)
     const [sandBuilding, setSandBuilding] = useState<any>(INIT_SAND_DATA.sandBuilding)
     const [current, setCurrent] = useState<any>({})
-    const safeArea = Taro.getSystemInfoSync().safeArea
-    const outerWidth = props.outerWidth ? props.outerWidth : safeArea.width
+    const screenWidth = Taro.getSystemInfoSync().screenWidth
+    const outerWidth = props.outerWidth ? props.outerWidth : screenWidth
 
     useEffect(() => {
         fetchSand()
@@ -81,10 +88,17 @@ const SandCommon = (props: IProps) => {
         setCurrent(currentBuilding)
     }, [currentBuilding])
 
-    const handleSandImageLoad = (e: any) => {
-        setMovableView({
-            width: e.detail.width,
-            height: e.detail.height
+    const setImageRealSize = (fang_sand_pic: string) => {
+        Taro.getImageInfo({
+            src: fang_sand_pic,
+            success: (result: any) => {
+                setMovableView({
+                    width: result.width,
+                    height: result.height,
+                    centerX: (outerWidth - result.width) / 2,
+                    centerY: (outerHeight - result.height) / 2
+                })
+            }
         })
     }
 
@@ -96,6 +110,7 @@ const SandCommon = (props: IProps) => {
             }
         }, { loading: false }).then((result: any) => {
             setSandData(result)
+            setImageRealSize(result.fang_sand_pic)
             showSandBuilding(INIT_SAND_STATE, result.sandBuilding)
             props.updateSandBuilding(result.sandBuilding)
         })
@@ -136,37 +151,84 @@ const SandCommon = (props: IProps) => {
         props.setCurrentBuilding(item)
     }
 
+    const handleTouchStart = (e: any) => {
+        const sandView: any = document.getElementsByClassName('sand-view')[0]
+        maxLeft = outerWidth - movableView.width
+        maxTop = outerHeight - movableView.height
+        lastPointX = e.touches[0].clientX;
+        lastPointY = e.touches[0].clientY;
+        imgLeft = parseFloat(sandView.style.left)
+        imgTop = parseFloat(sandView.style.top)
+    }
+
+    const handleTouchMove = (e: any) => {
+        e.preventDefault();
+        let changeX = e.touches[0].clientX - lastPointX;
+        let changeY = e.touches[0].clientY - lastPointY;
+        let disX = imgLeft + changeX;
+        let disY = imgTop + changeY;
+        setMovableView({
+            ...movableView,
+            centerX: Math.max(Math.min(disX, 0), maxLeft),
+            centerY: Math.max(Math.min(disY, 0), maxTop)
+        })
+    }
+
+    const renderSandBuilding = () => {
+        return sandBuilding.map((item: any, index: number) => (
+            <View
+                key={index}
+                style={item.style}
+                className={classnames('sand-item', `sale-status-${item.sale_status}`, current.id === item.id && 'actived')}
+                onClick={() => switchCurrent(item)}
+            >
+                <Text>{item.name}</Text>
+                <Text className="triangle-down"></Text>
+            </View>
+        ))
+    }
+
+    const renderMovableView = () => {
+        const { width, height, centerX, centerY } = movableView
+        return IS_H5 ?
+            (
+                <View className="sand-area">
+                    <View
+                        className="sand-view"
+                        style={{
+                            width: `${width}px`,
+                            height: `${height}px`,
+                            left: `${centerX}px`,
+                            top: `${centerY}px`
+                        }}
+                        onTouchStart={handleTouchStart}
+                        onTouchMove={handleTouchMove}
+                    >
+                        <Image className="taro-image" src={sandData.fang_sand_pic} />
+                        {renderSandBuilding()}
+                    </View>
+                </View>
+            ) :
+            (
+                <MovableArea className="sand-area">
+                    <MovableView
+                        x={centerX}
+                        y={centerY}
+                        style={{ width, height }}
+                        className="sand-view"
+                        direction="all"
+                        animation={false}
+                    >
+                        <Image className="taro-image" src={sandData.fang_sand_pic} />
+                        {renderSandBuilding()}
+                    </MovableView>
+                </MovableArea>
+            )
+    }
+
     return (
-        <View className="sand-card" style={{ width: '100%', height: outerHeight }}>
-            <MovableArea className="sand-area">
-                <MovableView
-                    x={(outerWidth - movableView.width) / 2}
-                    y={(outerHeight - movableView.height) / 2}
-                    style={movableView}
-                    className="sand-view"
-                    direction="all"
-                    animation={false}
-                >
-                    <Image
-                        className="taro-image"
-                        src={sandData.fang_sand_pic}
-                        onLoad={handleSandImageLoad}
-                    />
-                    {
-                        sandBuilding.map((item: any, index: number) => (
-                            <View
-                                key={index}
-                                style={item.style}
-                                className={classnames('sand-item', `sale-status-${item.sale_status}`, current.id === item.id && 'actived')}
-                                onClick={() => switchCurrent(item)}
-                            >
-                                <Text>{item.name}</Text>
-                                <Text className="triangle-down"></Text>
-                            </View>
-                        ))
-                    }
-                </MovableView>
-            </MovableArea>
+        <View className="sand-card" style={{ width: '100%', height: `${outerHeight}px` }}>
+            {renderMovableView()}
             <View className="sand-state">
                 <CheckboxGroup
                     onChange={handleCheckboxChange}

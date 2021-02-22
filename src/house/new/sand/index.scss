@@ -17,6 +17,7 @@
                         white-space: nowrap;
                         overflow: hidden;
                         text-overflow: ellipsis;
+                        font-size: $font-32;
 
                         &.actived {
                             background-color: $primary-color;
@@ -50,6 +51,7 @@
                         line-height: 60px;
                         border-left: 6px solid $primary-color;
                         background-color: $bg-color;
+                        font-size: $font-32;
 
                         .title {
                             margin-left: 20px;

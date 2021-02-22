@@ -10,7 +10,7 @@ import { formatTimestamp, formatPhoneCall } from '@utils/index'
 import { getToken, hasLoginBack } from '@services/login'
 import useNavData from '@hooks/useNavData'
 import Popup from '@components/popup/index'
-import SandCommon from '@house/new/sand/common'
+import SandCommon from '@components/sandCommon/index'
 import { getStaticMap } from '@utils/map'
 import { SALE_STATUS, PRICE_TYPE, SURROUND_TABS, ISurroundTab, INIT_SURROUND_TAB } from '@constants/house'
 import NavBar from '@/components/navbar'
@@ -198,7 +198,18 @@ const House = () => {
             currentBuilding: JSON.stringify(currentBuilding)
         })
         Taro.navigateTo({
-            url: `/house/new/sand/index${paramString}`
+            url: `/house/new/sand/index${paramString}`,
+            events: {
+              acceptDataFromOpenedPage: function(data) {
+                console.log(data)
+              },
+              someEvent: function(data) {
+                console.log(data)
+              }
+            },
+            success: function (res: any) {
+              res.eventChannel.emit('acceptDataFromOpenerPage', { data: currentBuilding })
+            }
         })
     }
 
