@@ -5,6 +5,7 @@ import classnames from 'classnames'
 
 import api from '@services/api'
 import app from '@services/request'
+import { toHouseNew } from '@/router/router'
 import useNavData from '@hooks/useNavData'
 import { PRICE_TYPE, SALE_STATUS } from '@constants/house'
 import { IPage, INIT_PAGE, getTotalPage } from '@utils/page'
@@ -89,9 +90,7 @@ const HouseType = () => {
     }
 
     const toDetail = (item: any) => {
-        Taro.navigateTo({
-            url: `/house/new/type/detail?id=${item.id}&houseId=${houseId}`
-        })
+        toHouseNew('TypeDetail', { id: item.id, houseId })
     }
     return (
         <View className="house-type">

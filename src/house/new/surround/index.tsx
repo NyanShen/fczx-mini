@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
-import Taro, { getCurrentInstance, useReady } from '@tarojs/taro'
+import Taro, { useReady } from '@tarojs/taro'
 import { View, Text, Map } from "@tarojs/components"
+import { useRouter } from 'tarojs-router'
 import classnames from 'classnames'
 import QQMapWX from 'qqmap-wx-jssdk'
 
@@ -10,15 +11,13 @@ import { SURROUND_TABS, ISurroundTab } from '@constants/house'
 import './index.scss'
 
 const houseSurround = () => {
-
-    const params: any = getCurrentInstance().router?.params
-    const currentTab = JSON.parse(params.tab)
+    const { params, data } = useRouter()
     const title = params.title
     const b_latitude = params.latitude
     const b_longitude = params.longitude
     const { latitude, longitude } = bMapTransQQMap(b_latitude, b_longitude)
     const { contentHeight } = useNavData()
-    const [tab, setTab] = useState<ISurroundTab>(currentTab)
+    const [tab, setTab] = useState<ISurroundTab>(data)
     const [markers, setMarkers] = useState<any[]>([]);
 
     const mapsdk = new QQMapWX({ key: QQ_MAP_KEY })
@@ -44,7 +43,7 @@ const houseSurround = () => {
     }
 
     useReady(() => {
-        Taro.setNavigationBarTitle({title: title || '周边及配套'})
+        Taro.setNavigationBarTitle({ title: title || '周边及配套' })
     })
 
     useEffect(() => {

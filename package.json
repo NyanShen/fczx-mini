@@ -45,7 +45,8 @@
 		"qqmap-wx-jssdk": "^1.0.0",
 		"qs": "^6.9.4",
 		"react": "^16.10.0",
-		"react-dom": "^16.10.0"
+		"react-dom": "^16.10.0",
+		"tarojs-router": "^1.2.9"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.8.0",

@@ -1,10 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import Taro, { getCurrentInstance, useReady, useShareAppMessage, useShareTimeline } from '@tarojs/taro'
+import Taro, { useReady, useShareAppMessage, useShareTimeline } from '@tarojs/taro'
 import {
     View,
     Text,
     ScrollView
 } from '@tarojs/components'
+import { useRouter } from 'tarojs-router'
 import classnames from 'classnames'
 
 import api from '@services/api'
@@ -13,16 +14,12 @@ import SandCommon from '@components/sandCommon/index'
 import '@styles/common/house.scss'
 import './index.scss'
 
-let currentBuilding: any = {}
 const INIT_SAND_BUILDING = []
 
 const HouseSand = () => {
-    let params: any = getCurrentInstance().router?.params
-    if (params.currentBuilding) {
-        currentBuilding = JSON.parse(params.currentBuilding)
-    }
+    const { params, data } = useRouter()
     const [sandBuilding, setSandBuilding] = useState<any>(INIT_SAND_BUILDING)
-    const [current, setCurrent] = useState<any>(currentBuilding)
+    const [current, setCurrent] = useState<any>(data)
     const [roomData, setRoomData] = useState<any[]>([])
 
     useReady(() => {
@@ -63,7 +60,7 @@ const HouseSand = () => {
 
     const handleSandBuildingChange = (sandBuilding: any[]) => {
         setSandBuilding(sandBuilding)
-        if (!params.currentBuilding) {
+        if (!data) {
             setCurrent(sandBuilding[0])
         }
     }

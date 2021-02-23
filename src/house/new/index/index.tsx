@@ -5,6 +5,7 @@ import classnames from 'classnames'
 
 import api from '@services/api'
 import app from '@services/request'
+import { toHouseNew } from '@/router/router'
 import { toUrlParam } from '@utils/urlHandler'
 import { formatTimestamp, formatPhoneCall } from '@utils/index'
 import { getToken, hasLoginBack } from '@services/login'
@@ -161,73 +162,31 @@ const House = () => {
         })
     }
 
-    const toHouseModule = (module: string, checkLogin: boolean = false) => {
-        const paramString = toUrlParam({
+    const toHouseModule = (module: string) => {
+        const params = {
             id: houseData.id,
             title: houseData.title
-        })
-        const targetUrl = `/house/new/${module}/index${paramString}`
-        if (checkLogin) {
-            hasLoginBack(targetUrl)
-                .then(() => {
-                    Taro.navigateTo({ url: targetUrl })
-                })
-            return
         }
-        Taro.navigateTo({ url: targetUrl })
+        toHouseNew(module, params)
     }
 
     const toHouseSurround = (currentTab: ISurroundTab = INIT_SURROUND_TAB) => {
         const { id, title, latitude, longitude } = houseData
-        const paramString = toUrlParam({
-            id,
-            title: title,
-            latitude,
-            longitude,
-            tab: JSON.stringify(currentTab),
-        })
-        Taro.navigateTo({
-            url: `/house/new/surround/index${paramString}`
-        })
+        toHouseNew('Surround', { id, title, latitude, longitude }, currentTab)
     }
 
     const toHouseSand = (currentBuilding: any) => {
-        const paramString = toUrlParam({
-            id: houseData.id,
-            title: houseData.title,
-            currentBuilding: JSON.stringify(currentBuilding)
-        })
-        Taro.navigateTo({
-            url: `/house/new/sand/index${paramString}`,
-            events: {
-              acceptDataFromOpenedPage: function(data) {
-                console.log(data)
-              },
-              someEvent: function(data) {
-                console.log(data)
-              }
-            },
-            success: function (res: any) {
-              res.eventChannel.emit('acceptDataFromOpenerPage', { data: currentBuilding })
-            }
-        })
+        const { id, title } = houseData
+        toHouseNew('Sand', { id, title }, currentBuilding)
     }
 
     const toHouseTypeDetail = (item: any) => {
-        Taro.navigateTo({
-            url: `/house/new/type/detail?id=${item.id}&houseId=${houseData.id}`
-        })
+        toHouseNew('TypeDetail', { id: item.id, houseId: houseData.id })
     }
 
     const toHouseVideo = (video: any) => {
-        const paramString = toUrlParam({
-            id: houseData.id,
-            title: houseData.title,
-            video: JSON.stringify(video)
-        })
-        Taro.navigateTo({
-            url: `/house/new/video/index${paramString}`
-        })
+        const { id, title } = houseData
+        toHouseNew('Video', { id, title }, video)
     }
 
     const toHouseNewsDetail = (newsId: string) => {
@@ -238,22 +197,16 @@ const House = () => {
 
     const toHouseConsultant = () => {
         const { id, title, price, price_type, image_path } = houseData
-        const paramString = toUrlParam({
+        const params = { id, title, messageType: '3' }
+        const data = {
             id,
             title,
-            messageType: '3',
-            houseMain: JSON.stringify({
-                id,
-                title,
-                price,
-                price_type,
-                image_path,
-                areaName: houseData.area.name
-            })
-        })
-        Taro.navigateTo({
-            url: `/house/new/consultant/index${paramString}`
-        })
+            price,
+            price_type,
+            image_path,
+            areaName: houseData.area.name
+        }
+        toHouseNew('Consultant', params, data)
     }
 
     const toConsultantModule = () => {
@@ -372,7 +325,7 @@ const House = () => {
                     <View className="title">用户评论({houseData.comment_num})</View>
                     {
                         comment.length > 0 &&
-                        <View className="more" onClick={() => toHouseModule('comment')}>
+                        <View className="more" onClick={() => toHouseModule('Comment')}>
                             <Text>查看更多</Text>
                             <Text className="iconfont iconarrow-right-bold"></Text>
                         </View>
@@ -426,7 +379,7 @@ const House = () => {
                                 <View>暂无评论</View>
                             </View>
                     }
-                    <View className="btn btn-blue" onClick={() => toHouseModule('commentForm', true)}>
+                    <View className="btn btn-blue" onClick={() => toHouseModule('CommentForm')}>
                         <Text className="btn-name">我要评论</Text>
                     </View>
                 </View>
@@ -441,7 +394,7 @@ const House = () => {
                     <View className="title">大家都在问</View>
                     {
                         ask.length > 0 &&
-                        <View className="more" onClick={() => toHouseModule('ask')}>
+                        <View className="more" onClick={() => toHouseModule('Ask')}>
                             <Text>查看更多</Text>
                             <Text className="iconfont iconarrow-right-bold"></Text>
                         </View>
@@ -467,7 +420,7 @@ const House = () => {
                                 <View>对此楼盘有疑问？赶快去提问吧</View>
                             </View>
                     }
-                    <View className="btn btn-blue" onClick={() => toHouseModule('askForm', true)}>
+                    <View className="btn btn-blue" onClick={() => toHouseModule('AskForm')}>
                         <Text className="btn-name">我要提问</Text>
                     </View>
                 </View>
@@ -549,11 +502,11 @@ const House = () => {
                         onChange={onSwiperChange}
                     >
                         {houseData.imagesData.video && renderVideo(houseData.imagesData.video)}
-                        <SwiperItem itemId={imageId} onClick={() => toHouseModule('album')}>
+                        <SwiperItem itemId={imageId} onClick={() => toHouseModule('Album')}>
                             <Image className="taro-image" src={houseData.image_path}></Image>
                         </SwiperItem>
                     </Swiper>
-                    <View className="album-count" onClick={() => toHouseModule('album')}>
+                    <View className="album-count" onClick={() => toHouseModule('Album')}>
                         共{houseData.imagesData.imageCount}张
                         </View>
                     <View className="album-text">
@@ -598,7 +551,7 @@ const House = () => {
                 <View className="house-item mt20">
                     <View className="house-item-header">
                         <View className="title">基本信息</View>
-                        <View className="more" onClick={() => toHouseModule('detail')}>
+                        <View className="more" onClick={() => toHouseModule('Detail')}>
                             <Text>更多</Text>
                             <Text className="iconfont iconarrow-right-bold"></Text>
                         </View>
@@ -633,7 +586,7 @@ const House = () => {
                         <Text className="label">售楼地址</Text>
                         <Text className="text">{renderDetail(houseData.fangHouseInfo.sale_address)}</Text>
                     </View>
-                    <View className="btn btn-blue mt20" onClick={() => toHouseModule('detail')}>
+                    <View className="btn btn-blue mt20" onClick={() => toHouseModule('Detail')}>
                         <Text className="btn-name">查看更多楼盘详情</Text>
                     </View>
                 </View>
@@ -721,7 +674,7 @@ const House = () => {
                     <View className="house-item house-type mt20">
                         <View className="house-item-header">
                             <View className="title">主力户型({houseData.fangHouseRoom.length})</View>
-                            <View className="more" onClick={() => toHouseModule('type')}>
+                            <View className="more" onClick={() => toHouseModule('Type')}>
                                 <Text>更多</Text>
                                 <Text className="iconfont iconarrow-right-bold"></Text>
                             </View>
@@ -753,7 +706,7 @@ const House = () => {
                     <View className="house-item house-news mt20">
                         <View className="house-item-header">
                             <View className="title">楼盘动态</View>
-                            <View className="more" onClick={() => toHouseModule('news')}>
+                            <View className="more" onClick={() => toHouseModule('News')}>
                                 <Text>更多</Text>
                                 <Text className="iconfont iconarrow-right-bold"></Text>
                             </View>
@@ -778,7 +731,7 @@ const House = () => {
                     <View className="house-item house-sand mt20">
                         <View className="house-item-header">
                             <View className="title">沙盘图</View>
-                            <View className="more" onClick={() => toHouseModule('sand')}>
+                            <View className="more" onClick={() => toHouseModule('Sand')}>
                                 <Text>查看</Text>
                                 <Text className="iconfont iconarrow-right-bold"></Text>
                             </View>

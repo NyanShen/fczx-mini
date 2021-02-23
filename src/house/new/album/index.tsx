@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import Taro, { getCurrentInstance, previewImage } from '@tarojs/taro'
+import { getCurrentInstance, previewImage } from '@tarojs/taro'
 import { View, ScrollView, Text, Image } from '@tarojs/components'
 import classnames from 'classnames'
 import map from 'lodash/map'
 
 import api from '@services/api'
 import app from '@services/request'
+import { toHouseNew } from '@/router'
 import useNavData from '@hooks/useNavData'
-import { toUrlParam } from '@utils/urlHandler'
 import './index.scss'
 
 interface IAlbumSwiper {
@@ -60,19 +60,14 @@ const AlbumList = () => {
 
     const handleImageClick = (albumItem: any, imageIndex: number) => {
         if (albumItem.type == '2') {
-            const paramString = toUrlParam({
-                video: JSON.stringify(albumItem.fangHouseImage[imageIndex])
-            })
-            Taro.navigateTo({
-                url: `/house/new/video/index${paramString}`
-            })
+            toHouseNew('Video', {}, albumItem.fangHouseImage[imageIndex])
             return
         }
         previewImage({
             current: albumItem.fangHouseImage[imageIndex].image_path,
             urls: map(albumItem.fangHouseImage, 'image_path')
         })
-        
+
         if (currentView === `view_${albumItem.id}`) {
             return
         }

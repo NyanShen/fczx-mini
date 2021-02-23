@@ -1,13 +1,12 @@
 import React from 'react'
-import Taro, { getCurrentInstance, useReady } from '@tarojs/taro'
+import Taro, { useReady } from '@tarojs/taro'
 import { View, Video } from '@tarojs/components'
+import { useRouter } from 'tarojs-router'
 
 import './index.scss'
 
 const HouseVideo = () => {
-    let currentRouter: any = getCurrentInstance().router
-    let params: any = currentRouter.params
-    const video = JSON.parse(params.video)
+    const { data } = useRouter()
     useReady(() => {
         Taro.setNavigationBarTitle({ title: '视频' })
     })
@@ -18,8 +17,8 @@ const HouseVideo = () => {
                     <Video
                         id='video'
                         style={{ width: '100%' }}
-                        src={video.video_path}
-                        poster={video.image_path}
+                        src={data.video_path}
+                        poster={data.image_path}
                         controls={true}
                         autoplay={true}
                         loop={false}
