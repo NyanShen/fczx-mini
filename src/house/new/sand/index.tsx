@@ -7,6 +7,7 @@ import {
 } from '@tarojs/components'
 import { useRouter } from 'tarojs-router'
 import classnames from 'classnames'
+import find from 'lodash/find'
 
 import api from '@services/api'
 import app from '@services/request'
@@ -17,26 +18,27 @@ import './index.scss'
 const INIT_SAND_BUILDING = []
 
 const HouseSand = () => {
-    const { params, data } = useRouter()
+    const { params } = useRouter()
+    const houseTitle = decodeURIComponent(params.title)
     const [sandBuilding, setSandBuilding] = useState<any>(INIT_SAND_BUILDING)
-    const [current, setCurrent] = useState<any>(data)
+    const [current, setCurrent] = useState<any>({})
     const [roomData, setRoomData] = useState<any[]>([])
 
     useReady(() => {
-        Taro.setNavigationBarTitle({ title: `${params.title}沙盘图` })
+        Taro.setNavigationBarTitle({ title: `${houseTitle}沙盘图` })
     })
 
     useShareTimeline(() => {
         return {
-            title: `${params.title}沙盘图`,
-            path: `/house/new/sand/index?id=${current.id}&title=${params.title}&share=true`
+            title: `${houseTitle}沙盘图`,
+            path: `/house/new/sand/index?id=${current.id}&title=${houseTitle}&share=true`
         }
     })
 
     useShareAppMessage(() => {
         return {
-            title: `${params.title}沙盘图`,
-            path: `/house/new/sand/index?id=${current.id}&title=${params.title}&share=true`
+            title: `${houseTitle}沙盘图`,
+            path: `/house/new/sand/index?id=${current.id}&title=${houseTitle}&share=true`
         }
     })
 
@@ -60,7 +62,9 @@ const HouseSand = () => {
 
     const handleSandBuildingChange = (sandBuilding: any[]) => {
         setSandBuilding(sandBuilding)
-        if (!data) {
+        if (params.buildId) {
+            setCurrent(find(sandBuilding, { id: params.buildId }))
+        } else {
             setCurrent(sandBuilding[0])
         }
     }
@@ -76,7 +80,7 @@ const HouseSand = () => {
             <SandCommon
                 houseId={params.id}
                 outerHeight={350}
-                currentBuilding={current}
+                buildId={current.id}
                 setCurrentBuilding={(currentBuilding) => setCurrent(currentBuilding)}
                 updateSandBuilding={handleSandBuildingChange}
             />

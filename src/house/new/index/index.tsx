@@ -24,12 +24,14 @@ import '@house/new/news/index.scss'
 import './index.scss'
 
 interface IAlbumSwiper {
-    albumId: string,
+    albumTabs: any[],
+    albumItems: any[],
     swiperIndex: number
 }
 
 const INIT_ALBUM_SWIPER = {
-    albumId: '',
+    albumTabs: [],
+    albumItems: [],
     swiperIndex: 0
 }
 
@@ -48,8 +50,6 @@ const INIT_HOUSE_DATA = {
     fangHouseComment: [],
     enableFangHouseConsultant: []
 }
-
-const imageId = "image_1"
 
 const House = () => {
     const { contentHeight } = useNavData()
@@ -85,9 +85,17 @@ const House = () => {
             setHouseData({ ...result, ...{ static_map: static_map } })
             const video = result.imagesData.video
             if (video) {
-                setAlbumSwiper({ albumId: video.id, swiperIndex: 0 })
+                setAlbumSwiper({
+                    albumTabs: [{ name: '视频' }, { name: '图片' }],
+                    albumItems: [video, { image_path: result.image_path }],
+                    swiperIndex: 0
+                })
             } else {
-                setAlbumSwiper({ albumId: imageId, swiperIndex: 0 })
+                setAlbumSwiper({
+                    albumTabs: [{ name: '图片' }],
+                    albumItems: [{ image_path: result.image_path }],
+                    swiperIndex: 0
+                })
             }
             Taro.setNavigationBarTitle({ title: result.title })
             if (params.c) {
@@ -127,22 +135,20 @@ const House = () => {
         })
     }
 
-    const onSwiperChange = (event) => {
-        let swiperIndex = event.detail.current;
-        let currentItem = event.detail.currentItemId.split(',');
-        let albumId = currentItem[0];
+    const onSwiperChange = (event: any) => {
+        const swiperIndex = event.detail.current
         setAlbumSwiper({
-            albumId,
+            ...albumSwiper,
             swiperIndex
         })
     }
 
-    const switchAlbum = (albumId: string, swiperIndex: number) => {
-        if (albumSwiper.albumId === albumId) {
+    const switchAlbum = (swiperIndex: number) => {
+        if (albumSwiper.swiperIndex === swiperIndex) {
             return
         }
         setAlbumSwiper({
-            albumId,
+            ...albumSwiper,
             swiperIndex
         })
     }
@@ -177,7 +183,7 @@ const House = () => {
 
     const toHouseSand = (currentBuilding: any) => {
         const { id, title } = houseData
-        toHouseNew('Sand', { id, title }, currentBuilding)
+        toHouseNew('Sand', { id, title, buildId: currentBuilding.id })
     }
 
     const toHouseTypeDetail = (item: any) => {
@@ -295,27 +301,6 @@ const House = () => {
         } else {
             return <Text className="price">{price}<Text className="price-unit">{PRICE_TYPE[price_type]}</Text></Text>
         }
-    }
-
-    const renderVideo = (video: any) => {
-        return (
-            <SwiperItem
-                itemId={video.id}
-                onClick={() => toHouseVideo(video)}
-            >
-                <Image className="taro-image" src={video.image_path}></Image>
-                <Text className="icon-vedio"></Text>
-            </SwiperItem>
-        )
-    }
-
-    const renderVideoTab = (video: any) => {
-        return (
-            <Text
-                className={classnames('album-text-item', video.id == albumSwiper.albumId && 'album-text-actived')}
-                onClick={() => switchAlbum(video.id, 0)}
-            >视频</Text>
-        )
     }
 
     const renderComment = (comment: any[]) => {
@@ -485,7 +470,7 @@ const House = () => {
         <SandCommon
             houseId={houseData.id}
             outerHeight={220}
-            currentBuilding={{}}
+            buildId={''}
             setCurrentBuilding={toHouseSand}
             updateSandBuilding={() => { }}
         />
@@ -495,28 +480,44 @@ const House = () => {
         <View className="house">
             <NavBar title={houseData.title} primary={true} />
             <ScrollView style={{ maxHeight: `${contentHeight - 55}px`, backgroundColor: '#f7f7f7' }} scrollY>
-                <View className="house-album">
-                    <Swiper
-                        style={{ height: '250px' }}
-                        current={albumSwiper.swiperIndex}
-                        onChange={onSwiperChange}
-                    >
-                        {houseData.imagesData.video && renderVideo(houseData.imagesData.video)}
-                        <SwiperItem itemId={imageId} onClick={() => toHouseModule('Album')}>
-                            <Image className="taro-image" src={houseData.image_path}></Image>
-                        </SwiperItem>
-                    </Swiper>
-                    <View className="album-count" onClick={() => toHouseModule('Album')}>
-                        共{houseData.imagesData.imageCount}张
+                {
+                    albumSwiper.albumItems.length > 0 &&
+                    <View className="house-album">
+                        <Swiper
+                            style={{ height: '250px' }}
+                            current={albumSwiper.swiperIndex}
+                            onChange={onSwiperChange}
+                        >
+                            {
+                                albumSwiper.albumItems.map((item: any, index: number) => {
+                                    return item.video_path ?
+                                        <SwiperItem key={index} onClick={() => toHouseVideo(item)}>
+                                            <Image className="taro-image" src={item.image_path}></Image>
+                                            <Text className="icon-vedio"></Text>
+                                        </SwiperItem> :
+                                        <SwiperItem key={index} onClick={() => toHouseModule('Album')}>
+                                            <Image className="taro-image" src={item.image_path}></Image>
+                                        </SwiperItem>
+                                })
+                            }
+                        </Swiper>
+                        <View className="album-count" onClick={() => toHouseModule('Album')}>
+                            共{houseData.imagesData.imageCount}张
                         </View>
-                    <View className="album-text">
-                        {houseData.imagesData.video && renderVideoTab(houseData.imagesData.video)}
-                        <Text
-                            className={classnames('album-text-item', imageId == albumSwiper.albumId && 'album-text-actived')}
-                            onClick={() => switchAlbum(imageId, 1)}
-                        >图片</Text>
+                        <View className="album-text">
+                            {
+                                albumSwiper.albumTabs.map((item: any, index: number) => (
+                                    <Text
+                                        key={index}
+                                        className={classnames('album-text-item', index == albumSwiper.swiperIndex && 'album-text-actived')}
+                                        onClick={() => switchAlbum(index)}
+                                    >{item.name}</Text>
+                                ))
+                            }
+                        </View>
                     </View>
-                </View>
+                }
+
                 <View className="house-header">
                     <View className="header-left">
                         <View className="title">

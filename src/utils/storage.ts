@@ -26,4 +26,4 @@ const clear = (key) => {
     key ? Taro.removeStorageSync(key) : Taro.clearStorageSync()
 }
 
-export default {setItem, getItem, clear}
+export default { setItem, getItem, clear }

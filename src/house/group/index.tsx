@@ -100,7 +100,7 @@ const HouseGroup = () => {
                                                             </View>
                                                             <View className="context">
                                                                 <Text className="label">优惠：</Text>
-                                                                <Text className="required">{groupItem.discount || '现场优惠'}</Text>
+                                                                <Text className="required">案场优惠</Text>
                                                             </View>
                                                         </View>
                                                     </View>

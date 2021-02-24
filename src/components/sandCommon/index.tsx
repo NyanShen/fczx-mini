@@ -57,7 +57,7 @@ interface IProps {
     houseId: string,
     outerWidth?: number,
     outerHeight: number,
-    currentBuilding?: any,
+    buildId?: string,
     setCurrentBuilding: (any) => void,
     updateSandBuilding: (any) => void
 }
@@ -70,7 +70,7 @@ let maxLeft: number = 0
 let maxTop: number = 0
 
 const SandCommon = (props: IProps) => {
-    const { houseId, outerHeight, currentBuilding = {} } = props
+    const { houseId, outerHeight, buildId = '' } = props
     const [movableView, setMovableView] = useState<any>({})
     const [showState, setShowState] = useState<IShowState>(INIT_SHOW_STATE)
     const [sandState, setSandState] = useState<ISandState[]>(INIT_SAND_STATE)
@@ -85,8 +85,10 @@ const SandCommon = (props: IProps) => {
     }, [houseId])
 
     useEffect(() => {
-        setCurrent(currentBuilding)
-    }, [currentBuilding])
+        if (buildId && sandBuilding.length > 0) {
+            setCurrent(find(sandBuilding, { id: buildId }))
+        }
+    }, [buildId])
 
     const setImageRealSize = (fang_sand_pic: string) => {
         Taro.getImageInfo({
