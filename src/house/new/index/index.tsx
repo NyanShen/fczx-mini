@@ -182,17 +182,16 @@ const House = () => {
     }
 
     const toHouseSand = (currentBuilding: any) => {
-        const { id, title } = houseData
-        toHouseNew('Sand', { id, title, buildId: currentBuilding.id })
+        const params = {
+            id: houseData.id,
+            title: houseData.title,
+            buildId: currentBuilding.id
+        }
+        toHouseNew('Sand', params)
     }
 
     const toHouseTypeDetail = (item: any) => {
         toHouseNew('TypeDetail', { id: item.id, houseId: houseData.id })
-    }
-
-    const toHouseVideo = (video: any) => {
-        const { id, title } = houseData
-        toHouseNew('Video', { id, title }, video)
     }
 
     const toHouseNewsDetail = (newsId: string) => {
@@ -489,16 +488,12 @@ const House = () => {
                             onChange={onSwiperChange}
                         >
                             {
-                                albumSwiper.albumItems.map((item: any, index: number) => {
-                                    return item.video_path ?
-                                        <SwiperItem key={index} onClick={() => toHouseVideo(item)}>
-                                            <Image className="taro-image" src={item.image_path}></Image>
-                                            <Text className="icon-vedio"></Text>
-                                        </SwiperItem> :
-                                        <SwiperItem key={index} onClick={() => toHouseModule('Album')}>
-                                            <Image className="taro-image" src={item.image_path}></Image>
-                                        </SwiperItem>
-                                })
+                                albumSwiper.albumItems.map((item: any, index: number) => (
+                                    <SwiperItem key={index} onClick={() => toHouseModule('Album')}>
+                                        <Image className="taro-image" src={item.image_path}></Image>
+                                        {item.video_path && <Text className="icon-vedio"></Text>}
+                                    </SwiperItem>
+                                ))
                             }
                         </Swiper>
                         <View className="album-count" onClick={() => toHouseModule('Album')}>

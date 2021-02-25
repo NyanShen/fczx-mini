@@ -1,11 +1,10 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import Taro, { useReady, useShareAppMessage, useShareTimeline } from '@tarojs/taro'
+import Taro, { getCurrentInstance, useReady, useShareAppMessage, useShareTimeline } from '@tarojs/taro'
 import {
     View,
     Text,
     ScrollView
 } from '@tarojs/components'
-import { useRouter } from 'tarojs-router'
 import classnames from 'classnames'
 import find from 'lodash/find'
 
@@ -18,7 +17,7 @@ import './index.scss'
 const INIT_SAND_BUILDING = []
 
 const HouseSand = () => {
-    const { params } = useRouter()
+    const params: any = getCurrentInstance().router?.params
     const houseTitle = decodeURIComponent(params.title)
     const [sandBuilding, setSandBuilding] = useState<any>(INIT_SAND_BUILDING)
     const [current, setCurrent] = useState<any>({})

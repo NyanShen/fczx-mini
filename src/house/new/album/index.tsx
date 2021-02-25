@@ -1,12 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { getCurrentInstance, previewImage } from '@tarojs/taro'
-import { View, ScrollView, Text, Image } from '@tarojs/components'
+import { View, ScrollView, Text, Image, Video } from '@tarojs/components'
 import classnames from 'classnames'
 import map from 'lodash/map'
 
 import api from '@services/api'
 import app from '@services/request'
-import { toHouseNew } from '@/router'
 import useNavData from '@hooks/useNavData'
 import './index.scss'
 
@@ -30,6 +29,7 @@ const AlbumList = () => {
     const houseId = router?.params.id
     const { contentHeight } = useNavData()
 
+    const [videoData, setVideoData] = useState<any>({})
     const [albumData, setAlbumData] = useState<any[]>([])
     const [currentView, setCurrentView] = useState<string>('')
     const [albumSwiper, setAlbumSwiper] = useState<IAlbumSwiper>(INIT_ALBUM_SWIPER)
@@ -60,7 +60,7 @@ const AlbumList = () => {
 
     const handleImageClick = (albumItem: any, imageIndex: number) => {
         if (albumItem.type == '2') {
-            toHouseNew('Video', {}, albumItem.fangHouseImage[imageIndex])
+            setVideoData(albumItem.fangHouseImage[imageIndex])
             return
         }
         previewImage({
@@ -141,6 +141,24 @@ const AlbumList = () => {
                     }
                 </ScrollView>
             </View>
+            {
+                videoData.video_path &&
+                <View className="album-video">
+                    <View className="mask show" onClick={() => setVideoData({})}></View>
+                    <View className="album-video-content">
+                        <Video
+                            id='video'
+                            style={{ width: '100%' }}
+                            src={videoData.video_path}
+                            poster={videoData.image_path}
+                            controls={true}
+                            autoplay={true}
+                            loop={false}
+                            muted={false}
+                        />
+                    </View>
+                </View>
+            }
         </View>
     )
 }
