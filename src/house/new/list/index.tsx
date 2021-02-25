@@ -648,7 +648,7 @@ const NewHouse = () => {
                                                 <Text className="line-split"></Text>
                                                 <Text>{item.comment_num}条评论</Text>
                                             </View>
-                                            <View className="mb12">
+                                            <View className="text-item mb12">
                                                 {renderPrice(item.price, item.price_type)}
                                             </View>
                                             <View className="text-item tags">

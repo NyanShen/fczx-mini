@@ -15,7 +15,7 @@ interface INavData {
     windowHeight: number
 }
 
-const useNavData = (): INavData => {
+const useNavData = (customNav: number  = 0): INavData => {
     const [navData, setNavData] = useState({
         statusBarHeight: 0,
         titleBarHeight: 0,
@@ -62,7 +62,7 @@ const useNavData = (): INavData => {
         } else {
             setNavData({
                 ...navData,
-                contentHeight: screenHeight
+                contentHeight: screenHeight -customNav
             })
         }
 

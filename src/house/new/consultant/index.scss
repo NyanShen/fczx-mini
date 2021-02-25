@@ -1,9 +1,9 @@
-.house-consultant {
+.house-consultant-wrapper {
     position: relative;
     padding: 20px;
     height: 100vh;
     box-sizing: border-box;
-    &-content {
+    .house-consultant-content {
         .consultant-item {
             display: flex;
             align-items: center;

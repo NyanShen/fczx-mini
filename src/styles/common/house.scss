@@ -24,6 +24,7 @@
                 margin-top: -6px;
                 .text-item {
                     width: 100%;
+                    line-height: 36px;
                     white-space: nowrap;
                     text-overflow: ellipsis;
                     overflow: hidden;
@@ -42,6 +43,7 @@
                 .title {
                     font-size: $font-34;
                     font-weight: bold;
+                    line-height: 44px;
                     color: $title-color;
                 }
 

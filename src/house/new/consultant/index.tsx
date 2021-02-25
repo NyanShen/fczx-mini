@@ -88,7 +88,7 @@ const HouseConsultant = () => {
         })
     }
     return (
-        <View className="house-consultant">
+        <View className="house-consultant-wrapper">
             <View className="house-consultant-content">
                 {
                     consultants.map((item: any, index: number) => (

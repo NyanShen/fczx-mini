@@ -30,7 +30,7 @@ import '@styles/common/search-tab.scss'
 import './index.scss'
 
 const CommunityList = () => {
-    const { contentHeight } = useNavData()
+    const { contentHeight } = useNavData(40)
     const PAGE_LIMIT = 10
     const footerBtnHeight = 60
     const scrollHeight = contentHeight * 0.5 - footerBtnHeight
@@ -443,7 +443,7 @@ const CommunityList = () => {
                                             <Image className="taro-image" src={item.image_path}></Image>
                                         </View>
                                         <View className="house-text">
-                                            <View className="text-item row2">
+                                            <View className="text-item title row2">
                                                 <Text>{item.title}</Text>
                                             </View>
                                             <View className="text-item text-item-small">

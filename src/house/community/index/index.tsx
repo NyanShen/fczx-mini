@@ -7,13 +7,14 @@ import api from '@services/api'
 import app from '@services/request'
 import { toUrlParam } from '@utils/urlHandler'
 import { fetchUserData } from '@services/login'
+import { getStaticMap } from '@utils/map'
+import { toHouseNew } from '@/router/router'
 import { PRICE_TYPE, SURROUND_TABS, ISurroundTab, INIT_SURROUND_TAB } from '@constants/house'
 
 import '@styles/common/house.scss'
 import '@styles/common/house-album.scss'
 import '@house/new/surround/index.scss'
 import './index.scss'
-import { getStaticMap } from '@utils/map'
 
 interface IAlbumSwiper {
     albumId: string,
@@ -123,16 +124,7 @@ const CommunityIndex = () => {
 
     const toHouseSurround = (currentTab: ISurroundTab = INIT_SURROUND_TAB) => {
         const { id, title, latitude, longitude } = communityData
-        const paramString = toUrlParam({
-            id,
-            title: title,
-            latitude,
-            longitude,
-            tab: JSON.stringify(currentTab),
-        })
-        Taro.navigateTo({
-            url: `/house/new/surround/index${paramString}`
-        })
+        toHouseNew('Surround', { id, title, latitude, longitude }, currentTab)
     }
 
     const toList = (name: string) => {

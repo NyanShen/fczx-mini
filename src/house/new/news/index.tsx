@@ -14,7 +14,7 @@ interface IParam {
 const INIT_PARAM = { currentPage: 1 }
 const HouseNewsList = () => {
     const PAGE_LIMIT = 10
-    const { contentHeight } = useNavData()
+    const { contentHeight } = useNavData(40)
     const router = getCurrentInstance().router
     const [showEmpty, setShowEmpty] = useState<boolean>(false)
     const [page, setPage] = useState<IPage>(INIT_PAGE)

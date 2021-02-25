@@ -389,7 +389,7 @@ const RentList = () => {
                                             <Image className="taro-image" src={item.image_path} mode="aspectFill"></Image>
                                         </View>
                                         <View className="house-text">
-                                            <View className="text-item row2">
+                                            <View className="text-item title row2">
                                                 <Text>{item.title}</Text>
                                             </View>
                                             <View className="text-item text-item-small">

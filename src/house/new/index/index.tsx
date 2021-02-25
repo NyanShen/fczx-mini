@@ -10,11 +10,11 @@ import { toUrlParam } from '@utils/urlHandler'
 import { formatTimestamp, formatPhoneCall } from '@utils/index'
 import { getToken, hasLoginBack } from '@services/login'
 import useNavData from '@hooks/useNavData'
+import NavBar from '@/components/navbar'
 import Popup from '@components/popup/index'
 import SandCommon from '@components/sandCommon/index'
 import { getStaticMap } from '@utils/map'
 import { SALE_STATUS, PRICE_TYPE, SURROUND_TABS, ISurroundTab, INIT_SURROUND_TAB } from '@constants/house'
-import NavBar from '@/components/navbar'
 
 import '@styles/common/house.scss'
 import '@styles/common/house-album.scss'
@@ -52,7 +52,7 @@ const INIT_HOUSE_DATA = {
 }
 
 const House = () => {
-    const { contentHeight } = useNavData()
+    const { contentHeight } = useNavData(40)
     const params: any = getCurrentInstance().router?.params
     const [albumSwiper, setAlbumSwiper] = useState<IAlbumSwiper>(INIT_ALBUM_SWIPER)
     const [houseData, setHouseData] = useState<any>(INIT_HOUSE_DATA)

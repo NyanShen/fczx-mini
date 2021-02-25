@@ -86,7 +86,7 @@ const priceTabs: IFilter[] = [
 ]
 
 const esfList = () => {
-    const { contentHeight } = useNavData()
+    const { contentHeight } = useNavData(40)
     const PAGE_LIMIT = 10
     const footerBtnHeight = 60
     const scrollHeight = contentHeight * 0.5 - footerBtnHeight
