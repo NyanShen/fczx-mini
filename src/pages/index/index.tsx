@@ -7,98 +7,19 @@ import api from '@services/api'
 import app from '@services/request'
 import storage from '@utils/storage'
 import CustomSocket from '@utils/socket'
-import HOUSE_ICON from '@assets/icons/house.png'
-import ESF_ICON from '@assets/icons/esf.png'
-import RENT_ICON from '@assets/icons/rent.png'
-import COMMUNITY from '@assets/icons/community.png'
-import CALC_ICON from '@assets/icons/calc.png'
-import BUS from '@assets/icons/bus.png'
-import news from '@assets/icons/news.png'
 import { PROJECT_NAME } from '@constants/global'
 import { PRICE_TYPE, SALE_STATUS } from '@constants/house'
+import {
+  esfPath,
+  housePath,
+  house_menu,
+  house_sub_menu,
+  esf_menu,
+  esf_sub_menu,
+  news_menu, calc_menu, house_group_menu
+} from './index.util'
 import '@styles/common/house.scss'
 import './index.scss'
-const esfPath = '/house/esf/list/index'
-const housePath = '/house/new/list/index'
-const menuContent = [{
-  children: [
-    {
-      name: '新盘',
-      icon: HOUSE_ICON,
-      path: housePath
-    },
-    {
-      name: '看房团',
-      icon: BUS,
-      path: '/house/group/index'
-    },
-    {
-      name: '二手房',
-      icon: ESF_ICON,
-      path: esfPath
-    },
-    {
-      name: '租房',
-      icon: RENT_ICON,
-      path: '/house/rent/list/index'
-    },
-    {
-      name: '小区',
-      icon: COMMUNITY,
-      path: '/house/community/list/index'
-    },
-    {
-      name: '资讯',
-      icon: news,
-      path: '/news/list/index'
-    },
-    {
-      name: '房贷计算',
-      icon: CALC_ICON,
-      path: '/calculator/index'
-    }
-  ]
-}]
-
-const house_menus = [
-  {
-    name: '热门楼盘',
-  },
-  {
-    name: '热门团购',
-    path: `${housePath}?is_recommend=1`
-  },
-  {
-    name: '组队看房',
-    path: `/house/group/index`
-  },
-  {
-    name: '地图找房',
-    path: '/house/new/map/index'
-  },
-  {
-    name: '更多',
-    path: housePath
-  }
-]
-
-const esf_menus = [
-  {
-    name: '二手房',
-  },
-  {
-    name: '小区',
-    path: '/house/community/list/index'
-  },
-  {
-    name: '租房',
-    path: '/house/rent/list/index'
-  },
-  {
-    name: '更多',
-    path: esfPath
-  }
-]
 
 const Index = () => {
   const [city, setCity] = useState<any>({})
@@ -127,26 +48,49 @@ const Index = () => {
     if (!currentCity) {
       app.setLocation((result: any) => {
         setCity(result)
-        fetchHouseList()
-        fetchEsfList()
         fetchHomeData()
       })
       return
     }
     if (currentCity.id !== city.id) {
       setCity(currentCity)
-      fetchHouseList()
-      fetchEsfList()
       fetchHomeData()
     }
 
   })
 
+  const isShow = (param: any) => {
+    return param == 1
+  }
+
   const fetchHomeData = () => {
     app.request({
       url: app.areaApiUrl(api.getHomeApplet),
     }).then((result: any) => {
-      setHomeData(result)
+      let menuContent: any[] = []
+      let esf_menus: any[] = []
+      let house_menus: any[] = []
+      if (isShow(result.navSetting.is_show_house)) {
+        menuContent = [...menuContent, ...house_menu]
+        house_menus = house_sub_menu
+        fetchHouseList()
+      }
+      if (isShow(result.navSetting.is_show_house_group)) {
+        menuContent = [...menuContent, ...house_group_menu]
+      }
+      if (isShow(result.navSetting.is_show_esf)) {
+        menuContent = [...menuContent, ...esf_menu]
+        esf_menus = esf_sub_menu
+        fetchEsfList()
+      }
+      if (isShow(result.navSetting.is_show_news)) {
+        menuContent = [...menuContent, ...news_menu]
+      }
+      if (isShow(result.navSetting.is_show_calculator)) {
+        menuContent = [...menuContent, ...calc_menu]
+      }
+      setHomeData({ ...result, menuContent, house_menus, esf_menus })
+      storage.setItem('navSetting', result.navSetting)
     })
   }
 
@@ -157,7 +101,7 @@ const Index = () => {
         page: 1,
         limit: 10
       }
-    }).then((result: any) => {
+    }, { loading: false }).then((result: any) => {
       setHouseList(result.data)
     })
   }
@@ -169,7 +113,7 @@ const Index = () => {
         page: 1,
         limit: 10
       }
-    }).then((result: any) => {
+    }, { loading: false }).then((result: any) => {
       setEsfList(result.data)
     })
   }
@@ -302,28 +246,23 @@ const Index = () => {
       </View>
 
       <View className="index-menu">
-        {
-          menuContent.map((item: any, index: number) => {
-            return (
-              <View className="index-menu-content" key={index}>
-                {
-                  item.children.map((childItem: any, childIndex: number) => {
-                    return (
-                      <View className="index-menu-item" key={childIndex} onClick={() => handleMenuClick(childItem.path)}>
-                        <View className="index-menu-icon">
-                          <Image className="taro-image" src={childItem.icon} mode="aspectFill"></Image>
-                        </View>
-                        <View className="index-menu-name">
-                          <Text>{childItem.name}</Text>
-                        </View>
-                      </View>
-                    )
-                  })
-                }
-              </View>
-            )
-          })
-        }
+        <View className="index-menu-content">
+          {
+            homeData.menuContent &&
+            homeData.menuContent.map((item: any, index: number) => {
+              return (
+                <View className="index-menu-item" key={index} onClick={() => handleMenuClick(item.path)}>
+                  <View className="index-menu-icon">
+                    <Image className="taro-image" src={item.icon} mode="aspectFill"></Image>
+                  </View>
+                  <View className="index-menu-name">
+                    <Text>{item.name}</Text>
+                  </View>
+                </View>
+              )
+            })
+          }
+        </View>
       </View>
       <View className="index-price">
         <View className="index-title">
@@ -347,116 +286,124 @@ const Index = () => {
           </View>
         </View>
       </View>
-      <View className="house-list">
-        <View className="index-title">
-          {
-            house_menus.map((item: any, index: number) => (
-              <View
-                key={index}
-                className="title-item"
-                onClick={() => handleMenuClick(item.path)}
-              >{item.name}</View>
-            ))
-          }
-        </View>
-        {
-          houseList.length > 0 &&
-          <View className="house-list-ul">
+      {
+        homeData.house_menus &&
+        <View className="house-list">
+          <View className="index-title">
             {
-              houseList.map((item: any) => (
-                <View key={item.id} className="house-list-li">
-                  <View className="house-content" onClick={() => toHouseItem(item, 'new')}>
-                    <View className="house-image">
-                      <Image className="taro-image" src={item.image_path} mode="aspectFill"></Image>
-                    </View>
-                    <View className="house-text">
-                      <View className="text-item title mb8">
-                        <Text className={classnames('sale-status', `sale-status-${item.sale_status}`)}>{SALE_STATUS[item.sale_status]}</Text>
-                        <Text>{item.title}</Text>
-                      </View>
-                      <View className="text-item small-desc mb8">
-                        <Text>{item.area && item.area.name}</Text>
-                        <Text className="line-split"></Text>
-                        <Text>{item.comment_num}条评论</Text>
-                      </View>
-                      <View className="text-item mb12">
-                        {renderPrice(item.price, item.price_type)}
-                      </View>
-                      <View className="text-item tags">
-                        {
-                          item.tags && item.tags.map((tag: string, index: number) => (
-                            <Text key={index} className="tags-item">{tag}</Text>
-                          ))
-                        }
-                      </View>
-                    </View>
-                  </View>
-                  {renderActivity(item)}
-                </View>
+              homeData.house_menus.map((item: any, index: number) => (
+                <View
+                  key={index}
+                  className="title-item"
+                  onClick={() => handleMenuClick(item.path)}
+                >{item.name}</View>
               ))
             }
           </View>
-        }
-        <View className="house-more" onClick={() => handleMenuClick(housePath)}>
-          更多房源
+          {
+            houseList.length > 0 &&
+            <View className="house-list-ul">
+              {
+                houseList.map((item: any) => (
+                  <View key={item.id} className="house-list-li">
+                    <View className="house-content" onClick={() => toHouseItem(item, 'new')}>
+                      <View className="house-image">
+                        <Image className="taro-image" src={item.image_path} mode="aspectFill"></Image>
+                      </View>
+                      <View className="house-text">
+                        <View className="text-item title mb8">
+                          <Text className={classnames('sale-status', `sale-status-${item.sale_status}`)}>{SALE_STATUS[item.sale_status]}</Text>
+                          <Text>{item.title}</Text>
+                        </View>
+                        <View className="text-item small-desc mb8">
+                          <Text>{item.area && item.area.name}</Text>
+                          <Text className="line-split"></Text>
+                          <Text>{item.comment_num}条评论</Text>
+                        </View>
+                        <View className="text-item mb12">
+                          {renderPrice(item.price, item.price_type)}
+                        </View>
+                        <View className="text-item tags">
+                          {
+                            item.tags && item.tags.map((tag: string, index: number) => (
+                              <Text key={index} className="tags-item">{tag}</Text>
+                            ))
+                          }
+                        </View>
+                      </View>
+                    </View>
+                    {renderActivity(item)}
+                  </View>
+                ))
+              }
+            </View>
+          }
+          <View className="house-more" onClick={() => handleMenuClick(housePath)}>
+            更多房源
         </View>
-      </View>
+        </View>
+      }
 
-      <View className="house-list mt20">
-        <View className="index-title">
-          {
-            esf_menus.map((item: any, index: number) => (
-              <View
-                key={index}
-                className="title-item"
-                onClick={() => handleMenuClick(item.path)}
-              >{item.name}</View>
-            ))
-          }
-        </View>
-        {
-          esfList.length > 0 &&
-          <View className="house-list-ul">
+      {
+        homeData.esf_menus &&
+        <View className="house-list mt20">
+          <View className="index-title">
             {
-              esfList.map((item: any, index: number) => (
-                <View key={index} className="house-list-li">
-                  <View className="house-content" onClick={() => toHouseItem(item, 'esf')}>
-                    <View className="house-image">
-                      <Image className="taro-image" src={item.image_path} mode="aspectFill"></Image>
-                    </View>
-                    <View className="house-text">
-                      <View className="text-item title row2">
-                        <Text>{item.title}</Text>
-                      </View>
-                      <View className="text-item text-item-small">
-                        <Text>{item.room}室{item.office}厅{item.toilet}卫</Text>
-                        <Text className="line-split"></Text>
-                        <Text>{item.building_area}m²</Text>
-                        <Text className="ml20">{item.community}</Text>
-                      </View>
-                      <View className="text-item mb12">
-                        <Text className="price">{item.price_total}</Text>
-                        <Text className="price-unit">万</Text>
-                        <Text className="small-desc ml20">{item.price_unit}元/m²</Text>
-                      </View>
-                      <View className="text-item tags">
-                        {
-                          item.tags.map((item: string, index: number) => (
-                            <Text key={index} className="tags-item">{item}</Text>
-                          ))
-                        }
-                      </View>
-                    </View>
-                  </View>
-                </View>
+              homeData.esf_menus.map((item: any, index: number) => (
+                <View
+                  key={index}
+                  className="title-item"
+                  onClick={() => handleMenuClick(item.path)}
+                >{item.name}</View>
               ))
             }
           </View>
-        }
-        <View className="house-more" onClick={() => handleMenuClick(esfPath)}>
-          更多房源
+          {
+            esfList.length > 0 &&
+            <View className="house-list-ul">
+              {
+                esfList.map((item: any, index: number) => (
+                  <View key={index} className="house-list-li">
+                    <View className="house-content" onClick={() => toHouseItem(item, 'esf')}>
+                      <View className="house-image">
+                        <Image className="taro-image" src={item.image_path} mode="aspectFill"></Image>
+                      </View>
+                      <View className="house-text">
+                        <View className="text-item title row2">
+                          <Text>{item.title}</Text>
+                        </View>
+                        <View className="text-item text-item-small">
+                          <Text>{item.room}室{item.office}厅{item.toilet}卫</Text>
+                          <Text className="line-split"></Text>
+                          <Text>{item.building_area}m²</Text>
+                          <Text className="ml20">{item.community}</Text>
+                        </View>
+                        <View className="text-item mb12">
+                          <Text className="price">{item.price_total}</Text>
+                          <Text className="price-unit">万</Text>
+                          <Text className="small-desc ml20">{item.price_unit}元/m²</Text>
+                        </View>
+                        <View className="text-item tags">
+                          {
+                            item.tags.map((item: string, index: number) => (
+                              <Text key={index} className="tags-item">{item}</Text>
+                            ))
+                          }
+                        </View>
+                      </View>
+                    </View>
+                  </View>
+                ))
+              }
+            </View>
+          }
+          <View className="house-more" onClick={() => handleMenuClick(esfPath)}>
+            更多房源
         </View>
-      </View>
+        </View>
+      }
+
+
     </View>
   )
 }

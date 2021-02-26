@@ -6,8 +6,9 @@ import app from '@services/request'
 import CustomSocket from '@utils/socket'
 import { hasLogin } from '@services/login'
 import { toUrlParam } from '@utils/urlHandler'
-import './index.scss'
 import NavBar from '@/components/navbar'
+import storage from '@/utils/storage'
+import './index.scss'
 
 const INIT_USER: any = {
   avatar: 'https://static.fczx.com/www/assets/mini/user_photo.png',
@@ -16,6 +17,8 @@ const INIT_USER: any = {
 const JOIN_PHONE = '18671072505'
 
 const User = () => {
+
+  const { is_show_esf } = storage.getItem('navSetting')
   const [user, setUser] = useState<any>(INIT_USER)
 
   useDidShow(() => {
@@ -66,7 +69,7 @@ const User = () => {
 
   return (
     <View className="user">
-      <NavBar title="个人中心" primary={true} showIcon={false}/>
+      <NavBar title="个人中心" primary={true} showIcon={false} />
       <View className="user-content">
         <View className="user-header">
           <View className="header-bg"></View>
@@ -137,32 +140,35 @@ const User = () => {
           </View>
         </View>
 
-        <View className="user-group">
-          <View className="user-item">
-            <View className="item-icon origin">
-              <Text className="iconfont iconhousemanage"></Text>
+        {
+          is_show_esf == 1 &&
+          <View className="user-group">
+            <View className="user-item">
+              <View className="item-icon origin">
+                <Text className="iconfont iconhousemanage"></Text>
+              </View>
+              <View className="item-text">管理房源</View>
             </View>
-            <View className="item-text">管理房源</View>
+            <View className="user-row">
+              <View className="row-item" onClick={() => toHouseModule('list')}>
+                <View className="iconfont iconmanage"></View>
+                <View className="text">我的出售</View>
+              </View>
+              <View className="row-item" onClick={() => toHouseModule('list', 'rent')}>
+                <View className="iconfont iconhome"></View>
+                <View className="text">我的出租</View>
+              </View>
+              <View className="row-item" onClick={() => toHouseModule('sale')}>
+                <View className="iconfont iconsquare"></View>
+                <View className="text">发布出售</View>
+              </View>
+              <View className="row-item" onClick={() => toHouseModule('sale', 'rent')}>
+                <View className="iconfont iconhomepage"></View>
+                <View className="text">发布出租</View>
+              </View>
+            </View>
           </View>
-          <View className="user-row">
-            <View className="row-item" onClick={() => toHouseModule('list')}>
-              <View className="iconfont iconmanage"></View>
-              <View className="text">我的出售</View>
-            </View>
-            <View className="row-item" onClick={() => toHouseModule('list', 'rent')}>
-              <View className="iconfont iconhome"></View>
-              <View className="text">我的出租</View>
-            </View>
-            <View className="row-item" onClick={() => toHouseModule('sale')}>
-              <View className="iconfont iconsquare"></View>
-              <View className="text">发布出售</View>
-            </View>
-            <View className="row-item" onClick={() => toHouseModule('sale', 'rent')}>
-              <View className="iconfont iconhomepage"></View>
-              <View className="text">发布出租</View>
-            </View>
-          </View>
-        </View>
+        }
         <View className="user-group">
           <Button className="user-item user-item-btn" open-type="contact">
             <View className="item-icon origin">
