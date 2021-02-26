@@ -124,7 +124,7 @@ const CommunityIndex = () => {
 
     const toHouseSurround = (currentTab: ISurroundTab = INIT_SURROUND_TAB) => {
         const { id, title, latitude, longitude } = communityData
-        toHouseNew('Surround', { id, title, latitude, longitude }, currentTab)
+        toHouseNew('Surround', { id, title, latitude, longitude, type: currentTab.type })
     }
 
     const toList = (name: string) => {

@@ -10,8 +10,8 @@ import { toUrlParam } from '@utils/urlHandler'
 import { formatTimestamp, formatPhoneCall } from '@utils/index'
 import { getToken, hasLoginBack } from '@services/login'
 import useNavData from '@hooks/useNavData'
-import NavBar from '@/components/navbar'
 import Popup from '@components/popup/index'
+import NavBar from '@/components/navbar'
 import SandCommon from '@components/sandCommon/index'
 import { getStaticMap } from '@utils/map'
 import { SALE_STATUS, PRICE_TYPE, SURROUND_TABS, ISurroundTab, INIT_SURROUND_TAB } from '@constants/house'
@@ -178,7 +178,7 @@ const House = () => {
 
     const toHouseSurround = (currentTab: ISurroundTab = INIT_SURROUND_TAB) => {
         const { id, title, latitude, longitude } = houseData
-        toHouseNew('Surround', { id, title, latitude, longitude }, currentTab)
+        toHouseNew('Surround', { id, title, latitude, longitude, type: currentTab.type })
     }
 
     const toHouseSand = (currentBuilding: any) => {
