@@ -13,7 +13,7 @@ import './index.scss'
 const houseSurround = () => {
     const params: any = getCurrentInstance().router?.params
     const currentTab: any = find(SURROUND_TABS, { type: params.type }) || {}
-    const title = params.title
+    const title = decodeURIComponent(params.title)
     const latitude = params.latitude
     const longitude = params.longitude
     const { contentHeight } = useNavData()
@@ -27,13 +27,6 @@ const houseSurround = () => {
     useEffect(() => {
         ref.current.updateTabMarkers && ref.current.updateTabMarkers(tab)
     }, [tab])
-
-    const handleTabChange = (item: ISurroundTab) => {
-        if (item.type === tab.type) {
-            return
-        }
-        setTab(item)
-    }
 
     const getMapInstance = useMemo(() => {
         return IS_H5 ?
@@ -60,7 +53,7 @@ const houseSurround = () => {
                         SURROUND_TABS.map((item: any, index: number) => (
                             <View
                                 key={index}
-                                onClick={() => handleTabChange(item)}
+                                onClick={() => setTab(item)}
                                 className={classnames('tabs-item', tab.type === item.type && 'actived')}
                             >
                                 <Text className={classnames('iconfont', item.icon)}></Text>

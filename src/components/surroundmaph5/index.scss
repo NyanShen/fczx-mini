@@ -1,4 +1,24 @@
 .h5-map {
     width: 100%;
     height: 100%;
+
+    /*周边配套中心点*/
+
+    .surround-bubble {
+        position: relative;
+        height: 70px;
+        line-height: 70px;
+        font-size: 15px;
+        padding: 0 20px;
+        text-align: center;
+        color: #fff;
+        .triangle-down {
+            position: absolute;
+            top: 70px;
+            left: 40%;
+            border-width: 20px;
+            border-style: solid;
+            border-color: #11a43c transparent transparent transparent;
+        }
+    }
 }
