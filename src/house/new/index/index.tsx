@@ -479,39 +479,41 @@ const House = () => {
         <View className="house">
             <NavBar title={houseData.title} primary={true} />
             <ScrollView style={{ maxHeight: `${contentHeight - 55}px`, backgroundColor: '#f7f7f7' }} scrollY>
-                {
-                    albumSwiper.albumItems.length > 0 &&
-                    <View className="house-album">
-                        <Swiper
-                            style={{ height: '250px' }}
-                            current={albumSwiper.swiperIndex}
-                            onChange={onSwiperChange}
-                        >
-                            {
-                                albumSwiper.albumItems.map((item: any, index: number) => (
-                                    <SwiperItem key={index} onClick={() => toHouseModule('Album')}>
-                                        <Image className="taro-image" src={item.image_path}></Image>
-                                        {item.video_path && <Text className="icon-vedio"></Text>}
-                                    </SwiperItem>
-                                ))
-                            }
-                        </Swiper>
-                        <View className="album-count" onClick={() => toHouseModule('Album')}>
-                            共{houseData.imagesData.imageCount}张
+                <View className="house-album">
+                    {
+                        albumSwiper.albumItems.length > 0 &&
+                        <View className="house-album-content">
+                            <Swiper
+                                style={{ height: '250px' }}
+                                current={albumSwiper.swiperIndex}
+                                onChange={onSwiperChange}
+                            >
+                                {
+                                    albumSwiper.albumItems.map((item: any, index: number) => (
+                                        <SwiperItem key={index} onClick={() => toHouseModule('Album')}>
+                                            <Image className="taro-image" src={item.image_path}></Image>
+                                            {item.video_path && <Text className="icon-vedio"></Text>}
+                                        </SwiperItem>
+                                    ))
+                                }
+                            </Swiper>
+                            <View className="album-count" onClick={() => toHouseModule('Album')}>
+                                共{houseData.imagesData.imageCount}张
                         </View>
-                        <View className="album-text">
-                            {
-                                albumSwiper.albumTabs.map((item: any, index: number) => (
-                                    <Text
-                                        key={index}
-                                        className={classnames('album-text-item', index == albumSwiper.swiperIndex && 'album-text-actived')}
-                                        onClick={() => switchAlbum(index)}
-                                    >{item.name}</Text>
-                                ))
-                            }
+                            <View className="album-text">
+                                {
+                                    albumSwiper.albumTabs.map((item: any, index: number) => (
+                                        <Text
+                                            key={index}
+                                            className={classnames('album-text-item', index == albumSwiper.swiperIndex && 'album-text-actived')}
+                                            onClick={() => switchAlbum(index)}
+                                        >{item.name}</Text>
+                                    ))
+                                }
+                            </View>
                         </View>
-                    </View>
-                }
+                    }
+                </View>
 
                 <View className="house-header">
                     <View className="header-left">

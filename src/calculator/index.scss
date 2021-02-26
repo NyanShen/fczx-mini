@@ -26,6 +26,7 @@
             justify-content: space-between;
             padding: 20px 30px;
             border-bottom: $border;
+            font-size: $font-32;
             .item-label {
                 color: $desc-color;
             }
@@ -99,6 +100,7 @@
                 line-height: 50px;
                 .value {
                     flex: 1;
+                    font-size: $font-32;
                 }
                 .label {
                     font-size: $font-basic;

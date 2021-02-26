@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Taro, { getCurrentInstance, makePhoneCall, useShareAppMessage, useShareTimeline } from '@tarojs/taro'
 import { ScrollView, View, Text, Image, Button, Swiper, SwiperItem } from '@tarojs/components'
+import map from 'lodash/map'
 
 import api from '@services/api'
 import app from '@services/request'
@@ -8,12 +9,13 @@ import useNavData from '@hooks/useNavData'
 import { PRICE_TYPE } from '@constants/house'
 import { toUrlParam } from '@utils/urlHandler'
 import { formatPhoneCall } from '@utils/index'
+import { getToken, hasLoginBack } from '@services/login'
 import { bMapTransQQMap, getStaticMap } from '@utils/map'
 import '@styles/common/house.scss'
 import '@styles/common/house-album.scss'
 import '@styles/common/bottom-bar.scss'
 import './index.scss'
-import { getToken, hasLoginBack } from '@services/login'
+
 const INIT_ESF_DATA = {
     esfImage: [],
     tags: [],
@@ -41,7 +43,6 @@ const SOURCE_TYPE = {
 const esfHouse = () => {
     const params: any = getCurrentInstance().router?.params
     const { contentHeight } = useNavData()
-    const [open, setOpen] = useState<boolean>(false)
     const [album, setAlbum] = useState<IAlbum>(INIT_ALNUM)
     const [esfData, setEsfData] = useState<any>(INIT_ESF_DATA)
     const [collect, setCollect] = useState<boolean>(false)
@@ -162,6 +163,13 @@ const esfHouse = () => {
         })
     }
 
+    const handlePreviewImage = (image_path: string) => {
+        Taro.previewImage({
+            urls: map(esfData.esfImage, 'image_path'),
+            current: image_path
+        })
+    }
+
     const toLocation = () => {
         const { latitude, longitude } = esfData.fangHouse
         const location = bMapTransQQMap(latitude, longitude)
@@ -191,21 +199,27 @@ const esfHouse = () => {
         <View className="esf">
             <ScrollView style={{ maxHeight: `${contentHeight - 55}px` }} scrollY>
                 <View className="house-album">
-                    <Swiper
-                        style={{ height: '250px' }}
-                        current={album.currentIdex}
-                        onChange={onSwiperChange}
-                    >
-                        {
-                            esfData.esfImage.map((item: any, index: number) => (
-                                <SwiperItem key={index} itemId={item.id} onClick={() => setOpen(true)}>
-                                    <Image className="taro-image" src={item.image_path}></Image>
-                                </SwiperItem>
-                            ))
-                        }
-                    </Swiper>
-                    <View className="album-count">共{esfData.esfImage.length}张</View>
+                    {
+                        esfData.esfImage.length > 0 &&
+                        <View className="house-album-content">
+                            <Swiper
+                                style={{ height: '250px' }}
+                                current={album.currentIdex}
+                                onChange={onSwiperChange}
+                            >
+                                {
+                                    esfData.esfImage.map((item: any, index: number) => (
+                                        <SwiperItem key={index} itemId={item.id} onClick={() => handlePreviewImage(item.image_path)}>
+                                            <Image className="taro-image" src={item.image_path}></Image>
+                                        </SwiperItem>
+                                    ))
+                                }
+                            </Swiper>
+                            <View className="album-count">共{esfData.esfImage.length}张</View>
+                        </View>
+                    }
                 </View>
+
                 <View className="esf-item">
                     <View className="header">
                         <View className="header-left">{esfData.title}</View>
@@ -383,33 +397,6 @@ const esfHouse = () => {
                     <Text className="btn btn-primary btn-bar">电话咨询</Text>
                 </View>
             </View>
-            {
-                open &&
-                <View className="album-swiper" style={{ top: 0 }}>
-                    <View className="album-swiper-header">
-                        <View className="album-count">
-                            <Text>{album.currentIdex + 1}/{esfData.esfImage.length}</Text>
-                        </View>
-                        <View className="iconfont iconclose" onClick={() => setOpen(false)}></View>
-                    </View>
-                    <View className="album-swiper-content">
-                        <Swiper
-                            style={{ height: contentHeight - 80 }}
-                            current={album.currentIdex}
-                            onChange={onSwiperChange}
-                        >
-                            {
-                                esfData.esfImage.map((item: any, index: number) => (
-                                    <SwiperItem key={index}>
-                                        <Image className="taro-image" src={item.image_path} mode='widthFix'></Image>
-                                        <View className="swiper-text"></View>
-                                    </SwiperItem>
-                                ))
-                            }
-                        </Swiper>
-                    </View>
-                </View>
-            }
         </View>
     )
 }

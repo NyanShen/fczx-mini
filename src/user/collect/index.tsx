@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import Taro, { useReady } from '@tarojs/taro'
+import Taro from '@tarojs/taro'
 import { ScrollView, View, Image, Text } from '@tarojs/components'
 import classnames from 'classnames'
 
@@ -18,35 +18,33 @@ interface IParam {
     currentPage: number
 }
 
-let collectCate: any[] = []
 const INIT_PARAM: IParam = { cateId: '1', currentPage: 1 }
 
 const Collect = () => {
+    let collectCate: any[] = []
     const { contentHeight } = useNavData()
     const [page, setPage] = useState<IPage>(INIT_PAGE)
     const [param, setParam] = useState<IParam>(INIT_PARAM)
     const [collectList, setCollectList] = useState<any[]>([])
     const { is_show_house, is_show_esf } = storage.getItem('navSetting')
 
-    useReady(() => {
-        if (is_show_house == 1) {
-            collectCate.push({ id: '1', name: '新房' })
-        }
+    if (is_show_house == 1) {
+        collectCate.push({ id: '1', name: '新房' })
+    }
 
-        if (is_show_esf == 1) {
-            const esfCate = [
-                {
-                    id: '2',
-                    name: '二手房'
-                },
-                {
-                    id: '3',
-                    name: '租房'
-                }
-            ]
-            collectCate = [...collectCate, ...esfCate]
-        }
-    })
+    if (is_show_esf == 1) {
+        const esfCate = [
+            {
+                id: '2',
+                name: '二手房'
+            },
+            {
+                id: '3',
+                name: '租房'
+            }
+        ]
+        collectCate = [...collectCate, ...esfCate]
+    }
 
     useEffect(() => {
         fetchCollectList()

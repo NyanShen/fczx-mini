@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Taro, { getCurrentInstance, useShareAppMessage, useShareTimeline } from '@tarojs/taro'
 import { View, ScrollView, Text, Image, Button, Swiper, SwiperItem } from '@tarojs/components'
+import map from 'lodash/map'
 
 import api from '@services/api'
 import app from '@services/request'
@@ -59,7 +60,6 @@ const SOURCE_TYPE = {
 const RentIndex = () => {
     const params: any = getCurrentInstance().router?.params
     const { contentHeight } = useNavData()
-    const [open, setOpen] = useState<boolean>(false)
     const [album, setAlbum] = useState<IAlbum>(INIT_ALNUM)
     const [rentData, setRentData] = useState<any>(INIT_RENT_DATA)
     const [collect, setCollect] = useState<boolean>(false)
@@ -192,24 +192,36 @@ const RentIndex = () => {
         })
     }
 
+    const handlePreviewImage = (image_path: string) => {
+        Taro.previewImage({
+            urls: map(rentData.rentImage, 'image_path'),
+            current: image_path
+        })
+    }
+
     return (
         <View className="rent">
             <ScrollView style={{ maxHeight: `${contentHeight - 55}px` }} scrollY>
                 <View className="house-album">
-                    <Swiper
-                        style={{ height: '250px' }}
-                        current={album.currentIdex}
-                        onChange={onSwiperChange}
-                    >
-                        {
-                            rentData.rentImage.map((item: any, index: number) => (
-                                <SwiperItem key={index} itemId={item.id} onClick={() => setOpen(true)}>
-                                    <Image className="taro-image" src={item.image_path}></Image>
-                                </SwiperItem>
-                            ))
-                        }
-                    </Swiper>
-                    <View className="album-count">共{rentData.rentImage.length}张</View>
+                    {
+                        rentData.rentImage.length > 0 &&
+                        <View className="house-album-content">
+                            <Swiper
+                                style={{ height: '250px' }}
+                                current={album.currentIdex}
+                                onChange={onSwiperChange}
+                            >
+                                {
+                                    rentData.rentImage.map((item: any, index: number) => (
+                                        <SwiperItem key={index} onClick={() => handlePreviewImage(item.image_path)}>
+                                            <Image className="taro-image" src={item.image_path}></Image>
+                                        </SwiperItem>
+                                    ))
+                                }
+                            </Swiper>
+                            <View className="album-count">共{rentData.rentImage.length}张</View>
+                        </View>
+                    }
                 </View>
                 <View className="rent-item">
                     <View className="header">
@@ -364,33 +376,6 @@ const RentIndex = () => {
                     <Text className="btn btn-primary btn-bar">电话咨询</Text>
                 </View>
             </View>
-            {
-                open &&
-                <View className="album-swiper" style={{ top: 0 }}>
-                    <View className="album-swiper-header">
-                        <View className="album-count">
-                            <Text>{album.currentIdex + 1}/{rentData.rentImage.length}</Text>
-                        </View>
-                        <View className="iconfont iconclose" onClick={() => setOpen(false)}></View>
-                    </View>
-                    <View className="album-swiper-content">
-                        <Swiper
-                            style={{ height: contentHeight - 80 }}
-                            current={album.currentIdex}
-                            onChange={onSwiperChange}
-                        >
-                            {
-                                rentData.rentImage.map((item: any, index: number) => (
-                                    <SwiperItem key={index}>
-                                        <Image className="taro-image" src={item.image_path} mode='widthFix'></Image>
-                                        <View className="swiper-text"></View>
-                                    </SwiperItem>
-                                ))
-                            }
-                        </Swiper>
-                    </View>
-                </View>
-            }
         </View>
     )
 }

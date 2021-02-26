@@ -5,8 +5,6 @@ import classnames from 'classnames'
 
 import api from '@services/api'
 import app from '@services/request'
-import { toUrlParam } from '@utils/urlHandler'
-import { fetchUserData } from '@services/login'
 import { getStaticMap } from '@utils/map'
 import { toHouseNew } from '@/router/router'
 import { PRICE_TYPE, SURROUND_TABS, ISurroundTab, INIT_SURROUND_TAB } from '@constants/house'
@@ -17,12 +15,14 @@ import '@house/new/surround/index.scss'
 import './index.scss'
 
 interface IAlbumSwiper {
-    albumId: string,
+    albumTabs: any[],
+    albumItems: any[],
     swiperIndex: number
 }
 
 const INIT_ALBUM_SWIPER = {
-    albumId: '',
+    albumTabs: [],
+    albumItems: [],
     swiperIndex: 0
 }
 
@@ -35,7 +35,6 @@ const INIT_HOUSE_DATA = {
     imagesData: {},
     fangHouseInfo: {},
 }
-const imageId = "image_1"
 
 const CommunityIndex = () => {
 
@@ -68,9 +67,17 @@ const CommunityIndex = () => {
             setCommunityData({ ...result, static_map: static_map })
             const video = result.imagesData.video
             if (video) {
-                setAlbumSwiper({ albumId: video.id, swiperIndex: 0 })
+                setAlbumSwiper({
+                    albumTabs: [{ name: '视频' }, { name: '图片' }],
+                    albumItems: [video, { image_path: result.image_path }],
+                    swiperIndex: 0
+                })
             } else {
-                setAlbumSwiper({ albumId: imageId, swiperIndex: 0 })
+                setAlbumSwiper({
+                    albumTabs: [{ name: '图片' }],
+                    albumItems: [{ image_path: result.image_path }],
+                    swiperIndex: 0
+                })
             }
             Taro.setNavigationBarTitle({
                 title: result.title
@@ -78,48 +85,30 @@ const CommunityIndex = () => {
         })
     }, [])
 
-    const onSwiperChange = (event) => {
-        let swiperIndex = event.detail.current;
-        let currentItem = event.detail.currentItemId.split(',');
-        let albumId = currentItem[0];
+    const onSwiperChange = (event: any) => {
+        const swiperIndex = event.detail.current
         setAlbumSwiper({
-            albumId,
+            ...albumSwiper,
             swiperIndex
         })
     }
 
-    const switchAlbum = (albumId: string, swiperIndex: number) => {
-        setAlbumSwiper({
-            albumId,
-            swiperIndex
-        })
-    }
-
-    const toHouseModule = (module: string, checkLogin: boolean = false) => {
-        const paramString = toUrlParam({
-            id: communityData.id,
-            title: communityData.title
-        })
-        const targetUrl = `/house/new/${module}/index${paramString}`
-        if (checkLogin) {
-            fetchUserData(targetUrl)
-                .then(() => {
-                    Taro.navigateTo({ url: targetUrl })
-                })
+    const switchAlbum = (swiperIndex: number) => {
+        if (albumSwiper.swiperIndex === swiperIndex) {
             return
         }
-        Taro.navigateTo({ url: targetUrl })
+        setAlbumSwiper({
+            ...albumSwiper,
+            swiperIndex
+        })
     }
 
-    const toHouseVideo = (video: any) => {
-        const paramString = toUrlParam({
+    const toHouseModule = (module: string) => {
+        const params = {
             id: communityData.id,
-            title: communityData.title,
-            video: JSON.stringify(video)
-        })
-        Taro.navigateTo({
-            url: `/house/new/video/index${paramString}`
-        })
+            title: communityData.title
+        }
+        toHouseNew(module, params)
     }
 
     const toHouseSurround = (currentTab: ISurroundTab = INIT_SURROUND_TAB) => {
@@ -137,27 +126,6 @@ const CommunityIndex = () => {
         return value ? `${value}${unit}` : '暂无'
     }
 
-    const renderVideo = (video: any) => {
-        return (
-            <SwiperItem
-                itemId={video.id}
-                onClick={() => toHouseVideo(video)}
-            >
-                <Image className="taro-image" src={video.image_path}></Image>
-                <Text className="icon-vedio"></Text>
-            </SwiperItem>
-        )
-    }
-
-    const renderVideoTab = (video: any) => {
-        return (
-            <Text
-                className={classnames('album-text-item', video.id == albumSwiper.albumId && 'album-text-actived')}
-                onClick={() => switchAlbum(video.id, 0)}
-            >视频</Text>
-        )
-    }
-
     const renderPrice = (price: string, price_type: string) => {
         if (price === '0') {
             return <Text className="price">待定</Text>
@@ -169,24 +137,39 @@ const CommunityIndex = () => {
     return (
         <View className="community">
             <View className="house-album">
-                <Swiper
-                    style={{ height: '250px' }}
-                    current={albumSwiper.swiperIndex}
-                    onChange={onSwiperChange}
-                >
-                    {communityData.imagesData.video && renderVideo(communityData.imagesData.video)}
-                    <SwiperItem itemId={imageId} onClick={() => toHouseModule('album')}>
-                        <Image className="taro-image" src={communityData.image_path}></Image>
-                    </SwiperItem>
-                </Swiper>
-                <View className="album-count">共{communityData.imagesData.imageCount}张</View>
-                <View className="album-text">
-                    {communityData.imagesData.video && renderVideoTab(communityData.imagesData.video)}
-                    <Text
-                        className={classnames('album-text-item', imageId == albumSwiper.albumId && 'album-text-actived')}
-                        onClick={() => switchAlbum(imageId, 1)}
-                    >图片</Text>
-                </View>
+                {
+                    albumSwiper.albumItems.length > 0 &&
+                    <View className="house-album-content">
+                        <Swiper
+                            style={{ height: '250px' }}
+                            current={albumSwiper.swiperIndex}
+                            onChange={onSwiperChange}
+                        >
+                            {
+                                albumSwiper.albumItems.map((item: any, index: number) => (
+                                    <SwiperItem key={index} onClick={() => toHouseModule('Album')}>
+                                        <Image className="taro-image" src={item.image_path}></Image>
+                                        {item.video_path && <Text className="icon-vedio"></Text>}
+                                    </SwiperItem>
+                                ))
+                            }
+                        </Swiper>
+                        <View className="album-count" onClick={() => toHouseModule('Album')}>
+                            共{communityData.imagesData.imageCount}张
+                        </View>
+                        <View className="album-text">
+                            {
+                                albumSwiper.albumTabs.map((item: any, index: number) => (
+                                    <Text
+                                        key={index}
+                                        className={classnames('album-text-item', index == albumSwiper.swiperIndex && 'album-text-actived')}
+                                        onClick={() => switchAlbum(index)}
+                                    >{item.name}</Text>
+                                ))
+                            }
+                        </View>
+                    </View>
+                }
             </View>
             <View className="community-content view-content">
                 <View className="community-item">
