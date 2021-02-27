@@ -110,9 +110,12 @@ app.request = (params: any, { loading = true, toast = true }: any = {}) => {
     if (!params.data) {
         params.data = {}
     }
-
+    if (!getToken() && IS_H5) {
+        app.deleteCookie('_x_token')
+    }
     const city = { 'X-City': getCityAlias() }
     const token = { 'X-Token': getToken() }
+    
     params.header = { ...params.header, ...token, ...city }
 
     const { page, limit } = params.data
@@ -199,6 +202,10 @@ const taroUploadFile = (filePath: string, callback: (...any) => void, file: any 
             'X-Token': getToken()
         },
         success: ((result: any) => {
+            if (result.status === 401) {
+                eventCenter.trigger('logout')
+                return
+            }
             callback(JSON.parse(result.data).data)
         })
     })
