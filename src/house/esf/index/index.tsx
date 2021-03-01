@@ -7,7 +7,7 @@ import api from '@services/api'
 import app from '@services/request'
 import useNavData from '@hooks/useNavData'
 import { PRICE_TYPE } from '@constants/house'
-import { toUrlParam } from '@utils/urlHandler'
+import { toChatRoom } from '@/router/router'
 import { formatPhoneCall } from '@utils/index'
 import { getToken, hasLoginBack } from '@services/login'
 import { bMapTransQQMap, getStaticMap } from '@utils/map'
@@ -123,10 +123,10 @@ const esfHouse = () => {
         })
     }
 
-    const toChatRoom = () => {
+    const handleToChatRoom = () => {
         const { title, price, price_type } = esfData.fangHouse
         const { id, image_path, room, office, toilet, building_area } = esfData
-        const paramString = toUrlParam({
+        const params: any = {
             messageType: '4',
             fromUserId: esfData.user_id,
             toUser: JSON.stringify(esfData.user),
@@ -142,10 +142,8 @@ const esfHouse = () => {
                 building_area,
                 areaName: esfData.area.name
             })
-        })
-        Taro.navigateTo({
-            url: `/chat/room/index${paramString}`
-        })
+        }
+        toChatRoom(params)
     }
 
     const handlePhoneCall = (phone: string) => {
@@ -389,7 +387,7 @@ const esfHouse = () => {
                 </View>
                 {
                     esfData.source_type == '2' &&
-                    <View className="bar-item-btn" onClick={toChatRoom}>
+                    <View className="bar-item-btn" onClick={handleToChatRoom}>
                         <Text className="btn btn-yellow btn-bar">在线咨询</Text>
                     </View>
                 }

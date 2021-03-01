@@ -20,7 +20,7 @@ const HouseAskForm = () => {
     const textCount = 35
     const router = getCurrentInstance().router
     const houseId = router?.params.id
-    const houseTitle = router?.params.title
+    const houseTitle = decodeURIComponent(router?.params.title || '')
     const [textData, setTextData] = useState<ITextData>(INIT_TEXT_DATA)
 
     const handleInputChange = (e: any) => {

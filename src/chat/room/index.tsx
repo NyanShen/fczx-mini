@@ -326,12 +326,15 @@ const ChatRoom = () => {
 
     const renderContentByType = (chatItem: any, isMine: boolean = false) => {
         let itemContent: any = null
+        if (['undefined', 'null'].includes(chatItem.content)) {
+            return
+        }
         switch (chatItem.message_type) {
             case '1':
                 return <Text className={classnames('text', isMine && 'text-primary')} selectable>{chatItem.content}</Text>
             case '2':
                 return <Image
-                    className="taro-image"
+                    className="message-image"
                     src={chatItem.content}
                     mode="widthFix"
                     onClick={() => handleViewImage(chatItem.content)}
@@ -472,11 +475,14 @@ const ChatRoom = () => {
                 </ScrollView>
                 <View className="send-box">
                     <View className="send-action">
-                        <View
-                            className={classnames('action-item', action.expression && 'actived')}
-                            onClick={() => toggleAction('expression')}>
-                            <Text>常用语</Text>
-                        </View>
+                        {
+                            expression &&
+                            <View
+                                className={classnames('action-item', action.expression && 'actived')}
+                                onClick={() => toggleAction('expression')}>
+                                <Text>常用语</Text>
+                            </View>
+                        }
                         {
                             toUser.is_show_more &&
                             <View className="action-item" onClick={handlePhoneCall}>
@@ -531,19 +537,15 @@ const ChatRoom = () => {
                         action.expression &&
                         <View className="expressions">
                             {
-                                expression && expression.length > 0 ?
-                                    expression.map((item: string, index: number) => (
-                                        <View
-                                            key={index}
-                                            className="expressions-item"
-                                            onClick={() => sendActionMessage(MESSAGE_TYPE.text, item)}
-                                        >
-                                            <Text>{item}</Text>
-                                        </View>
-                                    )) :
-                                    <View className="expressions-item">
-                                        <Text>暂无设置常用语</Text>
+                                expression.map((item: string, index: number) => (
+                                    <View
+                                        key={index}
+                                        className="expressions-item"
+                                        onClick={() => sendActionMessage(MESSAGE_TYPE.text, item)}
+                                    >
+                                        <Text>{item}</Text>
                                     </View>
+                                ))
                             }
                         </View>
                     }

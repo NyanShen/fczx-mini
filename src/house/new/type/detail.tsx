@@ -6,7 +6,7 @@ import classnames from 'classnames'
 import api from '@services/api'
 import app from '@services/request'
 import useNavData from '@hooks/useNavData'
-import { toUrlParam } from '@utils/urlHandler'
+import { toChatRoom } from '@/router/router'
 import { formatPhoneCall } from '@utils/index'
 import { PRICE_TYPE, SALE_STATUS } from '@constants/house'
 import '@house/new/album/index.scss'
@@ -70,9 +70,9 @@ const HouseTypeDetail = () => {
         })
     }
 
-    const toChatRoom = (consultant: any) => {
+    const handleToChatRoom = (consultant: any) => {
         const { id, name, price, price_type, image_path, room, office, toilet } = houseType
-        const paramString = toUrlParam({
+        const params: any = {
             messageType: '6',
             fromUserId: consultant.user_id,
             toUser: JSON.stringify(consultant.user),
@@ -87,11 +87,8 @@ const HouseTypeDetail = () => {
                 image_path,
                 title: houseType.fangHouse.title
             })
-        })
-
-        Taro.navigateTo({
-            url: `/chat/room/index${paramString}`
-        })
+        }
+        toChatRoom(params)
     }
 
     const toNewHouse = () => {
@@ -182,7 +179,7 @@ const HouseTypeDetail = () => {
                 </View>
                 {
                     houseType.fangHouseConsultant.length > 0 &&
-                    <View className="bar-item-btn" onClick={() => toChatRoom(houseType.fangHouseConsultant[0])}>
+                    <View className="bar-item-btn" onClick={() => handleToChatRoom(houseType.fangHouseConsultant[0])}>
                         <View className="btn btn-yellow btn-bar ml30">
                             <View>联系置业顾问</View>
                         </View>

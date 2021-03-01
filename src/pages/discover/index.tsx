@@ -9,6 +9,7 @@ import CustomSocket from '@utils/socket'
 import useNavData from '@hooks/useNavData'
 import { formatPhoneCall } from '@utils/index'
 import { toUrlParam } from '@utils/urlHandler'
+import { toChatRoom } from '@/router/router'
 import { PRICE_TYPE, SALE_STATUS } from '@constants/house'
 import { INIT_PAGE, IPage, getTotalPage } from '@utils/page'
 import './index.scss'
@@ -99,9 +100,9 @@ const Discover = () => {
         })
     }
 
-    const toChatRoom = (discoverItem: any) => {
+    const handleToChatRoom = (discoverItem: any) => {
         const { id, title, price, price_type, image_path } = discoverItem.fangHouse
-        const paramString = toUrlParam({
+        const params: any = {
             messageType: '3',
             fromUserId: discoverItem.user.id,
             toUser: JSON.stringify(discoverItem.user),
@@ -112,10 +113,8 @@ const Discover = () => {
                 price_type,
                 image_path
             })
-        })
-        Taro.navigateTo({
-            url: `/chat/room/index${paramString}`
-        })
+        }
+        toChatRoom(params)
     }
 
     const handlePhoneCall = (mobile: string) => {
@@ -203,7 +202,7 @@ const Discover = () => {
                                             }
                                         </View>
                                         <View className="discover-author">
-                                            <View className="author-profile" onClick={() => toChatRoom(item)}>
+                                            <View className="author-profile" onClick={() => handleToChatRoom(item)}>
                                                 <Image className="taro-image" src={item.user.avatar} mode="aspectFill" />
                                             </View>
                                             <View className="author-name">
@@ -211,7 +210,7 @@ const Discover = () => {
                                             </View>
                                             <View className="author-agent"></View>
                                             <View className="author-chat">
-                                                <View className="chat-item" onClick={() => toChatRoom(item)}>
+                                                <View className="chat-item" onClick={() => handleToChatRoom(item)}>
                                                     <Text className="iconfont iconmessage"></Text>
                                                 </View>
                                                 <View className="chat-item" onClick={() => handlePhoneCall(item.user.mobile)}>

@@ -6,7 +6,7 @@ import map from 'lodash/map'
 import api from '@services/api'
 import app from '@services/request'
 import useNavData from '@hooks/useNavData'
-import { toUrlParam } from '@utils/urlHandler'
+import { toChatRoom } from '@/router/router'
 import { getToken, hasLoginBack } from '@services/login'
 import { bMapTransQQMap, getStaticMap } from '@utils/map'
 import { formatPhoneCall, formatTimestamp } from '@utils/index'
@@ -153,9 +153,9 @@ const RentIndex = () => {
 
     }
 
-    const toChatRoom = () => {
+    const handleToChatRoom = () => {
         const { id, title, price, image_path, room, office, toilet, building_area, rent_type } = rentData
-        const paramString = toUrlParam({
+        const params: any = {
             messageType: '5',
             fromUserId: rentData.user_id,
             toUser: JSON.stringify(rentData.user),
@@ -171,10 +171,8 @@ const RentIndex = () => {
                 building_area,
                 areaName: rentData.area.name
             })
-        })
-        Taro.navigateTo({
-            url: `/chat/room/index${paramString}`
-        })
+        }
+        toChatRoom(params)
     }
 
     const handlePhoneCall = (phone: string) => {
@@ -368,7 +366,7 @@ const RentIndex = () => {
                 </View>
                 {
                     rentData.source_type == '2' &&
-                    <View className="bar-item-btn" onClick={toChatRoom}>
+                    <View className="bar-item-btn" onClick={handleToChatRoom}>
                         <Text className="btn btn-yellow btn-bar">在线咨询</Text>
                     </View>
                 }

@@ -5,8 +5,8 @@ import classnames from 'classnames'
 
 import api from '@services/api'
 import app from '@services/request'
-import { toHouseNew } from '@/router/router'
 import { toUrlParam } from '@utils/urlHandler'
+import { toChatRoom, toHouseNew } from '@/router/router'
 import { formatTimestamp, formatPhoneCall } from '@utils/index'
 import { getToken, hasLoginBack } from '@services/login'
 import useNavData from '@hooks/useNavData'
@@ -248,9 +248,9 @@ const House = () => {
         Taro.switchTab({ url: '/pages/index/index' })
     }
 
-    const toChatRoom = (consultant: any) => {
+    const handleToChatRoom = (consultant: any) => {
         const { id, title, price, price_type, image_path } = houseData
-        const paramString = toUrlParam({
+        const params = {
             messageType: '3',
             fromUserId: consultant.user_id,
             toUser: JSON.stringify(consultant.user),
@@ -262,10 +262,8 @@ const House = () => {
                 image_path,
                 areaName: houseData.area.name
             })
-        })
-        Taro.navigateTo({
-            url: `/chat/room/index${paramString}`
-        })
+        }
+        toChatRoom(params)
     }
 
     const handleViewImage = (imagePath: string) => {
@@ -440,7 +438,7 @@ const House = () => {
                                                 </View>
                                                 <View className="item-name">{item.user.nickname}</View>
                                                 <View className="item-btn">
-                                                    <Button className="ovalbtn ovalbtn-brown" onClick={() => toChatRoom(item)}>
+                                                    <Button className="ovalbtn ovalbtn-brown" onClick={() => handleToChatRoom(item)}>
                                                         <Text className="iconfont iconmessage"></Text>
                                                         <Text>咨询</Text>
                                                     </Button>
@@ -810,7 +808,7 @@ const House = () => {
 
                 {
                     houseData.enableFangHouseConsultant.length > 0 &&
-                    <View className="bar-item-btn" onClick={() => toChatRoom(houseData.enableFangHouseConsultant[0])}>
+                    <View className="bar-item-btn" onClick={() => handleToChatRoom(houseData.enableFangHouseConsultant[0])}>
                         <View className="btn btn-yellow btn-bar">
                             <View>在线咨询</View>
                             <View className="btn-subtext">快速在线咨询</View>

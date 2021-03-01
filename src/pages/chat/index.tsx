@@ -7,7 +7,7 @@ import app from '@services/request'
 import storage from '@utils/storage'
 import CustomSocket from '@utils/socket'
 import { getToken, hasLogin } from '@services/login'
-import { toUrlParam } from '@utils/urlHandler'
+import { toChatRoom } from '@/router/router'
 import { formatTimestamp } from '@utils/index'
 import logo from '@assets/icons/logo.png'
 import NavBar from '@/components/navbar'
@@ -53,7 +53,7 @@ const Chat = () => {
     })
   }
 
-  const toChatRoom = (item: any) => {
+  const handleToChatRoom = (item: any) => {
     let fromUserId: string = ''
     if (user.id == item.from_user_id) {
       fromUserId = item.to_user_id
@@ -62,13 +62,11 @@ const Chat = () => {
     }
     updateChatUnread(fromUserId)
 
-    const paramString = toUrlParam({
+    const params: any = {
       fromUserId,
       toUser: JSON.stringify(item.user)
-    })
-    Taro.navigateTo({
-      url: `/chat/room/index${paramString}`
-    })
+    }
+    toChatRoom(params)
   }
 
   const updateChatUnread = (fromUserId: string | number) => {
@@ -124,7 +122,7 @@ const Chat = () => {
   const renderDialog = () => {
     if (chatDialog.length > 0) {
       return chatDialog.map((item: any, index: number) => (
-        <View key={index} className="chat-item" onClick={() => toChatRoom(item)}>
+        <View key={index} className="chat-item" onClick={() => handleToChatRoom(item)}>
           <View className="item-photo">
             <Image className="taro-image" src={item.user.avatar} mode="aspectFill"></Image>
             {

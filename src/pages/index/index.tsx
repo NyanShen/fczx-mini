@@ -138,6 +138,10 @@ const Index = () => {
     })
   }
 
+  const toUserIndex = () => {
+    Taro.switchTab({ url: '/pages/user/index' })
+  }
+
   const toHouseItem = (item: any, name: string) => {
     Taro.navigateTo({
       url: `/house/${name}/index/index?id=${item.id}`
@@ -242,6 +246,13 @@ const Index = () => {
               <Text className="city-name">{city.short_name}</Text>
             </View>
           </View>
+          {
+            IS_H5 &&
+            <View className="index-user" onClick={toUserIndex}>
+              <View className="iconfont iconuser"></View>
+              <View className="user-text">我的</View>
+            </View>
+          }
         </View>
       </View>
 

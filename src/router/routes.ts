@@ -1,4 +1,5 @@
-import { HasLoginBack } from "./middleware/author-check";
+import { HasLoginBack } from "./middleware/author-check"
+import { IsH5Check } from "./middleware/h5-check"
 
 const routerMustLogin = (url: string, type: string = 'navigateTo') => {
     return {
@@ -44,6 +45,14 @@ export const routes = {
     houseConsultant: {
         url: '/house/new/consultant/index'
     },
+    houseAskForm: routerMustLogin('/house/new/askForm/index'),
     houseCommentForm: routerMustLogin('/house/new/commentForm/index'),
-    houseAskForm: routerMustLogin('/house/new/askForm/index')
+
+    chatRoom: {
+        url: '/chat/room/index',
+        beforeRouteEnter: [IsH5Check],
+        ext: {
+            checkH5: true
+        }
+    }
 }

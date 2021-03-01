@@ -28,3 +28,7 @@ export const toLogin = (params: any = {}, type: string = '') => {
 export const toHouseNew = (module: string, params: any = {}, data: any = {}) => {
     return Router.navigate(routes[`house${module}`], { params, data })
 }
+
+export const toChatRoom = (params: any = {}) => {
+    return Router.navigate(routes.chatRoom, { params })
+}

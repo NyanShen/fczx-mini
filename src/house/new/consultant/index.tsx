@@ -4,6 +4,7 @@ import { View, Image, Text } from '@tarojs/components'
 
 import api from '@services/api'
 import app from '@services/request'
+import { toChatRoom } from '@/router/router'
 import { hasLoginBack } from '@services/login'
 import { toUrlParam } from '@utils/urlHandler'
 import { formatPhoneCall } from '@utils/index'
@@ -46,16 +47,14 @@ const HouseConsultant = () => {
         })
     }
 
-    const toChatRoom = (item: any) => {
-        const paramString = toUrlParam({
+    const handleToChatRoom = (item: any) => {
+        const params: any = {
             messageType,
             fromUserId: item.user_id,
             toUser: JSON.stringify(item.user),
             content: houseData
-        })
-        Taro.navigateTo({
-            url: `/chat/room/index${paramString}`
-        })
+        }
+        toChatRoom(params)
     }
 
     const toConsultantModule = () => {
@@ -103,7 +102,7 @@ const HouseConsultant = () => {
                                     <Text className="iconfont iconcopy"></Text>
                                 </View>
                             </View>
-                            <View className="item-action" onClick={() => toChatRoom(item)}>
+                            <View className="item-action" onClick={() => handleToChatRoom(item)}>
                                 <Text className="iconfont iconmessage"></Text>
                             </View>
                             <View className="item-action" onClick={() => handlePhoneCall(item.user.mobile)}>
