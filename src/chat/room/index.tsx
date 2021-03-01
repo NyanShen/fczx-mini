@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import Taro, { getCurrentInstance, useDidShow, useReady } from '@tarojs/taro'
 import { View, Text, ScrollView, Input, Image } from "@tarojs/components"
 import classnames from 'classnames'
@@ -25,13 +25,7 @@ const MESSAGE_TYPE = {
     image: '2',
     image_text: '3'
 }
-const EXPRESSIONS = [
-    '你好，房子还有吗？',
-    '首付大概要多少',
-    '位置在哪？可以发我下位置吗？',
-    '什么时候方便看房子？',
-    '房子的价格还可以谈么',
-]
+
 let time: number = 0
 const PAGE_LIMIT: number = 20
 const INIT_ACTION = { expression: false, photo: false }
@@ -42,9 +36,11 @@ const ChatRoom = () => {
     const fromUserId: string = params.fromUserId
     let messageType: string = params.messageType
     let content: string = params.content
-    const toUser: any = JSON.parse(params.toUser || '{}') || {}
+    const toUser: any = JSON.parse(decodeURIComponent(params.toUser)) || {}
     const { contentHeight } = useNavData()
+    const { chatWordsUser, chatWordsConsultant } = storage.getItem('navSetting')
 
+    const [expression, setExpression] = useState<string[]>([])
     const [user, setUser] = useState<any>({})
     const [param, setParam] = useState<IParam>(INIT_PARAM)
     const [page, setPage] = useState<IPage>(INIT_PAGE)
@@ -98,7 +94,12 @@ const ChatRoom = () => {
             content: params.content
         })
         const backUrl = `/chat/room/index${paramString}`
-        fetchUserData(backUrl).then((result) => {
+        fetchUserData(backUrl).then((result: any) => {
+            if (result.is_consultant == 1) {
+                setExpression(chatWordsConsultant)
+            } else {
+                setExpression(chatWordsUser)
+            }
             setUser(result)
         })
     })
@@ -145,7 +146,7 @@ const ChatRoom = () => {
                 setChatData(resData)
                 imageFilter(resData)
                 if (messageType && content) {
-                    sendMessage(messageType, content, resData)
+                    sendMessage(messageType, decodeURIComponent(content), resData)
                     content = ''
                     messageType = ''
                 }
@@ -270,7 +271,7 @@ const ChatRoom = () => {
         }, { loading: false }).then(() => {
             const timestamp = handleMessageTime(dataList || chatData)
             const message = {
-                id: 'tempid_' + timestamp,
+                id: `tempid_${timestamp}`,
                 type: 'chat',
                 to_user_id: toUser.id,
                 message_type: type,
@@ -418,9 +419,9 @@ const ChatRoom = () => {
         }
     }
 
-    const renderChatList = () => {
-        return chatData.map((item: any, index: number) => (
-            <View key={index} id={`toView_${item.id}`}>
+    const renderChatList = useMemo(() => {
+        return chatData.length > 0 && chatData.map((item: any) => (
+            <View key={item.id} id={`toView_${item.id}`}>
                 {
                     item.from_user_id == fromUserId ?
                         (
@@ -452,7 +453,7 @@ const ChatRoom = () => {
                 }
             </View>
         ))
-    }
+    }, [chatData])
 
     return (
         <View className="chat-room">
@@ -467,7 +468,7 @@ const ChatRoom = () => {
                     scrollIntoView={toView}
                     scrollWithAnimation={false}
                 >
-                    {renderChatList()}
+                    {renderChatList}
                 </ScrollView>
                 <View className="send-box">
                     <View className="send-action">
@@ -492,6 +493,7 @@ const ChatRoom = () => {
                     </View>
                     <View className="send-content">
                         <Input
+                            className="taro-input"
                             onFocus={handleInputFocus}
                             value={inputData.value}
                             onInput={handleInputChange}
@@ -529,15 +531,19 @@ const ChatRoom = () => {
                         action.expression &&
                         <View className="expressions">
                             {
-                                EXPRESSIONS.map((item: string, index: number) => (
-                                    <View
-                                        key={index}
-                                        className="expressions-item"
-                                        onClick={() => sendActionMessage(MESSAGE_TYPE.text, item)}
-                                    >
-                                        <Text>{item}</Text>
+                                expression && expression.length > 0 ?
+                                    expression.map((item: string, index: number) => (
+                                        <View
+                                            key={index}
+                                            className="expressions-item"
+                                            onClick={() => sendActionMessage(MESSAGE_TYPE.text, item)}
+                                        >
+                                            <Text>{item}</Text>
+                                        </View>
+                                    )) :
+                                    <View className="expressions-item">
+                                        <Text>暂无设置常用语</Text>
                                     </View>
-                                ))
                             }
                         </View>
                     }

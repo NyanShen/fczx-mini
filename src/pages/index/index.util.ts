@@ -30,11 +30,11 @@ export const house_sub_menu = [
         name: '热门楼盘',
     },
     {
-        name: '热门团购',
+        name: '优惠楼盘',
         path: `${housePath}?is_recommend=1`
     },
     {
-        name: '组队看房',
+        name: '看房团',
         path: `/house/group/index`
     },
     {

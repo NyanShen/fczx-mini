@@ -11,7 +11,7 @@ class App extends Component {
     '/pages/index/index',
     '/pages/user/index',
     '/pages/chat/index',
-    '/pages/discover/index',
+    '/pages/discover/index'
   ]
 
   componentDidMount() {
@@ -38,7 +38,14 @@ class App extends Component {
   }
 
   handleTabBarRedDot = (result: any[]) => {
-    const pathname: any = getCurrentInstance().router?.path
+    let pathname: string = ''
+    const router: any = getCurrentInstance().router
+    if (router?.path) {
+      pathname = router?.path
+    } else {
+      const lastIndex = router?.onReady.lastIndexOf('.')
+      pathname = router?.onReady.substring(0, lastIndex)
+    }
     if (this.tabbarList.includes(pathname)) {
       if (result.length > 0) {
         Taro.showTabBarRedDot({
