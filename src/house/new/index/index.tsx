@@ -52,7 +52,7 @@ const INIT_HOUSE_DATA = {
 }
 
 const House = () => {
-    const { contentHeight } = useNavData(40)
+    const { contentHeight } = useNavData(38)
     const params: any = getCurrentInstance().router?.params
     const [albumSwiper, setAlbumSwiper] = useState<IAlbumSwiper>(INIT_ALBUM_SWIPER)
     const [houseData, setHouseData] = useState<any>(INIT_HOUSE_DATA)

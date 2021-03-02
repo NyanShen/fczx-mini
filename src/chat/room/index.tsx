@@ -326,7 +326,7 @@ const ChatRoom = () => {
 
     const renderContentByType = (chatItem: any, isMine: boolean = false) => {
         let itemContent: any = null
-        if (['undefined', 'null'].includes(chatItem.content)) {
+        if (['undefined'].includes(chatItem.content)) {
             return
         }
         switch (chatItem.message_type) {

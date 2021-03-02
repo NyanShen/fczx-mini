@@ -30,7 +30,7 @@ import '@styles/common/search-tab.scss'
 import './index.scss'
 
 const CommunityList = () => {
-    const { contentHeight } = useNavData(40)
+    const { contentHeight } = useNavData(38)
     const PAGE_LIMIT = 10
     const footerBtnHeight = 60
     const scrollHeight = contentHeight * 0.5 - footerBtnHeight
