@@ -43,7 +43,7 @@ const Chat = () => {
   const fetchChatDialog = () => {
     app.request({
       url: app.apiUrl(api.getChatDialog)
-    }, { loading: false }).then((result: any) => {
+    }, { loading: false }).then((result: any[]) => {
       setChatDialog(result)
       //异常删除会话列表处理
       if (result.length <= 0) {
@@ -120,27 +120,30 @@ const Chat = () => {
   }
 
   const renderDialog = () => {
-    if (chatDialog.length > 0) {
-      return chatDialog.map((item: any, index: number) => (
-        <View key={index} className="chat-item" onClick={() => handleToChatRoom(item)}>
-          <View className="item-photo">
-            <Image className="taro-image" src={item.user.avatar} mode="aspectFill"></Image>
-            {
-              item.status == '1' && item.to_user_id == user.id &&
-              <View className="item-dot"></View>
-            }
-          </View>
-          <View className="item-text">
-            <View className="item-text-item">
-              <View className="name">{item.user.nickname}</View>
-              <View className="date">{item.modified && formatTimestamp(item.modified, 'MM-dd hh:mm')}</View>
+    if (chatDialog && chatDialog.length > 0) {
+      return chatDialog.map((item: any, index: number) => {
+        const user = item.user || {}
+        return (
+          <View key={index} className="chat-item" onClick={() => handleToChatRoom(item)}>
+            <View className="item-photo">
+              <Image className="taro-image" src={user.avatar} mode="aspectFill"></Image>
+              {
+                item.status == '1' && item.to_user_id == user.id &&
+                <View className="item-dot"></View>
+              }
             </View>
-            <View className="item-text-item">
-              <View className="record">{renderContent(item)}</View>
+            <View className="item-text">
+              <View className="item-text-item">
+                <View className="name">{user.nickname}</View>
+                <View className="date">{item.modified && formatTimestamp(item.modified, 'MM-dd hh:mm')}</View>
+              </View>
+              <View className="item-text-item">
+                <View className="record">{renderContent(item)}</View>
+              </View>
             </View>
           </View>
-        </View>
-      ))
+        )
+      })
     } else {
       return (
         <View className="chat-empty">
@@ -152,7 +155,7 @@ const Chat = () => {
 
   return (
     <View className="chat">
-      <NavBar title="会话列表" showIcon={false}/>
+      <NavBar title="会话列表" showIcon={false} />
       {
         user && user.is_subscribe_wx != 1 && !is_subscribe_wx &&
         <View className="official">

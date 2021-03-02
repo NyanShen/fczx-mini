@@ -235,7 +235,7 @@ const NewHouse = () => {
 
         }
     }
-    
+
     const handleMultiClick = (key: string, item: any) => {
         let selectedValue = selected[key]
         if (selectedValue instanceof Object) {
@@ -490,51 +490,51 @@ const NewHouse = () => {
     const renderActivity = (houseItem: any) => {
         let activities: any[] = []
         if (houseItem.is_discount == '1') {
-          activities.push({
-            icon: 'iconcoupon',
-            title: houseItem.fangHouseDiscount.title
-          })
+            activities.push({
+                icon: 'iconcoupon',
+                title: houseItem.fangHouseDiscount.title
+            })
         }
         if (houseItem.is_group == '1') {
-          activities.push({
-            icon: 'iconstars',
-            title: houseItem.fangHouseGroup.title
-          })
+            activities.push({
+                icon: 'iconstars',
+                title: houseItem.fangHouseGroup.title
+            })
         }
-    
+
         return (
-          <View className="house-activity" onClick={() => handleActivity(houseItem.id)}>
-            <View className="activity-content">
-              {
-                activities.map((item: any, index: number) => {
-                  if (index === 0) {
-                    return (
-                      <View className="activity-item" key={index}>
-                        <Text className={classnames('iconfont', item.icon)}></Text>
-                        <Text className="text">{item.title}</Text>
-                      </View>
-                    )
-                  }
-                  if (index > 0 && activity.includes(houseItem.id)) {
-                    return (
-                      <View className="activity-item" key={index}>
-                        <Text className={classnames('iconfont', item.icon)}></Text>
-                        <Text className="text">{item.title}</Text>
-                      </View>
-                    )
-                  }
-                })
-              }
+            <View className="house-activity" onClick={() => handleActivity(houseItem.id)}>
+                <View className="activity-content">
+                    {
+                        activities.map((item: any, index: number) => {
+                            if (index === 0) {
+                                return (
+                                    <View className="activity-item" key={index}>
+                                        <Text className={classnames('iconfont', item.icon)}></Text>
+                                        <Text className="text">{item.title}</Text>
+                                    </View>
+                                )
+                            }
+                            if (index > 0 && activity.includes(houseItem.id)) {
+                                return (
+                                    <View className="activity-item" key={index}>
+                                        <Text className={classnames('iconfont', item.icon)}></Text>
+                                        <Text className="text">{item.title}</Text>
+                                    </View>
+                                )
+                            }
+                        })
+                    }
+                </View>
+                {
+                    activities.length > 1 &&
+                    <View className="activity-icon">
+                        <Text className={classnames('iconfont', activity.includes(houseItem.id) ? 'iconarrow-up-bold' : 'iconarrow-down-bold')}></Text>
+                    </View>
+                }
             </View>
-            {
-              activities.length > 1 &&
-              <View className="activity-icon">
-                <Text className={classnames('iconfont', activity.includes(houseItem.id) ? 'iconarrow-up-bold' : 'iconarrow-down-bold')}></Text>
-              </View>
-            }
-          </View>
         )
-      }
+    }
 
     return (
         <View className="newhouse">

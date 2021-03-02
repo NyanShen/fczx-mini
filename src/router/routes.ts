@@ -12,6 +12,9 @@ const routerMustLogin = (url: string, type: string = 'navigateTo') => {
     }
 }
 export const routes = {
+    houseIndex: {
+        url: '/house/new/index/index'
+    },
     houseComment: {
         url: '/house/new/comment/index'
     },

@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import Taro from '@tarojs/taro'
-import { View, ScrollView, Text, Map } from '@tarojs/components'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
+import { View, ScrollView, Text } from '@tarojs/components'
 import classnames from 'classnames'
 import find from 'lodash/find'
 import remove from 'lodash/remove'
@@ -9,87 +8,23 @@ import api from '@services/api'
 import app from '@services/request'
 import storage from '@utils/storage'
 import useNavData from '@hooks/useNavData'
-import { bMapTransQQMap, qqMapTransBMap } from '@utils/map'
-import { PRICE_TYPE } from '@constants/house'
-import down_fill from '@assets/icons/downfill.png'
+import { bMapTransQQMap } from '@utils/map'
+import SearchMap from '@/components/searchmap'
+import SearchMapH5 from '@/components/searchmaph5'
+import {
+    default_zoom,
+    region_zoom,
+    default_value,
+    initial_value,
+    IConditionState,
+    INIT_CONDITION,
+    priceTabs,
+    tabs
+} from './index.util'
+
 import '@styles/common/search-tab.scss'
 import './index.scss'
-interface IFilter {
-    id: string
-    name: string
-    value?: string
-}
-
-interface IConditionState {
-    areaList?: IFilter
-    unitPrice?: IFilter
-    totalPrice?: IFilter
-    priceType?: string
-    room?: IFilter
-    propertyType?: IFilter
-    fangBuildingType?: IFilter
-    renovationStatus?: IFilter
-    zoom: number
-    swlng?: number | string
-    swlat?: number | string
-    nelng?: number | string
-    nelat?: number | string
-}
-
-const initial_value: IFilter = { id: '', name: '' }
-const default_value: IFilter = { id: 'all', name: '不限' }
-
-const INIT_CONDITION: IConditionState = {
-    zoom: 11,
-    priceType: '',
-    areaList: default_value,
-    unitPrice: default_value,
-    totalPrice: initial_value,
-    room: default_value,
-    propertyType: initial_value,
-    fangBuildingType: initial_value,
-    renovationStatus: initial_value,
-    swlng: '',
-    swlat: '',
-    nelat: '',
-    nelng: '',
-}
-
-const tabs: any[] = [
-    {
-        type: 'areaList',
-        name: '区域',
-        keys: ['areaList']
-    },
-    {
-        type: 'price',
-        name: '价格',
-        keys: ['totalPrice', 'unitPrice']
-    },
-    {
-        type: 'room',
-        name: '户型',
-        keys: ['room']
-    },
-    {
-        type: 'more',
-        name: '更多',
-        keys: ['propertyType', 'fangBuildingType', 'renovationStatus']
-    }
-]
-const priceTabs: IFilter[] = [
-    {
-        id: '1',
-        name: '按单价',
-        value: "unitPrice"
-    },
-    {
-        id: '2',
-        name: '按总价',
-        value: "totalPrice"
-    }
-]
-
+import { toHouseNew } from '@/router'
 
 const HouseMap = () => {
     const { contentHeight } = useNavData()
@@ -97,14 +32,11 @@ const HouseMap = () => {
     const scrollHeight = contentHeight * 0.5 - footerBtnHeight
     const scrollMoreHeight = contentHeight * 0.6 - footerBtnHeight
     const city = storage.getItem('city')
-    const centerLocation = bMapTransQQMap(city.latitude, city.longitude)
     const [tab, setTab] = useState<string>('')
-    const [center, setCenter] = useState<any>(centerLocation)
-    const [customZoom, setCustomZoom] = useState<number>(INIT_CONDITION.zoom)
     const [condition, setCondition] = useState<any>()
     const [priceType, setPriceType] = useState<string>('unitPrice')
     const [selected, setSelected] = useState<IConditionState>(INIT_CONDITION)
-    const [markers, setMarkers] = useState<any[]>([])
+    const ref = useRef<any>()
 
     useEffect(() => {
         app.request({
@@ -146,129 +78,36 @@ const HouseMap = () => {
                 fang_renovation_status: selected.renovationStatus?.id
             }
         }).then((result: any) => {
-            if (selected.zoom < 12) {
-                setRegionData(result.gather_regions)
+            const { setRegionData, setHouseLabels } = ref.current
+            if (selected.zoom < region_zoom) {
+                setRegionData && setRegionData(result.gather_regions)
             } else {
-                setHouseLabels(result.label_rows)
+                setHouseLabels && setHouseLabels(result.label_rows)
             }
         })
     }
-    /**
-     * 地图方法
-     * @param dataList 
-     */
-    const setRegionData = (dataList: any[]) => {
-        let totalCount = 0
-        let regionLabels: any[] = []
-        for (const item of dataList) {
-            totalCount = totalCount + item.count
-            const location = bMapTransQQMap(item.latitude, item.longitude)
-            regionLabels.push({
-                id: Number(item.id),
-                latitude: location.latitude,
-                longitude: location.longitude,
-                iconPath: down_fill,
-                width: 20,
-                height: 30,
-                callout: {
-                    content: `${item.name}\n${item.count}个新盘`,
-                    color: '#fff',
-                    anchorX: 0,
-                    anchorY: 30,
-                    padding: 10,
-                    borderRadius: 10,
-                    borderColor: '#fff',
-                    bgColor: '#11a43c',
-                    textAlign: 'center',
-                    display: 'ALWAYS'
-                }
-            })
-        }
-        setMarkers(regionLabels)
-    }
 
-    const setHouseLabels = (dataList: any[]) => {
-        let houseLabels: any[] = []
-        for (const item of dataList) {
-            const location = bMapTransQQMap(item.latitude, item.longitude)
-            const showPrice = item.price === '0' ? '价格待定' : `${item.price}${PRICE_TYPE[item.price_type]}`
-            houseLabels.push({
-                id: Number(item.id),
-                latitude: location.latitude,
-                longitude: location.longitude,
-                iconPath: down_fill,
-                width: 20,
-                height: 30,
-                callout: {
-                    content: `${showPrice} | ${item.title}`,
-                    color: '#fff',
-                    anchorX: 0,
-                    anchorY: 20,
-                    padding: 10,
-                    borderRadius: 10,
-                    bgColor: '#11a43c',
-                    textAlign: 'center',
-                    display: 'ALWAYS'
-                }
-            })
-        }
-        setMarkers(houseLabels)
-    }
-
-    const handleRegionChangeEnd = (e: any) => {
-        let causeType = e.causedBy
-        let zoom = e.detail.scale
-        let ne = e.detail.region.northeast
-        let sw = e.detail.region.southwest
-        let nepoint = qqMapTransBMap(ne.latitude, ne.longitude)
-        let swpoint = qqMapTransBMap(sw.latitude, sw.longitude)
-        if (causeType === 'update') {
-            if (selected.zoom === 11) {
-                setSelected({
-                    ...selected,
-                    swlat: '',
-                    swlng: '',
-                    nelat: '',
-                    nelng: '',
-                })
-                return
-            }
-            setSelected({
-                ...selected,
-                swlat: swpoint.latitude,
-                swlng: swpoint.longitude,
-                nelat: nepoint.latitude,
-                nelng: nepoint.longitude,
-            })
-        } else {
-            setSelected({
-                ...selected,
-                zoom,
-                swlat: swpoint.latitude,
-                swlng: swpoint.longitude,
-                nelat: nepoint.latitude,
-                nelng: nepoint.longitude,
-            })
-        }
-    }
-
-    const handleCalloutTap = (e: any) => {
-        const markerId = e.detail.markerId
-        const areaTarget = find(condition.areaList, { id: `${markerId}` })
+    const handleAreaChange = (params: any) => {
+        const areaTarget = find(condition.areaList, { id: `${params.houseId}` })
         if (areaTarget) {
-            const newZoom = 13 + Math.random() / 1000
+            const { setCustomZoom, setCenter } = ref.current
             setSelected({
                 ...selected,
-                zoom: newZoom,
+                zoom: params.zoom,
                 areaList: areaTarget
             })
-            setCustomZoom(newZoom)
-            setCenter(bMapTransQQMap(areaTarget.latitude, areaTarget.longitude))
+            setCustomZoom && setCustomZoom(params.zoom)
+            setCenter && setCenter(bMapTransQQMap(areaTarget.latitude, areaTarget.longitude))
         } else {
-            Taro.navigateTo({
-                url: `/house/new/index/index?id=${markerId}`
-            })
+            toHouseNew('Index', { id: params.houseId })
         }
+    }
+
+    const handleParamsChange = (params: any) => {
+        setSelected({
+            ...selected,
+            ...params
+        })
     }
 
     /**
@@ -286,6 +125,50 @@ const HouseMap = () => {
             return
         }
         setTab(item.type)
+    }
+
+    const updateAreaforH5 = (item: any) => {
+        const { setMapCenter } = ref.current
+        if (item.latitude) {
+            setSelected({
+                ...selected,
+                areaList: item,
+                zoom: region_zoom
+            })
+            const { latitude, longitude } = item
+            setMapCenter && setMapCenter(region_zoom, { latitude, longitude })
+        } else {
+            setSelected({
+                ...selected,
+                areaList: item,
+                zoom: default_zoom
+            })
+            setMapCenter && setMapCenter(default_zoom)
+        }
+    }
+
+    const updateAreaforMini = (item: any) => {
+        const { setCustomZoom, setCenter } = ref.current
+        if (item.latitude) {
+            const newZoom = region_zoom + Math.random() / 1000
+            setSelected({
+                ...selected,
+                areaList: item,
+                zoom: newZoom
+            })
+            setCustomZoom && setCustomZoom(newZoom)
+            setCenter && setCenter(bMapTransQQMap(item.latitude, item.longitude))
+        } else {
+            const newZoom = INIT_CONDITION.zoom + Math.random() / 1000
+            setSelected({
+                ...selected,
+                areaList: item,
+                zoom: newZoom
+            })
+            setCustomZoom && setCustomZoom(newZoom)
+            const position = bMapTransQQMap(city.latitude, city.longitude)
+            setCenter && setCenter(bMapTransQQMap(position.latitude, position.longitude))
+        }
     }
 
     const handleSingleClick = (key: string, item: any) => {
@@ -308,25 +191,7 @@ const HouseMap = () => {
                 })
                 break
             case 'areaList':
-                if (item.latitude) {
-                    const newZoom = 13 + Math.random() / 1000
-                    setSelected({
-                        ...selected,
-                        [key]: item,
-                        zoom: newZoom
-                    })
-                    setCustomZoom(newZoom)
-                    setCenter(bMapTransQQMap(item.latitude, item.longitude))
-                } else {
-                    const newZoom = INIT_CONDITION.zoom + Math.random() / 1000
-                    setSelected({
-                        ...selected,
-                        [key]: item,
-                        zoom: newZoom
-                    })
-                    setCustomZoom(newZoom)
-                    setCenter(bMapTransQQMap(centerLocation.latitude, centerLocation.longitude))
-                }
+                IS_H5 ? updateAreaforH5(item) : updateAreaforMini(item)
                 break
             default:
                 setSelected({
@@ -443,6 +308,26 @@ const HouseMap = () => {
         )
     }
 
+    const getSearchMap = useMemo(() => {
+        return IS_H5 ?
+            <SearchMapH5
+                ref={ref}
+                city={city}
+                default_zoom={default_zoom}
+                region_zoom={region_zoom}
+                updateParams={handleParamsChange}
+            /> :
+            <SearchMap
+                ref={ref}
+                city={city}
+                zoom={selected.zoom}
+                default_zoom={INIT_CONDITION.zoom}
+                region_zoom={region_zoom}
+                updateParams={handleParamsChange}
+                updateAreaParams={handleAreaChange}
+            />
+    }, [selected.zoom, condition])
+
     return (
         <View className="house-map">
             <View className="fixed">
@@ -473,8 +358,8 @@ const HouseMap = () => {
                         </View>
                     </View>
                 </View>
-                <View className={classnames('search-container', 'search-multi-container', tab === 'price' && 'actived')}>
-                    <View className="search-content search-content-scroll">
+                <View className={classnames('search-container', tab === 'price' && 'actived')}>
+                    <View className="search-content">
                         <View className="search-split">
                             <View className="split-type flex-item">
                                 {
@@ -517,19 +402,7 @@ const HouseMap = () => {
                 </View>
             </View>
             <View className={classnames('mask', tab && 'show')} onClick={() => setTab('')}></View>
-            <View className="QQMap">
-                <Map
-                    id="QQMapId"
-                    style={{ width: '100%', height: contentHeight }}
-                    latitude={center.latitude}
-                    longitude={center.longitude}
-                    scale={customZoom}
-                    markers={markers}
-                    onEnd={handleRegionChangeEnd}
-                    onCalloutTap={handleCalloutTap}
-                >
-                </Map>
-            </View>
+            {getSearchMap}
         </View>
     )
 }

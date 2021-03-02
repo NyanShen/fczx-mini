@@ -1,0 +1,47 @@
+/* 地图覆盖物样式 */
+
+.circle-bubble {
+    margin-top: 40px;
+    text-align: center;
+    color: #fff;
+    .name {
+        font-size: 14px;
+        font-weight: bold;
+    }
+    .count {
+        margin-top: 4px;
+        font-size: 12px;
+    }
+}
+
+.house-bubble {
+    display: block;
+    position: relative;
+    height: 60px;
+    line-height: 60px;
+    padding: 0 20px;
+    text-align: center;
+    border-radius: 8px;
+    color: #fff;
+    &.actived {
+        background-color: #f60;
+    }
+    .triangle-down {
+        position: absolute;
+        left: 40%;
+        border-width: 16px;
+        border-style: solid;
+        border-color: #11a43c transparent transparent transparent;
+        opacity: 0.9;
+        &.actived {
+            border-color: #f60 transparent transparent transparent;
+        }
+    }
+    .house-price {
+        font-weight: bold;
+    }
+    em {
+        padding: 0 20px;
+        color: #ccc;
+    }
+}
