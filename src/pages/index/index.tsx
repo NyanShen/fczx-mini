@@ -260,6 +260,7 @@ const Index = () => {
         <View className="index-menu-content">
           {
             homeData.menuContent &&
+            homeData.menuContent.length > 0 &&
             homeData.menuContent.map((item: any, index: number) => {
               return (
                 <View className="index-menu-item" key={index} onClick={() => handleMenuClick(item.path)}>
@@ -299,6 +300,7 @@ const Index = () => {
       </View>
       {
         homeData.house_menus &&
+        homeData.house_menus.length > 0 &&
         <View className="house-list">
           <View className="index-title">
             {
@@ -357,6 +359,7 @@ const Index = () => {
 
       {
         homeData.esf_menus &&
+        homeData.esf_menus.length > 0 &&
         <View className="house-list mt20">
           <View className="index-title">
             {

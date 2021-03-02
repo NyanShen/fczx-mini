@@ -77,6 +77,8 @@ export default {
         'official/index',
         'profile/index',
         'consultant/index',
+        'dynamic/index',
+        'dynamic/release/index',
 
         'house/sale/index',
         'house/list/index',
@@ -91,8 +93,6 @@ export default {
     {
       root: 'consultant',
       pages: [
-        'release/index',
-        'dynamic/index',
         'register/index',
         'checkStatus/index',
         'houseSearch/index',

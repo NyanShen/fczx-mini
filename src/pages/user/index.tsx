@@ -57,12 +57,6 @@ const User = () => {
     taroNavigateTo('/user/official/index')
   }
 
-  const toConsultantModule = () => {
-    Taro.navigateTo({
-      url: '/consultant/dynamic/index'
-    })
-  }
-
   const taroNavigateTo = (url: string) => {
     Taro.navigateTo({ url })
   }
@@ -109,7 +103,7 @@ const User = () => {
                   <Text className="iconfont iconarrow-right-bold"></Text>
                 </View>
               </View>
-              <View className="user-item" onClick={() => toConsultantModule()}>
+              <View className="user-item" onClick={() => toUserModule('dynamic')}>
                 <View className="item-icon cyan">
                   <Text className="iconfont icondynamic"></Text>
                 </View>

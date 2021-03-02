@@ -31,6 +31,7 @@ const Discover = () => {
 
     useDidShow(() => {
         CustomSocket.onChatUnread()
+        fetchDiscover()
     })
 
     useEffect(() => {
@@ -149,77 +150,80 @@ const Discover = () => {
                             onRefresherRefresh={handleRefresherRefresh}
                         >
                             {
-                                discover.map((item: any, index: number) => (
-                                    <View className="discover-item" key={index}>
-                                        <View className="discover-title" onClick={() => toHouseModule(item.fangHouse.id)}>
-                                            <View className="discover-profile">
-                                                <Image className="taro-image" src={item.fangHouse.image_path} mode="aspectFill" />
-                                            </View>
-                                            <View className="discover-header">
-                                                <View className="header-item">
-                                                    <View className="title">{item.fangHouse.title}</View>
-                                                    <View className="tags">
-                                                        <Text className="tags-item">{SALE_STATUS[item.fangHouse.sale_status]}</Text>
+                                discover.map((item: any, index: number) => {
+                                    const fangHouse = item.fangHouse || {}
+                                    return (
+                                        <View className="discover-item" key={index}>
+                                            <View className="discover-title" onClick={() => toHouseModule(fangHouse.id)}>
+                                                <View className="discover-profile">
+                                                    <Image className="taro-image" src={fangHouse.image_path} mode="aspectFill" />
+                                                </View>
+                                                <View className="discover-header">
+                                                    <View className="header-item">
+                                                        <View className="title">{fangHouse.title}</View>
+                                                        <View className="tags">
+                                                            <Text className="tags-item">{SALE_STATUS[fangHouse.sale_status]}</Text>
+                                                        </View>
+                                                    </View>
+                                                    <View className="header-item">
+                                                        <View className="subtitle">{fangHouse.price}{PRICE_TYPE[fangHouse.price_type]}</View>
+                                                        <View className="describ">
+                                                            {/* <Text className="describ-text">{item.fangHouse.area.name}</Text> */}
+                                                        </View>
                                                     </View>
                                                 </View>
-                                                <View className="header-item">
-                                                    <View className="subtitle">{item.fangHouse.price}{PRICE_TYPE[item.fangHouse.price_type]}</View>
-                                                    <View className="describ">
-                                                        {/* <Text className="describ-text">{item.fangHouse.area.name}</Text> */}
+                                            </View>
+                                            <View className="discover-digest">{item.content}</View>
+                                            <View className="discover-media">
+                                                {
+                                                    item.video_path ?
+                                                        <View className="media-video" onClick={() => toHouseVideo(item.face_path, item.video_path)}>
+                                                            <Image className="taro-image" src={item.face_path} mode="aspectFill" />
+                                                            <Text className="iconfont iconvideo"></Text>
+                                                        </View> :
+                                                        <View className="media-image">
+                                                            {
+                                                                item.fangHouseCircleImage.map((imageItem: any, index: number) => {
+                                                                    if (index < 3) {
+                                                                        return (
+                                                                            <View className="item-image" key={index}>
+                                                                                <Image
+                                                                                    className="taro-image"
+                                                                                    src={imageItem.image_path}
+                                                                                    mode="aspectFill"
+                                                                                    onClick={() => handleImagePreview(item.fangHouseCircleImage, imageItem.image_path)}
+                                                                                />
+                                                                                {
+                                                                                    index == 2 && <Text className="item-count">共{item.fangHouseCircleImage.length}张</Text>
+                                                                                }
+                                                                            </View>
+                                                                        )
+                                                                    }
+                                                                })
+                                                            }
+                                                        </View>
+                                                }
+                                            </View>
+                                            <View className="discover-author">
+                                                <View className="author-profile" onClick={() => handleToChatRoom(item)}>
+                                                    <Image className="taro-image" src={item.user.avatar} mode="aspectFill" />
+                                                </View>
+                                                <View className="author-name">
+                                                    <Text className="name">{item.user.nickname}</Text>
+                                                </View>
+                                                <View className="author-agent"></View>
+                                                <View className="author-chat">
+                                                    <View className="chat-item" onClick={() => handleToChatRoom(item)}>
+                                                        <Text className="iconfont iconmessage"></Text>
+                                                    </View>
+                                                    <View className="chat-item" onClick={() => handlePhoneCall(item.user.mobile)}>
+                                                        <Text className="iconfont iconcall"></Text>
                                                     </View>
                                                 </View>
                                             </View>
                                         </View>
-                                        <View className="discover-digest">{item.content}</View>
-                                        <View className="discover-media">
-                                            {
-                                                item.video_path ?
-                                                    <View className="media-video" onClick={() => toHouseVideo(item.face_path, item.video_path)}>
-                                                        <Image className="taro-image" src={item.face_path} mode="aspectFill" />
-                                                        <Text className="iconfont iconvideo"></Text>
-                                                    </View> :
-                                                    <View className="media-image">
-                                                        {
-                                                            item.fangHouseCircleImage.map((imageItem: any, index: number) => {
-                                                                if (index < 3) {
-                                                                    return (
-                                                                        <View className="item-image" key={index}>
-                                                                            <Image
-                                                                                className="taro-image"
-                                                                                src={imageItem.image_path}
-                                                                                mode="aspectFill"
-                                                                                onClick={() => handleImagePreview(item.fangHouseCircleImage, imageItem.image_path)}
-                                                                            />
-                                                                            {
-                                                                                index == 2 && <Text className="item-count">共{item.fangHouseCircleImage.length}张</Text>
-                                                                            }
-                                                                        </View>
-                                                                    )
-                                                                }
-                                                            })
-                                                        }
-                                                    </View>
-                                            }
-                                        </View>
-                                        <View className="discover-author">
-                                            <View className="author-profile" onClick={() => handleToChatRoom(item)}>
-                                                <Image className="taro-image" src={item.user.avatar} mode="aspectFill" />
-                                            </View>
-                                            <View className="author-name">
-                                                <Text className="name">{item.user.nickname}</Text>
-                                            </View>
-                                            <View className="author-agent"></View>
-                                            <View className="author-chat">
-                                                <View className="chat-item" onClick={() => handleToChatRoom(item)}>
-                                                    <Text className="iconfont iconmessage"></Text>
-                                                </View>
-                                                <View className="chat-item" onClick={() => handlePhoneCall(item.user.mobile)}>
-                                                    <Text className="iconfont iconcall"></Text>
-                                                </View>
-                                            </View>
-                                        </View>
-                                    </View>
-                                ))
+                                    )
+                                })
                             }
                             {
                                 showEmpty &&

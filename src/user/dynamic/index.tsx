@@ -124,7 +124,7 @@ const HouseDynamic = () => {
 
     const toRelease = () => {
         Taro.navigateTo({
-            url: '/consultant/release/index'
+            url: '/user/dynamic/release/index'
         })
     }
     return (
@@ -138,50 +138,53 @@ const HouseDynamic = () => {
                     onScrollToLower={handleScrollToLower}
                 >
                     {
-                        dynamic.map((item: any) => (
-                            <View className="dynamic-item" key={item.id}>
-                                <View className="dynamic-flex" onClick={() => toHouseModule(item.fangHouse.id)}>
-                                    <View className="dynamic-title">{item.fangHouse.title}</View>
-                                    <View className="more">
-                                        <Text>更多</Text>
-                                        <Text className="iconfont iconarrow-right-bold"></Text>
+                        dynamic.map((item: any) => {
+                            const fangHouse = item.fangHouse || {}
+                            return (
+                                <View className="dynamic-item" key={item.id}>
+                                    <View className="dynamic-flex" onClick={() => toHouseModule(fangHouse.id)}>
+                                        <View className="dynamic-title">{fangHouse.title}</View>
+                                        <View className="more">
+                                            <Text>更多</Text>
+                                            <Text className="iconfont iconarrow-right-bold"></Text>
+                                        </View>
+                                    </View>
+                                    <View className="dynamic-text">{item.content}</View>
+                                    <View className="dynamic-media">
+                                        {
+                                            item.video_path ?
+                                                <View className="media-video" onClick={() => toHouseVideo(item.face_path, item.video_path)}>
+                                                    <Image className="taro-image" src={item.face_path} mode="aspectFill" />
+                                                    <Text className="iconfont iconvideo"></Text>
+                                                </View> :
+                                                <View className="media-image">
+                                                    {
+                                                        item.fangHouseCircleImage.map((imageItem: any, index: number) => (
+                                                            <View className="item-image" key={index}>
+                                                                <Image
+                                                                    className="taro-image"
+                                                                    src={imageItem.image_path}
+                                                                    mode="aspectFill"
+                                                                    onClick={() => handleImagePreview(item.fangHouseCircleImage, imageItem.image_path)}
+                                                                />
+                                                            </View>
+                                                        ))
+                                                    }
+                                                </View>
+                                        }
+                                    </View>
+                                    {/* <View className="dynamic-action clearfix">
+                                    </View> */}
+                                    <View className="dynamic-flex dynamic-check">
+                                        <View className="check-time">2021-01-18 16:06:21</View>
+                                        {/* <View className="check-status">等待审核</View> */}
+                                        <View className="action-item" onClick={() => handleDynamicDelete(item.id)}>
+                                            <View className="btn btn-plain">删除</View>
+                                        </View>
                                     </View>
                                 </View>
-                                <View className="dynamic-text">{item.content}</View>
-                                <View className="dynamic-media">
-                                    {
-                                        item.video_path ?
-                                            <View className="media-video" onClick={() => toHouseVideo(item.face_path, item.video_path)}>
-                                                <Image className="taro-image" src={item.face_path} mode="aspectFill" />
-                                                <Text className="iconfont iconvideo"></Text>
-                                            </View> :
-                                            <View className="media-image">
-                                                {
-                                                    item.fangHouseCircleImage.map((imageItem: any, index: number) => (
-                                                        <View className="item-image" key={index}>
-                                                            <Image
-                                                                className="taro-image"
-                                                                src={imageItem.image_path}
-                                                                mode="aspectFill"
-                                                                onClick={() => handleImagePreview(item.fangHouseCircleImage, imageItem.image_path)}
-                                                            />
-                                                        </View>
-                                                    ))
-                                                }
-                                            </View>
-                                    }
-                                </View>
-                                {/* <View className="dynamic-action clearfix">
-                                </View> */}
-                                <View className="dynamic-flex dynamic-check">
-                                    <View className="check-time">2021-01-18 16:06:21</View>
-                                    {/* <View className="check-status">等待审核</View> */}
-                                    <View className="action-item" onClick={() => handleDynamicDelete(item.id)}>
-                                        <View className="btn btn-plain">删除</View>
-                                    </View>
-                                </View>
-                            </View>
-                        ))
+                            )
+                        })
                     }
                 </ScrollView>
                 <View className="dynamic-release" onClick={toRelease}>
