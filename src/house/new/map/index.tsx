@@ -9,6 +9,7 @@ import app from '@services/request'
 import storage from '@utils/storage'
 import useNavData from '@hooks/useNavData'
 import { bMapTransQQMap } from '@utils/map'
+import { toHouseNew } from '@/router/router'
 import SearchMap from '@/components/searchmap'
 import SearchMapH5 from '@/components/searchmaph5'
 import {
@@ -24,7 +25,6 @@ import {
 
 import '@styles/common/search-tab.scss'
 import './index.scss'
-import { toHouseNew } from '@/router'
 
 const HouseMap = () => {
     const { contentHeight } = useNavData()
