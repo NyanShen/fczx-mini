@@ -1,11 +1,8 @@
-<<<<<<< HEAD
-dist/
+
 deploy_versions/
 .temp/
 .rn_temp/
-node_modules/
-.DS_Store
-=======
+
 # Windows
 [Dd]esktop.ini
 Thumbs.db
@@ -19,5 +16,5 @@ $RECYCLE.BIN/
 .Trashes
 
 # Node.js
+dist/
 node_modules/
->>>>>>> 3c0b0a2ec1a893084c2f29c3bdc92eddf508a8e8
